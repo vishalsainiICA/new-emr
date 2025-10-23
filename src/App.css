@@ -4,6 +4,17 @@
     box-sizing: border-box;
 }
 
+/* common css */
+
+.commonBtn {
+    border-radius: 15px;
+    background-color: lightblue;
+    font-size: 15px;
+    cursor: pointer;
+    border: 0.5px solid black;
+}
+
+/* common css end */
 h1,
 h2,
 h3,
@@ -17,41 +28,64 @@ span {
 }
 
 .controlPannel {
+    top: 0;
     display: flex;
-    height: 46vw;
     width: 100vw;
+    height: 100vh;
     border-top: 10px solid;
-    background-color: rgb(243, 244, 246);
+    /* background: rgb(14, 46, 109); */
 
 }
 
-.controlPannel nav {
+.navbar {
     background-color: rgba(29, 39, 53);
     width: 350px;
     height: 100%;
     display: flex;
+    flex-direction: column;
+    padding: 20px;
+    overflow: hidden;
+    transition: width 0.4s ease, padding 0.3s ease;
+}
+
+.navbar.collapse {
+    width: 60px;
+
 }
 
 .navDiv {
-    width: "70px";
-    height: "30px";
     cursor: pointer;
-    border-radius: 10px;
-    padding: 10px;
-
 }
 
-.navDiv:hover {
-    background-color: rgba(42, 54, 70)
-}
 
+.navDiv:hover,
 .navDiv.active {
     background-color: rgba(42, 54, 70);
+
+}
+
+
+.navIcon {
+    color: white;
+    font-size: 20px;
+}
+
+.navText {
+    color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    transition: opacity 0.2s ease;
+}
+
+.navbar.collapse .navText {
+    opacity: 0;
+    width: 0;
 }
 
 .mainContent {
     width: 100%;
-    margin: 20px 30px 0 60px;
+    background-color: aliceblue;
+    padding: 30px;
 }
 
 .dashboard {
@@ -66,8 +100,57 @@ span {
     justify-content: space-between;
 }
 
+.card {
+    display: 'flex';
+    flex-direction: 'column';
+    width: 14vw;
+    height: 6vw;
+    padding: 10px;
+    justify-content: 'center';
+    cursor: 'pointer';
+    border: "1px solid lightgray";
+    background-color: white;
+
+
+}
+
+.card h3,
+h2,
+span,
+i {
+    font-size: 1vw;
+}
+
 .hospitalperformance {
     margin: 20px 0 10px 0;
     background-color: white;
     padding: 20px 0 0 10px;
+    border-radius: 10px 10px 0 0;
+    min-height: 500px;
+}
+
+.hosptialHeading {
+    display: flex;
+    justify-content: space-between;
+
+}
+
+/* hospitalOnboard */
+
+.hospitalOnboard {
+    width: 52vw;
+    background-color: white;
+    padding: 20px;
+
+}
+
+.hospitalOnboard div {
+    display: flex;
+}
+
+.hospitalOnboard input {
+    width: 100%;
+    padding: 7px;
+    border-radius: 7px;
+
 }

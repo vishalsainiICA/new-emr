@@ -23,6 +23,9 @@ export const superAdminApi = {
     getAllhosptial: async () => {
         return await superAdminInstance.get('/super-admin/hospital/getAllHospital')
     },
+    getHosptialMetrices: async () => {
+        return await superAdminInstance.get('/super-admin/hospital/hosptial-metrices')
+    },
     addHospital: async (data) => {
         return await superAdminInstance.post('/common/hospital/addHospital', data)
     },

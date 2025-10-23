@@ -1,13 +1,16 @@
 import { superAdminApi } from "../../auth";
 import { Circles } from 'react-loader-spinner';
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-export function Dashboard() {
+export function HospitalManagement() {
 
     const [data, setData] = useState([]);
     const [isProcessing, setIsProcessing] = useState(false);
     const [error, setError] = useState(null);
     const [filterHospital, setFilterHospital] = useState([]);
+
+    const navigate = useNavigate()
 
     useEffect(() => {
         const fetchHospital = async () => {
@@ -33,33 +36,24 @@ export function Dashboard() {
 
     return (
         <div className="dashboard">
-            <h2>Dashboard</h2>
-
-            {/* metrics cards */}
-            <div className="dashbaordcardList" style={{ display: 'flex', gap: '10px' }}>
-                {data?.metrices?.map((obj, index) => (
-                    <div key={index}
-                        className="card"
-                    >
-                        <span style={{ display: 'flex', gap: '20px' }}>
-                            <h3>{obj?.key}</h3>
-                            <span style={{
-                                backgroundColor: 'lightblue',
-                                padding: '10px',
-                                borderRadius: '10px'
-                            }}>
-                                <i className="ri-group-line"></i>
-                            </span>
-                        </span>
-                        <h2>{obj?.value || "N/A"}</h2>
-                    </div>
-                ))}
+            <div style={{
+                display: 'flex',
+                justifyContent: 'space-between'
+            }}>
+                <h2>Hospital Management</h2>
+                <button className="commonBtn" onClick={() => navigate('/new-hosptial')}>Add New Hospital</button>
             </div>
 
             {/* hospital performance */}
-            <div className="hospitalperformance">
-                <h3>Hospital Performance</h3>
 
+            <div className="hospitalperformance">
+                <div className="hosptialHeading">
+                    <p>Hospital</p>
+                    <p>Location</p>
+                    <p>Revenue</p>
+                    <p>Patients</p>
+                    <p>Action</p>
+                </div>
                 {isProcessing && (
                     <span style={{
                         display: 'flex',
@@ -144,4 +138,3 @@ export function Dashboard() {
     );
 }
 
-export default Dashboard;
