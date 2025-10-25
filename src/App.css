@@ -173,17 +173,43 @@ input {
     font-size: 17px;
 }
 
-.patientRecordsHeadings {
-    display: flex;
+.patientRecordsHeadings,
+.patientRecordBody>div {
+    display: grid;
+    grid-template-columns: 100px 1fr 80px 1fr 1fr 120px;
+    /* Fixed widths for each column */
+    gap: 15px;
     background-color: rgb(245, 239, 239);
     padding: 20px;
-    flex-wrap: wrap;
     border-top: 1px solid gray;
     border-left: 1px solid gray;
     border-right: 1px solid gray;
     border-radius: 7px;
-    /* gap: 240px; */
-    font-weight: bold;
-    justify-content: space-between;
+    align-items: center;
 }
 
+.patientRecordsHeadings {
+    font-weight: bold;
+}
+
+.patientRecordBody>div {
+    background-color: white;
+    cursor: pointer;
+    border-top: none;
+    /* Remove double border */
+    border-radius: 0;
+    /* Remove radius for body rows */
+}
+
+.patientRecordBody>div:last-child {
+    border-radius: 0 0 7px 7px;
+    /* Add radius only to last row */
+}
+
+.patientRecordsHeadings p,
+.patientRecordBody>div>p {
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
