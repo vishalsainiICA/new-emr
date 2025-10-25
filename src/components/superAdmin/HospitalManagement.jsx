@@ -79,7 +79,6 @@ export function HospitalManagement() {
 
                 {!isProcessing && !error && Array.isArray(filterHospital) && filterHospital.length > 0 && (
                     <div style={{
-                        display: 'grid',
                         gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
                         gap: '20px',
                         marginTop: '20px',
@@ -88,16 +87,14 @@ export function HospitalManagement() {
                         {filterHospital.map((hos, i) => (
                             <div key={i}
                                 style={{
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
                                     width: '80%',
-                                    height: '75px',
+
                                     backgroundColor: 'white',
                                     border: '1px solid lightgray',
                                     padding: '15px 15px 15px 30px',
                                     borderRadius: '10px',
                                     margin: '0 0 10px 10px',
-                                    boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
+
                                     cursor: 'pointer'
                                 }}>
                                 <div
@@ -110,7 +107,7 @@ export function HospitalManagement() {
                                         gap: "20px" // space between items
                                     }}
                                 >
-                                    <span style={{ fontSize: '18px', fontFamily: 'cursive' }}>{i + 1}.</span>
+
                                     <div>
                                         <h4 style={{ margin: 0 }}>{hos.name || "Unnamed Hospital"}</h4>
                                         <p style={{ margin: 0 }}>{hos.location || "Unknown location"}</p>

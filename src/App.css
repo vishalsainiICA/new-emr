@@ -4,6 +4,10 @@
     box-sizing: border-box;
 }
 
+i {
+    cursor: pointer;
+}
+
 /* common css */
 
 .commonBtn {
@@ -145,8 +149,8 @@ i {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    min-height: 600px;
-    max-height: 600px;
+    min-height: 620px;
+    max-height: 620px;
     border-radius: 10px;
     scrollbar-width: thin;
     overflow-y: auto;
@@ -158,9 +162,10 @@ i {
     flex-direction: column;
     row-gap: 25px;
     flex-wrap: wrap;
+    padding: 20px;
 }
 
-.hospitalOnboard input {
+input {
     width: 100%;
     min-width: 100px;
     padding: 10px;

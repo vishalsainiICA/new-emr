@@ -51,7 +51,12 @@ export function Dashboard() {
                                 <i className="ri-group-line"></i>
                             </span>
                         </span>
-                        <h2>{obj?.value || "N/A"}</h2>
+                        <h2>
+                            {typeof obj?.value === "object"
+                                ? JSON.stringify(obj.value)
+                                : obj?.value ?? "N/A"}
+                        </h2>
+
                     </div>
                 ))}
             </div>
@@ -85,7 +90,7 @@ export function Dashboard() {
 
                 {!isProcessing && !error && Array.isArray(filterHospital) && filterHospital.length > 0 && (
                     <div style={{
-                        display: 'grid',
+
                         gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
                         gap: '20px',
                         marginTop: '20px',
@@ -119,14 +124,14 @@ export function Dashboard() {
                                     <span style={{ fontSize: '18px', fontFamily: 'cursive' }}>{i + 1}.</span>
                                     <div>
                                         <h4 style={{ margin: 0 }}>{hos.name || "Unnamed Hospital"}</h4>
-                                        <p style={{ margin: 0 }}>{hos.location || "Unknown location"}</p>
+                                        <p style={{ margin: 0 }}>{`${hos.city},${hos.state}`}</p>
                                     </div>
 
                                 </div>
 
                                 <div>
-                                    <h4>{hos.name || "Unnamed Hospital"}</h4>
-                                    <p>{hos.location || "Unknown location"}</p>
+                                    <h4>{hos.totalRevenue || "Unnamed Hospital"}</h4>
+                                    <p>{`patients: 0`}</p>
                                 </div>
 
                             </div>

@@ -4,7 +4,8 @@ import ControlPannel from './components/superAdmin/ControlPannel'
 import Dashboard from './components/superAdmin/Dashboard'
 import { HospitalManagement } from './components/superAdmin/HospitalManagement'
 import { NewHospital } from './components/superAdmin/NewHospital'
-
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
@@ -20,6 +21,17 @@ function App() {
 
       </Route>
     </Routes>
+
+    <ToastContainer
+      position="top-right"
+      autoClose={3000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      pauseOnHover
+      draggable
+    />
+
 
   </BrowserRouter>
 }
