@@ -213,3 +213,21 @@ input {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+.medicationPatieninfo {
+    background-color: white;
+    padding: 10px;
+    width: 50%;
+}
+
+.medicationPatieninfo span,
+p {
+    font-size: 15px;
+}
+
+.medicationPatienmedication {
+    padding: 20px;
+    margin-top: 10px;
+    background-color: white;
+    min-height: 600px;
+}
