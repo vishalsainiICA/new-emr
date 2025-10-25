@@ -73,6 +73,10 @@ export const superAdminApi = {
         return await superAdminInstance.delete(`/super-admin/admin/delete-admin?adminId=${id}`)
     },
 
+    allPatients: async () => {
+        return await superAdminInstance.get(`/super-admin/patients/allPatients`)
+    },
+
     // updateAdmin : async(data)=>{
 
     // }

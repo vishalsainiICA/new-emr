@@ -6,6 +6,7 @@ import { HospitalManagement } from './components/superAdmin/HospitalManagement'
 import { NewHospital } from './components/superAdmin/NewHospital'
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import { PatientRecords } from './components/superAdmin/PatientRecord'
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Route path='dashboard' element={<Dashboard></Dashboard>}></Route>
         <Route path='hosptial-management' element={<HospitalManagement></HospitalManagement>}></Route>
         <Route path='new-hosptial' element={<NewHospital></NewHospital>}></Route>
+        <Route path='patient-record' element={<PatientRecords></PatientRecords>}></Route>
 
       </Route>
     </Routes>

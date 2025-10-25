@@ -170,4 +170,20 @@ input {
     min-width: 100px;
     padding: 10px;
     border-radius: 7px;
+    font-size: 17px;
 }
+
+.patientRecordsHeadings {
+    display: flex;
+    background-color: rgb(245, 239, 239);
+    padding: 20px;
+    flex-wrap: wrap;
+    border-top: 1px solid gray;
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+    border-radius: 7px;
+    /* gap: 240px; */
+    font-weight: bold;
+    justify-content: space-between;
+}
+
