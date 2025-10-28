@@ -217,7 +217,9 @@ input {
 .medicationPatieninfo {
     background-color: white;
     padding: 10px;
-    width: 50%;
+    width: 100%;
+    margin-bottom: 20px;
+    border-radius: 10px;
 }
 
 .medicationPatieninfo span,
@@ -228,6 +230,69 @@ p {
 .medicationPatienmedication {
     padding: 20px;
     margin-top: 10px;
-    background-color: white;
+    width: 40%;
     min-height: 600px;
+}
+
+.selectedMediciene {
+    width: 60%;
+    margin: 20px;
+}
+
+.illnessSuggenstion {
+    display: flex;
+    padding: 10px;
+    flex-direction: column;
+    max-height: 200px;
+    overflow-y: scroll;
+    border-radius: 20px;
+}
+
+.illCard {
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+}
+
+.illCard:hover {
+    border: 1px solid;
+    background-color: rgb(219, 237, 243);
+    border-radius: 10px;
+}
+
+.patientHistory {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    /* better than absolute for modals */
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    /* dim transparent bg */
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+}
+
+.finalprescription {
+    width: 794px;
+    height: 1123px;
+    background-color: white;
+    margin: auto;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+
+}
+
+.heading {
+    padding: 20px;
+    background-color: lightblue;
+    text-align: center;
+    font-weight: bold;
+}
+
+.Info {
+    padding: 10px;
+
 }

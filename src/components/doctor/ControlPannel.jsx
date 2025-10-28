@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Outlet, useNavigate } from "react-router-dom"
+import { CircularAvatar } from "../utility/CicularAvatar"
 
 
 export function ControlPannel() {
@@ -24,10 +25,8 @@ export function ControlPannel() {
                 {!collapsed && (
                     <div>
                         <h3>EMR System</h3>
-                        <p>Super Admin</p>
                     </div>
                 )}
-
                 <i
                     onClick={() => setcollapsed(!collapsed)}
                     style={{
@@ -41,6 +40,7 @@ export function ControlPannel() {
                     }} className={collapsed ? "ri-layout-left-line" : "ri-layout-right-line"}></i>
             </div>
             <hr style={{
+                width: '100%',
                 height: '2px',
                 marginBottom: '20px',
             }} />
@@ -50,7 +50,8 @@ export function ControlPannel() {
                 display: 'flex',
                 flexDirection: "column",
                 gap: '30px',
-                height: '450px'
+                height: '100%',
+                justifyContent: 'space-between'
             }}>
                 {
                     navLinks.map((items, i) => {
@@ -64,6 +65,26 @@ export function ControlPannel() {
                         </div>
 
                     })}
+                <div style={{
+                    height: '100%',
+                    justifyContent: 'end',
+                    alignItems: 'end',
+                    alignContent: 'end',
+                    marginBottom: '30px'
+                }}>
+                    <hr style={{
+                        width: '100%',
+                        height: '2px',
+
+
+                    }} />
+                    <h3 style={{
+                        color: 'white',
+                    }}>Dr. Arun Mehta <i style={{ height: '50px', width: '50px' }} class="ri-logout-box-r-line"></i></h3>
+                    <p style={{ color: 'white' }}>MBBS, MD (Internal Medicine)</p>
+
+
+                </div>
             </div>
 
 

@@ -1,24 +1,27 @@
-import { superAdminApi } from "../../auth";
+import { doctorAPi, superAdminApi } from "../../auth";
 import { Circles } from 'react-loader-spinner';
 import { useEffect, useState } from "react";
 import { CircularAvatar } from "../utility/CicularAvatar";
+import { useNavigate } from "react-router-dom";
 
 export function Dashboard() {
 
-    const [data, setData] = useState([]);
+    const [data, setData] = useState(null);
     const [isProcessing, setIsProcessing] = useState(false);
     const [error, setError] = useState(null);
-    const [filterHospital, setFilterHospital] = useState([]);
+    const [filterHospital, setFilterHospital] = useState(null);
+
+    const navigate = useNavigate()
 
     useEffect(() => {
         const fetchHospital = async () => {
             setIsProcessing(true);
             setError(null);
             try {
-                const res = await superAdminApi.getHosptialMetrices();
+                const res = await doctorAPi.getTodayPatient();
                 if (res.status === 200) {
-                    setData(res.data.data || []);
-                    setFilterHospital(res.data.data?.TopPerformanceHospital || []); // initialize filter
+                    setData(res.data?.data);
+                    setFilterHospital(res.data?.data); // initialize filter
                 } else {
                     setError(res.data?.message || "Something went wrong");
                 }
@@ -38,33 +41,86 @@ export function Dashboard() {
 
             {/* metrics cards */}
             <div className="dashbaordcardList" style={{ display: 'flex', gap: '10px' }}>
-                {data?.metrices?.map((obj, index) => (
-                    <div key={index}
-                        className="card"
-                    >
-                        <span style={{ display: 'flex', gap: '20px' }}>
-                            <h3>{obj?.key}</h3>
-                            <span style={{
-                                backgroundColor: 'lightblue',
-                                padding: '10px',
-                                borderRadius: '10px'
-                            }}>
-                                <i className="ri-group-line"></i>
-                            </span>
+                <div
+                    className="card"
+                >
+                    <span style={{ display: 'flex', gap: '20px' }}>
+                        <h3>Total Patients</h3>
+                        <span style={{
+                            backgroundColor: 'lightblue',
+                            padding: '10px',
+                            borderRadius: '10px'
+                        }}>
+                            <i className="ri-group-line"></i>
                         </span>
-                        <h2>
-                            {typeof obj?.value === "object"
-                                ? JSON.stringify(obj.value)
-                                : obj?.value ?? "N/A"}
-                        </h2>
+                    </span>
+                    <h2>
 
-                    </div>
-                ))}
+                        {data?.doctorProfile?.totalPatient || "N/A"}
+                    </h2>
+
+                </div>
+                <div
+                    className="card"
+                >
+                    <span style={{ display: 'flex', gap: '20px' }}>
+                        <h3>Patients Today</h3>
+                        <span style={{
+                            backgroundColor: 'lightblue',
+                            padding: '10px',
+                            borderRadius: '10px'
+                        }}>
+                            <i className="ri-group-line"></i>
+                        </span>
+                    </span>
+                    <h2>
+                        {data?.doctorProfile?.todayPatient?.length || "N/A"}
+                    </h2>
+
+                </div>
+                <div
+                    className="card"
+                >
+                    <span style={{ display: 'flex', gap: '20px' }}>
+                        <h3>Total Prescriptions</h3>
+                        <span style={{
+                            backgroundColor: 'lightblue',
+                            padding: '10px',
+                            borderRadius: '10px'
+                        }}>
+                            <i className="ri-group-line"></i>
+                        </span>
+                    </span>
+                    <h2>
+
+                        {data?.doctorProfile?.totalPrescriptions || "N/A"}
+                    </h2>
+
+                </div>
+
+                <div
+                    className="card"
+                >
+                    <span style={{ display: 'flex', gap: '20px' }}>
+                        <h3>Total Lab Tests</h3>
+                        <span style={{
+                            backgroundColor: 'lightblue',
+                            padding: '10px',
+                            borderRadius: '10px'
+                        }}>
+                            <i className="ri-group-line"></i>
+                        </span>
+                    </span>
+                    <h2>
+                        {Number(data?.doctorProfile?.totalPatient) || "N/A"}
+                    </h2>
+
+                </div>
             </div>
 
             {/* hospital performance */}
             <div className="hospitalperformance">
-                <h2><i class="ri-calendar-line"></i>    Today's Appointments</h2>
+                <h3><i class="ri-calendar-line"></i>Today's Appointments</h3>
                 <p>
                     {new Date().toLocaleDateString('en-US', {
                         weekday: 'long',
@@ -98,7 +154,7 @@ export function Dashboard() {
                     }}>{error}</h4>
                 )}
 
-                {!isProcessing && !error && Array.isArray(filterHospital) && filterHospital.length > 0 && (
+                {!isProcessing && !error && Array.isArray(filterHospital?.todayPatient) && filterHospital?.todayPatient?.length > 0 && (
                     <div style={{
 
                         gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
@@ -106,8 +162,9 @@ export function Dashboard() {
                         marginTop: '20px',
                         // minHeight: '500px'
                     }}>
-                        {filterHospital.map((hos, i) => (
+                        {filterHospital?.todayPatient?.map((hos, i) => (
                             <div key={i}
+                                onClick={() => navigate('/doctor/medication', { state: { patient: hos } })}
                                 style={{
                                     display: 'flex',
                                     justifyContent: 'space-between',
@@ -130,7 +187,7 @@ export function Dashboard() {
                                     <CircularAvatar></CircularAvatar>
                                     <div>
                                         <h4 style={{ margin: 0 }}>{hos.name || "Unnamed Hospital"}</h4>
-                                        <p style={{ margin: 0 }}>{`${hos.city},${hos.state}`}</p>
+                                        <p style={{ margin: 0 }}>{`${hos.age} years,${hos.gender}`}</p>
                                     </div>
 
                                 </div>
@@ -145,10 +202,10 @@ export function Dashboard() {
                     </div>
                 )}
 
-                {!isProcessing && !error && Array.isArray(filterHospital) && filterHospital.length === 0 && (
+                {!isProcessing && !error && Array.isArray(filterHospital?.todayPatient) && filterHospital?.todayPatient?.length === 0 && (
                     <p
                         style={{ textAlign: 'center', padding: '50px 0' }}
-                    >No hospitals found</p>
+                    >No Patients found</p>
                 )}
             </div>
         </div>

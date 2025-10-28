@@ -145,6 +145,12 @@ export const doctorAPi = {
     savePrescribtionData: async (data) => {
 
         return await instance.post('/patient/prescribtion-data', data)
+    },
+    getTodayPatient: async () => {
+        return await doctorInstance.get('/doctor/today-Patient')
+    },
+    getAllIllness: async () => {
+        return await doctorInstance.get('/doctor/all-illness')
     }
 }
 

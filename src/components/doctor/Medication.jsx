@@ -1,40 +1,206 @@
 import { useEffect, useState } from "react";
-import { superAdminApi } from "../../auth";
+import { doctorAPi, superAdminApi } from "../../auth";
 import { Circles } from "react-loader-spinner";
+import { BsArrowLeft } from "react-icons/bs";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { LabTest } from "./PatientHistory__Labtest";
+
 
 
 
 export const Medication = () => {
-    const [data, setData] = useState([]);
-    const [isProcessing, setIsProcessing] = useState(false);
-    const [error, setError] = useState(null);
-    const [filterHospital, setFilterHospital] = useState([]);
+    const navigate = useNavigate()
+    const location = useLocation()
+    const [patient, setPatient] = useState()
+    const [symtomps, setSymptopms] = useState([])
+    const [mediciene, setmediciene] = useState([])
+    const [searchTerm, setSearchTerm] = useState("");
+    const [open, setClose] = useState(false)
+    const [filteredIllness, setFilteredIllness] = useState([]);
+    const [state, setState] = useState({
+        hospitalData: [],
+        illnessData: [],
+        filterHospital: [],
+        labTest: [],
+        labTestError: null,
+        labTestloading: false,
+        error: null,
+        loadingHospital: false,
+        loadingIllness: false,
+    });
 
     useEffect(() => {
+        const patient = location.state?.patient || undefined
+        if (!patient) {
+            navigate('/doctor/dashboard')
+        }
+        setPatient(patient)
+    }, [patient])
+
+    const setPartialState = (updates) =>
+        setState((prev) => ({ ...prev, ...updates }));
+
+    const handleChange = (e) => {
+        const value = e.target.value;
+        setSearchTerm(value);
+
+
+        if (value.trim() === "") {
+            setFilteredIllness([]);
+            return;
+        }
+
+        // Filter illness (case-insensitive startsWith)
+        const filtered = illnessData.filter((ill) =>
+            ill.illnessName.toLowerCase().startsWith(value.toLowerCase())
+        );
+        console.log('X', filtered);
+        console.log('y', value);
+        console.log('d', illnessData);
+
+        setFilteredIllness(filtered);
+    };
+    // Fetch Hospitals
+    useEffect(() => {
         const fetchHospital = async () => {
-            setIsProcessing(true);
-            setError(null);
+            setPartialState({ loadingHospital: true, error: null });
             try {
                 const res = await superAdminApi.getHosptialMetrices();
-                if (res.status === 200) {
-                    setData(res.data.data || []);
-                    setFilterHospital(res.data.data?.TopPerformanceHospital || []); // initialize filter
-                } else {
-                    setError(res.data?.message || "Something went wrong");
-                }
+                const hospitalData = res?.data?.data || [];
+                setPartialState({
+                    hospitalData,
+                    filterHospital: hospitalData?.TopPerformanceHospital || [],
+                });
             } catch (err) {
-                setError(err.response?.data?.message || "Internal Server Error");
+                setPartialState({
+                    error:
+                        err.response?.data?.message ||
+                        err.message ||
+                        "Error fetching hospitals",
+                });
             } finally {
-                setIsProcessing(false);
+                setPartialState({ loadingHospital: false });
             }
         };
 
         fetchHospital();
     }, []);
 
+    // Fetch Illnesses (independent)
+    useEffect(() => {
+        const fetchIllness = async () => {
+            setPartialState({ loadingIllness: true, error: null });
+            try {
+                const res = await doctorAPi.getAllIllness();
+                const illnessData = res?.data?.data || [];
+                setPartialState({
+                    illnessData,
+                });
+            } catch (err) {
+                setPartialState({
+                    error:
+                        err.response?.data?.message ||
+                        err.message ||
+                        "Error fetching illnesses",
+                });
+            } finally {
+                setPartialState({ loadingIllness: false });
+            }
+        };
+
+        fetchIllness();
+    }, []);
+
+    useEffect(() => {
+        const fetchLabTest = async () => {
+            setPartialState({ labTestloading: true, labTestError: null });
+            try {
+                const res = await axios.post('https://care-backend-sa3e.onrender.com/api/v1/analyze', {
+                    "report_text": String(patient?.initialAssementId + symptoms)
+                });
+                const labTest = res?.data?.data || [];
+                setPartialState({
+                    labTest,
+                });
+            } catch (err) {
+                setPartialState({
+                    labTestError:
+                        err.response?.data?.message ||
+                        err.message ||
+                        "Error fetching hospitals",
+                });
+            } finally {
+                setPartialState({ labTestloading: false });
+            }
+        };
+
+        fetchLabTest();
+    }, [symtomps]);
+
+
+    const {
+        hospitalData,
+        illnessData,
+        filterHospital,
+        loadingHospital,
+        loadingIllness,
+        labTest,
+        labTestError,
+        labTestloading,
+        error,
+    } = state;
+
+
     return <div>
         {/* patient info */}
         <div style={{
+            display: 'flex',
+            justifyContent: "space-between",
+
+        }}>
+            <button onClick={() => navigate(-1)}><BsArrowLeft></BsArrowLeft> Back to Dashboard</button>
+            <div style={{
+                display: 'flex',
+                gap: '10px',
+
+            }}>
+                <button style={{
+                    padding: '10px',
+                    fontSize: '12px',
+                    width: '105px'
+                }}>View History</button>
+                <button
+                    onClick={() => setClose(true)}
+                    style={{
+                        padding: '10px',
+                        fontSize: '12px',
+                        width: '105px'
+                    }}>Lab Test</button>
+                <button
+                    onClick={() => {
+                        navigate('/final-prescription', {
+                            state: {
+                                data: {
+                                    patientInfo: patient,
+                                    hospitalData: patient?.hospitalId,
+                                    illnessData: symtomps,
+                                    medication: mediciene
+                                }
+                            }
+                        })
+                    }}
+                    style={{
+                        padding: '10px',
+                        fontSize: '14px',
+                        width: '170px',
+                        border: '1px solid black'
+                    }}>Generate Prescription </button>
+            </div>
+
+        </div>
+        <div style={{
+            marginTop: '10px',
             display: 'flex',
             gap: '10px'
         }}>
@@ -44,102 +210,229 @@ export const Medication = () => {
                     justifyContent: 'space-between',
                 }}>
                     <h4>Patient Information</h4>
-                    <button style={{
-                        padding: '10px',
-                        fontSize: '12px',
-                        border: '1px solid black'
-                    }}>View History</button>
                 </div>
 
                 <div style={{
                     display: 'flex',
                     justifyContent: 'space-between',
+                    flexWrap: 'wrap'
                 }}>
-                    <span>Name:<h4>Vishal</h4></span>
-                    <span>Age:<h4>Vishal</h4></span>
-                    <span>Gender:<h4>Vishal</h4></span>
-                    <span>Phone:<h4>Vishal</h4></span>
-                </div>
-
-            </div>
-            <div className="medicationPatieninfo">
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                }}>
-                    <h4>Patient Information</h4>
-                    <button style={{
-                        padding: '10px',
-                        fontSize: '12px',
-                        border: '1px solid black'
-                    }}>View History</button>
-                </div>
-
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                }}>
-                    <span>Name:<h4>Vishal</h4></span>
-                    <span>Age:<h4>Vishal</h4></span>
-                    <span>Gender:<h4>Vishal</h4></span>
-                    <span>Phone:<h4>Vishal</h4></span>
+                    <span>Name:<h4>{patient?.name}</h4></span>
+                    <span>Age:<h4>{patient?.age}</h4></span>
+                    <span>Gender:<h4>{patient?.gender}</h4></span>
+                    <span>Height:<h4>{patient?.initialAssementId?.height}</h4></span>
+                    <span>Weight:<h4>{patient?.initialAssementId?.weight}</h4></span>
+                    <span>BloodGroup:<h4>{patient?.initialAssementId?.bloodGroup}</h4></span>
+                    <span>HeartRate:<h4>{patient?.initialAssementId?.heartRate}</h4></span>
+                    <span>BP:<h4>{patient?.initialAssementId?.BP}</h4></span>
                 </div>
 
             </div>
         </div>
 
         {/* Symtomps/illness */}
-        <div>
-            
-        </div>
-        <div className="medicationPatienmedication">
-            <div style={{
-                width: "30%",
-                minHeight: '250px'
-            }}>
-                <h3>Illness/Daignosis</h3>
-                <input type="text" placeholder="Enter Illness Related" />
-                <h3>Symptoms</h3>
-                <input type="text" placeholder="Enter Illness Related" />
+        <div style={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'space-between',
+            backgroundColor: 'white'
+        }}>
+            <div className="medicationPatienmedication">
+                <div style={{
+                    minHeight: '250px'
+                }}>
+                    <h4>Illness/Daignosis</h4>
+                    <input type="search" onChange={handleChange} placeholder="Enter Illness Related" />
+                    {console.log('fill', filteredIllness)
+                    }
+                    {filteredIllness.length > 0 && searchTerm.trim() !== "" && (
+                        <>
+                            <div className="illnessSuggenstion">
+                                {filteredIllness?.map((ill, i) => {
+                                    const isSelected = symtomps.some((item) => item._id === ill._id)
+                                    return <div
 
+                                        onClick={() => {
+                                            setSymptopms((prev) => {
+                                                if (isSelected) {
+                                                    return prev.filter((item) => item._id !== ill._id)
+                                                }
+                                                else {
+                                                    return [...prev, ill];
+                                                }
+                                            })
+                                        }}
+                                        key={i} className="illCard">
+                                        <div>
+                                            <h4>{ill?.illnessName}</h4>
+                                            <p style={{
+                                            }}>{ill?.illnessName}</p>
+                                        </div>
+                                        {isSelected && (
+                                            <i
+                                                className="ri-check-line"
+                                                style={{
+                                                    fontSize: "24px",
+                                                    color: "green",
+                                                    marginLeft: "10px",
+                                                }}
+                                            ></i>
+                                        )}
+
+
+                                    </div>
+                                })}
+                            </div>
+
+                        </>
+
+                    )}
+                    <br />
+                    <br />
+                    <h4>Symptoms</h4>
+                    <input type="search" placeholder="Enter Illness Related" />
+                    {console.log('sysys', symtomps)
+                    }
+                    {
+                        symtomps.length > 0 && (
+                            <div style={{
+                                display: 'flex',
+                                margin: '20px',
+                                gap: '10px',
+                                flexWrap: 'wrap',
+                                backgroundColor: 'white'
+                            }}>
+                                <button onClick={() => setSymptopms([])}>clear All</button>
+                                {console.log(symtomps)
+                                }
+                                {symtomps.map((ill, i) => {
+                                    return ill?.symptoms?.map((sym) => {
+                                        console.log(sym)
+
+                                        return <span style={{
+                                            padding: '7px',
+                                            backgroundColor: 'lightgray',
+                                            justifyContent: 'center',
+                                            textAlign: 'center',
+                                            fontSize: '18px',
+                                            borderRadius: '10px'
+                                        }} key={i}>{sym}
+                                            <i onClick={() => {
+                                                setSymptopms((prev) => {
+                                                    return prev.filter((item) => item !== sym)
+                                                })
+                                            }} class="ri-close-line"></i></span>
+
+                                    })
+
+                                })}
+
+                            </div>
+
+                        )
+                    }
+
+                </div>
+                <div style={{
+
+                }}>
+                    <h3>Suggested Medication:</h3>
+                    {loadingHospital && (
+                        <span style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            flexDirection: 'column',
+                            padding: '50px 0'
+                        }}>
+                            <Circles height="40" width="40" color="#4f46e5" ariaLabel="loading" />
+                            <br />Loading...
+                        </span>
+                    )}
+
+                    {error && (
+                        <h4 style={{
+                            color: 'red',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            padding: '50px 0'
+                        }}>{error}</h4>
+                    )}
+
+                    {!loadingHospital && !error && Array.isArray(filterHospital) && filterHospital.length > 0 && (
+                        <div style={{
+
+                            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                            gap: '20px',
+                            marginTop: '20px',
+                            // minHeight: '500px'
+                        }}>
+                            {filterHospital.map((hos, i) => (
+                                <div key={i}
+                                    style={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        padding: '20px',
+                                        height: '75px',
+                                        backgroundColor: 'white',
+                                        borderBottom: '1px solid lightgray',
+                                        borderRadius: '10px',
+                                        cursor: 'pointer'
+                                    }}>
+                                    <div
+
+                                        style={{
+                                            padding: "10px",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            gap: "20px" // space between items
+                                        }}
+                                    > <div>
+                                            <h4 style={{ margin: 0 }}>{hos.name || "Unnamed Hospital"}</h4>
+                                            <p style={{ margin: 0 }}>{`${hos.city},${hos.state}`}</p>
+                                        </div>
+
+                                    </div>
+
+                                    <div>
+
+                                        <button
+                                            onClick={() => {
+                                                setmediciene((prev) => [...prev, hos])
+                                            }}
+                                            style={{
+                                                padding: '10px',
+                                                fontSize: '12px',
+                                                border: '1px solid black'
+                                            }}>+ Add </button>
+                                    </div>
+
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {!loadingHospital && !error && Array.isArray(filterHospital) && filterHospital.length === 0 && (
+                        <p
+                            style={{ textAlign: 'center', padding: '50px 0' }}
+                        >No hospitals found</p>
+                    )}
+                </div>
             </div>
-            <div style={{
-                width: "30%",
-            }}>
-                <h3>Suggested Medication:</h3>
-                {isProcessing && (
-                    <span style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        flexDirection: 'column',
-                        padding: '50px 0'
-                    }}>
-                        <Circles height="40" width="40" color="#4f46e5" ariaLabel="loading" />
-                        <br />Loading...
-                    </span>
-                )}
-
-                {error && (
-                    <h4 style={{
-                        color: 'red',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        padding: '50px 0'
-                    }}>{error}</h4>
-                )}
-
-                {!isProcessing && !error && Array.isArray(filterHospital) && filterHospital.length > 0 && (
+            <div className="selectedMediciene">
+                <div>
                     <div style={{
-
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                        gap: '20px',
-                        marginTop: '20px',
-                        // minHeight: '500px'
+                        display: 'flex',
+                        justifyContent: 'space-between'
                     }}>
-                        {filterHospital.map((hos, i) => (
-                            <div key={i}
+                        <h4>Medication:</h4>
+                        <h4>Total: {mediciene.length}</h4>
+                    </div>
+
+                    {
+                        mediciene.length > 0 && mediciene.map((hos, i) => {
+                            return <div key={i}
                                 style={{
                                     display: 'flex',
                                     justifyContent: 'space-between',
@@ -159,34 +452,40 @@ export const Medication = () => {
                                         gap: "20px" // space between items
                                     }}
                                 > <div>
-                                        <h4 style={{ margin: 0 }}>{hos.name || "Unnamed Hospital"}</h4>
-                                        <p style={{ margin: 0 }}>{`${hos.city},${hos.state}`}</p>
+                                        <h4 style={{ margin: 0 }}>{'Paracetamol' || "Unnamed Hospital"}</h4>
+                                        <span>{"Once Daily"} <span></span>| {"Take After Meal"}</span>
+
                                     </div>
 
                                 </div>
 
                                 <div>
 
-                                    <button style={{
-                                        padding: '10px',
-                                        fontSize: '12px',
-                                        border: '1px solid black'
-                                    }}>+ Add </button>
+                                    <button
+                                        onClick={() => {
+                                            setmediciene((prev) => prev.filter((item) => item._id !== hos._id))
+                                        }}
+                                        style={{
+                                            padding: '10px',
+                                            fontSize: '12px',
+                                            border: '1px solid black'
+                                        }}>Remove </button>
                                 </div>
 
                             </div>
-                        ))}
-                    </div>
-                )}
+                        })
+                    }
+                </div>
 
-                {!isProcessing && !error && Array.isArray(filterHospital) && filterHospital.length === 0 && (
-                    <p
-                        style={{ textAlign: 'center', padding: '50px 0' }}
-                    >No hospitals found</p>
-                )}
             </div>
         </div>
 
-    </div>
+
+        <div className="patientHistory">
+            <LabTest labTest={labTest} labTestError={labTestError} labTestloading={labTestloading} onclose={() => {
+                setClose(null)
+            }} ></LabTest>
+        </div>
+    </div >
 
 }
