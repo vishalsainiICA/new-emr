@@ -78,6 +78,7 @@ export const Medication = () => {
     const [patient, setPatient] = useState()
     const [symtomps, setSymptopms] = useState([])
     const [illness, setIllness] = useState([])
+    const [labtestResult, setLabtestResult] = useState([])
     const [selectedLabTest, setselectedLabTest] = useState([])
     const [mediciene, setmediciene] = useState([])
     const [searchTerm, setSearchTerm] = useState("");
@@ -187,7 +188,7 @@ export const Medication = () => {
                 const analysis = res?.data?.data?.analysis || [];
                 const labTests = extractLabTests(analysis);
 
-                setPartialState({ labTest: labTests });
+                setLabtestResult(labTests);
             } catch (err) {
                 setPartialState({
                     labTestError:
@@ -236,6 +237,7 @@ export const Medication = () => {
                 }}>View History</button>
                 <button
                     onClick={() => setClose(true)}
+                    disabled={labTestloading}
                     style={{
                         padding: '10px',
                         fontSize: '12px',
@@ -692,7 +694,7 @@ export const Medication = () => {
 
         {open && (
             <div className="patientHistory">
-                <LabTest labTest={labTest} labTestError={labTestError} labTestloading={labTestloading} onclose={() => setClose(false)} ></LabTest>
+                <LabTest labTest={labtestResult} labTestError={labTestError} labTestloading={labTestloading} onclose={() => setClose(false)} ></LabTest>
             </div>
         )}
 
