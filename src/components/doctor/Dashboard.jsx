@@ -41,82 +41,47 @@ export function Dashboard() {
 
             {/* metrics cards */}
             <div className="dashbaordcardList" style={{ display: 'flex', gap: '10px' }}>
-                <div
-                    className="card"
-                >
+                <div className="card">
                     <span style={{ display: 'flex', gap: '20px' }}>
                         <h3>Total Patients</h3>
-                        <span style={{
-                            backgroundColor: 'lightblue',
-                            padding: '10px',
-                            borderRadius: '10px'
-                        }}>
+                        <span style={{ backgroundColor: 'lightblue', padding: '10px', borderRadius: '10px' }}>
                             <i className="ri-group-line"></i>
                         </span>
                     </span>
-                    <h2>
-
-                        {data?.doctorProfile?.totalPatient || "N/A"}
-                    </h2>
-
+                    <h2>{data?.doctorProfile?.totalPatient ?? "N/A"}</h2>
                 </div>
-                <div
-                    className="card"
-                >
+
+                <div className="card">
                     <span style={{ display: 'flex', gap: '20px' }}>
                         <h3>Patients Today</h3>
-                        <span style={{
-                            backgroundColor: 'lightblue',
-                            padding: '10px',
-                            borderRadius: '10px'
-                        }}>
+                        <span style={{ backgroundColor: 'lightblue', padding: '10px', borderRadius: '10px' }}>
                             <i className="ri-group-line"></i>
                         </span>
                     </span>
-                    <h2>
-                        {data?.doctorProfile?.todayPatient?.length || "N/A"}
-                    </h2>
-
+                    <h2>{data?.todayPatient?.length ?? "N/A"}</h2>
                 </div>
-                <div
-                    className="card"
-                >
+
+                <div className="card">
                     <span style={{ display: 'flex', gap: '20px' }}>
                         <h3>Total Prescriptions</h3>
-                        <span style={{
-                            backgroundColor: 'lightblue',
-                            padding: '10px',
-                            borderRadius: '10px'
-                        }}>
+                        <span style={{ backgroundColor: 'lightblue', padding: '10px', borderRadius: '10px' }}>
                             <i className="ri-group-line"></i>
                         </span>
                     </span>
-                    <h2>
-
-                        {data?.doctorProfile?.totalPrescriptions || "N/A"}
-                    </h2>
-
+                    <h2>{data?.doctorProfile?.totalPrescriptions ?? "N/A"}</h2>
                 </div>
 
-                <div
-                    className="card"
-                >
+                <div className="card">
                     <span style={{ display: 'flex', gap: '20px' }}>
                         <h3>Total Lab Tests</h3>
-                        <span style={{
-                            backgroundColor: 'lightblue',
-                            padding: '10px',
-                            borderRadius: '10px'
-                        }}>
+                        <span style={{ backgroundColor: 'lightblue', padding: '10px', borderRadius: '10px' }}>
                             <i className="ri-group-line"></i>
                         </span>
                     </span>
-                    <h2>
-                        {Number(data?.doctorProfile?.totalPatient) || "N/A"}
-                    </h2>
-
+                    <h2>{data?.doctorProfile?.totalLabTests ?? "N/A"}</h2>
                 </div>
             </div>
+
 
             {/* hospital performance */}
             <div className="hospitalperformance">
