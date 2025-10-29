@@ -4,15 +4,24 @@ import { useState } from 'react';
 export function LabTest({ labTest = [], labTestError, labTestloading, onclose }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedTest, setSelectedTest] = useState(null);
+    const [filteredLabtest, setFilteredLabtest] = useState(labTest);
+
 
     // if (labTestError) {
     //     return <p style={{ color: 'red' }}>Error: {labTestError}</p>;
     // }
 
     // Filter logic
-    const filteredTests = labTest.filter(test =>
-        test.name?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+
+    const handlechange = (value) => {
+        if (value.trim() === '') {
+            setFilteredLabtest(labTest)
+        }
+        const filtered = labTest.filter((item) => {
+            return item?.test?.toLowerCase().startsWith(value.toLowerCase())
+        })
+        setFilteredLabtest(filtered)
+    }
 
     return (
         <div style={{
@@ -69,10 +78,9 @@ export function LabTest({ labTest = [], labTestError, labTestloading, onclose })
                 marginBottom: '20px'
             }}>
                 <input
-                    type="text"
+                    type='search'
                     placeholder="Search lab test..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={(e) => handlechange(e.target.value)}
                     style={{
                         width: '80%',
                         padding: '10px',
@@ -100,8 +108,10 @@ export function LabTest({ labTest = [], labTestError, labTestloading, onclose })
                         gridTemplateColumns: '1fr 1fr',
                         gap: '10px'
                     }}>
-                        {filteredTests.length > 0 ? (
-                            filteredTests.map((test, i) => (
+                        {console.log('filterlsbtest', filteredLabtest)
+                        }
+                        {filteredLabtest.length > 0 ? (
+                            filteredLabtest.map((test, i) => (
                                 <div key={i} style={{
                                     display: 'flex',
                                     justifyContent: 'space-between',
