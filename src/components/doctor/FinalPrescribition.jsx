@@ -128,6 +128,8 @@ const FinalPrescription = () => {
                         minHeight: '100px'
                     }}>
                         <h3>Diagnosis:</h3>
+                        {console.log('state', state)
+                        }
                         {
                             state?.illnessData && (
                                 <div style={{
@@ -138,9 +140,8 @@ const FinalPrescription = () => {
                                 }}>
                                     {state?.illnessData?.map((item) => {
                                         return <p style={{
-
                                             fontSize: '17px'
-                                        }}>{item.illnessName
+                                        }}>{item?.illnessName
                                             }</p>
                                     })}
                                 </div>
@@ -154,24 +155,21 @@ const FinalPrescription = () => {
                     }}>
                         <h3>Presenting Symptoms:</h3>
                         {
-                            state?.illnessData && (
+                            state?.symtomps && (
                                 <div style={{
                                     margin: '10px',
                                     display: 'flex',
                                     gap: '10px',
                                     flexWrap: 'wrap'
                                 }}>
-                                    {state?.illnessData?.map((item) => {
-                                        return item?.symptoms?.map((item) => {
-
-                                            return <p style={{
-                                                borderRadius: '10px',
-                                                padding: '10px',
-                                                backgroundColor: 'rgba(240, 242, 245)',
-                                                fontSize: '17px'
-                                            }}>{item
-                                                }</p>
-                                        })
+                                    {state?.symtomps?.map((item) => {
+                                        return <p style={{
+                                            borderRadius: '10px',
+                                            padding: '10px',
+                                            backgroundColor: 'rgba(240, 242, 245)',
+                                            fontSize: '17px'
+                                        }}>{item
+                                            }</p>
 
                                     })}
                                 </div>
@@ -185,22 +183,27 @@ const FinalPrescription = () => {
                         padding: '20px'
                     }}>
                         {
-                            state?.medication?.length > 0 && (
+                            state?.selectedLabTest?.length > 0 && (
                                 <div >
                                     <h3>
                                         Recommended Lab Tests:
                                     </h3>
 
-                                    <div >
+                                    <div style={{
+                                        borderLeft: '10px solid skyblue',
+                                        borderRadius: '0 0 0 10px',
+                                    }} >
                                         {
-                                            state?.medication.map((med, i) => {
-
+                                            state?.selectedLabTest.map((lab, i) => {
                                                 return <div style={{
+                                                    padding: '10px',
+
                                                     display: 'flex',
+
                                                     justifyContent: 'space-between'
                                                 }}>
 
-                                                    <span>{i + 1} <span>Complete Blood Count (CBC)</span></span>
+                                                    <span>{i + 1} <span>{lab.test}</span></span>
                                                 </div>
 
                                             })

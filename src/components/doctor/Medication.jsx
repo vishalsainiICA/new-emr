@@ -315,7 +315,7 @@ export const Medication = () => {
                 );
 
                 const analysis = res?.data?.analysis || [];
-                console.log(analysis)
+                // console.log(analysis)
                 const labTests = extractLabTests(analysis);
 
                 setLabtestResult(labTests);
@@ -380,8 +380,10 @@ export const Medication = () => {
                                 data: {
                                     patientInfo: patient,
                                     hospitalData: patient?.hospitalId,
-                                    illnessData: symtomps,
-                                    medication: mediciene
+                                    illnessData: illness,
+                                    symtomps: symtomps,
+                                    medication: mediciene,
+                                    selectedLabTest: selectedLabTest
                                 }
                             }
                         })
@@ -708,7 +710,9 @@ export const Medication = () => {
             </div>
             <div className="selectedMediciene">
                 {selectedLabTest.length > 0 && (
-                    <div>
+                    <div style={{
+                        marginBottom: '20px',
+                    }}>
                         <div style={{
                             display: 'flex',
                             justifyContent: 'space-between'
@@ -717,7 +721,7 @@ export const Medication = () => {
                             <h4>Total: {selectedLabTest.length}</h4>
                         </div>
                         {
-                            selectedLabTest.length > 0 && selectedLabTest.map((hos, i) => {
+                            selectedLabTest.length > 0 && selectedLabTest.map((test, i) => {
                                 return <div key={i}
                                     style={{
                                         display: 'flex',
@@ -738,23 +742,29 @@ export const Medication = () => {
                                             gap: "20px" // space between items
                                         }}
                                     > <div>
-                                            <h4 style={{ margin: 0 }}>{'Paracetamol' || "Unnamed Hospital"}</h4>
-                                            <span>{"Once Daily"} <span></span>| {"Take After Meal"}</span>
+                                            <h5 style={{ margin: 0 }}>{test.test || "Unnamed Hospital"}</h5>
+                                            <p>{test.disease} </p>
 
                                         </div>
 
                                     </div>
 
-                                    <div>
-                                        <button
-                                            onClick={() => {
-                                                setmediciene((prev) => prev.filter((item) => item._id !== hos._id))
-                                            }}
+                                    <div style={{
+                                        display: 'flex',
+                                        gap: '10px'
+                                    }}>
+                                        <span
                                             style={{
-                                                padding: '10px',
-                                                fontSize: '12px',
-                                                border: '1px solid black'
-                                            }}>Remove </button>
+                                                fontSize: '13px',
+                                                color: test.confidence > 0.5 ? 'green' : 'gray'
+                                            }}
+                                        >
+                                            Confidence: {(test.confidence * 100).toFixed(0)}%
+                                        </span>
+                                        <i onClick={() => {
+                                            setselectedLabTest((prev) => prev.filter((t) => t.test !== test.test));
+                                        }} class="ri-delete-bin-6-line"></i>
+
                                     </div>
 
                                 </div>
@@ -824,7 +834,7 @@ export const Medication = () => {
 
         {open && (
             <div className="patientHistory">
-                <LabTest labTest={labtestResult} labTestError={labTestError} labTestloading={labTestloading} onclose={() => setClose(false)} ></LabTest>
+                <LabTest selectedLabTest={selectedLabTest} setselectedLabTest={setselectedLabTest} labTest={labtestResult} labTestError={labTestError} labTestloading={labTestloading} onclose={() => setClose(false)} ></LabTest>
             </div>
         )}
 
