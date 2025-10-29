@@ -51,13 +51,7 @@ const FinalPrescription = () => {
                         padding: '10px',
                         fontSize: '12px',
                         width: '105px'
-                    }}>View History</button>
-
-                    <button style={{
-                        padding: '10px',
-                        fontSize: '12px',
-                        width: '105px'
-                    }}>Lab Test</button>
+                    }}><i class="ri-printer-line"></i> Print</button>
 
                     <button
                         onClick={() => {
@@ -80,7 +74,7 @@ const FinalPrescription = () => {
                             boxShadow: '2px 2px 6px rgba(0,0,0,0.15)' // 👈 optional shadow for this button too
                         }}
                     >
-                        Generate Prescription
+                        <i class="ri-download-line"></i> Download PDF
                     </button>
                 </div>
             </div>
@@ -185,10 +179,7 @@ const FinalPrescription = () => {
                             )
                         }
                     </div>
-
-                    <br />
                     <hr />
-                    <br />
                     <h1>℞ </h1>
                     <div style={{
                         padding: '20px'
@@ -208,13 +199,8 @@ const FinalPrescription = () => {
                                                     display: 'flex',
                                                     justifyContent: 'space-between'
                                                 }}>
-                                                    <span>{i + 1} <span>Paracetamol</span></span>
-                                                    <div>
 
-                                                    </div>
-                                                    <i onClick={() => {
-
-                                                    }} class="ri-close-line"></i>
+                                                    <span>{i + 1} <span>Complete Blood Count (CBC)</span></span>
                                                 </div>
 
                                             })
@@ -233,7 +219,13 @@ const FinalPrescription = () => {
                                         Prescribed Medications:
                                     </h3>
 
-                                    <div >
+                                    <div style={{
+                                        marginTop: '10px',
+                                        padding: '7px',
+                                        borderRadius: '7px',
+                                        borderLeft: '10px solid skyblue'
+                                    }}
+                                    >
                                         {
                                             state?.medication.map((med, i) => {
 
@@ -241,13 +233,18 @@ const FinalPrescription = () => {
                                                     display: 'flex',
                                                     justifyContent: 'space-between'
                                                 }}>
-                                                    <span>{i + 1} <span>Paracetamol</span></span>
+
                                                     <div>
-
+                                                        <span>{i + 1} <span>Paracetamol</span></span>
+                                                        <p>Acetaminophen 500mg</p>
                                                     </div>
-                                                    <i onClick={() => {
+                                                    <div style={{
+                                                        display: 'flex'
+                                                    }}>
+                                                        <p>5 Days</p>
+                                                        <p>Three times daily</p>
+                                                    </div>
 
-                                                    }} class="ri-close-line"></i>
                                                 </div>
 
                                             })

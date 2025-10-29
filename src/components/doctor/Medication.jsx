@@ -33,6 +33,43 @@ BP: ${patient?.initialAssementId?.BP || "N/A"}
     return report_text.trim();
 };
 
+const extractLabTests = (analysis) => {
+    if (!Array.isArray(analysis)) return [];
+
+    const tests = [];
+
+    analysis.forEach(item => {
+        const args = item.args || {};
+        const primary = args.primary_diagnosis;
+        const differentials = args.differential_diagnoses || [];
+
+        // Primary diagnosis tests
+        if (primary?.diagnostic_approach?.confirmatory_tests) {
+            primary.diagnostic_approach.confirmatory_tests.forEach(t => {
+                tests.push({
+                    test: t,
+                    disease: primary.disease_name,
+                    confidence: primary.confidence_score || 0,
+                });
+            });
+        }
+
+        // Differential diagnoses tests
+        differentials.forEach(diff => {
+            (diff.diagnostic_tests || []).forEach(t => {
+                tests.push({
+                    test: t,
+                    disease: diff.disease_name,
+                    confidence: diff.confidence_score || 0,
+                });
+            });
+        });
+    });
+
+    return tests;
+};
+
+
 
 
 export const Medication = () => {
@@ -142,19 +179,19 @@ export const Medication = () => {
         const fetchLabTest = async () => {
             setPartialState({ labTestloading: true, labTestError: null });
             try {
-                const res = await axios.post('https://care-backend-sa3e.onrender.com/api/v1/analyze', {
-                    "report_text": buildReportText(illness, symtomps, patient)
-                });
-                const labTest = res?.data?.data || [];
-                setPartialState({
-                    labTest,
-                });
+                const res = await axios.post(
+                    "https://care-backend-sa3e.onrender.com/api/v1/analyze",
+                    { report_text: buildReportText(illness, symtomps, patient) }
+                );
+
+                const analysis = res?.data?.data?.analysis || [];
+                const labTests = extractLabTests(analysis);
+
+                setPartialState({ labTest: labTests });
             } catch (err) {
                 setPartialState({
                     labTestError:
-                        err.response?.data?.message ||
-                        err.message ||
-                        "Error fetching hospitals",
+                        err.response?.data?.message || err.message || "Error fetching lab tests",
                 });
             } finally {
                 setPartialState({ labTestloading: false });
@@ -162,7 +199,8 @@ export const Medication = () => {
         };
 
         fetchLabTest();
-    }, [symtomps]);
+    }, [symtomps, illness]);
+
 
 
     const {

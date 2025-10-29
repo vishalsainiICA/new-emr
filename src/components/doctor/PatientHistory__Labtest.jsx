@@ -5,10 +5,6 @@ export function LabTest({ labTest = [], labTestError, labTestloading, onclose })
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedTest, setSelectedTest] = useState(null);
 
-    if (labTestloading) {
-        return <p>Loading lab tests...</p>;
-    }
-
     // if (labTestError) {
     //     return <p style={{ color: 'red' }}>Error: {labTestError}</p>;
     // }
@@ -31,35 +27,42 @@ export function LabTest({ labTest = [], labTestError, labTestloading, onclose })
             boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
         }}>
             {/* Heading */}
+
             <div style={{
                 display: 'flex',
-                justifyContent: 'space-between'
+                justifyContent: 'space-between',
+                marginBottom: '10px'
             }}>
                 <h4 style={{
                     marginBottom: '15px',
                     color: '#333',
-
                     fontWeight: '600'
                 }}>
                     Select Lab Tests
                 </h4>
-                <i
-                    onClick={() => onclose?.(null)}
-                    className="ri-close-large-fill"
-                    style={{
-                        fontSize: '20px',
-                        cursor: 'pointer',
-                        color: '#666',
-                        transition: '0.3s',
-                    }}
-                    onMouseOver={(e) => e.target.style.color = 'red'}
-                    onMouseOut={(e) => e.target.style.color = '#666'}
-                ></i>
+                <div>
+                    <button style={{
+                        padding: '10px',
+                        fontSize: '12px',
+                        width: '105px',
+                        border: '1px solid gray',
+                        marginRight: '10px'
+                    }}>Save</button>
+                    <i
+                        onClick={() => onclose?.(null)}
+                        className="ri-close-large-fill"
+                        style={{
+                            fontSize: '20px',
+                            cursor: 'pointer',
+                            color: '#666',
+                            transition: '0.3s',
+                        }}
+                        onMouseOver={(e) => e.target.style.color = 'red'}
+                        onMouseOut={(e) => e.target.style.color = '#666'}
+                    ></i>
+                </div>
+
             </div>
-
-
-
-            {/* 🔍 Filter/Search box */}
             <div style={{
                 display: 'flex',
                 justifyContent: 'center',
@@ -79,58 +82,59 @@ export function LabTest({ labTest = [], labTestError, labTestloading, onclose })
                     }}
                 />
             </div>
-
-            {/* 🧪 Test List */}
-            <div style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: '10px'
-            }}>
-                {filteredTests.length > 0 ? (
-                    filteredTests.map((test, i) => (
-                        <label
-                            key={i}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '10px',
-                                border: '1px solid #ddd',
-                                borderRadius: '10px',
-                                padding: '10px',
-                                cursor: 'pointer',
-                                transition: '0.3s',
-                                backgroundColor:
-                                    selectedTest === test.name ? '#e8f4ff' : '#fff'
-                            }}
-                        >
-                            <input
-                                type="radio"
-                                name="labTestSelect"
-                                value={test.name}
-                                checked={selectedTest === test.name}
-                                onChange={() => setSelectedTest(test.name)}
-                            />
-                            <span>{test.name || 'Unnamed Test'}</span>
-                        </label>
-                    ))
-                ) : (
-                    <p style={{ textAlign: 'center', color: '#777' }}>
-                        No lab tests found
-                    </p>
-                )}
-            </div>
-
-            {/* 🧾 Selected test info */}
-            {selectedTest && (
-                <div style={{
-                    marginTop: '20px',
-                    textAlign: 'center',
-                    color: '#333',
-                    fontWeight: '500'
-                }}>
-                    Selected Test: <span style={{ color: '#007bff' }}>{selectedTest}</span>
-                </div>
+            {labTestloading && (
+                <p>Loading.....</p>
             )}
+            {
+                labTestError && (
+                    <p style={{
+                        color: 'red'
+
+                    }}>Error :{labTestError}</p>
+                )
+            }
+            {
+                !labTestloading && !labTestError && (
+                    <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: '1fr 1fr',
+                        gap: '10px'
+                    }}>
+                        {filteredTests.length > 0 ? (
+                            filteredTests.map((test, i) => (
+                                <div key={i} style={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    border: '1px solid lightgray',
+                                    padding: '10px',
+                                    borderRadius: '8px',
+                                    marginBottom: '8px',
+                                    backgroundColor: '#fafafa'
+                                }}>
+                                    <div>
+                                        <h4 style={{ margin: 0 }}>{test.test}</h4>
+                                        <p style={{ margin: 0, fontSize: '13px', color: '#555' }}>
+                                            {test.disease}
+                                        </p>
+                                    </div>
+                                    <span style={{
+                                        fontSize: '13px',
+                                        color: test.confidence > 0.5 ? 'green' : 'gray'
+                                    }}>
+                                        Confidence: {(test.confidence * 100).toFixed(0)}%
+                                    </span>
+                                </div>
+                            ))
+                        ) : (
+                            <p style={{ textAlign: 'center', color: '#777' }}>No lab tests found</p>
+                        )}
+
+                    </div>
+                )
+            }
+
+
         </div>
     );
 }
