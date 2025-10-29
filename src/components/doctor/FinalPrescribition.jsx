@@ -189,14 +189,16 @@ const FinalPrescription = () => {
                     <br />
                     <hr />
                     <br />
-                    <div>
-                        <h1>℞ </h1>
+                    <h1>℞ </h1>
+                    <div style={{
+                        padding: '20px'
+                    }}>
                         {
                             state?.medication?.length > 0 && (
                                 <div >
-                                    <h4>
-                                        Medication:
-                                    </h4>
+                                    <h3>
+                                        Recommended Lab Tests:
+                                    </h3>
 
                                     <div >
                                         {
@@ -223,17 +225,52 @@ const FinalPrescription = () => {
                                 </div>
                             )
                         }
+                        <br />
+                        {
+                            state?.medication?.length > 0 && (
+                                <div >
+                                    <h3>
+                                        Prescribed Medications:
+                                    </h3>
+
+                                    <div >
+                                        {
+                                            state?.medication.map((med, i) => {
+
+                                                return <div style={{
+                                                    display: 'flex',
+                                                    justifyContent: 'space-between'
+                                                }}>
+                                                    <span>{i + 1} <span>Paracetamol</span></span>
+                                                    <div>
+
+                                                    </div>
+                                                    <i onClick={() => {
+
+                                                    }} class="ri-close-line"></i>
+                                                </div>
+
+                                            })
+                                        }
+
+                                    </div>
+
+                                </div>
+                            )
+                        }
+
                     </div>
+
 
                 </div>
 
-                <div style={{
+                {/* <div style={{
                     backgroundColor: 'rgba(240, 242, 245)',
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
                     height: '50px',
-                    marginTop: '350px'
+                   
                 }}>
                     <p style={{
                         fontSize: '15px',
@@ -244,7 +281,7 @@ const FinalPrescription = () => {
                         This is a computer-generated prescription and is valid without signature<br />
                         City Medical Center • +91 98765 00000 • dr.arun@citymedical.com
                     </p>
-                </div>
+                </div> */}
 
             </div>
 

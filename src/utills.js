@@ -1,14 +1,14 @@
 import axios from "axios";
 
 export const commonInstance = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
+  baseURL: "http://localhost:8000/api",
   timeout: 10000,
   withCredentials: true,
 })
 
 //  super Admin
 export const superAdminInstance = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
+  baseURL: "http://localhost:8000/api",
   timeout: 10000, // 
   withCredentials: true,
 });
@@ -26,7 +26,7 @@ superAdminInstance.interceptors.request.use((config) => {
 
 
 export const adminInstance = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
+  baseURL: "http://localhost:8000/api",
   timeout: 1000,
   withCredentials: true,
 })
@@ -41,7 +41,7 @@ adminInstance.interceptors.request.use((config) => {
 
 
 export const medicalDirectorInstance = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
+  baseURL: "http://localhost:8000/api",
   timeout: 1000,
   withCredentials: true,
   headers: {
@@ -61,7 +61,7 @@ medicalDirectorInstance.interceptors.request.use((config) => {
 
 
 export const doctorInstance = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
+  baseURL: "http://localhost:8000/api",
   timeout: 1000,
   withCredentials: true,
   headers: {

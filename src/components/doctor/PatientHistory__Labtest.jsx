@@ -24,7 +24,7 @@ export function LabTest({ labTest = [], labTestError, labTestloading, onclose })
             maxHeight: '700px',
             minHeight: "700px",
             backgroundColor: '#fff',
-            overflowY: 'scroll',
+            msOverflowX: 'scroll',
             borderRadius: '20px',
             overflowY: 'auto',
             minWidth: '900px',
