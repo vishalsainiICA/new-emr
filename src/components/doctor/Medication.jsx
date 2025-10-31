@@ -33,41 +33,55 @@ BP: ${patient?.initialAssementId?.BP || "N/A"}
     return report_text.trim();
 };
 
-const extractLabTests = (analysis) => {
+const extractLabTests = (analysis = []) => {
     if (!Array.isArray(analysis)) return [];
 
     const tests = [];
+    const medicines = [];
 
     analysis.forEach(item => {
         const args = item.args || {};
-        const primary = args.primary_diagnosis;
+        const primary = args.primary_diagnosis || {};
         const differentials = args.differential_diagnoses || [];
 
-        // Primary diagnosis tests
-        if (primary?.diagnostic_approach?.confirmatory_tests) {
-            primary.diagnostic_approach.confirmatory_tests.forEach(t => {
+        // Collect primary diagnostic tests
+        const primaryTests = [
+            ...(primary.diagnostic_approach?.initial_tests || []),
+            ...(primary.diagnostic_approach?.confirmatory_tests || [])
+        ];
+        primaryTests.forEach(test => {
+            tests.push({
+                test,
+                disease: primary.disease_name || "Unknown Disease",
+                confidence: primary.confidence_score || 0
+            });
+        });
+
+        // Collect differential diagnostic tests
+        differentials.forEach(diff => {
+            (diff.diagnostic_tests || []).forEach(test => {
                 tests.push({
-                    test: t,
-                    disease: primary.disease_name,
-                    confidence: primary.confidence_score || 0,
+                    test,
+                    disease: diff.disease_name || "Unknown Differential",
+                    confidence: diff.confidence_score || 0
                 });
             });
-        }
+        });
 
-        // Differential diagnoses tests
-        differentials.forEach(diff => {
-            (diff.diagnostic_tests || []).forEach(t => {
-                tests.push({
-                    test: t,
-                    disease: diff.disease_name,
-                    confidence: diff.confidence_score || 0,
-                });
+        // Collect suggested medications
+        (primary.suggested_medications || []).forEach(med => {
+            medicines.push({
+                drug_name: med.drug_name,
+                dosage: med.dosage,
+                frequency: med.frequency
             });
         });
     });
 
-    return tests;
+    // return both results if needed
+    return { tests, medicines };
 };
+
 
 
 const analysis = [
@@ -211,8 +225,10 @@ export const Medication = () => {
     const [selectedLabTest, setselectedLabTest] = useState([])
     const [mediciene, setmediciene] = useState([])
     const [searchTerm, setSearchTerm] = useState("");
+    const [searchTermforsymtoms, setsearchTermforsymtoms] = useState("");
     const [open, setClose] = useState(false)
     const [filteredIllness, setFilteredIllness] = useState([]);
+    const [filteredsymtomps, setfilteredsymtomps] = useState([]);
     const [state, setState] = useState({
         hospitalData: [],
         illnessData: [],
@@ -236,6 +252,7 @@ export const Medication = () => {
     const setPartialState = (updates) =>
         setState((prev) => ({ ...prev, ...updates }));
 
+    //   illness
     const handleChange = (e) => {
         const value = e.target.value;
         setSearchTerm(value);
@@ -254,6 +271,26 @@ export const Medication = () => {
 
         setFilteredIllness(filtered);
     };
+
+    const handleChangeSymtomps = (e) => {
+        const value = e.target.value;
+        setsearchTermforsymtoms(value);
+
+        if (value.trim() === "") {
+            setfilteredsymtomps([]);
+            return;
+        }
+
+        // Corrected filter logic
+        const filtered = illnessData.filter((ill) =>
+            ill.symptoms.some((sym) =>
+                sym.toLowerCase().startsWith(value.toLowerCase())
+            )
+        );
+
+        setfilteredsymtomps(filtered);
+    };
+
     // Fetch Hospitals
     useEffect(() => {
         const fetchHospital = async () => {
@@ -316,9 +353,9 @@ export const Medication = () => {
 
                 const analysis = res?.data?.analysis || [];
                 // console.log(analysis)
-                const labTests = extractLabTests(analysis);
-
-                setLabtestResult(labTests);
+                const { test, mediciene } = extractLabTests(analysis);
+                setLabtestResult(test);
+                setmediciene(mediciene)
             } catch (err) {
                 setPartialState({
                     labTestError:
@@ -395,8 +432,10 @@ export const Medication = () => {
                         border: '1px solid black'
                     }}>Generate Prescription </button>
             </div>
-
         </div>
+        <i style={{
+            color: 'rosybrown'
+        }} class="ri-user-fill"></i>
         <div style={{
             marginTop: '10px',
             display: 'flex',
@@ -440,7 +479,7 @@ export const Medication = () => {
                     minHeight: '250px'
                 }}>
                     <h4>Illness/Daignosis</h4>
-                    <input type="search" onChange={handleChange} placeholder="Enter Illness Related" />
+                    <input type="search" onChange={handleChange} placeholder="type illness" value={searchTerm} />
                     {filteredIllness.length > 0 && searchTerm.trim() !== "" && (
                         <>
                             <div className="illnessSuggenstion">
@@ -473,6 +512,7 @@ export const Medication = () => {
                                                     return [...prevIllnesses, ill];
                                                 }
                                             });
+                                            setSearchTerm('')
                                         }}
 
                                         key={i} className="illCard">
@@ -503,66 +543,50 @@ export const Medication = () => {
                     <br />
                     <br />
                     <h4>Symptoms</h4>
-                    <input type="search" placeholder="Enter Illness Related" />
-                    {/* {filteredIllness.length > 0 && searchTerm.trim() !== "" && (
+                    <input type="search" placeholder="add more symtomps...." onChange={handleChangeSymtomps} value={searchTermforsymtoms} />
+                    {filteredsymtomps.length > 0 && searchTermforsymtoms.trim() !== "" && (
                         <>
                             <div className="illnessSuggenstion">
-                                {filteredIllness?.map((ill, i) => {
-                                    const isSelected = illness.some((item) => item._id === ill._id)
-                                    return <div
-                                        onClick={() => {
-                                            setIllness((prevIllnesses) => {
-                                                const isSelected = prevIllnesses.some((item) => item._id === ill._id);
-
-                                                if (isSelected) {
-                                                    // Deselect: illness remove + uske symptoms bhi remove
-                                                    setSymptopms((prevSymptoms) =>
-                                                        prevSymptoms.filter(
-                                                            (sym) => !ill.symptoms.includes(sym) // remove all symptoms of deselected illness
-                                                        )
-                                                    );
-                                                    return prevIllnesses.filter((item) => item._id !== ill._id);
-                                                } else {
-                                                    //Select: illness add + uske symptoms bhi add (avoid duplicates)
-                                                    setSymptopms((prevSymptoms) => {
-                                                        const newSymptoms = [...prevSymptoms];
-                                                        ill.symptoms.forEach((s) => {
-                                                            if (!newSymptoms.includes(s)) {
-                                                                newSymptoms.push(s);
-                                                            }
-                                                        });
-                                                        return newSymptoms;
-                                                    });
-                                                    return [...prevIllnesses, ill];
+                                {filteredsymtomps?.map((ill, i) => {
+                                    return ill.symptoms?.map((sym) => {
+                                        const isSelected = symtomps.some((item) => item === sym)
+                                        return <div
+                                            onClick={() => {
+                                                if (!symtomps.includes(sym)) {
+                                                    setSymptopms((prev) => [...prev, sym]);
                                                 }
-                                            });
-                                        }}
+                                                setsearchTermforsymtoms("");
+                                                setfilteredsymtomps([]);
+                                            }}
 
-                                        key={i} className="illCard">
-                                        <div>
-                                            <h4>{ill?.illnessName}</h4>
-                                            <p style={{
-                                            }}>{ill?.illnessName}</p>
+                                            key={i} className="illCard">
+                                            <div>
+                                                <h4>{sym}</h4>
+                                                <p style={{
+                                                }}>{ill?.illnessName}</p>
+                                            </div>
+                                            {isSelected && (
+                                                <i
+                                                    className="ri-check-line"
+                                                    style={{
+                                                        fontSize: "24px",
+                                                        color: "green",
+                                                        marginLeft: "10px",
+                                                    }}
+                                                ></i>
+                                            )}
+
+
                                         </div>
-                                        {isSelected && (
-                                            <i
-                                                className="ri-check-line"
-                                                style={{
-                                                    fontSize: "24px",
-                                                    color: "green",
-                                                    marginLeft: "10px",
-                                                }}
-                                            ></i>
-                                        )}
 
+                                    })
 
-                                    </div>
                                 })}
                             </div>
 
                         </>
 
-                    )} */}
+                    )}
                     {
                         symtomps.length > 0 && (
                             <div style={{
@@ -625,7 +649,7 @@ export const Medication = () => {
 
                 }}>
                     <h3>Suggested Medication:</h3>
-                    {loadingHospital && (
+                    {labTestloading && (
                         <span style={{
                             display: 'flex',
                             justifyContent: 'center',
@@ -638,7 +662,7 @@ export const Medication = () => {
                         </span>
                     )}
 
-                    {error && (
+                    {labTestError && (
                         <h4 style={{
                             color: 'red',
                             display: 'flex',
@@ -648,7 +672,7 @@ export const Medication = () => {
                         }}>{error}</h4>
                     )}
 
-                    {!loadingHospital && !error && Array.isArray(filterHospital) && filterHospital.length > 0 && (
+                    {!labTestloading && !error && Array.isArray(mediciene) && mediciene.length > 0 && (
                         <div style={{
 
                             gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
@@ -656,7 +680,7 @@ export const Medication = () => {
                             marginTop: '20px',
                             // minHeight: '500px'
                         }}>
-                            {filterHospital.map((hos, i) => (
+                            {mediciene.map((hos, i) => (
                                 <div key={i}
                                     style={{
                                         display: 'flex',
@@ -677,8 +701,8 @@ export const Medication = () => {
                                             gap: "20px" // space between items
                                         }}
                                     > <div>
-                                            <h4 style={{ margin: 0 }}>{hos.name || "Unnamed Hospital"}</h4>
-                                            <p style={{ margin: 0 }}>{`${hos.city},${hos.state}`}</p>
+                                            <h4 style={{ margin: 0 }}>{hos?.drug_name || "Unnamed Hospital"}</h4>
+                                            <p style={{ margin: 0 }}>{`${hos?.dosage},${hos?.frequency}`}</p>
                                         </div>
 
                                     </div>
@@ -718,7 +742,6 @@ export const Medication = () => {
                             justifyContent: 'space-between'
                         }}>
                             <h4>Lab Test:</h4>
-                            <h4>Total: {selectedLabTest.length}</h4>
                         </div>
                         {
                             selectedLabTest.length > 0 && selectedLabTest.map((test, i) => {
@@ -778,7 +801,6 @@ export const Medication = () => {
                         justifyContent: 'space-between'
                     }}>
                         <h4>Medication:</h4>
-                        <h4>Total: {mediciene.length}</h4>
                     </div>
 
                     {

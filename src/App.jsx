@@ -11,6 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { PatientRecords } from './components/superAdmin/PatientRecord'
 import { Medication } from './components/doctor/Medication'
 import FinalPrescription from './components/doctor/FinalPrescribition'
+import { AdminManagement } from './components/superAdmin/AdminManagement'
 
 
 
@@ -27,6 +28,7 @@ function App() {
         <Route path='hosptial-management' element={<HospitalManagement></HospitalManagement>}></Route>
         <Route path='new-hosptial' element={<NewHospital></NewHospital>}></Route>
         <Route path='patient-record' element={<PatientRecords></PatientRecords>}></Route>
+        <Route path='admin-record' element={<AdminManagement></AdminManagement>}></Route>
       </Route>
       <Route path='/final-prescription' element={<FinalPrescription />} ></Route>
       <Route path='/doctor' element={<DoctorControlPannel />} >

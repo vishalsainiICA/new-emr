@@ -923,8 +923,7 @@ export const NewHospital = () => {
 
 
         </div>
-        {console.log('assing', assinDoctor)
-        }
+
         {assinDoctor !== null && (
             <div style={{
                 position: 'absolute',

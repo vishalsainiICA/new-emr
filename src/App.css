@@ -127,16 +127,43 @@ i {
 
 .hospitalperformance {
     margin: 20px 0 10px 0;
-    background-color: white;
     padding: 20px 0 0 10px;
     border-radius: 10px 10px 0 0;
     min-height: 500px;
 }
 
 .hosptialHeading {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr 1fr 1fr 1fr;
+    background-color: #f4f4f4;
+    padding: 15px;
+    border: 0 solid gray;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    font-weight: 600;
+}
 
+.hosptialBody {
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr 1fr 1fr 1fr;
+    border: 0 solid gray;
+    background-color: white;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.hosptialBody:hover {
+    background-color: rgb(252, 247, 247)
+}
+
+.hosptialHeading,
+.hosptialBody h4 {
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 /* hospitalOnboard */

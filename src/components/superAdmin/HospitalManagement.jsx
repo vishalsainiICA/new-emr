@@ -2,6 +2,7 @@ import { superAdminApi } from "../../auth";
 import { Circles } from 'react-loader-spinner';
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import moment from 'moment'
 
 export function HospitalManagement() {
 
@@ -11,16 +12,26 @@ export function HospitalManagement() {
     const [filterHospital, setFilterHospital] = useState([]);
 
     const navigate = useNavigate()
+    const filter = (value) => {
 
+        if (value.trim() === "") {
+            setFilterHospital(data)
+        }
+        const filter = data.filter((hos) => {
+            return hos.name.toLowerCase().startsWith(value.toLowerCase())
+        })
+        setFilterHospital(filter)
+
+    }
     useEffect(() => {
         const fetchHospital = async () => {
             setIsProcessing(true);
             setError(null);
             try {
-                const res = await superAdminApi.getHosptialMetrices();
+                const res = await superAdminApi.getAllhosptial();
                 if (res.status === 200) {
                     setData(res.data.data || []);
-                    setFilterHospital(res.data.data?.TopPerformanceHospital || []); // initialize filter
+                    setFilterHospital(res.data.data || []); // initialize filter
                 } else {
                     setError(res.data?.message || "Something went wrong");
                 }
@@ -41,7 +52,24 @@ export function HospitalManagement() {
                 justifyContent: 'space-between'
             }}>
                 <h2>Hospital Management</h2>
-                <button className="commonBtn" onClick={() => navigate('/new-hosptial')}>Add New Hospital</button>
+                <div style={{
+                    display: 'flex',
+                    gap: '10px',
+                }}>
+                    <input style={{
+                        height: '40px',
+                        width: '300px',
+                        padding: '10px'
+                    }} type="search" placeholder="type name.." onChange={(e) => filter(e.target.value)} />
+                    <input style={{
+                        height: '40px',
+                        width: '250px',
+                        padding: '10px',
+                        cursor: "pointer"
+                    }} type="date" />
+                    <button className="commonBtn" onClick={() => navigate('/new-hosptial')}>Add New Hospital</button>
+                </div>
+
             </div>
 
             {/* hospital performance */}
@@ -52,7 +80,8 @@ export function HospitalManagement() {
                     <p>Location</p>
                     <p>Revenue</p>
                     <p>Patients</p>
-                    <p>Action</p>
+                    <p>CreateBy</p>
+                    <p>CreateAt</p>
                 </div>
                 {isProcessing && (
                     <span style={{
@@ -77,53 +106,32 @@ export function HospitalManagement() {
                     }}>{error}</h4>
                 )}
 
-                {!isProcessing && !error && Array.isArray(filterHospital) && filterHospital.length > 0 && (
-                    <div style={{
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                        gap: '20px',
-                        marginTop: '20px',
-                        // minHeight: '500px'
-                    }}>
-                        {filterHospital.map((hos, i) => (
-                            <div key={i}
-                                style={{
-                                    width: '80%',
+                {!isProcessing && !error && Array.isArray(filterHospital) && filterHospital.length > 0 && filterHospital.map((hos, i) => (
+                    <div key={i}
 
-                                    backgroundColor: 'white',
-                                    border: '1px solid lightgray',
-                                    padding: '15px 15px 15px 30px',
-                                    borderRadius: '10px',
-                                    margin: '0 0 10px 10px',
+                        className="hosptialBody"
+                    >
+                        <div>
+                            <h3 style={{ margin: 0 }}>{hos.name || "Unnamed Hospital"}</h3>
+                            <p style={{ margin: 0, }}>Director {hos?.medicalDirector?.name || "N/A"}</p>
+                            <p style={{ margin: 0, color: 'blue' }}>Schemes {hos?.patientCategories?.join(",") || "N/A"}</p>
+                        </div>
+                        <h4 style={{ margin: 0 }}>{hos.address},{hos.city} ,{hos.state},{hos.pinCode} </h4>
+                        <h4 style={{ margin: 0, color: 'green' }}>₹ {hos?.totalRevenue || "N/A"}</h4>
+                        <h4 style={{ margin: 0 }}>{hos?.totalPatient || "N/A"}</h4>
+                        <div>
+                            <h4 style={{ margin: 0 }}>{hos?.adminId?.name || "N/A"}</h4>
+                            <p style={{ margin: 0, }}>{hos?.adminId?.email || "N/A"}</p>
 
-                                    cursor: 'pointer'
-                                }}>
-                                <div
+                        </div>
 
-                                    style={{
+                        <h4 style={{ margin: 0 }}>{moment(hos?.createdAt).format("DD/MM/YYYY, hh:mm A") || "N/A"}</h4>
+                        {/* <span><i class="ri-edit-box-line"></i><i class="ri-delete-bin-6-line"></i></span>a */}
 
-                                        padding: "10px",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        gap: "20px" // space between items
-                                    }}
-                                >
-
-                                    <div>
-                                        <h4 style={{ margin: 0 }}>{hos.name || "Unnamed Hospital"}</h4>
-                                        <p style={{ margin: 0 }}>{hos.location || "Unknown location"}</p>
-                                    </div>
-
-                                </div>
-
-                                <div>
-                                    <h4>{hos.name || "Unnamed Hospital"}</h4>
-                                    <p>{hos.location || "Unknown location"}</p>
-                                </div>
-
-                            </div>
-                        ))}
                     </div>
-                )}
+                ))}
+
+
 
                 {!isProcessing && !error && Array.isArray(filterHospital) && filterHospital.length === 0 && (
                     <p

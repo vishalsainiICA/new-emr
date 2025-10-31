@@ -62,7 +62,9 @@ export function Dashboard() {
             </div>
 
             {/* hospital performance */}
-            <div className="hospitalperformance">
+            <div className="hospitalperformance" style={{
+                backgroundColor: 'white'
+            }}>
                 <h3>Hospital Performance</h3>
 
                 {isProcessing && (

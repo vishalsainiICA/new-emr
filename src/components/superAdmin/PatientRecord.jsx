@@ -9,6 +9,20 @@ export function PatientRecords() {
     const [error, setError] = useState(null);
     const [filterPatient, setFilterPatient] = useState([]);
 
+
+    const filter = (value) => {
+
+        if (value.trim() === "") {
+            setFilterPatient(data)
+        }
+        const filter = data.filter((hos) => {
+            return hos.name.toLowerCase().startsWith(value.toLowerCase())
+        })
+
+        setFilterPatient(filter)
+
+    }
+
     useEffect(() => {
         const fetchPatient = async () => {
             setIsProcessing(true);
@@ -42,21 +56,27 @@ export function PatientRecords() {
                     width: '100%',
                     display: 'flex',         // add this
                     justifyContent: 'end', // horizontally center
-                    alignItems: 'end',        // vertically bottom         // height dena zaroori hai
+                    alignItems: 'end',
+                    gap: '10px'      // vertically bottom         // height dena zaroori hai
                 }}
             >
                 <input
+                    onChange={(e) => filter(e.target.value)}
                     style={{
-                        width: '20%',
+                        width: '170px',
                     }}
                     type="text"
                     placeholder="Search"
                 />
+                <input style={{
+                    width: '170px',
+                }} type="date" />
+
             </div>
 
 
             <div style={{ marginTop: '10px' }}>
-                <div className="patientRecordsHeadings">
+                <div className="hosptialHeading">
                     <p>Patient ID</p>
                     <p>Name</p>
                     <p>Age</p>
@@ -64,53 +84,51 @@ export function PatientRecords() {
                     <p>Doctor</p>
                     <p>Date</p>
                 </div>
-                <div className="patientRecordBody">
-                    {isProcessing && (
-                        <span style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            flexDirection: 'column',
-                            padding: '50px 0'
-                        }}>
-                            <Circles height="40" width="40" color="#4f46e5" ariaLabel="loading" />
-                            <br />Loading...
-                        </span>
-                    )}
 
-                    {error && (
-                        <h4 style={{
-                            color: 'red',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            padding: '50px 0'
-                        }}>{error}</h4>
-                    )}
+                {isProcessing && (
+                    <span style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        flexDirection: 'column',
+                        padding: '50px 0'
+                    }}>
+                        <Circles height="40" width="40" color="#4f46e5" ariaLabel="loading" />
+                        <br />Loading...
+                    </span>
+                )}
 
-                    {!isProcessing && !error && Array.isArray(filterPatient) && filterPatient.length > 0 && (
-                        <>
-                            {filterPatient.map((patient, i) => (
-                                <div key={i}>
-                                    <p>{patient.uid}</p>
-                                    <p>{patient.name}</p>
-                                    <p>{patient.age}</p>
-                                    <p>{patient?.hospitalId?.name || "N/A"}</p>
-                                    <p>{patient?.doctorId?.name || "N/A"}</p>
-                                    <p>{patient.date || "1990-05-15"}</p>
-                                </div>
-                            ))}
-                        </>
-                    )}
+                {error && (
+                    <h4 style={{
+                        color: 'red',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        padding: '50px 0'
+                    }}>{error}</h4>
+                )}
 
-                    {!isProcessing && !error && Array.isArray(filterPatient) && filterPatient.length === 0 && (
-                        <p style={{ textAlign: 'center', padding: '50px 0' }}>
-                            No Patient found
-                        </p>
-                    )}
-                </div>
+                {!isProcessing && !error && Array.isArray(filterPatient) && filterPatient.length > 0 && (
+                    <>
+                        {filterPatient.map((patient, i) => (
+                            <div key={i} className="hosptialBody" >
+                                <p>{patient.uid}</p>
+                                <p>{patient.name}</p>
+                                <p>{patient.age}</p>
+                                <p>{patient?.hospitalId?.name || "N/A"}</p>
+                                <p>{patient?.doctorId?.name || "N/A"}</p>
+                                <p>{patient.date || "1990-05-15"}</p>
+                            </div>
+                        ))}
+                    </>
+                )}
+
+                {!isProcessing && !error && Array.isArray(filterPatient) && filterPatient.length === 0 && (
+                    <p style={{ textAlign: 'center', padding: '50px 0' }}>
+                        No Patient found
+                    </p>
+                )}
             </div>
-
         </div>
     )
 }
