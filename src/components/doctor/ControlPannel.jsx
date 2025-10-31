@@ -9,7 +9,7 @@ export function ControlPannel() {
     const navigate = useNavigate()
 
     const navLinks = [
-        { name: 'DashBoard', icon: 'ri-dashboard-line', navigate: '/dashboard' },
+        { name: 'DashBoard', icon: 'ri-dashboard-line', navigate: '/doctor/dashboard' },
         { name: 'Hospital Management', icon: 'ri-building-line', navigate: '/hosptial-management' },
         { name: 'Patients Records', icon: 'ri-group-line', navigate: '/patient-record' },
         { name: 'Admin Management', icon: 'ri-admin-line', navigate: '/super-admin/dashboard' },
