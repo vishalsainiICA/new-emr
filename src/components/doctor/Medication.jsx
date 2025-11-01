@@ -342,34 +342,31 @@ export const Medication = () => {
         fetchIllness();
     }, []);
 
-    useEffect(() => {
-        const fetchLabTest = async () => {
-            setPartialState({ labTestloading: true, labTestError: null });
-            try {
-                const res = await axios.post(
-                    "https://care-backend-sa3e.onrender.com/api/v1/analyze",
-                    { report_text: buildReportText(illness, symtomps, patient) }
-                );
+    const fetchLabTest = async () => {
+        setPartialState({ labTestloading: true, labTestError: null });
+        try {
+            const res = await axios.post(
+                "https://care-backend-sa3e.onrender.com/api/v1/analyze",
+                { report_text: buildReportText(illness, symtomps, patient) }
+            );
 
-                const analysis = res?.data?.analysis || [];
-                // console.log(analysis)
-                const { test, mediciene } = extractLabTests(analysis);
-                setLabtestResult(test);
-                setmediciene(mediciene)
-            } catch (err) {
-                setPartialState({
-                    labTestError:
-                        err.response?.data?.message || err.message || "Error fetching lab tests",
-                });
-            } finally {
-                setPartialState({ labTestloading: false });
-            }
-        };
+            const analysis = res?.data?.analysis || [];
+            // console.log(analysis)
+            const { test, mediciene } = extractLabTests(analysis);
+            console.log("test", test)
+            console.log("mediciene", mediciene)
 
-        fetchLabTest();
-    }, [symtomps, illness]);
-
-
+            setLabtestResult(test);
+            setmediciene(mediciene)
+        } catch (err) {
+            setPartialState({
+                labTestError:
+                    err.response?.data?.message || err.message || "Error fetching lab tests",
+            });
+        } finally {
+            setPartialState({ labTestloading: false });
+        }
+    };
 
     const {
         hospitalData,
@@ -433,9 +430,7 @@ export const Medication = () => {
                     }}>Generate Prescription </button>
             </div>
         </div>
-        <i style={{
-            color: 'rosybrown'
-        }} class="ri-user-fill"></i>
+
         <div style={{
             marginTop: '10px',
             display: 'flex',
@@ -648,7 +643,22 @@ export const Medication = () => {
                 <div style={{
 
                 }}>
-                    <h3>Suggested Medication:</h3>
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between'
+
+                    }}>
+                        <h3>Suggested Medication:</h3>
+                        <button
+                            disabled={labTestloading}
+                            onClick={() => fetchLabTest()}
+                            style={{
+                                backgroundColor: "lightblue"
+                            }}>
+                            Generate
+                        </button>
+                    </div>
+
                     {labTestloading && (
                         <span style={{
                             display: 'flex',
@@ -669,7 +679,7 @@ export const Medication = () => {
                             justifyContent: 'center',
                             alignItems: 'center',
                             padding: '50px 0'
-                        }}>{error}</h4>
+                        }}>{labTestError}</h4>
                     )}
 
                     {!labTestloading && !error && Array.isArray(mediciene) && mediciene.length > 0 && (
@@ -680,6 +690,8 @@ export const Medication = () => {
                             marginTop: '20px',
                             // minHeight: '500px'
                         }}>
+                            {console.log("medicien", mediciene)
+                            }
                             {mediciene.map((hos, i) => (
                                 <div key={i}
                                     style={{
@@ -854,11 +866,13 @@ export const Medication = () => {
         </div>
 
 
-        {open && (
-            <div className="patientHistory">
-                <LabTest selectedLabTest={selectedLabTest} setselectedLabTest={setselectedLabTest} labTest={labtestResult} labTestError={labTestError} labTestloading={labTestloading} onclose={() => setClose(false)} ></LabTest>
-            </div>
-        )}
+        {
+            open && (
+                <div className="patientHistory">
+                    <LabTest selectedLabTest={selectedLabTest} setselectedLabTest={setselectedLabTest} labTest={labtestResult} labTestError={labTestError} labTestloading={labTestloading} onclose={() => setClose(false)} ></LabTest>
+                </div>
+            )
+        }
 
     </div >
 
