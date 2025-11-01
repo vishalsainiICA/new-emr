@@ -25,8 +25,8 @@ function App() {
     <Routes>
       {/* */}
       <Route path='/' element={<ControlPannel></ControlPannel>} >
-        {/* <Route path='dashboard' element={<DoctorDashboard />}></Route> */}
-        <Route path='dashboard' element={<Dashboard></Dashboard>}></Route>
+        <Route path='dashboard' element={<DoctorDashboard />}></Route>
+        {/* <Route path='dashboard' element={<Dashboard></Dashboard>}></Route> */}
         <Route path='hosptial-management' element={<HospitalManagement></HospitalManagement>}></Route>
         <Route path='new-hosptial' element={<NewHospital></NewHospital>}></Route>
         <Route path='patient-record' element={<PatientRecords></PatientRecords>}></Route>
