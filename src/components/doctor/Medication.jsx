@@ -83,136 +83,155 @@ const extractLabTests = (analysis = []) => {
 };
 
 
-
 const analysis = [
     {
         "args": {
             "differential_diagnoses": [
                 {
-                    "relevance_explanation": "E. coli is a common bacterial cause of foodborne illness, and its symptoms—particularly severe stomach cramping and diarrhea—closely overlap with the patient's presentation. Identifying the specific strain is crucial, as some types, like E. coli O157:H7, can lead to severe complications.",
-                    "summary": "E. coli refers to a group of bacteria, some strains of which are pathogenic and produce powerful toxins, leading to gastroenteritis. The illness typically ranges from mild to severe, often characterized by intense stomach cramping, tenderness, and potentially bloody diarrhea. Age and underlying health can influence the severity of the infection.",
+                    "relevance_explanation": "Emphysema is a chronic obstructive lung disease that shares the key symptoms of shortness of breath, coughing, wheezing, and chest tightness with asthma. Although less common in a 35-year-old without a known smoking history, it must be considered, especially if symptoms are progressive or if Alpha-1 antitrypsin (AAT) deficiency is suspected.",
+                    "summary": "Emphysema is a chronic, progressive lung condition characterized by the destruction of the air sacs (alveoli), leading to reduced surface area for gas exchange. This results in persistent shortness of breath, chronic coughing, and often wheezing, particularly during physical activity.",
                     "treatment_approach": [
-                        "Rest and supportive care",
-                        "Aggressive fluid replacement to manage dehydration",
-                        "Avoidance of anti-diarrheal medications"
+                        "Oxygen therapy",
+                        "Pulmonary rehabilitation",
+                        "Nutrition therapy",
+                        "Avoid smoking and lung irritants"
                     ],
-                    "disease_name": "E. coli Infection (Gastroenteritis)",
+                    "disease_name": "Emphysema",
                     "key_symptoms": [
-                        "Severe and bloody diarrhea",
-                        "Intense stomach cramping and tenderness",
-                        "Nausea and vomiting"
+                        "Shortness of breath",
+                        "Chest tightness",
+                        "Coughing",
+                        "Wheezing",
+                        "Weight loss"
                     ],
                     "diagnostic_tests": [
-                        "Stool culture and PCR testing to detect the presence of E. coli bacteria and identify specific pathogenic strains (e.g., Shiga toxin-producing E. coli).",
-                        "Complete Blood Count (CBC) to check for signs of hemolytic uremic syndrome (HUS), especially in severe cases."
-                    ],
-                    "confidence_score": 0.75
-                },
-                {
-                    "relevance_explanation": "Viral gastroenteritis is a highly common cause of acute gastroenteritis that is clinically indistinguishable from many cases of bacterial food poisoning. The patient's symptoms (vomiting, diarrhea, fever, cramps) are classic for a viral etiology, such as Norovirus, which is often transmitted via contaminated food or person-to-person contact.",
-                    "summary": "Viral gastroenteritis, often called the \"stomach flu,\" is an inflammation of the stomach and intestines caused by viruses like Norovirus or Rotavirus. It is characterized by the acute onset of non-bloody, watery diarrhea, vomiting, abdominal cramps, and sometimes fever. The illness is typically self-limiting, with the main risk being dehydration.",
-                    "treatment_approach": [
-                        "Supportive care and rest",
-                        "Oral or intravenous fluid and electrolyte replacement",
-                        "Antiemetics for persistent vomiting"
-                    ],
-                    "disease_name": "Viral Gastroenteritis",
-                    "key_symptoms": [
-                        "Acute onset of watery diarrhea and vomiting",
-                        "Low-grade fever and general malaise",
-                        "Abdominal cramps and nausea"
-                    ],
-                    "diagnostic_tests": [
-                        "Clinical diagnosis based on symptom presentation and local outbreak patterns",
-                        "Stool PCR panel for common viral pathogens (e.g., Norovirus, Rotavirus) if diagnosis is uncertain or for public health tracking"
+                        "Spirometry",
+                        "CT scan",
+                        "Arterial blood gas analysis",
+                        "Testing for AAT deficiency"
                     ],
                     "confidence_score": 0.6
                 },
                 {
-                    "relevance_explanation": "Parasitic infections, such as Giardiasis, are a less common but important cause of foodborne illness, often acquired through contaminated water or food. While the acute presentation can mimic bacterial or viral causes, parasitic infections tend to cause more persistent symptoms, bloating, and malabsorption.",
-                    "summary": "Parasitic gastroenteritis is caused by protozoa or helminths that infect the gastrointestinal tract, often transmitted through contaminated food or water. Giardiasis, a common example, involves the parasite Giardia lamblia colonizing the small intestine, leading to symptoms like chronic diarrhea, abdominal cramps, bloating, and significant fatigue.",
+                    "relevance_explanation": "Bronchitis, both acute and chronic, causes inflammation of the bronchial tubes, leading to a persistent cough and shortness of breath, which can mimic asthma. While wheezing is less typical than in asthma, the symptom overlap warrants its inclusion as a differential diagnosis.",
+                    "summary": "Bronchitis is an inflammation of the lining of the bronchial tubes, which carry air to and from the lungs. It is characterized by a persistent cough, often producing mucus, along with shortness of breath and chest discomfort. Acute cases are usually viral, while chronic cases are often linked to smoking or prolonged exposure to irritants.",
                     "treatment_approach": [
-                        "Antiparasitic medications (e.g., Metronidazole, Tinidazole)",
-                        "Fluid and nutritional support",
-                        "Symptomatic relief for cramping and nausea"
+                        "Oxygen therapy",
+                        "Pulmonary rehabilitation",
+                        "Breathing exercise program",
+                        "Rest and hydration"
                     ],
-                    "disease_name": "Parasitic Gastroenteritis (e.g., Giardiasis)",
+                    "disease_name": "Bronchitis",
                     "key_symptoms": [
-                        "Persistent, foul-smelling, watery diarrhea",
-                        "Abdominal cramping and bloating",
-                        "Fatigue and weight loss (if chronic)"
+                        "Cough (often with mucus production)",
+                        "Shortness of breath",
+                        "Chest discomfort",
+                        "Fatigue"
                     ],
                     "diagnostic_tests": [
-                        "Complete Blood Count (CBC) and blood smear to check for signs of parasitic infection (e.g., eosinophilia)",
-                        "Ova and Parasite (O&P) examination of stool sample, often requiring multiple samples",
-                        "Stool antigen testing for specific parasites (e.g., Giardia, Cryptosporidium)"
+                        "Chest X-ray",
+                        "Pulmonary function test",
+                        "Sputum tests"
                     ],
-                    "confidence_score": 0.5
+                    "confidence_score": 0.55
+                },
+                {
+                    "relevance_explanation": "Pulmonary edema presents with acute breathlessness and cough, which overlaps with the patient's symptoms. However, the patient's stable heart rate and blood pressure make a primary cardiac cause less likely. It is a critical differential to rule out, especially in cases of severe or rapidly worsening shortness of breath.",
+                    "summary": "Pulmonary edema is a condition caused by excess fluid accumulation in the air spaces and parenchyma of the lungs, leading to impaired gas exchange and severe difficulty breathing. It is often a complication of heart failure, presenting with a cough, a feeling of breathlessness, and sometimes a rapid or irregular heartbeat.",
+                    "treatment_approach": [
+                        "Oxygen therapy",
+                        "Diuretics (to remove excess fluid)",
+                        "Medications to improve heart function",
+                        "Treating the underlying cause"
+                    ],
+                    "disease_name": "Pulmonary edema",
+                    "key_symptoms": [
+                        "A cough",
+                        "Breathless feeling",
+                        "Rapid, irregular heartbeat",
+                        "Anxiety",
+                        "Cold, clammy skin"
+                    ],
+                    "diagnostic_tests": [
+                        "Chest X-ray",
+                        "Electrocardiogram (ECG)",
+                        "Echocardiogram",
+                        "Blood tests (e.g., BNP)"
+                    ],
+                    "confidence_score": 0.3
                 }
             ],
             "primary_diagnosis": {
-                "relevance_explanation": "The patient's clinical picture, characterized by the acute onset of vomiting, diarrhea, stomach cramps, and fever, is the classic presentation of acute gastroenteritis caused by food poisoning. This diagnosis encompasses illness resulting from the ingestion of food or drinks contaminated with bacteria, viruses, parasites, or toxins. The symptoms directly align with the core manifestations of foodborne illness.",
+                "clinical_presentation": {
+                    "key_findings": [
+                        "Wheezing (a whistling sound during breathing)",
+                        "Chest tightness",
+                        "Episodic shortness of breath"
+                    ],
+                    "common_symptoms": [
+                        "Shortness of breath",
+                        "Wheezing",
+                        "Chest tightness",
+                        "Coughing at night"
+                    ]
+                },
                 "treatment_plan": {
                     "advanced_options": [
-                        "Intravenous (IV) fluid replacement for severe dehydration or persistent vomiting",
-                        "Administration of specific antibiotics or antiparasitics if a bacterial or parasitic cause is confirmed and deemed necessary by a healthcare professional",
-                        "Hospitalization for patients with severe symptoms, underlying comorbidities, or signs of organ damage"
+                        "Biologic therapies for severe, refractory asthma",
+                        "Bronchial thermoplasty (for select severe cases)",
+                        "Continuous monitoring of breathing and symptoms"
                     ],
                     "first_line": [
-                        "Fluid replacement with water and electrolyte-rich solutions to compensate for fluid loss",
-                        "Rest to allow the digestive system to recover",
-                        "Use of probiotics to help restore the gut microbiome"
+                        "Use of a quick-relief inhaler for acute symptoms",
+                        "Daily use of long-term control medications (e.g., inhaled corticosteroids)",
+                        "Patient education on trigger avoidance and medication adherence"
                     ]
                 },
-                "clinical_presentation": {
-                    "common_symptoms": [
-                        "Vomiting",
-                        "Diarrhea",
-                        "Stomach cramps",
-                        "Fever",
-                        "Weakness",
-                        "Headache",
-                        "Loose stools"
-                    ],
-                    "key_findings": [
-                        "Acute onset of gastrointestinal distress (vomiting and diarrhea)",
-                        "Presence of systemic symptoms including fever and weakness",
-                        "Abdominal pain and cramping localized to the stomach"
-                    ]
-                },
-                "summary": "Food poisoning, or foodborne illness, is a common condition resulting from the consumption of contaminated food or beverages. It is caused by various pathogens, including bacteria, viruses, and parasites, or their toxins. The illness typically manifests as acute gastroenteritis, characterized by a rapid onset of symptoms such as nausea, vomiting, stomach pain and cramps, loose stools, and sometimes fever. While most cases are self-limiting, the primary concern is the risk of dehydration due to fluid loss.",
+                "relevance_explanation": "The patient's clinical presentation, characterized by the classic triad of shortness of breath, wheezing, and chest tightness, particularly with nocturnal coughing, is highly indicative of asthma. This aligns directly with the symptoms and clinical description of asthma provided in the knowledge base, making it the most probable diagnosis.",
+                "summary": "Asthma is a chronic inflammatory disease of the airways characterized by recurrent episodes of wheezing, shortness of breath, chest tightness, and coughing. These symptoms result from reversible airflow obstruction and bronchospasm, often triggered by environmental factors, exercise, or respiratory infections. Effective management focuses on prevention and long-term control of airway inflammation.",
                 "diagnostic_approach": {
                     "initial_tests": [
-                        "Detailed history of recent food and drink consumption (within 48 hours)",
-                        "Inquiry about recent travel and symptoms in other people who shared the same meal",
-                        "Physical examination to assess hydration status and abdominal tenderness"
+                        "Spirometry",
+                        "Peak flow monitoring",
+                        "Physical exam"
                     ],
                     "confirmatory_tests": [
-                        "Stool culture to identify specific bacterial pathogens (e.g., Salmonella, Campylobacter)",
-                        "Stool testing for viruses (e.g., Norovirus) and parasites (e.g., Giardia) to determine the causative agent",
-                        "Testing of suspected food or drink sources if an outbreak is suspected"
+                        "Methacholine challenge",
+                        "Sputum eosinophils",
+                        "Allergy testing"
                     ]
                 },
                 "prevention_strategies": [
-                    "Practice proper food handling and preparation techniques, including cooking foods to the correct internal temperatures.",
-                    "Avoid cross-contamination by keeping raw meats separate from ready-to-eat foods and using separate cutting boards.",
-                    "Ensure prompt refrigeration of perishable foods and discard any food left at room temperature for too long.",
-                    "Maintain excellent personal hygiene, especially frequent and thorough handwashing before eating and after using the restroom."
+                    "Identify and avoid specific asthma triggers (e.g., airborne substances, chemical fumes)",
+                    "Follow a detailed asthma action plan provided by a healthcare professional",
+                    "Take prescribed long-term control medications consistently",
+                    "Get appropriate vaccinations (e.g., influenza, pneumonia) to avoid respiratory infections"
                 ],
-                "disease_name": "Food Poisoning (Foodborne Illness)",
+                "disease_name": "Asthma",
+                "suggested_medications": [
+                    {
+                        "dosage": "90 mcg/puff",
+                        "drug_name": "Albuterol (Quick-relief inhaler)",
+                        "frequency": "As needed for symptoms or before exercise"
+                    },
+                    {
+                        "dosage": "Varies by severity",
+                        "drug_name": "Inhaled Corticosteroid (e.g., Fluticasone)",
+                        "frequency": "Once or twice daily for long-term control"
+                    }
+                ],
                 "confidence_score": 0.95
             },
             "clinical_recommendations": [
-                "Aggressively manage fluid and electrolyte balance using oral rehydration solutions (ORS) to prevent dehydration, which is the most common complication of acute gastroenteritis.",
-                "Monitor for signs of severe illness, such as persistent high fever, bloody diarrhea, inability to keep fluids down, or symptoms of neurological involvement (e.g., blurred vision, numbness), and seek immediate medical care if these occur.",
-                "Avoid over-the-counter anti-diarrheal medications (like loperamide) unless specifically instructed by a healthcare professional, as they can prolong the illness or worsen outcomes in certain bacterial infections (e.g., E. coli O157:H7).",
-                "Maintain strict food safety and hygiene practices at home to prevent secondary transmission, including frequent handwashing and proper cleaning of contaminated surfaces."
+                "Undergo spirometry and peak flow monitoring to establish baseline lung function and confirm the degree of airway obstruction.",
+                "Develop a personalized Asthma Action Plan in consultation with a healthcare provider, detailing steps for daily management, symptom worsening, and emergency situations.",
+                "Receive education on the correct technique for using both quick-relief and long-term control inhalers to maximize medication efficacy.",
+                "Identify and minimize exposure to known or suspected asthma triggers, such as airborne substances, chemical fumes, or cold air, potentially through allergy testing."
             ]
         },
         "type": "ClinicalAnalysis"
     }
 ]
-
 
 
 export const Medication = () => {
@@ -224,6 +243,7 @@ export const Medication = () => {
     const [labtestResult, setLabtestResult] = useState([])
     const [selectedLabTest, setselectedLabTest] = useState([])
     const [mediciene, setmediciene] = useState([])
+    const [selectedMediciene, setselectedMediciene] = useState([])
     const [searchTerm, setSearchTerm] = useState("");
     const [searchTermforsymtoms, setsearchTermforsymtoms] = useState("");
     const [open, setClose] = useState(false)
@@ -345,19 +365,19 @@ export const Medication = () => {
     const fetchLabTest = async () => {
         setPartialState({ labTestloading: true, labTestError: null });
         try {
-            const res = await axios.post(
-                "https://care-backend-sa3e.onrender.com/api/v1/analyze",
-                { report_text: buildReportText(illness, symtomps, patient) }
-            );
+            // const res = await axios.post(
+            //     "https://care-backend-sa3e.onrender.com/api/v1/analyze",
+            //     { report_text: buildReportText(illness, symtomps, patient) }
+            // );
 
-            const analysis = res?.data?.analysis || [];
+            // const analysis = res?.data?.analysis || [];
             // console.log(analysis)
-            const { test, mediciene } = extractLabTests(analysis);
-            console.log("test", test)
-            console.log("mediciene", mediciene)
+            const { tests, medicines } = extractLabTests(analysis);
+            console.log("test", tests)
+            console.log("mediciene", medicines)
 
-            setLabtestResult(test);
-            setmediciene(mediciene)
+            setLabtestResult(tests);
+            setmediciene(medicines)
         } catch (err) {
             setPartialState({
                 labTestError:
@@ -416,7 +436,7 @@ export const Medication = () => {
                                     hospitalData: patient?.hospitalId,
                                     illnessData: illness,
                                     symtomps: symtomps,
-                                    medication: mediciene,
+                                    medication: selectedMediciene,
                                     selectedLabTest: selectedLabTest
                                 }
                             }
@@ -465,13 +485,16 @@ export const Medication = () => {
         {/* Symtomps/illness */}
         <div style={{
             width: '100%',
+
             display: 'flex',
             justifyContent: 'space-between',
-            backgroundColor: 'white'
+            backgroundColor: 'white',
+            overflowY: 'scroll'
         }}>
             <div className="medicationPatienmedication">
                 <div style={{
-                    minHeight: '250px'
+                    minHeight: '250px',
+
                 }}>
                     <h4>Illness/Daignosis</h4>
                     <input type="search" onChange={handleChange} placeholder="type illness" value={searchTerm} />
@@ -641,11 +664,14 @@ export const Medication = () => {
 
                 </div>
                 <div style={{
+                    height: '100%',
 
                 }}>
                     <div style={{
+                        marginTop: '10px',
                         display: 'flex',
-                        justifyContent: 'space-between'
+                        justifyContent: 'space-between',
+                        boxShadow:'10px 20px 5px rg'
 
                     }}>
                         <h3>Suggested Medication:</h3>
@@ -682,18 +708,16 @@ export const Medication = () => {
                         }}>{labTestError}</h4>
                     )}
 
-                    {!labTestloading && !error && Array.isArray(mediciene) && mediciene.length > 0 && (
+                    {!labTestloading && !labTestError && Array.isArray(mediciene) && mediciene.length > 0 && (
                         <div style={{
-
                             gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
                             gap: '20px',
                             marginTop: '20px',
                             // minHeight: '500px'
                         }}>
-                            {console.log("medicien", mediciene)
-                            }
-                            {mediciene.map((hos, i) => (
-                                <div key={i}
+                            {mediciene.map((hos, i) => {
+
+                                return <div key={i}
                                     style={{
                                         display: 'flex',
                                         justifyContent: 'space-between',
@@ -712,18 +736,18 @@ export const Medication = () => {
                                             alignItems: "center",
                                             gap: "20px" // space between items
                                         }}
-                                    > <div>
+                                    >
+                                        <div>
                                             <h4 style={{ margin: 0 }}>{hos?.drug_name || "Unnamed Hospital"}</h4>
-                                            <p style={{ margin: 0 }}>{`${hos?.dosage},${hos?.frequency}`}</p>
+                                            <p style={{ margin: 0 }}>{`${hos?.dosage}`}</p>
+                                            <p style={{ margin: 0 }}>{`${hos?.frequency}`}</p>
                                         </div>
 
                                     </div>
-
                                     <div>
-
                                         <button
                                             onClick={() => {
-                                                setmediciene((prev) => [...prev, hos])
+                                                setselectedMediciene((prev) => [...prev, hos])
                                             }}
                                             style={{
                                                 padding: '10px',
@@ -733,7 +757,7 @@ export const Medication = () => {
                                     </div>
 
                                 </div>
-                            ))}
+                            })}
                         </div>
                     )}
 
@@ -816,7 +840,7 @@ export const Medication = () => {
                     </div>
 
                     {
-                        mediciene.length > 0 && mediciene.map((hos, i) => {
+                        selectedMediciene.length > 0 && selectedMediciene.map((hos, i) => {
                             return <div key={i}
                                 style={{
                                     display: 'flex',
@@ -837,18 +861,16 @@ export const Medication = () => {
                                         gap: "20px" // space between items
                                     }}
                                 > <div>
-                                        <h4 style={{ margin: 0 }}>{'Paracetamol' || "Unnamed Hospital"}</h4>
-                                        <span>{"Once Daily"} <span></span>| {"Take After Meal"}</span>
+                                        <h4 style={{ margin: 0 }}>{hos?.drug_name}</h4>
+                                        <span>{hos?.dosage} <span></span>| {"Take After Meal"}</span>
 
                                     </div>
 
                                 </div>
-
                                 <div>
-
                                     <button
                                         onClick={() => {
-                                            setmediciene((prev) => prev.filter((item) => item._id !== hos._id))
+                                            setselectedMediciene((prev) => prev.filter((item) => item?.drug_name !== hos?.drug_name))
                                         }}
                                         style={{
                                             padding: '10px',

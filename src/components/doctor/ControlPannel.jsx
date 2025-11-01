@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Outlet, useNavigate } from "react-router-dom"
 import { CircularAvatar } from "../utility/CicularAvatar"
 
@@ -9,11 +9,16 @@ export function ControlPannel() {
     const navigate = useNavigate()
 
     const navLinks = [
-        { name: 'DashBoard', icon: 'ri-dashboard-line', navigate: '/doctor/dashboard' },
-        { name: 'Hospital Management', icon: 'ri-building-line', navigate: '/hosptial-management' },
-        { name: 'Patients Records', icon: 'ri-group-line', navigate: '/patient-record' },
-        { name: 'Admin Management', icon: 'ri-admin-line', navigate: '/super-admin/dashboard' },
+        { name: 'Dashboard', icon: 'ri-dashboard-line', navigate: '/doctor/dashboard' },
+        { name: 'Patients Records', icon: 'ri-group-line', navigate: '/doctor/patient-record' },
     ]
+
+    useEffect(() => {
+        if (window.location.pathname == "/doctor") {
+            navigate("/doctor/dashboard")
+            setActiveTab("Dashboard")
+        }
+    })
 
     return <div className="controlPannel">
         <div className={`navbar ${collapsed ? "collapse" : ""}`}>
@@ -50,7 +55,7 @@ export function ControlPannel() {
                 display: 'flex',
                 flexDirection: "column",
                 gap: '30px',
-                height: '100%',
+                height: collapsed ? '' : "100%",
                 justifyContent: 'space-between'
             }}>
                 {
@@ -65,26 +70,30 @@ export function ControlPannel() {
                         </div>
 
                     })}
-                <div style={{
-                    height: '100%',
-                    justifyContent: 'end',
-                    alignItems: 'end',
-                    alignContent: 'end',
-                    marginBottom: '30px'
-                }}>
-                    <hr style={{
-                        width: '100%',
-                        height: '2px',
+
+                {!collapsed && (
+                    <div style={{
+                        height: '100%',
+                        justifyContent: 'end',
+                        alignItems: 'end',
+                        alignContent: 'end',
+                        marginBottom: '30px'
+                    }}>
+                        <hr style={{
+                            width: '100%',
+                            height: '2px',
 
 
-                    }} />
-                    <h3 style={{
-                        color: 'white',
-                    }}>Dr. Arun Mehta <i style={{ height: '50px', width: '50px' }} class="ri-logout-box-r-line"></i></h3>
-                    <p style={{ color: 'white' }}>MBBS, MD (Internal Medicine)</p>
+                        }} />
+                        <h3 style={{
+                            color: 'white',
+                        }}>Dr. Arun Mehta <i style={{ height: '50px', width: '50px' }} class="ri-logout-box-r-line"></i></h3>
+                        <p style={{ color: 'white' }}>MBBS, MD (Internal Medicine)</p>
 
 
-                </div>
+                    </div>
+                )}
+
             </div>
 
 

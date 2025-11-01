@@ -69,13 +69,13 @@ export const doctorInstance = axios.create({
   }
 })
 
-doctorInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem("Doctor");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+// doctorInstance.interceptors.request.use((config) => {
+//   const token = localStorage.getItem("Doctor");
+//   if (token) {
+//     config.headers.Authorization = `Bearer ${token}`;
+//   }
+//   return config;
+// });
 
 // Converts nested object → FormData
 export const createFormData = (obj, form = new FormData(), namespace = '') => {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { superAdminApi } from "../../auth";
+import { doctorAPi } from "../../auth";
 import { Circles } from "react-loader-spinner";
 import moment from "moment";
 
@@ -9,7 +9,6 @@ export default function PatientRecords() {
     const [isProcessing, setIsProcessing] = useState(false);
     const [error, setError] = useState(null);
     const [filterPatient, setFilterPatient] = useState([]);
-
 
     const filter = (value) => {
 
@@ -29,7 +28,7 @@ export default function PatientRecords() {
             setIsProcessing(true);
             setError(null);
             try {
-                const res = await superAdminApi.allPatients();
+                const res = await doctorAPi.getAllPatients();
                 if (res.status === 200) {
                     setData(res.data.data || []);
                     setFilterPatient(res.data.data || []); // initialize filter
@@ -37,6 +36,7 @@ export default function PatientRecords() {
                     setError(res.data?.message || "Something went wrong");
                 }
             } catch (err) {
+                console.log(err);
                 setError(err.response?.data?.message || "Internal Server Error");
             } finally {
                 setIsProcessing(false);
@@ -46,12 +46,9 @@ export default function PatientRecords() {
         fetchPatient();
     }, []);
 
-
-
     return (
         <div>
             <h2>Patient-Records</h2>
-
             <div
                 style={{
                     width: '100%',
@@ -79,9 +76,9 @@ export default function PatientRecords() {
             <div style={{ marginTop: '10px' }}>
                 <div className="hosptialHeading">
                     <p>Patient ID</p>
+                    <p>Problem</p>
                     <p>Name</p>
                     <p>Age</p>
-                    <p>Hospital</p>
                     <p>Doctor</p>
                     <p>Date</p>
                 </div>
@@ -114,11 +111,11 @@ export default function PatientRecords() {
                         {filterPatient.map((patient, i) => (
                             <div key={i} className="hosptialBody" >
                                 <p>{patient.uid}</p>
+                                <p>{patient?.hospitalId?.name || "N/A"}</p>
                                 <p>{patient.name}</p>
                                 <p>{patient.age}</p>
-                                <p>{patient?.hospitalId?.name || "N/A"}</p>
                                 <p>{patient?.doctorId?.name || "N/A"}</p>
-                                <p>{moment(hos?.createdAt).format("DD/MM/YYYY, hh:mm A") || "N/A"}</p>
+                                <p>{moment(patient?.createdAt).format("DD/MM/YYYY, hh:mm A") || "N/A"}</p>
                             </div>
                         ))}
                     </>

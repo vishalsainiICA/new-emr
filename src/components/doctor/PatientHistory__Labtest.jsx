@@ -45,6 +45,7 @@ export function LabTest({ labTest = [], labTestError, labTestloading, onclose, s
             borderRadius: '20px',
             overflowY: 'auto',
             maxWidth: '900px',
+            minWidth: '900px',
             boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
         }}>
             {/* Heading */}

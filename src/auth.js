@@ -125,26 +125,26 @@ export const doctorAPi = {
         return await doctorInstance.get('/doctor/auth/profile')
     },
     patientRegistration: async (formData) => {
-        return await instance.post('/patient/patient-registration', formData)
+        return await doctorInstance.post('/patient/patient-registration', formData)
 
     },
     getAllPatients: async () => {
-        return await instance.get('/patient/getAllPatients')
+        return await doctorInstance.get('/doctor/all-patient-record')
     },
     getAllPatientsAssements: async () => {
-        return await instance.get('/patient/getAllPatientsAssement')
+        return await doctorInstance.get('/patient/getAllPatientsAssement')
     },
     // HUD - Hospital Unique ID
     verifyHUD: async (uid) => {
-        return await instance.get(`/patient/verifyUID?uid=${uid}`)
+        return await doctorInstance.get(`/patient/verifyUID?uid=${uid}`)
     },
     saveInitialAssement: async (data) => {
 
-        return await instance.post('/patient/initialassessment', data)
+        return await doctorInstance.post('/patient/initialassessment', data)
     },
     savePrescribtionData: async (data) => {
 
-        return await instance.post('/patient/prescribtion-data', data)
+        return await doctorInstance.post('/patient/prescribtion-data', data)
     },
     getTodayPatient: async () => {
         return await doctorInstance.get('/doctor/today-Patient')

@@ -238,8 +238,8 @@ const FinalPrescription = () => {
                                                 }}>
 
                                                     <div>
-                                                        <span>{i + 1} <span>Paracetamol</span></span>
-                                                        <p>Acetaminophen 500mg</p>
+                                                        <span>{i + 1} <span>{med?.drug_name}</span></span>
+                                                        <p>{med?.dosage}</p>
                                                     </div>
                                                     <div style={{
                                                         display: 'flex'

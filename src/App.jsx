@@ -8,7 +8,8 @@ import { HospitalManagement } from './components/superAdmin/HospitalManagement'
 import { NewHospital } from './components/superAdmin/NewHospital'
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import { PatientRecords } from './components/superAdmin/PatientRecord'
+import PatientRecords from './components/superAdmin/PatientRecord'
+import PatientRecordsof_Doc from './components/doctor/PatientRecord'
 import { Medication } from './components/doctor/Medication'
 import FinalPrescription from './components/doctor/FinalPrescribition'
 import { AdminManagement } from './components/superAdmin/AdminManagement'
@@ -24,8 +25,8 @@ function App() {
     <Routes>
       {/* */}
       <Route path='/' element={<ControlPannel></ControlPannel>} >
-        <Route path='dashboard' element={<DoctorDashboard />}></Route>
-        {/* <Route path='dashboard' element={<Dashboard></Dashboard>}></Route> */}
+        {/* <Route path='dashboard' element={<DoctorDashboard />}></Route> */}
+        <Route path='dashboard' element={<Dashboard></Dashboard>}></Route>
         <Route path='hosptial-management' element={<HospitalManagement></HospitalManagement>}></Route>
         <Route path='new-hosptial' element={<NewHospital></NewHospital>}></Route>
         <Route path='patient-record' element={<PatientRecords></PatientRecords>}></Route>
@@ -35,7 +36,7 @@ function App() {
       <Route path='/doctor' element={<DoctorControlPannel />} >
         <Route path='dashboard' element={<DoctorDashboard />}></Route>
         <Route path='medication' element={<Medication />}></Route>
-        <Route path='patient-record' element={<PatientRecords></PatientRecords>}></Route>
+        <Route path='patient-record' element={<PatientRecordsof_Doc></PatientRecordsof_Doc>}></Route>
       </Route>
 
 
