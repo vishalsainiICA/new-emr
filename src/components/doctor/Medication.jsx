@@ -365,13 +365,13 @@ export const Medication = () => {
     const fetchLabTest = async () => {
         setPartialState({ labTestloading: true, labTestError: null });
         try {
-            // const res = await axios.post(
-            //     "https://care-backend-sa3e.onrender.com/api/v1/analyze",
-            //     { report_text: buildReportText(illness, symtomps, patient) }
-            // );
+            const res = await axios.post(
+                "https://care-backend-sa3e.onrender.com/api/v1/analyze",
+                { report_text: buildReportText(illness, symtomps, patient) }
+            );
 
-            // const analysis = res?.data?.analysis || [];
-            // console.log(analysis)
+            const analysis = res?.data?.analysis || [];
+            console.log(analysis)
             const { tests, medicines } = extractLabTests(analysis);
             console.log("test", tests)
             console.log("mediciene", medicines)
