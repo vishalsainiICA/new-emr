@@ -90,6 +90,7 @@ span {
 .mainContent {
     width: 100%;
     background-color: aliceblue;
+    /* background-color: rgb(247, 231, 231); */
     padding: 30px;
 }
 
@@ -115,7 +116,7 @@ span {
     justify-content: 'center';
     cursor: 'pointer';
     border: "1px solid lightgray";
-    background-color: white;
+    background-color: rgb(211, 233, 232);
     box-shadow: 5px 5px 2px rgba(0, 0, 0, 0.1);
     border-radius: 7px;
 

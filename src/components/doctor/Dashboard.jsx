@@ -84,7 +84,9 @@ export function Dashboard() {
 
 
             {/* hospital performance */}
-            <div className="hospitalperformance">
+            <div style={{
+                backgroundColor: 'white'
+            }} className="hospitalperformance">
                 <h3><i class="ri-calendar-line"></i>Today's Appointments</h3>
                 <p>
                     {new Date().toLocaleDateString('en-US', {

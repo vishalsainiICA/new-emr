@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { superAdminApi } from "../../auth";
+import { FaArrowLeft } from "react-icons/fa";
 
 
 const CurrentStep = ({ currentStep, totalSteps }) => {
@@ -77,15 +77,16 @@ const indianStates = [
 ];
 
 const dummyDepartments = [
-    { icon: "❤️", name: "Cardiology" },
-    { icon: "👂", name: "ENT" },
-    { icon: "📷", name: "Radiology" },
-    { icon: "🧠", name: "Neurology" },
-    { icon: "🦴", name: "Orthopedics" },
-    { icon: "👶", name: "Pediatrics" },
-    { icon: "🔬", name: "General Surgery" },
-    { icon: "💊", name: "Dermatology" }
+    { image: "src/assets/DepartmentsImages/cardiology.png", name: "Cardiology" },
+    { image: "src/assets/DepartmentsImages/audiologist.png", name: "ENT" },
+    { image: "src/assets/DepartmentsImages/medical.png", name: "Radiology" },
+    { image: "src/assets/DepartmentsImages/neurology.png", name: "Neurology" },
+    { image: "src/assets/DepartmentsImages/arthritis.png", name: "Orthopedics" },
+    { image: "src/assets/DepartmentsImages/pediatrics.png", name: "Pediatrics" },
+    { image: "src/assets/DepartmentsImages/anesthesia.png", name: "General Surgery" },
+    { image: "src/assets/DepartmentsImages/skin.png", name: "Dermatology" }
 ];
+
 
 
 export const NewHospital = () => {
@@ -95,6 +96,7 @@ export const NewHospital = () => {
     const [isProcessing, setIsProcessing] = useState(false)
     const [currentStep, setCurrentStep] = useState(1); // start at step 1
     const [categoryName, setCategoryName] = useState(null)
+    const [addCustomDep, setCustomDepartment] = useState(null)
     const [hosptialData, setHospitalData] = useState({
         name: '',
         state: null,
@@ -158,6 +160,18 @@ export const NewHospital = () => {
             qualification: ""
         });
     };
+    const handelAddCustomDepartment = () => {
+
+        if (!addCustomDep.name || !addCustomDep.image) {
+            toast.error("Please fill all required fields!");
+            return;
+        }
+        setCustomDepartment(null)
+        toast.success("Department Add Successfully!");
+
+        return;
+
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -446,34 +460,44 @@ export const NewHospital = () => {
                     }}>
                         {
                             dummyDepartments.map((item, i) => {
+                                const isSelected = hosptialData.supportedDepartments.some((dep) => dep.departmentName === item.name)
                                 return <span
                                     onClick={() => {
+                                        if (isSelected) {
+                                            return
+                                        }
                                         return setHospitalData({
                                             ...hosptialData, supportedDepartments: [
                                                 ...hosptialData.supportedDepartments,
                                                 {
                                                     departmentName: item.name,
+                                                    image: item.image,
                                                     doctors: []
                                                 }
                                             ]
                                         })
                                     }}
                                     style={{
+                                        backgroundColor: isSelected ? "lightgrey" : "",
                                         margin: '10px',
                                         display: 'flex',
                                         padding: '7px',
                                         justifyContent: 'center',
                                         alignItems: 'center',
-                                        gap: '10px'
+                                        gap: '10px',
+                                        border: '0.5px solid gray',
+                                        borderRadius: '10px',
+                                        cursor: 'pointer',
+                                        width: '170px',
+                                        height: '70px'
+
 
                                     }} key={i}>
-                                    <input
-
-                                        type="checkbox" style={{
-                                            height: '25px',
-                                            width: '20px',
-                                            minWidth: '10px',
-                                        }} />{item.name}</span>
+                                    <img style={{
+                                        width: '50px',
+                                        height: '50px'
+                                    }} src={item.image} alt={item.name} />
+                                    {item.name}</span>
                             })
                         }
                     </div>
@@ -484,7 +508,7 @@ export const NewHospital = () => {
                         justifyContent: 'space-between'
                     }}>
                         <h4> Selected Department</h4>
-                        <button>+ Add Custom</button>
+                        <button onClick={() => setCustomDepartment({ name: '', image: '' })}>+ Add Custom</button>
                     </div>
 
                     {
@@ -530,7 +554,12 @@ export const NewHospital = () => {
 
                                             </div>
                                             <div>
-                                                <i class="ri-close-large-line"></i>
+                                                <i class="ri-close-large-line" onClick={() => {
+                                                    const updated = hosptialData.supportedDepartments.filter((item, index) => index !== i)
+                                                    setHospitalData((prev) => {
+                                                        return { ...prev, supportedDepartments: updated }
+                                                    })
+                                                }}></i>
                                             </div>
 
 
@@ -914,6 +943,7 @@ export const NewHospital = () => {
                     if (currentStep < 5) {
                         setCurrentStep(currentStep + 1);
                     } else {
+
                         handleSubmit(e);
                     }
                 }}
@@ -1041,7 +1071,80 @@ export const NewHospital = () => {
                 </div>
             </div>
         )}
+        {addCustomDep !== null && (
+            <div style={{
+                position: 'absolute',
+                inset: 0,
+                zIndex: 9999,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backdropFilter: 'blur(10px)',
+                backgroundColor: 'rgba(19, 5, 5, 0.6)',
+            }}>
+                <div style={{
+                    backgroundColor: 'white',
+                    minHeight: '400px',
+                    width: '600px',
+                    padding: '20px',
+                    borderRadius: '10px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between'
+                }}>
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center'
+                    }}>
+                        <h3>
+                            {`New Department`}
+                        </h3>
+                        <i
+                            onClick={() => setCustomDepartment(null)}
+                            className="ri-close-large-line"
+                            style={{ cursor: 'pointer', fontSize: '20px' }}
+                        ></i>
+                    </div>
 
+                    <label style={{ width: '100%' }}>
+                        Name *
+                        <input
+                            type="text"
+                            placeholder="Name"
+                            value={addCustomDep.name}
+                            onChange={(e) => setCustomDepartment({ ...addCustomDep, name: e.target.value })}
+                        />
+                    </label>
+
+                    <label style={{
+                        width: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        marginTop: '10px'
+                    }}>
+                        Department Image *
+                        <input
+                            value={addCustomDep.image}
+                            onChange={(e) => setCustomDepartment({ ...addCustomDep, image: e.target.value })}
+                            style={{
+                                border: '0.5px solid black'
+                            }} type="file"></input>
+                    </label>
+
+                    {/*Action Buttons */}
+                    <div style={{
+                        marginTop: '30px',
+                        display: 'flex',
+                        justifyContent: 'end',
+                        gap: '10px'
+                    }}>
+                        <button onClick={() => setCustomDepartment(null)}>Cancel</button>
+                        <button onClick={handelAddCustomDepartment}>Add Department</button>
+                    </div>
+                </div>
+            </div>
+        )}
 
     </div >
 

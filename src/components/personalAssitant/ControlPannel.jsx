@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react"
 import { Outlet, useNavigate } from "react-router-dom"
+import { CircularAvatar } from "../utility/CicularAvatar"
+
 
 export function ControlPannel() {
     const [activeTab, setActiveTab] = useState('Dashboard')
@@ -7,16 +9,13 @@ export function ControlPannel() {
     const navigate = useNavigate()
 
     const navLinks = [
-        { name: 'DashBoard', icon: 'ri-dashboard-line', navigate: '/dashboard' },
-        { name: 'Hospital Management', icon: 'ri-building-line', navigate: '/hosptial-management' },
-        { name: 'Patients Records', icon: 'ri-group-line', navigate: '/patient-record' },
-        { name: 'Admin Management', icon: 'ri-admin-line', navigate: '/admin-record' },
+        { name: 'Dashboard', icon: 'ri-dashboard-line', navigate: '/pa/dashboard' },
+        { name: 'Patients Records', icon: 'ri-group-line', navigate: '/pa/patient-record' },
     ]
 
-
     useEffect(() => {
-        if (window.location.pathname == "/") {
-            navigate("/dashboard")
+        if (window.location.pathname == "/pa") {
+            navigate("/pa/dashboard")
             setActiveTab("Dashboard")
         }
     })
@@ -31,10 +30,8 @@ export function ControlPannel() {
                 {!collapsed && (
                     <div>
                         <h3>EMR ( Electronic Medical Record )</h3>
-                        <p>Super Admin</p>
                     </div>
                 )}
-
                 <i
                     onClick={() => setcollapsed(!collapsed)}
                     style={{
@@ -48,6 +45,7 @@ export function ControlPannel() {
                     }} className={collapsed ? "ri-layout-left-line" : "ri-layout-right-line"}></i>
             </div>
             <hr style={{
+                width: '100%',
                 height: '2px',
                 marginBottom: '20px',
             }} />
@@ -57,7 +55,8 @@ export function ControlPannel() {
                 display: 'flex',
                 flexDirection: "column",
                 gap: '30px',
-                height: '450px'
+                height: collapsed ? '' : "100%",
+
             }}>
                 {
                     navLinks.map((items, i) => {
@@ -71,6 +70,30 @@ export function ControlPannel() {
                         </div>
 
                     })}
+
+                {/* {!collapsed && (
+                    <div style={{
+                        height: '100%',
+                        justifyContent: 'end',
+                        alignItems: 'end',
+                        alignContent: 'end',
+                        marginBottom: '30px'
+                    }}>
+                        <hr style={{
+                            width: '100%',
+                            height: '2px',
+
+
+                        }} />
+                        <h3 style={{
+                            color: 'white',
+                        }}>Dr. Arun Mehta <i style={{ height: '50px', width: '50px' }} class="ri-logout-box-r-line"></i></h3>
+                        <p style={{ color: 'white' }}>MBBS, MD (Internal Medicine)</p>
+
+
+                    </div>
+                )} */}
+
             </div>
 
 

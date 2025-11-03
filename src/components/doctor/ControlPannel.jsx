@@ -29,7 +29,7 @@ export function ControlPannel() {
             }}>
                 {!collapsed && (
                     <div>
-                        <h3>EMR System</h3>
+                        <h3>EMR ( Electronic Medical Record )</h3>
                     </div>
                 )}
                 <i

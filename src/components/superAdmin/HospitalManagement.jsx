@@ -1,4 +1,4 @@
-import { superAdminApi } from "../../auth";
+import { commonApi, superAdminApi } from "../../auth";
 import { Circles } from 'react-loader-spinner';
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,7 @@ import moment from 'moment'
 export function HospitalManagement() {
 
     const [data, setData] = useState([]);
+    
     const [isProcessing, setIsProcessing] = useState(false);
     const [error, setError] = useState(null);
     const [filterHospital, setFilterHospital] = useState([]);
@@ -44,6 +45,8 @@ export function HospitalManagement() {
 
         fetchHospital();
     }, []);
+
+
 
     return (
         <div className="dashboard">
@@ -120,8 +123,8 @@ export function HospitalManagement() {
                         <h4 style={{ margin: 0, color: 'green' }}>₹ {hos?.totalRevenue || "N/A"}</h4>
                         <h4 style={{ margin: 0 }}>{hos?.totalPatient || "N/A"}</h4>
                         <div>
-                            <h4 style={{ margin: 0 }}>{hos?.adminId?.name || "N/A"}</h4>
-                            <p style={{ margin: 0, }}>{hos?.adminId?.email || "N/A"}</p>
+                            <h4 style={{ margin: 0 }}>{hos?.adminId?.name || "super-admin"}</h4>
+                            <p style={{ margin: 0, }}>{hos?.adminId?.email || "super@admin"}</p>
 
                         </div>
 
