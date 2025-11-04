@@ -367,7 +367,14 @@ export const Medication = () => {
         try {
             const res = await axios.post(
                 "https://care-backend-sa3e.onrender.com/api/v1/analyze",
-                { report_text: buildReportText(illness, symtomps, patient) }
+
+                {
+                    report_text: buildReportText(illness, symtomps, patient)
+
+                }, {
+                timeout: 1000,
+                
+            }
             );
 
             const analysis = res?.data?.analysis || [];
@@ -671,7 +678,7 @@ export const Medication = () => {
                         marginTop: '10px',
                         display: 'flex',
                         justifyContent: 'space-between',
-                        boxShadow:'10px 20px 5px rg'
+                        boxShadow: '10px 20px 5px rg'
 
                     }}>
                         <h3>Suggested Medication:</h3>
