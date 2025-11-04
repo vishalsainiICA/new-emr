@@ -91,7 +91,7 @@ const dummyDepartments = [
 
 export default function NewPatient() {
     const totalSteps = 5;
-    const navigate = useNavigate(-1)
+    const navigate = useNavigate()
     const [selectedDep, setSelectedDep] = useState(null)
     const [isProcessing, setIsProcessing] = useState(false)
     const [currentStep, setCurrentStep] = useState(1); // start at step 1
@@ -185,7 +185,7 @@ export default function NewPatient() {
                 formdata.append(key, value ?? "");
             });
 
-            formdata.append("hospitalId", "6908988170e584cca0dad6d2")
+            // formdata.append("hospitalId", "6908988170e584cca0dad6d2")
 
             const res = await commonApi.registerPatient(formdata);
             toast.success(res?.data?.message || "Patient registered successfully");
@@ -215,10 +215,10 @@ export default function NewPatient() {
                 pastDocumnents: []
             });
             setUploadedDocuments([]);
-            navigation("/");
+            navigate(-1);
         } catch (err) {
             console.log(err);
-            
+
             toast.error(err.response?.data?.message || "Something went wrong");
         } finally {
             setIsProcessing(false);

@@ -1,4 +1,4 @@
-import { adminInstance, commonInstance, doctorInstance, medicalDirectorInstance, superAdminInstance } from "./utills";
+import { adminInstance, commonInstance, doctorInstance, medicalDirectorInstance, perosnalAssistanceInstance, superAdminInstance } from "./utills";
 
 
 export const commonApi = {
@@ -138,10 +138,7 @@ export const doctorAPi = {
     verifyHUD: async (uid) => {
         return await doctorInstance.get(`/patient/verifyUID?uid=${uid}`)
     },
-    saveInitialAssement: async (data) => {
 
-        return await doctorInstance.post('/patient/initialassessment', data)
-    },
     savePrescribtionData: async (data) => {
 
         return await doctorInstance.post('/patient/prescribtion-data', data)
@@ -152,5 +149,11 @@ export const doctorAPi = {
     getAllIllness: async () => {
         return await doctorInstance.get('/doctor/all-illness')
     }
+}
+
+export const perosnalAssistantAPI = {
+    saveInitialAssement: async (data, id) => {
+        return await perosnalAssistanceInstance.post(`/assitant/intital-assement?patientId=${id}`, data)
+    },
 }
 

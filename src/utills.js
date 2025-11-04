@@ -78,6 +78,16 @@ export const doctorInstance = axios.create({
 // });
 
 // Converts nested object → FormData
+
+
+export const perosnalAssistanceInstance = axios.create({
+  baseURL: "http://localhost:8000/api",
+  timeout: 1000,
+  withCredentials: true,
+  headers: {
+    "Content-Type": 'application/json'
+  }
+})
 export const createFormData = (obj, form = new FormData(), namespace = '') => {
   for (let key in obj) {
     if (obj[key] === undefined || obj[key] === null) continue;

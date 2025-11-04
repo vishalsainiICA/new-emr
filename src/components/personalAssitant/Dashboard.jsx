@@ -290,16 +290,39 @@ export function Dashboard() {
                                         backgroundColor: 'lightseagreen'
                                     }}>{"Web" || "N/A"}</p>
                                     <p>{moment(patient?.createdAt).format("DD/MM/YYYY, hh:mm A") || "N/A"}</p>
-                                    <p
-                                    onClick={()=>navigate('/pa/inital-assement')}
-                                     style={{
-                                        border: '1px solid lightgray',
-                                        borderRadius: '7px',
-                                        marginRight: '20px',
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        fontWeight: 'bold'
-                                    }}>InitialAssement</p>
+                                    {patient?.initialAssementId && typeof patient.initialAssementId === "string" && patient.initialAssementId.trim() !== "" ? (
+                                        <p
+                                            style={{
+                                                borderRadius: '7px',
+                                                marginRight: '20px',
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                textAlign: 'center',
+                                                fontWeight: 'bold'
+                                            }}
+                                        >
+                                            Scheduled
+                                        </p>
+
+                                    ) : (
+
+                                        <p
+                                            onClick={() => navigate('/pa/inital-assement', { state: { patient } })}
+                                            style={{
+                                                border: '1px solid lightgray',
+                                                borderRadius: '7px',
+                                                marginRight: '20px',
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                fontWeight: 'bold',
+                                                cursor: 'pointer'
+                                            }}
+                                        >
+                                            Initial Assessment
+                                        </p>
+                                    )}
+
+
                                 </div>
                             ))}
                         </>

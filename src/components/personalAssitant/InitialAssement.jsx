@@ -1,11 +1,54 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 
-import { doctorAPi } from '../../auth';
+import { doctorAPi, perosnalAssistantAPI } from '../../auth';
 import { toast } from 'react-toastify';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { BsArrowLeft } from 'react-icons/bs';
 
+const validationRules = {
+    height: { min: 50, max: 250, label: "Height (cm)" },
+    weight: { min: 2, max: 300, label: "Weight (kg)" },
+    BP: { label: "Blood Pressure (mmHg)" }, // we'll check separately
+    o2: { min: 60, max: 100, label: "O₂ Saturation (%)" },
+    heartRate: { min: 30, max: 200, label: "Heart Rate (bpm)" },
+    sugar: { min: 40, max: 500, label: "Sugar (mg/dL)" },
+    hemoglobin: { min: 5, max: 20, label: "Hemoglobin (g/dL)" },
+    bodyTempreture: { min: 30, max: 45, label: "Body Temperature (°C)" },
+    respiratoryRate: { min: 5, max: 50, label: "Respiratory Rate (breaths/min)" },
+    bloodGroup: { label: "Blood Group" }
+};
+
+
+const validateForm = (patient) => {
+    for (const key in validationRules) {
+        const rule = validationRules[key];
+        const value = patient[key];
+
+        // Empty check
+        if (value === "" || value === null) {
+            toast.error(`${rule.label} is required`);
+            return false;
+        }
+
+        // BP validation (simple format check)
+        if (key === "BP" && !/^\d{2,3}\/\d{2,3}$/.test(value)) {
+            toast.error("Blood Pressure should be in format e.g. 120/80");
+            return false;
+        }
+
+        // Range validation for numeric fields
+        if (rule.min && (value < rule.min || value > rule.max)) {
+            toast.error(`${rule.label} should be between ${rule.min} and ${rule.max}`);
+            return false;
+        }
+    }
+
+    return true;
+};
 
 const InitialAssesment = () => {
+
     const [patient, setPatient] = useState({
         uid: "",
         height: null,
@@ -19,51 +62,31 @@ const InitialAssesment = () => {
         bodyTempreture: null,
         respiratoryRate: null,
     });
-    const [uploadedDocuments, setUploadedDocuments] = useState([]);
     const [isProcessing, setIsProcessing] = useState(false);
-    const [InputedDocuments, setInputedDocuments] = useState([{ document: null }]);
-    const [isUidVerified, setUidVerify] = useState(null)
+    const location = useLocation();
+    const navigate = useNavigate();
 
-    const handleAddMoreDocument = () => {
-        setInputedDocuments([...InputedDocuments, { document: null }])
-    }
+    const data = location.state?.patient;
 
-    const handleVerifyUID = async () => {
-        setIsProcessing(true)
-        try {
-            const res = await doctorAPi.verifyHUD(patient.uid)
-                .then(res => {
-                    if (res?.status === 200) {
-                        toast.success(res?.data?.message);
-                        setIsProcessing(false)
-                        setUidVerify(true)
-                    }
-                    else {
-                        setIsProcessing(false)
-                        setUidVerify(false)
-                        toast.error(res?.data?.message);
-                    }
+    useEffect(() => {
 
-                })
-
-        } catch (error) {
-            toast.error(error.response.data.message || 'Internal Server Error')
-            setIsProcessing(false)
-            setUidVerify(false)
-            console.log('error when verify uid', error);
+        if (!data) {
+            navigate("/pa/dashboard");
+            return;
         }
-        finally {
-            setIsProcessing(false);
-        }
-    }
+        console.log("Received Data:", data);
+
+    }, [location.state, navigate]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!validateForm(patient)) {
+            return
+        }; // stop if validation fails
         setIsProcessing(true);
         try {
-            const res = doctorAPi.saveInitialAssement(patient).then(res => {
-                // fetchBranches();
-                // onCancel();
-                if (res.status === 200) {
+            const res = await perosnalAssistantAPI.saveInitialAssement(patient, data._id).then(res => {
+                if (res.status === 200 || res.data.status === 200) {
                     setIsProcessing(false);
                     setPatient({
                         uid: "",
@@ -79,50 +102,46 @@ const InitialAssesment = () => {
                         respiratoryRate: "",
                     })
                     toast.success(res.data.message)
-
+                    navigate('/pa')
                 }
                 else {
-                    setIsProcessing(false);
-                    setUidVerify(null)
-                    toast.success(res?.data?.message);
+                    setIsProcessing(false)
+
+                    toast.error(res?.data?.message || "Failed to save vitals");
                 }
             })
         } catch (error) {
-            setUidVerify(null)
             setIsProcessing(false)
-            console.log('while assessments', error);
+            toast.error(error?.response?.data?.message || "An error occurred while saving vitals");
+            console.error("while assessments", error);
+
         }
         finally {
-            setUidVerify(null)
+
             setIsProcessing(false);
         }
 
     };
 
-    const handleDocumentUpload = (e) => {
-        const files = e.target.files;
-        if (files) {
-            const fileNames = Array.from(files).map(file => file.name);
-            setUploadedDocuments([...uploadedDocuments, ...fileNames]);
-
-            setTimeout(() => {
-                setPatient(prev => ({
-                    ...prev,
-                    medicalHistory: prev.medicalHistory + (prev.medicalHistory ? '\n' : '') +
-                        '• Previous diagnosis: Hypertension (2020)\n• Previous surgery: Appendectomy (2018)\n• Chronic conditions: Diabetes Type 2'
-                }));
-            }, 1500);
-        }
-    };
-
     return (
-
         <div style={{
             backgroundColor: 'white',
             padding: '20px',
 
         }} className="steps">
-            <h2>Initial Assessment (Vitals)</h2>
+            <span style={{
+                display: 'flex',
+                gap: '10px'
+            }}><BsArrowLeft onClick={() => navigate(-1)} style={{
+                fontSize: '40px',
+                cursor: 'pointer'
+
+            }}></BsArrowLeft> <h2>Initial Assessment (Vitals)</h2></span>
+            {data && (
+                <h4>Patient Name:  <span style={{
+                    fontSize: '20px'
+                }}>{data?.name}</span></h4>
+            )}
             <div style={{
                 width: '80%',
                 display: 'flex',
@@ -257,23 +276,17 @@ const InitialAssesment = () => {
                 display: 'flex',
                 justifyContent: 'space-between'
             }}>
-
                 <button
+                    disabled={isProcessing}
                     style={{
                         border: '1px solid black'
                     }}
                     onClick={(e) => {
                         e.preventDefault();
-
-                        if (currentStep < 5) {
-                            setCurrentStep(currentStep + 1);
-                        } else {
-
-                            handleSubmit(e);
-                        }
+                        handleSubmit(e);
                     }}
                 >
-                    {"Save Hospital"}
+                    {isProcessing ? "saving...." : "Save Vitals"}
                 </button>
 
 
