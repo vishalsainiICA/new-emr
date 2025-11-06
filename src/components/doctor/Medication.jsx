@@ -285,10 +285,6 @@ export const Medication = () => {
         const filtered = illnessData.filter((ill) =>
             ill.illnessName.toLowerCase().startsWith(value.toLowerCase())
         );
-        console.log('X', filtered);
-        console.log('y', value);
-        console.log('d', illnessData);
-
         setFilteredIllness(filtered);
     };
 
@@ -366,14 +362,14 @@ export const Medication = () => {
         setPartialState({ labTestloading: true, labTestError: null });
         try {
             const res = await axios.post(
-                "https://care-backend-sa3e.onrender.com/api/v1/analyze",
+                "https://care-backend-sa3e.onrender.com/api/v1/clinical-analysis",
 
                 {
                     report_text: buildReportText(illness, symtomps, patient)
 
                 }, {
                 timeout: 1000,
-                
+
             }
             );
 
