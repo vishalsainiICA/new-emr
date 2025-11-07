@@ -442,7 +442,7 @@ export const Medication = () => {
 
             console.log("✅ API response:", res.data);
 
-            const { tests, medicines } = extractLabTests(res?.data);
+            const { tests, medicines } = extractLabTests(res?.data?.data);
             console.log("🧪 Tests extracted:", tests);
             console.log("💊 Medicines extracted:", medicines);
 
