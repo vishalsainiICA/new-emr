@@ -428,36 +428,38 @@ export const Medication = () => {
 
     const fetchLabTest = async () => {
         setPartialState({ labTestloading: true, labTestError: null });
+        console.log("📤 Starting API call to clinical-analysis...");
+
         try {
+            const payload = { report_text: buildReportText(illness, symtomps, patient) };
+            console.log("📦 Request payload:", payload);
+
             const res = await axios.post(
                 "https://care-backend-sa3e.onrender.com/api/v1/clinical-analysis",
-
-                {
-                    report_text: buildReportText(illness, symtomps, patient)
-
-                },
+                payload,
                 { timeout: 30000 }
             );
-            console.log("res", res.data);
 
+            console.log("✅ API response:", res.data);
 
             const { tests, medicines } = extractLabTests(res?.data);
-            console.log("test", tests)
-            console.log("mediciene", medicines)
+            console.log("🧪 Tests extracted:", tests);
+            console.log("💊 Medicines extracted:", medicines);
 
             setLabtestResult(tests);
-            setmediciene(medicines)
+            setmediciene(medicines);
         } catch (err) {
-            console.log(err);
-
+            console.error("❌ Axios error:", err);
             setPartialState({
                 labTestError:
                     err.response?.data?.message || err.message || "Error fetching lab tests",
             });
         } finally {
+            console.log("🏁 Finished API call");
             setPartialState({ labTestloading: false });
         }
     };
+
 
     const {
         hospitalData,
