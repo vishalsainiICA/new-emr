@@ -33,205 +33,273 @@ BP: ${patient?.initialAssementId?.BP || "N/A"}
     return report_text.trim();
 };
 
-const extractLabTests = (analysis = []) => {
-    if (!Array.isArray(analysis)) return [];
+const extractLabTests = (data = {}) => {
+    const primary = data.primary_diagnosis || {};
+    const differentials = data.differential_diagnoses || [];
 
-    const tests = [];
-    const medicines = [];
+    // Temporary storage
+    const testSet = new Map();  // key = test name
+    const medSet = new Map();   // key = drug name
 
-    analysis.forEach(item => {
-        const args = item.args || {};
-        const primary = args.primary_diagnosis || {};
-        const differentials = args.differential_diagnoses || [];
-
-        // Collect primary diagnostic tests
-        const primaryTests = [
-            ...(primary.diagnostic_approach?.initial_tests || []),
-            ...(primary.diagnostic_approach?.confirmatory_tests || [])
-        ];
-        primaryTests.forEach(test => {
-            tests.push({
+    // Helper to safely add a test (no duplicates)
+    const addTest = (test, disease, confidence) => {
+        if (!test) return;
+        const key = test.trim().toLowerCase();
+        if (!testSet.has(key)) {
+            testSet.set(key, {
                 test,
-                disease: primary.disease_name || "Unknown Disease",
-                confidence: primary.confidence_score || 0
+                disease,
+                confidence
             });
-        });
+        }
+    };
 
-        // Collect differential diagnostic tests
-        differentials.forEach(diff => {
-            (diff.diagnostic_tests || []).forEach(test => {
-                tests.push({
-                    test,
-                    disease: diff.disease_name || "Unknown Differential",
-                    confidence: diff.confidence_score || 0
-                });
+    // Helper to safely add a medicine (no duplicates)
+    const addMed = (drug_name, dosage, frequency) => {
+        if (!drug_name) return;
+        const key = drug_name.trim().toLowerCase();
+        if (!medSet.has(key)) {
+            medSet.set(key, {
+                drug_name,
+                dosage: dosage || "Not specified",
+                frequency: frequency || "Not specified"
             });
-        });
+        }
+    };
 
-        // Collect suggested medications
-        (primary.suggested_medications || []).forEach(med => {
-            medicines.push({
-                drug_name: med.drug_name,
-                dosage: med.dosage,
-                frequency: med.frequency
-            });
-        });
+    //  Primary diagnostic tests
+    const primaryTests = [
+        ...(primary.diagnostic_approach?.initial_tests || []),
+        ...(primary.diagnostic_approach?.confirmatory_tests || [])
+    ];
+    primaryTests.forEach(test =>
+        addTest(test, primary.disease_name || "Unknown", primary.confidence_score || 0)
+    );
+
+    //  Differential diagnostic tests
+    differentials.forEach(diff => {
+        (diff.diagnostic_tests || []).forEach(test =>
+            addTest(test, diff.disease_name || "Unknown Differential", diff.confidence_score || 0)
+        );
     });
 
-    // return both results if needed
-    return { tests, medicines };
+    // Suggested medications (both primary and top-level)
+    const allMedications = [
+        ...(primary.suggested_medications || []),
+        ...(data.suggested_medications || [])
+    ];
+    allMedications.forEach(med =>
+        addMed(med.drug_name, med.dosage, med.frequency)
+    );
+
+    // Return unique tests and medicines
+    return {
+        tests: Array.from(testSet.values()),
+        medicines: Array.from(medSet.values())
+    };
 };
 
 
-const analysis = [
-    {
-        "args": {
-            "differential_diagnoses": [
-                {
-                    "relevance_explanation": "Emphysema is a chronic obstructive lung disease that shares the key symptoms of shortness of breath, coughing, wheezing, and chest tightness with asthma. Although less common in a 35-year-old without a known smoking history, it must be considered, especially if symptoms are progressive or if Alpha-1 antitrypsin (AAT) deficiency is suspected.",
-                    "summary": "Emphysema is a chronic, progressive lung condition characterized by the destruction of the air sacs (alveoli), leading to reduced surface area for gas exchange. This results in persistent shortness of breath, chronic coughing, and often wheezing, particularly during physical activity.",
-                    "treatment_approach": [
-                        "Oxygen therapy",
-                        "Pulmonary rehabilitation",
-                        "Nutrition therapy",
-                        "Avoid smoking and lung irritants"
-                    ],
-                    "disease_name": "Emphysema",
-                    "key_symptoms": [
-                        "Shortness of breath",
-                        "Chest tightness",
-                        "Coughing",
-                        "Wheezing",
-                        "Weight loss"
-                    ],
-                    "diagnostic_tests": [
-                        "Spirometry",
-                        "CT scan",
-                        "Arterial blood gas analysis",
-                        "Testing for AAT deficiency"
-                    ],
-                    "confidence_score": 0.6
-                },
-                {
-                    "relevance_explanation": "Bronchitis, both acute and chronic, causes inflammation of the bronchial tubes, leading to a persistent cough and shortness of breath, which can mimic asthma. While wheezing is less typical than in asthma, the symptom overlap warrants its inclusion as a differential diagnosis.",
-                    "summary": "Bronchitis is an inflammation of the lining of the bronchial tubes, which carry air to and from the lungs. It is characterized by a persistent cough, often producing mucus, along with shortness of breath and chest discomfort. Acute cases are usually viral, while chronic cases are often linked to smoking or prolonged exposure to irritants.",
-                    "treatment_approach": [
-                        "Oxygen therapy",
-                        "Pulmonary rehabilitation",
-                        "Breathing exercise program",
-                        "Rest and hydration"
-                    ],
-                    "disease_name": "Bronchitis",
-                    "key_symptoms": [
-                        "Cough (often with mucus production)",
-                        "Shortness of breath",
-                        "Chest discomfort",
-                        "Fatigue"
-                    ],
-                    "diagnostic_tests": [
-                        "Chest X-ray",
-                        "Pulmonary function test",
-                        "Sputum tests"
-                    ],
-                    "confidence_score": 0.55
-                },
-                {
-                    "relevance_explanation": "Pulmonary edema presents with acute breathlessness and cough, which overlaps with the patient's symptoms. However, the patient's stable heart rate and blood pressure make a primary cardiac cause less likely. It is a critical differential to rule out, especially in cases of severe or rapidly worsening shortness of breath.",
-                    "summary": "Pulmonary edema is a condition caused by excess fluid accumulation in the air spaces and parenchyma of the lungs, leading to impaired gas exchange and severe difficulty breathing. It is often a complication of heart failure, presenting with a cough, a feeling of breathlessness, and sometimes a rapid or irregular heartbeat.",
-                    "treatment_approach": [
-                        "Oxygen therapy",
-                        "Diuretics (to remove excess fluid)",
-                        "Medications to improve heart function",
-                        "Treating the underlying cause"
-                    ],
-                    "disease_name": "Pulmonary edema",
-                    "key_symptoms": [
-                        "A cough",
-                        "Breathless feeling",
-                        "Rapid, irregular heartbeat",
-                        "Anxiety",
-                        "Cold, clammy skin"
-                    ],
-                    "diagnostic_tests": [
-                        "Chest X-ray",
-                        "Electrocardiogram (ECG)",
-                        "Echocardiogram",
-                        "Blood tests (e.g., BNP)"
-                    ],
-                    "confidence_score": 0.3
-                }
+
+
+const data = {
+    "differential_diagnoses": [
+        {
+            "relevance_explanation": "Emphysema is a type of Chronic Obstructive Pulmonary Disease (COPD) that shares key symptoms with asthma, including shortness of breath, wheezing, and chest tightness. Differentiation is crucial, typically through lung function tests and imaging.",
+            "summary": "A chronic lung disease where the air sacs (alveoli) are damaged, leading to air trapping and difficulty exhaling, resulting in shortness of breath and chronic cough.",
+            "treatment_approach": [
+                "Oxygen therapy",
+                "Pulmonary rehabilitation",
+                "Nutrition therapy",
+                "Smoking cessation"
             ],
-            "primary_diagnosis": {
-                "clinical_presentation": {
-                    "key_findings": [
-                        "Wheezing (a whistling sound during breathing)",
-                        "Chest tightness",
-                        "Episodic shortness of breath"
-                    ],
-                    "common_symptoms": [
-                        "Shortness of breath",
-                        "Wheezing",
-                        "Chest tightness",
-                        "Coughing at night"
-                    ]
-                },
-                "treatment_plan": {
-                    "advanced_options": [
-                        "Biologic therapies for severe, refractory asthma",
-                        "Bronchial thermoplasty (for select severe cases)",
-                        "Continuous monitoring of breathing and symptoms"
-                    ],
-                    "first_line": [
-                        "Use of a quick-relief inhaler for acute symptoms",
-                        "Daily use of long-term control medications (e.g., inhaled corticosteroids)",
-                        "Patient education on trigger avoidance and medication adherence"
-                    ]
-                },
-                "relevance_explanation": "The patient's clinical presentation, characterized by the classic triad of shortness of breath, wheezing, and chest tightness, particularly with nocturnal coughing, is highly indicative of asthma. This aligns directly with the symptoms and clinical description of asthma provided in the knowledge base, making it the most probable diagnosis.",
-                "summary": "Asthma is a chronic inflammatory disease of the airways characterized by recurrent episodes of wheezing, shortness of breath, chest tightness, and coughing. These symptoms result from reversible airflow obstruction and bronchospasm, often triggered by environmental factors, exercise, or respiratory infections. Effective management focuses on prevention and long-term control of airway inflammation.",
-                "diagnostic_approach": {
-                    "initial_tests": [
-                        "Spirometry",
-                        "Peak flow monitoring",
-                        "Physical exam"
-                    ],
-                    "confirmatory_tests": [
-                        "Methacholine challenge",
-                        "Sputum eosinophils",
-                        "Allergy testing"
-                    ]
-                },
-                "prevention_strategies": [
-                    "Identify and avoid specific asthma triggers (e.g., airborne substances, chemical fumes)",
-                    "Follow a detailed asthma action plan provided by a healthcare professional",
-                    "Take prescribed long-term control medications consistently",
-                    "Get appropriate vaccinations (e.g., influenza, pneumonia) to avoid respiratory infections"
-                ],
-                "disease_name": "Asthma",
-                "suggested_medications": [
-                    {
-                        "dosage": "90 mcg/puff",
-                        "drug_name": "Albuterol (Quick-relief inhaler)",
-                        "frequency": "As needed for symptoms or before exercise"
-                    },
-                    {
-                        "dosage": "Varies by severity",
-                        "drug_name": "Inhaled Corticosteroid (e.g., Fluticasone)",
-                        "frequency": "Once or twice daily for long-term control"
-                    }
-                ],
-                "confidence_score": 0.95
-            },
-            "clinical_recommendations": [
-                "Undergo spirometry and peak flow monitoring to establish baseline lung function and confirm the degree of airway obstruction.",
-                "Develop a personalized Asthma Action Plan in consultation with a healthcare provider, detailing steps for daily management, symptom worsening, and emergency situations.",
-                "Receive education on the correct technique for using both quick-relief and long-term control inhalers to maximize medication efficacy.",
-                "Identify and minimize exposure to known or suspected asthma triggers, such as airborne substances, chemical fumes, or cold air, potentially through allergy testing."
+            "disease_name": "Emphysema",
+            "key_symptoms": [
+                "Shortness of breath",
+                "Coughing",
+                "Chest tightness or heaviness",
+                "Wheezing"
+            ],
+            "diagnostic_tests": [
+                "Spirometry",
+                "Chest X-ray",
+                "CT scan",
+                "Arterial blood gas analysis"
+            ],
+            "confidence_score": 0.7
+        },
+        {
+            "relevance_explanation": "Bronchitis, particularly chronic bronchitis, presents with a persistent cough and shortness of breath, which can mimic asthma. Sputum analysis and pulmonary function tests help distinguish it from asthma.",
+            "summary": "Inflammation of the lining of the bronchial tubes, which carry air to and from the lungs. Acute cases are often viral, while chronic cases are characterized by a persistent, productive cough.",
+            "treatment_approach": [
+                "Oxygen therapy",
+                "Pulmonary rehabilitation",
+                "Breathing exercise program",
+                "Rest and hydration (for acute cases)"
+            ],
+            "disease_name": "Bronchitis",
+            "key_symptoms": [
+                "Cough (often with mucus production)",
+                "Shortness of breath",
+                "Chest discomfort",
+                "Fatigue"
+            ],
+            "diagnostic_tests": [
+                "Chest X-ray",
+                "Sputum tests",
+                "Pulmonary function test"
+            ],
+            "confidence_score": 0.7
+        },
+        {
+            "relevance_explanation": "Pulmonary edema, often cardiac in origin, can cause acute shortness of breath and coughing, which can be mistaken for a severe asthma attack (sometimes called 'cardiac asthma'). The presence of a rapid, irregular heartbeat suggests a potential cardiac component that must be ruled out.",
+            "summary": "A condition caused by excess fluid in the lungs, which collects in the numerous air sacs, making it difficult to breathe and often resulting from underlying heart conditions.",
+            "treatment_approach": [
+                "Oxygen therapy",
+                "Treating the underlying cause (e.g., heart failure)",
+                "Diuretics (to remove excess fluid)",
+                "Medications to improve heart function"
+            ],
+            "disease_name": "Pulmonary edema",
+            "key_symptoms": [
+                "Cough",
+                "Severe shortness of breath",
+                "Chest pain or discomfort",
+                "Rapid, irregular heartbeat"
+            ],
+            "diagnostic_tests": [
+                "Chest X-ray",
+                "Electrocardiogram (ECG)",
+                "Echocardiogram",
+                "Blood tests (e.g., B-type natriuretic peptide)"
+            ],
+            "confidence_score": 0.6
+        }
+    ],
+    "primary_diagnosis": {
+        "clinical_presentation": {
+            "key_findings": [
+                "Airway narrowing and inflammation",
+                "Reversible airflow obstruction",
+                "Symptoms triggered by specific environmental factors"
+            ],
+            "common_symptoms": [
+                "Shortness of breath",
+                "Wheezing",
+                "Chest tightness",
+                "Coughing (especially at night)"
             ]
         },
-        "type": "ClinicalAnalysis"
-    }
-]
+        "treatment_plan": {
+            "advanced_options": [
+                "Long-term control medications (e.g., inhaled corticosteroids)",
+                "Monitoring breathing and symptoms closely",
+                "Following a detailed asthma action plan"
+            ],
+            "first_line": [
+                "Quick-relief (rescue) inhaler",
+                "Prevention and long-term control strategies",
+                "Education on trigger avoidance"
+            ]
+        },
+        "relevance_explanation": "The patient's clinical presentation, including recurrent shortness of breath, wheezing, chest tightness, and nocturnal coughing, is the classic symptom complex for asthma, as explicitly stated in the patient report and supported by the medical context.",
+        "summary": "Asthma is a chronic respiratory condition characterized by inflammation and narrowing of the airways, which leads to recurrent episodes of wheezing, shortness of breath, chest tightness, and coughing. The severity and frequency of symptoms vary among individuals.",
+        "diagnostic_approach": {
+            "initial_tests": [
+                "Spirometry",
+                "Peak flow measurement",
+                "Physical exam"
+            ],
+            "confirmatory_tests": [
+                "Methacholine challenge (Provocative testing)",
+                "Nitric oxide test",
+                "Allergy testing"
+            ]
+        },
+        "prevention_strategies": [
+            "Identify and avoid asthma triggers (e.g., cold air, fumes, allergens)",
+            "Follow a detailed asthma action plan",
+            "Take medication as prescribed for long-term control",
+            "Get vaccinated against influenza and pneumonia",
+            "Monitor breathing using a peak flow meter"
+        ],
+        "disease_name": "Asthma",
+        "confidence_score": 1.0
+    },
+    "clinical_recommendations": [
+        "The patient should work with their healthcare provider to develop a comprehensive Asthma Action Plan, detailing daily management, how to handle worsening symptoms, and when to seek emergency care.",
+        "Identify and strictly avoid known asthma triggers, which may include airborne substances, chemical fumes, cold air, or respiratory infections.",
+        "Ensure the patient is educated on the proper use of both quick-relief (rescue) inhalers and long-term control medications.",
+        "Maintain regular follow-up appointments to monitor lung function (e.g., with a peak flow meter) and adjust medication as necessary to maintain symptom control.",
+        "Get recommended vaccinations, including the annual influenza (flu) shot and the pneumonia vaccine, to prevent respiratory infections that can trigger asthma exacerbations."
+    ],
+    "suggested_medications": [
+        {
+            "dosage": "As directed",
+            "drug_name": "Ginsenoside Compound K",
+            "frequency": "As directed"
+        },
+        {
+            "dosage": "Titrated to maintain SpO2 > 90%",
+            "drug_name": "Oxygen",
+            "frequency": "As needed for hypoxia"
+        }
+    ],
+    "knowledge_base_sources": [
+        {
+            "disease": "Pulmonary edema",
+            "source_url": "https://www.mayoclinic.org/diseases-conditions/pulmonary-edema/symptoms-causes/syc-20377009",
+            "score": "N/A"
+        },
+        {
+            "disease": "Emphysema",
+            "source_url": "https://www.mayoclinic.org/diseases-conditions/emphysema/symptoms-causes/syc-20355555",
+            "score": "N/A"
+        },
+        {
+            "disease": "Asthma",
+            "source_url": "https://www.mayoclinic.org/diseases-conditions/asthma/symptoms-causes/syc-20369653",
+            "score": "N/A"
+        },
+        {
+            "disease": "ARDS",
+            "source_url": "https://www.mayoclinic.org/diseases-conditions/ards/symptoms-causes/syc-20355576",
+            "score": "N/A"
+        },
+        {
+            "disease": "Bronchitis",
+            "source_url": "https://www.mayoclinic.org/diseases-conditions/bronchitis/symptoms-causes/syc-20355566",
+            "score": "N/A"
+        }
+    ],
+    "medication_sources": [
+        {
+            "brand_name": "Air",
+            "generic_name": "Breathing Air",
+            "score": "N/A"
+        },
+        {
+            "brand_name": "Asthma Alleviator",
+            "generic_name": "Ginsenoside Compound K",
+            "score": "N/A"
+        },
+        {
+            "brand_name": "Air",
+            "generic_name": "Air",
+            "score": "N/A"
+        },
+        {
+            "brand_name": "Air",
+            "generic_name": "Air",
+            "score": "N/A"
+        },
+        {
+            "brand_name": "Air",
+            "generic_name": "Air",
+            "score": "N/A"
+        }
+    ]
+}
 
 
 export const Medication = () => {
@@ -373,9 +441,7 @@ export const Medication = () => {
             }
             );
 
-            const analysis = res?.data?.analysis || [];
-            console.log(analysis)
-            const { tests, medicines } = extractLabTests(analysis);
+            const { tests, medicines } = extractLabTests(res?.data);
             console.log("test", tests)
             console.log("mediciene", medicines)
 
