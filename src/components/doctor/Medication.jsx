@@ -436,10 +436,12 @@ export const Medication = () => {
                     report_text: buildReportText(illness, symtomps, patient)
 
                 }, {
-                timeout: 1000,
+                timeout: 5000,
 
             }
             );
+            console.log("res", res.data);
+
 
             const { tests, medicines } = extractLabTests(res?.data);
             console.log("test", tests)
