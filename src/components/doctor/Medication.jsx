@@ -32,16 +32,15 @@ BP: ${patient?.initialAssementId?.BP || "N/A"}
 
     return report_text.trim();
 };
-
 const extractLabTests = (data = {}) => {
     const primary = data.primary_diagnosis || {};
     const differentials = data.differential_diagnoses || [];
 
-    // Temporary storage
-    const testSet = new Map();  // key = test name
-    const medSet = new Map();   // key = drug name
+    // Temporary storage (avoid duplicates)
+    const testSet = new Map();
+    const medSet = new Map();
 
-    // Helper to safely add a test (no duplicates)
+    // Helper: add test safely
     const addTest = (test, disease, confidence) => {
         if (!test) return;
         const key = test.trim().toLowerCase();
@@ -54,7 +53,7 @@ const extractLabTests = (data = {}) => {
         }
     };
 
-    // Helper to safely add a medicine (no duplicates)
+    // Helper: add medicine safely
     const addMed = (drug_name, dosage, frequency) => {
         if (!drug_name) return;
         const key = drug_name.trim().toLowerCase();
@@ -67,7 +66,7 @@ const extractLabTests = (data = {}) => {
         }
     };
 
-    //  Primary diagnostic tests
+    // 🧪 Primary diagnostic tests
     const primaryTests = [
         ...(primary.diagnostic_approach?.initial_tests || []),
         ...(primary.diagnostic_approach?.confirmatory_tests || [])
@@ -76,14 +75,14 @@ const extractLabTests = (data = {}) => {
         addTest(test, primary.disease_name || "Unknown", primary.confidence_score || 0)
     );
 
-    //  Differential diagnostic tests
+    // 🧪 Differential diagnostic tests
     differentials.forEach(diff => {
         (diff.diagnostic_tests || []).forEach(test =>
             addTest(test, diff.disease_name || "Unknown Differential", diff.confidence_score || 0)
         );
     });
 
-    // Suggested medications (both primary and top-level)
+    // 💊 Suggested medications (primary + top-level)
     const allMedications = [
         ...(primary.suggested_medications || []),
         ...(data.suggested_medications || [])
@@ -92,7 +91,7 @@ const extractLabTests = (data = {}) => {
         addMed(med.drug_name, med.dosage, med.frequency)
     );
 
-    // Return unique tests and medicines
+    // ✅ Return unique items
     return {
         tests: Array.from(testSet.values()),
         medicines: Array.from(medSet.values())
@@ -105,197 +104,167 @@ const extractLabTests = (data = {}) => {
 const data = {
     "differential_diagnoses": [
         {
-            "relevance_explanation": "Emphysema is a type of Chronic Obstructive Pulmonary Disease (COPD) that shares key symptoms with asthma, including shortness of breath, wheezing, and chest tightness. Differentiation is crucial, typically through lung function tests and imaging.",
-            "summary": "A chronic lung disease where the air sacs (alveoli) are damaged, leading to air trapping and difficulty exhaling, resulting in shortness of breath and chronic cough.",
+            "relevance_explanation": "The patient is a known diabetic presenting with unexplained weight loss and symptoms of severe hyperglycemia. DKA is a life-threatening complication that must be ruled out immediately, as it is characterized by high blood sugar and ketone levels (KB 3).",
+            "summary": "Diabetic Ketoacidosis is a severe, acute complication of diabetes resulting from a profound lack of insulin, leading to the body breaking down fat for energy. This process produces ketones, causing the blood to become acidic (KB 3).",
             "treatment_approach": [
-                "Oxygen therapy",
-                "Pulmonary rehabilitation",
-                "Nutrition therapy",
-                "Smoking cessation"
+                "Intravenous fluids",
+                "Insulin therapy",
+                "Electrolyte replacement"
             ],
-            "disease_name": "Emphysema",
+            "disease_name": "Diabetic Ketoacidosis (DKA)",
             "key_symptoms": [
-                "Shortness of breath",
-                "Coughing",
-                "Chest tightness or heaviness",
-                "Wheezing"
+                "Unexplained weight loss",
+                "High blood sugar level",
+                "Loss of appetite"
             ],
             "diagnostic_tests": [
-                "Spirometry",
-                "Chest X-ray",
-                "CT scan",
-                "Arterial blood gas analysis"
+                "A blood ketone level",
+                "Blood acidity tests",
+                "Blood electrolyte tests"
             ],
             "confidence_score": 0.7
         },
         {
-            "relevance_explanation": "Bronchitis, particularly chronic bronchitis, presents with a persistent cough and shortness of breath, which can mimic asthma. Sputum analysis and pulmonary function tests help distinguish it from asthma.",
-            "summary": "Inflammation of the lining of the bronchial tubes, which carry air to and from the lungs. Acute cases are often viral, while chronic cases are characterized by a persistent, productive cough.",
+            "relevance_explanation": "While the primary presentation suggests hyperglycemia, the symptoms of dizziness, blurred vision, and fatigue are also classic signs of low blood sugar (KB 1, KB 2). Intermittent or nocturnal hypoglycemia may be occurring, especially if the patient is on insulin therapy.",
+            "summary": "Hypoglycemia is a condition defined by blood sugar levels dropping below 70 mg/dL (KB 2). It is a common complication in diabetes, often caused by an imbalance between medication, food intake, and physical activity.",
             "treatment_approach": [
-                "Oxygen therapy",
-                "Pulmonary rehabilitation",
-                "Breathing exercise program",
-                "Rest and hydration (for acute cases)"
+                "Fast-acting carbohydrates (15 to 20 grams)",
+                "Glucagon injection (KB 2)",
+                "Review of medication and eating habits"
             ],
-            "disease_name": "Bronchitis",
+            "disease_name": "Hypoglycemia",
             "key_symptoms": [
-                "Cough (often with mucus production)",
-                "Shortness of breath",
-                "Chest discomfort",
-                "Fatigue"
+                "Dizziness",
+                "Blurred vision",
+                "Fatigue",
+                "Anxiety"
             ],
             "diagnostic_tests": [
-                "Chest X-ray",
-                "Sputum tests",
-                "Pulmonary function test"
+                "Blood sugar levels",
+                "Continuous glucose monitoring"
             ],
-            "confidence_score": 0.7
-        },
-        {
-            "relevance_explanation": "Pulmonary edema, often cardiac in origin, can cause acute shortness of breath and coughing, which can be mistaken for a severe asthma attack (sometimes called 'cardiac asthma'). The presence of a rapid, irregular heartbeat suggests a potential cardiac component that must be ruled out.",
-            "summary": "A condition caused by excess fluid in the lungs, which collects in the numerous air sacs, making it difficult to breathe and often resulting from underlying heart conditions.",
-            "treatment_approach": [
-                "Oxygen therapy",
-                "Treating the underlying cause (e.g., heart failure)",
-                "Diuretics (to remove excess fluid)",
-                "Medications to improve heart function"
-            ],
-            "disease_name": "Pulmonary edema",
-            "key_symptoms": [
-                "Cough",
-                "Severe shortness of breath",
-                "Chest pain or discomfort",
-                "Rapid, irregular heartbeat"
-            ],
-            "diagnostic_tests": [
-                "Chest X-ray",
-                "Electrocardiogram (ECG)",
-                "Echocardiogram",
-                "Blood tests (e.g., B-type natriuretic peptide)"
-            ],
-            "confidence_score": 0.6
+            "confidence_score": 0.4
         }
     ],
     "primary_diagnosis": {
         "clinical_presentation": {
             "key_findings": [
-                "Airway narrowing and inflammation",
-                "Reversible airflow obstruction",
-                "Symptoms triggered by specific environmental factors"
+                "Fatigue",
+                "Pale skin",
+                "Shortness of breath",
+                "Cold hands and feet"
             ],
             "common_symptoms": [
-                "Shortness of breath",
-                "Wheezing",
-                "Chest tightness",
-                "Coughing (especially at night)"
+                "Frequent urination",
+                "Excessive thirst",
+                "Unexplained weight loss",
+                "Blurred vision"
             ]
         },
         "treatment_plan": {
             "advanced_options": [
-                "Long-term control medications (e.g., inhaled corticosteroids)",
-                "Monitoring breathing and symptoms closely",
-                "Following a detailed asthma action plan"
+                "Continuous glucose monitor (KB 1)",
+                "Glucagon auto-injector pen or emergency syringe kit (KB 1)",
+                "Treatment for underlying anemia"
             ],
             "first_line": [
-                "Quick-relief (rescue) inhaler",
-                "Prevention and long-term control strategies",
-                "Education on trigger avoidance"
+                "Medicine adjustments by a professional (KB 1)",
+                "Nutrition counseling (KB 2)",
+                "Frequent blood sugar monitoring"
             ]
         },
-        "relevance_explanation": "The patient's clinical presentation, including recurrent shortness of breath, wheezing, chest tightness, and nocturnal coughing, is the classic symptom complex for asthma, as explicitly stated in the patient report and supported by the medical context.",
-        "summary": "Asthma is a chronic respiratory condition characterized by inflammation and narrowing of the airways, which leads to recurrent episodes of wheezing, shortness of breath, chest tightness, and coughing. The severity and frequency of symptoms vary among individuals.",
+        "relevance_explanation": "The patient's history of Diabetes combined with the cardinal symptoms of polyuria (frequent urination), polydipsia (excessive thirst), unexplained weight loss, and blurred vision are highly indicative of significantly uncontrolled blood sugar levels. The additional symptoms of fatigue and pallor suggest associated anemia or chronic complications.",
+        "summary": "Diabetes Mellitus is a chronic metabolic disorder characterized by sustained high blood sugar (hyperglycemia) due to defects in insulin production or action. Uncontrolled hyperglycemia leads to osmotic symptoms and metabolic derangements, which, if left untreated, can progress to severe complications like Diabetic Ketoacidosis (KB 3).",
         "diagnostic_approach": {
             "initial_tests": [
-                "Spirometry",
-                "Peak flow measurement",
-                "Physical exam"
+                "Blood sugar level (KB 3)",
+                "Complete blood count",
+                "Urinalysis (KB 3)"
             ],
             "confirmatory_tests": [
-                "Methacholine challenge (Provocative testing)",
-                "Nitric oxide test",
-                "Allergy testing"
+                "A blood ketone level",
+                "Blood acidity (KB 3)",
+                "HbA1c"
             ]
         },
         "prevention_strategies": [
-            "Identify and avoid asthma triggers (e.g., cold air, fumes, allergens)",
-            "Follow a detailed asthma action plan",
-            "Take medication as prescribed for long-term control",
-            "Get vaccinated against influenza and pneumonia",
-            "Monitor breathing using a peak flow meter"
+            "Eat nutritious foods (KB 5)",
+            "Maintain a healthy weight (KB 5)",
+            "Engage in regular exercise (KB 5)",
+            "Avoid tobacco/smoke (KB 5)"
         ],
-        "disease_name": "Asthma",
-        "confidence_score": 1.0
+        "disease_name": "Diabetes Mellitus (Uncontrolled Hyperglycemia)",
+        "confidence_score": 0.95
     },
     "clinical_recommendations": [
-        "The patient should work with their healthcare provider to develop a comprehensive Asthma Action Plan, detailing daily management, how to handle worsening symptoms, and when to seek emergency care.",
-        "Identify and strictly avoid known asthma triggers, which may include airborne substances, chemical fumes, cold air, or respiratory infections.",
-        "Ensure the patient is educated on the proper use of both quick-relief (rescue) inhalers and long-term control medications.",
-        "Maintain regular follow-up appointments to monitor lung function (e.g., with a peak flow meter) and adjust medication as necessary to maintain symptom control.",
-        "Get recommended vaccinations, including the annual influenza (flu) shot and the pneumonia vaccine, to prevent respiratory infections that can trigger asthma exacerbations."
+        "Immediate comprehensive laboratory workup, including a Complete Blood Count (CBC) to evaluate the reported anemia (pale skin, fatigue), HbA1c, serum glucose, and blood ketone levels.",
+        "Urgent consultation with an endocrinologist to review and adjust the current diabetes medication regimen (medicine adjustments, per KB 1) to achieve better glycemic control.",
+        "Initiate intensive nutrition counseling (KB 2) to optimize dietary habits and carbohydrate intake, which is crucial for managing blood sugar levels.",
+        "Provide the patient with education on recognizing and managing both hyperglycemic and hypoglycemic emergencies, including the proper use of a continuous glucose monitor (KB 1) and emergency glucagon (KB 2)."
     ],
     "suggested_medications": [
         {
-            "dosage": "As directed",
-            "drug_name": "Ginsenoside Compound K",
-            "frequency": "As directed"
+            "dosage": "Individualized (Units per injection)",
+            "drug_name": "Insulin glulisine",
+            "frequency": "Before meals or as directed by physician"
         },
         {
-            "dosage": "Titrated to maintain SpO2 > 90%",
-            "drug_name": "Oxygen",
-            "frequency": "As needed for hypoxia"
+            "dosage": "Individualized (Units per injection)",
+            "drug_name": "Insulin human",
+            "frequency": "Once or twice daily, or as directed by physician"
         }
     ],
     "knowledge_base_sources": [
         {
-            "disease": "Pulmonary edema",
-            "source_url": "https://www.mayoclinic.org/diseases-conditions/pulmonary-edema/symptoms-causes/syc-20377009",
+            "disease": "Diabetic hypoglycemia",
+            "source_url": "https://www.mayoclinic.org/diseases-conditions/diabetic-hypoglycemia/symptoms-causes/syc-20371525",
             "score": "N/A"
         },
         {
-            "disease": "Emphysema",
-            "source_url": "https://www.mayoclinic.org/diseases-conditions/emphysema/symptoms-causes/syc-20355555",
+            "disease": "Hypoglycemia",
+            "source_url": "https://www.mayoclinic.org/diseases-conditions/hypoglycemia/symptoms-causes/syc-20373685",
             "score": "N/A"
         },
         {
-            "disease": "Asthma",
-            "source_url": "https://www.mayoclinic.org/diseases-conditions/asthma/symptoms-causes/syc-20369653",
+            "disease": "Diabetic ketoacidosis",
+            "source_url": "https://www.mayoclinic.org/diseases-conditions/diabetic-ketoacidosis/symptoms-causes/syc-20371551",
             "score": "N/A"
         },
         {
-            "disease": "ARDS",
-            "source_url": "https://www.mayoclinic.org/diseases-conditions/ards/symptoms-causes/syc-20355576",
+            "disease": "Thrombocytosis",
+            "source_url": "https://www.mayoclinic.org/diseases-conditions/thrombocytosis/symptoms-causes/syc-20378315",
             "score": "N/A"
         },
         {
-            "disease": "Bronchitis",
-            "source_url": "https://www.mayoclinic.org/diseases-conditions/bronchitis/symptoms-causes/syc-20355566",
+            "disease": "Arteriosclerosis / atherosclerosis",
+            "source_url": "https://www.mayoclinic.org/diseases-conditions/arteriosclerosis-atherosclerosis/symptoms-causes/syc-20350569",
             "score": "N/A"
         }
     ],
     "medication_sources": [
         {
-            "brand_name": "Air",
-            "generic_name": "Breathing Air",
+            "brand_name": "Glucose",
+            "generic_name": "Dextrose anhydrous",
             "score": "N/A"
         },
         {
-            "brand_name": "Asthma Alleviator",
-            "generic_name": "Ginsenoside Compound K",
+            "brand_name": "GILTUSS DIABETIC EX",
+            "generic_name": "GILTUSS DIABETIC EX",
             "score": "N/A"
         },
         {
-            "brand_name": "Air",
-            "generic_name": "Air",
+            "brand_name": "Apidra SoloStar",
+            "generic_name": "insulin glulisine",
             "score": "N/A"
         },
         {
-            "brand_name": "Air",
-            "generic_name": "Air",
+            "brand_name": "",
+            "generic_name": "Insulin human",
             "score": "N/A"
         },
         {
-            "brand_name": "Air",
-            "generic_name": "Air",
+            "brand_name": "",
+            "generic_name": "Insulin human",
             "score": "N/A"
         }
     ]
@@ -440,9 +409,10 @@ export const Medication = () => {
                 { timeout: 30000 }
             );
 
-            console.log("✅ API response:", res.data);
+            console.log("✅ API response:", res.data?.data);
 
             const { tests, medicines } = extractLabTests(res?.data?.data);
+            // const { tests, medicines } = extractLabTests(data);
             console.log("🧪 Tests extracted:", tests);
             console.log("💊 Medicines extracted:", medicines);
 
@@ -794,8 +764,8 @@ export const Medication = () => {
                                     style={{
                                         display: 'flex',
                                         justifyContent: 'space-between',
-                                        padding: '20px',
-                                        height: '75px',
+                                        padding: '10px',
+                                        
                                         backgroundColor: 'white',
                                         borderBottom: '1px solid lightgray',
                                         borderRadius: '10px',
@@ -823,6 +793,8 @@ export const Medication = () => {
                                                 setselectedMediciene((prev) => [...prev, hos])
                                             }}
                                             style={{
+                                                width:'70px',
+                                                height:'35px',
                                                 padding: '10px',
                                                 fontSize: '12px',
                                                 border: '1px solid black'
