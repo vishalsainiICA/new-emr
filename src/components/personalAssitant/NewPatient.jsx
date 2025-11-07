@@ -224,17 +224,22 @@ export default function NewPatient() {
             setIsProcessing(false);
         }
     };
-    return <div>
+    return <div className="patientRegister">
+        <div className="customCard" style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+        }}>
+            <div className="hospitalMangement" >
+                <h3>Patient Registeration</h3>
 
-        <span
-            onClick={() => navigate(-1)}
-            style={{
-                cursor: 'pointer',
-            }
-            }><FaArrowLeft></FaArrowLeft> Back to Patient</span>
+            </div>
+            <div style={{
+                width: '40%'
+            }}>
+                <CurrentStep currentStep={currentStep} totalSteps={totalSteps}></CurrentStep>
+            </div>
 
-        <h2>New Patient</h2>
-        <CurrentStep currentStep={currentStep} totalSteps={totalSteps}></CurrentStep>
+        </div>
 
         <div className="hospitalOnboard">
 
@@ -635,7 +640,7 @@ export default function NewPatient() {
                     }
                 }}
             >
-                {currentStep < 5 ? "Next" : "Save Hospital"}
+                {currentStep < 5 ? "Next" : "Register"}
             </button>
 
 

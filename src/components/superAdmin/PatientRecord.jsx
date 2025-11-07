@@ -50,8 +50,6 @@ export default function PatientRecords() {
 
     return (
         <div>
-            <h2>Patient-Records</h2>
-
             <div
                 style={{
                     width: '100%',
@@ -74,8 +72,6 @@ export default function PatientRecords() {
                 }} type="date" />
 
             </div>
-
-
             <div style={{ marginTop: '10px' }}>
                 <div className="hosptialHeading">
                     <p>Patient ID</p>

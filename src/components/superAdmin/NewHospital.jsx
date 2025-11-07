@@ -30,7 +30,7 @@ const CurrentStep = ({ currentStep, totalSteps }) => {
                         width: `${progress}%`,
                         backgroundColor: "#007bff",
                         height: "100%",
-                        transition: "width 0.3s ease",
+                        transition: "all 0.3s ease",
                     }}
                 ></div>
             </div>
@@ -195,20 +195,35 @@ export const NewHospital = () => {
     };
     return <div>
 
-        <span
-            onClick={() => navigate(-1)}
-            style={{
-                cursor: 'pointer',
-            }
-            }><FaArrowLeft></FaArrowLeft> Back to Hospitals</span>
+        <div className="customCard" style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+        }}>
+            <div className="hospitalMangement" >
+                <span
+                    onClick={() => navigate(-1)}
+                    style={{
+                        cursor: 'pointer',
+                    }
+                    }><FaArrowLeft></FaArrowLeft> Back to Hospitals</span>
 
-        <h2>New Hospital</h2>
-        <CurrentStep currentStep={currentStep} totalSteps={totalSteps}></CurrentStep>
+                <h3>New Hospital</h3>
+
+            </div>
+            <div style={{
+                width: '40%'
+            }}>
+                <CurrentStep currentStep={currentStep} totalSteps={totalSteps}></CurrentStep>
+            </div>
+
+        </div>
+
 
         <div className="hospitalOnboard" >
             {/* step1 */}
             {currentStep == 1 && (
                 <div className="steps" >
+
                     <h2>Hospital Details</h2>
 
                     <div style={{
@@ -461,7 +476,7 @@ export const NewHospital = () => {
                         {
                             dummyDepartments.map((item, i) => {
                                 const isSelected = hosptialData.supportedDepartments.some((dep) => dep.departmentName === item.name)
-                                return <span
+                                return <span className="card hover"
                                     onClick={() => {
                                         if (isSelected) {
                                             return
@@ -478,14 +493,14 @@ export const NewHospital = () => {
                                         })
                                     }}
                                     style={{
-                                        backgroundColor: isSelected ? "lightgrey" : "",
+                                        backgroundColor: isSelected ? "lightgrey" : "white",
                                         margin: '10px',
                                         display: 'flex',
                                         padding: '7px',
                                         justifyContent: 'center',
                                         alignItems: 'center',
                                         gap: '10px',
-                                        border: '0.5px solid gray',
+                                        transition: "1s ease",
                                         borderRadius: '10px',
                                         cursor: 'pointer',
                                         width: '170px',
@@ -508,7 +523,11 @@ export const NewHospital = () => {
                         justifyContent: 'space-between'
                     }}>
                         <h4> Selected Department</h4>
-                        <button onClick={() => setCustomDepartment({ name: '', image: '' })}>+ Add Custom</button>
+                        <button className="card hover" style={{
+                            width: '160px',
+                            height: "40px",
+                            transition: "1s ease",
+                        }} onClick={() => setCustomDepartment({ name: '', image: '' })}>+ Add Custom</button>
                     </div>
 
                     {
@@ -714,7 +733,7 @@ export const NewHospital = () => {
             {currentStep == 5 && (
                 <div className="steps" >
                     <h2>Review & Submit</h2>
-                    <div
+                    <div 
                         style={{
                             backgroundColor: 'white',
                             border: '1px solid lightgray',
