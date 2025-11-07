@@ -450,6 +450,8 @@ export const Medication = () => {
             setLabtestResult(tests);
             setmediciene(medicines)
         } catch (err) {
+            console.log(err);
+
             setPartialState({
                 labTestError:
                     err.response?.data?.message || err.message || "Error fetching lab tests",
