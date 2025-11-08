@@ -147,9 +147,12 @@ export function ViewHospital() {
                 justifyContent: "space-between"
             }}>
                 <h4>{"Hospital Information"}</h4>
-                <button className="commonBtn">Patient Registeratiion Link <i style={{
+
+                <a style={{
+                    padding: '0 7px 0 7px'
+                }} className="commonBtn" href={"http://localhost:5173/register"}>Patient Registeratiion Link <i style={{
                     fontSize: '20px'
-                }} class="ri-external-link-line"></i></button>
+                }} class="ri-external-link-line"></i></a>
             </div>
 
             <div style={{

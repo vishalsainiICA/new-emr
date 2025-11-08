@@ -1,8 +1,11 @@
 import { superAdminApi } from "../../auth";
 import { Circles, Grid } from 'react-loader-spinner';
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export function Dashboard() {
+
+    const navigate = useNavigate()
 
     const [data, setData] = useState([]);
     const [isProcessing, setIsProcessing] = useState(false);
@@ -226,12 +229,67 @@ export function Dashboard() {
             </div>
             {/* Hospital-performance and Networkoverview */}
             <div className="Hospital-perfo-and-Network">
+
                 <div className="hospital-performance">
                     <div className="hospital-heading">
                         <h4>Hopital Performance</h4>
                         <button className="hbutton">View All Hospital</button>
                     </div>
-                    <div className="hospital-name">
+
+                    {isProcessing && (
+                        <span style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            flexDirection: 'column',
+                            padding: '50px 0'
+                        }}>
+                            <Circles height="40" width="40" color="#4f46e5" ariaLabel="loading" />
+                            <br />Loading...
+                        </span>
+                    )}
+
+                    {error && (
+                        <h4 style={{
+                            color: 'red',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            padding: '50px 0'
+                        }}>{error}</h4>
+                    )}
+
+                    {!isProcessing && !error && Array.isArray(filterHospital) && filterHospital.length > 0 && (
+                        <div style={{
+
+                            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                            gap: '20px',
+                            // minHeight: '500px'
+                        }}>
+                            {filterHospital.map((hos, i) => (
+                                <div key={i} className="hospital-name">
+                                    <div style={{ display: "flex", gap: "20px" }}>
+                                        <span className="logo">{hos?.name?.slice(0, 2).toUpperCase()}</span>
+                                        <div>
+                                            <h5>{hos?.name}</h5>
+                                            <span style={{
+                                                fontSize: "12px"
+                                            }}>ID: H-001 • Patients: 2,847 • Revenue: $485K</span>
+                                        </div>
+                                    </div>
+                                    <p>Excellent</p>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {!isProcessing && !error && Array.isArray(filterHospital) && filterHospital.length === 0 && (
+                        <p
+                            style={{ textAlign: 'center', padding: '50px 0' }}
+                        >No hospitals found</p>
+                    )}
+                </div>
+                {/* <div className="hospital-name">
                         <div style={{ display: "flex", gap: "20px" }}>
                             <span className="logo">CH</span>
                             <div>
@@ -291,7 +349,7 @@ export function Dashboard() {
                         </div>
                         <p>Well</p>
                     </div>
-                </div>
+                </div> */}
                 {/* Network Overview */}
                 <div className="network-overview">
                     <h4>Network Overview</h4>
@@ -321,7 +379,7 @@ export function Dashboard() {
                     <div className="extra-main-block">
 
                         <div className="extra-block">
-                            <div className="blocks">
+                            <div className="blocks" onClick={() => navigate("/new-hosptial")}>
                                 <p>🏥</p>
                                 <span>Add Hospital</span>
                             </div>

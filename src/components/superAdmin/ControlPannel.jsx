@@ -31,8 +31,8 @@ export function ControlPannel() {
             }}>
                 {!collapsed && (
                     <div className="navHeading">
-                        <h3>EMR ( Electronic Medical Record )</h3>
-                        <p>Super Admin</p>
+                        <span className="logo">👑</span>
+                        <h3>Dr Parcha</h3>
                     </div>
                 )}
 

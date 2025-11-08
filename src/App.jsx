@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
+import './Jaffar.css'
 import ControlPannel from './components/superAdmin/ControlPannel'
 import Dashboard from './components/superAdmin/Dashboard'
 import DoctorControlPannel from './components/doctor/ControlPannel'
@@ -33,8 +34,8 @@ function App() {
       {/* */}
       <Route path='register' element={<RegisterPatient></RegisterPatient>}></Route>
       <Route path='/' element={<ControlPannel></ControlPannel>} >
-        <Route path='dashboard' element={<DoctorDashboard />}></Route>
-        {/* <Route path='dashboard' element={<Dashboard></Dashboard>}></Route> */}
+        {/* <Route path='dashboard' element={<DoctorDashboard />}></Route> */}
+        <Route path='dashboard' element={<Dashboard></Dashboard>}></Route>
         <Route path='hosptial-management' element={<HospitalManagement></HospitalManagement>}></Route>
         <Route path='new-hosptial' element={<NewHospital></NewHospital>}></Route>
         <Route path='patient-record' element={<PatientRecords></PatientRecords>}></Route>

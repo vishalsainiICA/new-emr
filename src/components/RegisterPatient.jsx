@@ -77,14 +77,14 @@ const indianStates = [
 ];
 
 const dummyDepartments = [
-    { image: new URL('../../assets/DepartmentsImages/cardiology.png', import.meta.url).href, name: "Cardiology" },
-    { image: new URL('../../assets/DepartmentsImages/audiologist.png', import.meta.url).href, name: "ENT" },
-    { image: new URL('../../assets/DepartmentsImages/medical.png', import.meta.url).href, name: "Radiology" },
-    { image: new URL('../../assets/DepartmentsImages/arthritis.png', import.meta.url).href, name: "Orthopedics" },
-    { image: new URL('../../assets/DepartmentsImages/pediatrics.png', import.meta.url).href, name: "Pediatrics" },
-    { image: new URL('../../assets/DepartmentsImages/anesthesia.png', import.meta.url).href, name: "General Surgery" },
-    { image: new URL('../../assets/DepartmentsImages/skin.png', import.meta.url).href, name: "Dermatology" },
-    { image: new URL('../../assets/DepartmentsImages/neurology.png', import.meta.url).href, name: "Neurology" },
+    { image: new URL('../assets/DepartmentsImages/cardiology.png', import.meta.url).href, name: "Cardiology" },
+    { image: new URL('../assets/DepartmentsImages/audiologist.png', import.meta.url).href, name: "ENT" },
+    { image: new URL('../assets/DepartmentsImages/medical.png', import.meta.url).href, name: "Radiology" },
+    { image: new URL('../assets/DepartmentsImages/arthritis.png', import.meta.url).href, name: "Orthopedics" },
+    { image: new URL('../assets/DepartmentsImages/pediatrics.png', import.meta.url).href, name: "Pediatrics" },
+    { image: new URL('../assets/DepartmentsImages/anesthesia.png', import.meta.url).href, name: "General Surgery" },
+    { image: new URL('../assets/DepartmentsImages/skin.png', import.meta.url).href, name: "Dermatology" },
+    { image: new URL('../assets/DepartmentsImages/neurology.png', import.meta.url).href, name: "Neurology" },
 ];
 
 
@@ -140,7 +140,7 @@ export default function RegisterPatient() {
         const fetch = async () => {
             try {
 
-                const res = await commonApi.fetchhospitalId("6908988170e584cca0dad6d2")
+                const res = await commonApi.fetchhospitalId("690eeab9521e26ba703e4962")
 
                 if (res.status == 200 || res.data.status === 200) {
                     setHospital(res?.data?.data)
@@ -307,12 +307,14 @@ export default function RegisterPatient() {
                                 style={{
                                     display: 'flex',
                                     alignItems: 'center',
-                                    justifyContent: 'center'
+                                    justifyContent: 'center',
+                                    flexDirection: 'column'
 
                                 }}
 
                             >
                                 <img src="src/assets/download.jpg" alt="**" />
+                                <h3>Fill Manually</h3>
 
                             </div>
 
@@ -321,7 +323,7 @@ export default function RegisterPatient() {
                 }
                 {currentStep === 1 && (
                     <div className="steps">
-                        <h2>Patient Details</h2>
+                        <h4>Patient Details</h4>
 
                         <div style={{ display: "flex", gap: "10px" }}>
                             <label style={{ width: "100%" }}>
@@ -468,7 +470,7 @@ export default function RegisterPatient() {
                 {/* Step 2 — Attendee Details */}
                 {currentStep === 2 && (
                     <div className="steps">
-                        <h2>Attendee Details</h2>
+                        <h4>Attendee Details</h4>
 
                         <div style={{ display: "flex", gap: "10px" }}>
                             <label style={{ width: "100%" }}>
@@ -507,7 +509,7 @@ export default function RegisterPatient() {
                 {/* Step 3 — Document Upload */}
                 {currentStep === 3 && (
                     <div className="steps">
-                        <h3>Select Department:</h3>
+                        <h4>Select Department:</h4>
 
                         <div style={{
                             display: 'flex',
@@ -524,22 +526,23 @@ export default function RegisterPatient() {
                                     );
 
                                     return (
-                                        <span
+                                        <span className="card hover"
                                             key={i}
                                             onClick={() => setSelectedDep(item)}
                                             style={{
-                                                backgroundColor: isSelected ? "lightgrey" : "",
-                                                margin: "10px",
-                                                display: "flex",
-                                                padding: "7px",
-                                                justifyContent: "center",
-                                                alignItems: "center",
-                                                gap: "10px",
-                                                border: "0.5px solid gray",
-                                                borderRadius: "10px",
-                                                cursor: "pointer",
-                                                width: "170px",
-                                                height: "70px",
+                                                backgroundColor: isSelected ? "rgb(245, 243, 243)" : "white",
+                                                // backgroundColor: isSelected ? "lightgrey" : "white",
+                                                margin: '10px',
+                                                display: 'flex',
+                                                padding: '7px',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                gap: '10px',
+                                                transition: "1s ease",
+                                                borderRadius: '10px',
+                                                cursor: 'pointer',
+                                                width: '170px',
+                                                height: '70px'
                                             }}
                                         >
                                             <img
@@ -547,7 +550,9 @@ export default function RegisterPatient() {
                                                 src={matchedDept?.image || ""}
                                                 alt={item.departmentName}
                                             />
-                                            <span>{item.departmentName}</span>
+                                            <span style={{
+                                                fontSize: '12px'
+                                            }}>{item.departmentName}</span>
                                         </span>
                                     );
                                 })
@@ -584,22 +589,28 @@ export default function RegisterPatient() {
                                         }}>
 
                                         <span style={{
-                                            fontSize: '25px',
                                             fontFamily: 'sans-serif'
 
                                         }}>
                                             {i + 1}.
                                             <span style={{
                                                 marginLeft: '10px',
+                                                fontSize: '12px'
 
                                             }}>
                                                 {doc?.name}
                                             </span>
                                         </span>
-
-                                        <h4 style={{
+                                        {/* 
+                                        <h5 style={{
                                             marginLeft: '12px'
-                                        }}>Experience:{doc?.expierience || 5}</h4>
+                                        }}>Experience:{doc?.expierience || 5}</h4> */}
+                                        <span style={{
+                                            fontSize: '12px',
+                                            display: 'flex'
+                                        }}>Experience:<span style={{
+                                            fontWeight: 'bold'
+                                        }}>{doc?.experience}</span ></span>
                                     </div>
                                 })
                             }
@@ -614,40 +625,81 @@ export default function RegisterPatient() {
                 {/* Step 4 — Review & Submit */}
                 {currentStep === 4 && (
                     <div className="steps">
-                        <h2>Upload Documents</h2>
+                        <h4>Upload Documents</h4>
                         <div style={{
                             padding: '20px',
                             display: "flex",
                             justifyContent: 'center',
                             alignItems: 'center',
-                            border: '0.2px solid lightgray',
+                            border: '1px solid lightgray',
                             cursor: 'pointer',
-                            borderRadius: '10px'
+                            borderRadius: '10px',
+                            gap: '10px'
                         }}>
-                            <input
-                                style={{
-                                    cursor: 'pointer'
-                                }}
-                                type="file"
-                                multiple
-                                accept=".pdf,.jpg,.jpeg,.png"
-                                onChange={(e) => {
-                                    const files = Array.from(e.target.files)
-                                    return setUploadedDocuments((prev) => [...prev, ...files])
-                                }}
 
-                            />
+                            <div style={{
+                                marginTop: '12px'
+                            }}>
+                                <input
+                                    disabled={!categoryName}
+                                    style={{
+                                        cursor: 'pointer'
+                                    }}
+                                    type="file"
+                                    multiple
+                                    accept=".pdf,.jpg,.jpeg,.png"
+                                    onChange={(e) => {
+                                        const files = Array.from(e.target.files);
+                                        setUploadedDocuments((prev) => [
+                                            ...prev,
+                                            { category: categoryName, files },
+                                        ]);
+
+                                        setCategoryName("")
+                                    }}
+
+                                />
+                                {!categoryName && (
+                                    <p style={{
+                                        fontSize: '12px',
+                                        color: 'red'
+                                    }}>Pleae Select Cateogry First</p>
+                                )}
+
+                            </div>
+
+                            <label style={{ width: "100%" }}>
+                                Category *
+                                <select
+                                    value={categoryName}
+                                    onChange={(e) => setCategoryName(e.target.value)}
+                                    style={{ padding: "10px", borderRadius: "7px", width: "100%" }}
+                                >
+                                    <option value="">Select Category</option>
+                                    <option value="Blood test">Blood test related</option>
+                                    <option value="Xray">Xray</option>
+                                    <option value="MRI & CT Scan">MRI & CT Scan</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </label>
+
 
                         </div>
                         {uploadedDocuments.length > 0 && (
                             <div className="uploaded-docs">
                                 <h4>Uploaded Documents:</h4>
+                                <br />
 
-                                {uploadedDocuments.map((doc, index) => {
-                                    // console.log("doc", doc)
+                                {uploadedDocuments.map((obj, index) => (
+                                    <div key={index}>
+                                        <h5>{obj?.category}</h5>
 
-                                    return <p key={index}>✓ {doc.name} (Processing )</p>
-                                })}
+                                        {obj?.files?.map((file, i) => (
+                                            <p key={i}>✓ {file.name || file} (Processing)</p>
+                                        ))}
+                                    </div>
+                                ))}
+
                             </div>
                         )}
 
@@ -655,7 +707,7 @@ export default function RegisterPatient() {
                 )}
                 {currentStep === 5 && (
                     <div className="steps">
-                        <h2>Review & Submit</h2>
+                        <h4>Review & Submit</h4>
 
                         <div
                             style={{

@@ -506,7 +506,6 @@ export const NewHospital = () => {
                                         width: '170px',
                                         height: '70px'
 
-
                                     }} key={i}>
                                     <img style={{
                                         width: '50px',

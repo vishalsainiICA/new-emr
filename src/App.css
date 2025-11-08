@@ -228,9 +228,31 @@ label {
 input {
     width: 100%;
     min-width: 100px;
-    padding: 7px;
+    padding: 8px;
     border-radius: 7px;
-    font-size: 12px;
+    font-size: 12.5px;
+    border: 1px solid lightgray;
+
+
+}
+
+select,
+option,
+textarea,
+button,
+input {
+    outline: none;
+    cursor: pointer;
+}
+
+button:focus,
+button:active {
+    outline: none;
+    /* removes blue outline */
+    box-shadow: none;
+    /* removes shadow glow */
+    border-color: lightgray;
+    /* keeps border same */
 }
 
 .patientRecordsHeadings,
@@ -382,7 +404,12 @@ p {
 
 }
 
-
+.navHeading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
 
 
 /* mobile */
