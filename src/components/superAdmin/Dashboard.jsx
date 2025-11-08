@@ -24,6 +24,7 @@ export function Dashboard() {
                     setError(res.data?.message || "Something went wrong");
                 }
             } catch (err) {
+                console.log(err);
                 setError(err.response?.data?.message || "Internal Server Error");
             } finally {
                 setIsProcessing(false);

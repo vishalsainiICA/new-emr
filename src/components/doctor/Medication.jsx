@@ -32,206 +32,243 @@ BP: ${patient?.initialAssementId?.BP || "N/A"}
 
     return report_text.trim();
 };
+const extractLabTests = (data = {}) => {
+    const primary = data.primary_diagnosis || {};
+    const differentials = data.differential_diagnoses || [];
 
-const extractLabTests = (analysis = []) => {
-    if (!Array.isArray(analysis)) return [];
+    // Temporary storage (avoid duplicates)
+    const testSet = new Map();
+    const medSet = new Map();
 
-    const tests = [];
-    const medicines = [];
-
-    analysis.forEach(item => {
-        const args = item.args || {};
-        const primary = args.primary_diagnosis || {};
-        const differentials = args.differential_diagnoses || [];
-
-        // Collect primary diagnostic tests
-        const primaryTests = [
-            ...(primary.diagnostic_approach?.initial_tests || []),
-            ...(primary.diagnostic_approach?.confirmatory_tests || [])
-        ];
-        primaryTests.forEach(test => {
-            tests.push({
+    // Helper: add test safely
+    const addTest = (test, disease, confidence) => {
+        if (!test) return;
+        const key = test.trim().toLowerCase();
+        if (!testSet.has(key)) {
+            testSet.set(key, {
                 test,
-                disease: primary.disease_name || "Unknown Disease",
-                confidence: primary.confidence_score || 0
+                disease,
+                confidence
             });
-        });
+        }
+    };
 
-        // Collect differential diagnostic tests
-        differentials.forEach(diff => {
-            (diff.diagnostic_tests || []).forEach(test => {
-                tests.push({
-                    test,
-                    disease: diff.disease_name || "Unknown Differential",
-                    confidence: diff.confidence_score || 0
-                });
+    // Helper: add medicine safely
+    const addMed = (drug_name, dosage, frequency) => {
+        if (!drug_name) return;
+        const key = drug_name.trim().toLowerCase();
+        if (!medSet.has(key)) {
+            medSet.set(key, {
+                drug_name,
+                dosage: dosage || "Not specified",
+                frequency: frequency || "Not specified"
             });
-        });
+        }
+    };
 
-        // Collect suggested medications
-        (primary.suggested_medications || []).forEach(med => {
-            medicines.push({
-                drug_name: med.drug_name,
-                dosage: med.dosage,
-                frequency: med.frequency
-            });
-        });
+    // 🧪 Primary diagnostic tests
+    const primaryTests = [
+        ...(primary.diagnostic_approach?.initial_tests || []),
+        ...(primary.diagnostic_approach?.confirmatory_tests || [])
+    ];
+    primaryTests.forEach(test =>
+        addTest(test, primary.disease_name || "Unknown", primary.confidence_score || 0)
+    );
+
+    // 🧪 Differential diagnostic tests
+    differentials.forEach(diff => {
+        (diff.diagnostic_tests || []).forEach(test =>
+            addTest(test, diff.disease_name || "Unknown Differential", diff.confidence_score || 0)
+        );
     });
 
-    // return both results if needed
-    return { tests, medicines };
+    // 💊 Suggested medications (primary + top-level)
+    const allMedications = [
+        ...(primary.suggested_medications || []),
+        ...(data.suggested_medications || [])
+    ];
+    allMedications.forEach(med =>
+        addMed(med.drug_name, med.dosage, med.frequency)
+    );
+
+    // ✅ Return unique items
+    return {
+        tests: Array.from(testSet.values()),
+        medicines: Array.from(medSet.values())
+    };
 };
 
 
-const analysis = [
-    {
-        "args": {
-            "differential_diagnoses": [
-                {
-                    "relevance_explanation": "Emphysema is a chronic obstructive lung disease that shares the key symptoms of shortness of breath, coughing, wheezing, and chest tightness with asthma. Although less common in a 35-year-old without a known smoking history, it must be considered, especially if symptoms are progressive or if Alpha-1 antitrypsin (AAT) deficiency is suspected.",
-                    "summary": "Emphysema is a chronic, progressive lung condition characterized by the destruction of the air sacs (alveoli), leading to reduced surface area for gas exchange. This results in persistent shortness of breath, chronic coughing, and often wheezing, particularly during physical activity.",
-                    "treatment_approach": [
-                        "Oxygen therapy",
-                        "Pulmonary rehabilitation",
-                        "Nutrition therapy",
-                        "Avoid smoking and lung irritants"
-                    ],
-                    "disease_name": "Emphysema",
-                    "key_symptoms": [
-                        "Shortness of breath",
-                        "Chest tightness",
-                        "Coughing",
-                        "Wheezing",
-                        "Weight loss"
-                    ],
-                    "diagnostic_tests": [
-                        "Spirometry",
-                        "CT scan",
-                        "Arterial blood gas analysis",
-                        "Testing for AAT deficiency"
-                    ],
-                    "confidence_score": 0.6
-                },
-                {
-                    "relevance_explanation": "Bronchitis, both acute and chronic, causes inflammation of the bronchial tubes, leading to a persistent cough and shortness of breath, which can mimic asthma. While wheezing is less typical than in asthma, the symptom overlap warrants its inclusion as a differential diagnosis.",
-                    "summary": "Bronchitis is an inflammation of the lining of the bronchial tubes, which carry air to and from the lungs. It is characterized by a persistent cough, often producing mucus, along with shortness of breath and chest discomfort. Acute cases are usually viral, while chronic cases are often linked to smoking or prolonged exposure to irritants.",
-                    "treatment_approach": [
-                        "Oxygen therapy",
-                        "Pulmonary rehabilitation",
-                        "Breathing exercise program",
-                        "Rest and hydration"
-                    ],
-                    "disease_name": "Bronchitis",
-                    "key_symptoms": [
-                        "Cough (often with mucus production)",
-                        "Shortness of breath",
-                        "Chest discomfort",
-                        "Fatigue"
-                    ],
-                    "diagnostic_tests": [
-                        "Chest X-ray",
-                        "Pulmonary function test",
-                        "Sputum tests"
-                    ],
-                    "confidence_score": 0.55
-                },
-                {
-                    "relevance_explanation": "Pulmonary edema presents with acute breathlessness and cough, which overlaps with the patient's symptoms. However, the patient's stable heart rate and blood pressure make a primary cardiac cause less likely. It is a critical differential to rule out, especially in cases of severe or rapidly worsening shortness of breath.",
-                    "summary": "Pulmonary edema is a condition caused by excess fluid accumulation in the air spaces and parenchyma of the lungs, leading to impaired gas exchange and severe difficulty breathing. It is often a complication of heart failure, presenting with a cough, a feeling of breathlessness, and sometimes a rapid or irregular heartbeat.",
-                    "treatment_approach": [
-                        "Oxygen therapy",
-                        "Diuretics (to remove excess fluid)",
-                        "Medications to improve heart function",
-                        "Treating the underlying cause"
-                    ],
-                    "disease_name": "Pulmonary edema",
-                    "key_symptoms": [
-                        "A cough",
-                        "Breathless feeling",
-                        "Rapid, irregular heartbeat",
-                        "Anxiety",
-                        "Cold, clammy skin"
-                    ],
-                    "diagnostic_tests": [
-                        "Chest X-ray",
-                        "Electrocardiogram (ECG)",
-                        "Echocardiogram",
-                        "Blood tests (e.g., BNP)"
-                    ],
-                    "confidence_score": 0.3
-                }
+
+
+const data = {
+    "differential_diagnoses": [
+        {
+            "relevance_explanation": "The patient is a known diabetic presenting with unexplained weight loss and symptoms of severe hyperglycemia. DKA is a life-threatening complication that must be ruled out immediately, as it is characterized by high blood sugar and ketone levels (KB 3).",
+            "summary": "Diabetic Ketoacidosis is a severe, acute complication of diabetes resulting from a profound lack of insulin, leading to the body breaking down fat for energy. This process produces ketones, causing the blood to become acidic (KB 3).",
+            "treatment_approach": [
+                "Intravenous fluids",
+                "Insulin therapy",
+                "Electrolyte replacement"
             ],
-            "primary_diagnosis": {
-                "clinical_presentation": {
-                    "key_findings": [
-                        "Wheezing (a whistling sound during breathing)",
-                        "Chest tightness",
-                        "Episodic shortness of breath"
-                    ],
-                    "common_symptoms": [
-                        "Shortness of breath",
-                        "Wheezing",
-                        "Chest tightness",
-                        "Coughing at night"
-                    ]
-                },
-                "treatment_plan": {
-                    "advanced_options": [
-                        "Biologic therapies for severe, refractory asthma",
-                        "Bronchial thermoplasty (for select severe cases)",
-                        "Continuous monitoring of breathing and symptoms"
-                    ],
-                    "first_line": [
-                        "Use of a quick-relief inhaler for acute symptoms",
-                        "Daily use of long-term control medications (e.g., inhaled corticosteroids)",
-                        "Patient education on trigger avoidance and medication adherence"
-                    ]
-                },
-                "relevance_explanation": "The patient's clinical presentation, characterized by the classic triad of shortness of breath, wheezing, and chest tightness, particularly with nocturnal coughing, is highly indicative of asthma. This aligns directly with the symptoms and clinical description of asthma provided in the knowledge base, making it the most probable diagnosis.",
-                "summary": "Asthma is a chronic inflammatory disease of the airways characterized by recurrent episodes of wheezing, shortness of breath, chest tightness, and coughing. These symptoms result from reversible airflow obstruction and bronchospasm, often triggered by environmental factors, exercise, or respiratory infections. Effective management focuses on prevention and long-term control of airway inflammation.",
-                "diagnostic_approach": {
-                    "initial_tests": [
-                        "Spirometry",
-                        "Peak flow monitoring",
-                        "Physical exam"
-                    ],
-                    "confirmatory_tests": [
-                        "Methacholine challenge",
-                        "Sputum eosinophils",
-                        "Allergy testing"
-                    ]
-                },
-                "prevention_strategies": [
-                    "Identify and avoid specific asthma triggers (e.g., airborne substances, chemical fumes)",
-                    "Follow a detailed asthma action plan provided by a healthcare professional",
-                    "Take prescribed long-term control medications consistently",
-                    "Get appropriate vaccinations (e.g., influenza, pneumonia) to avoid respiratory infections"
-                ],
-                "disease_name": "Asthma",
-                "suggested_medications": [
-                    {
-                        "dosage": "90 mcg/puff",
-                        "drug_name": "Albuterol (Quick-relief inhaler)",
-                        "frequency": "As needed for symptoms or before exercise"
-                    },
-                    {
-                        "dosage": "Varies by severity",
-                        "drug_name": "Inhaled Corticosteroid (e.g., Fluticasone)",
-                        "frequency": "Once or twice daily for long-term control"
-                    }
-                ],
-                "confidence_score": 0.95
-            },
-            "clinical_recommendations": [
-                "Undergo spirometry and peak flow monitoring to establish baseline lung function and confirm the degree of airway obstruction.",
-                "Develop a personalized Asthma Action Plan in consultation with a healthcare provider, detailing steps for daily management, symptom worsening, and emergency situations.",
-                "Receive education on the correct technique for using both quick-relief and long-term control inhalers to maximize medication efficacy.",
-                "Identify and minimize exposure to known or suspected asthma triggers, such as airborne substances, chemical fumes, or cold air, potentially through allergy testing."
+            "disease_name": "Diabetic Ketoacidosis (DKA)",
+            "key_symptoms": [
+                "Unexplained weight loss",
+                "High blood sugar level",
+                "Loss of appetite"
+            ],
+            "diagnostic_tests": [
+                "A blood ketone level",
+                "Blood acidity tests",
+                "Blood electrolyte tests"
+            ],
+            "confidence_score": 0.7
+        },
+        {
+            "relevance_explanation": "While the primary presentation suggests hyperglycemia, the symptoms of dizziness, blurred vision, and fatigue are also classic signs of low blood sugar (KB 1, KB 2). Intermittent or nocturnal hypoglycemia may be occurring, especially if the patient is on insulin therapy.",
+            "summary": "Hypoglycemia is a condition defined by blood sugar levels dropping below 70 mg/dL (KB 2). It is a common complication in diabetes, often caused by an imbalance between medication, food intake, and physical activity.",
+            "treatment_approach": [
+                "Fast-acting carbohydrates (15 to 20 grams)",
+                "Glucagon injection (KB 2)",
+                "Review of medication and eating habits"
+            ],
+            "disease_name": "Hypoglycemia",
+            "key_symptoms": [
+                "Dizziness",
+                "Blurred vision",
+                "Fatigue",
+                "Anxiety"
+            ],
+            "diagnostic_tests": [
+                "Blood sugar levels",
+                "Continuous glucose monitoring"
+            ],
+            "confidence_score": 0.4
+        }
+    ],
+    "primary_diagnosis": {
+        "clinical_presentation": {
+            "key_findings": [
+                "Fatigue",
+                "Pale skin",
+                "Shortness of breath",
+                "Cold hands and feet"
+            ],
+            "common_symptoms": [
+                "Frequent urination",
+                "Excessive thirst",
+                "Unexplained weight loss",
+                "Blurred vision"
             ]
         },
-        "type": "ClinicalAnalysis"
-    }
-]
+        "treatment_plan": {
+            "advanced_options": [
+                "Continuous glucose monitor (KB 1)",
+                "Glucagon auto-injector pen or emergency syringe kit (KB 1)",
+                "Treatment for underlying anemia"
+            ],
+            "first_line": [
+                "Medicine adjustments by a professional (KB 1)",
+                "Nutrition counseling (KB 2)",
+                "Frequent blood sugar monitoring"
+            ]
+        },
+        "relevance_explanation": "The patient's history of Diabetes combined with the cardinal symptoms of polyuria (frequent urination), polydipsia (excessive thirst), unexplained weight loss, and blurred vision are highly indicative of significantly uncontrolled blood sugar levels. The additional symptoms of fatigue and pallor suggest associated anemia or chronic complications.",
+        "summary": "Diabetes Mellitus is a chronic metabolic disorder characterized by sustained high blood sugar (hyperglycemia) due to defects in insulin production or action. Uncontrolled hyperglycemia leads to osmotic symptoms and metabolic derangements, which, if left untreated, can progress to severe complications like Diabetic Ketoacidosis (KB 3).",
+        "diagnostic_approach": {
+            "initial_tests": [
+                "Blood sugar level (KB 3)",
+                "Complete blood count",
+                "Urinalysis (KB 3)"
+            ],
+            "confirmatory_tests": [
+                "A blood ketone level",
+                "Blood acidity (KB 3)",
+                "HbA1c"
+            ]
+        },
+        "prevention_strategies": [
+            "Eat nutritious foods (KB 5)",
+            "Maintain a healthy weight (KB 5)",
+            "Engage in regular exercise (KB 5)",
+            "Avoid tobacco/smoke (KB 5)"
+        ],
+        "disease_name": "Diabetes Mellitus (Uncontrolled Hyperglycemia)",
+        "confidence_score": 0.95
+    },
+    "clinical_recommendations": [
+        "Immediate comprehensive laboratory workup, including a Complete Blood Count (CBC) to evaluate the reported anemia (pale skin, fatigue), HbA1c, serum glucose, and blood ketone levels.",
+        "Urgent consultation with an endocrinologist to review and adjust the current diabetes medication regimen (medicine adjustments, per KB 1) to achieve better glycemic control.",
+        "Initiate intensive nutrition counseling (KB 2) to optimize dietary habits and carbohydrate intake, which is crucial for managing blood sugar levels.",
+        "Provide the patient with education on recognizing and managing both hyperglycemic and hypoglycemic emergencies, including the proper use of a continuous glucose monitor (KB 1) and emergency glucagon (KB 2)."
+    ],
+    "suggested_medications": [
+        {
+            "dosage": "Individualized (Units per injection)",
+            "drug_name": "Insulin glulisine",
+            "frequency": "Before meals or as directed by physician"
+        },
+        {
+            "dosage": "Individualized (Units per injection)",
+            "drug_name": "Insulin human",
+            "frequency": "Once or twice daily, or as directed by physician"
+        }
+    ],
+    "knowledge_base_sources": [
+        {
+            "disease": "Diabetic hypoglycemia",
+            "source_url": "https://www.mayoclinic.org/diseases-conditions/diabetic-hypoglycemia/symptoms-causes/syc-20371525",
+            "score": "N/A"
+        },
+        {
+            "disease": "Hypoglycemia",
+            "source_url": "https://www.mayoclinic.org/diseases-conditions/hypoglycemia/symptoms-causes/syc-20373685",
+            "score": "N/A"
+        },
+        {
+            "disease": "Diabetic ketoacidosis",
+            "source_url": "https://www.mayoclinic.org/diseases-conditions/diabetic-ketoacidosis/symptoms-causes/syc-20371551",
+            "score": "N/A"
+        },
+        {
+            "disease": "Thrombocytosis",
+            "source_url": "https://www.mayoclinic.org/diseases-conditions/thrombocytosis/symptoms-causes/syc-20378315",
+            "score": "N/A"
+        },
+        {
+            "disease": "Arteriosclerosis / atherosclerosis",
+            "source_url": "https://www.mayoclinic.org/diseases-conditions/arteriosclerosis-atherosclerosis/symptoms-causes/syc-20350569",
+            "score": "N/A"
+        }
+    ],
+    "medication_sources": [
+        {
+            "brand_name": "Glucose",
+            "generic_name": "Dextrose anhydrous",
+            "score": "N/A"
+        },
+        {
+            "brand_name": "GILTUSS DIABETIC EX",
+            "generic_name": "GILTUSS DIABETIC EX",
+            "score": "N/A"
+        },
+        {
+            "brand_name": "Apidra SoloStar",
+            "generic_name": "insulin glulisine",
+            "score": "N/A"
+        },
+        {
+            "brand_name": "",
+            "generic_name": "Insulin human",
+            "score": "N/A"
+        },
+        {
+            "brand_name": "",
+            "generic_name": "Insulin human",
+            "score": "N/A"
+        }
+    ]
+}
 
 
 export const Medication = () => {
@@ -285,10 +322,6 @@ export const Medication = () => {
         const filtered = illnessData.filter((ill) =>
             ill.illnessName.toLowerCase().startsWith(value.toLowerCase())
         );
-        console.log('X', filtered);
-        console.log('y', value);
-        console.log('d', illnessData);
-
         setFilteredIllness(filtered);
     };
 
@@ -364,36 +397,39 @@ export const Medication = () => {
 
     const fetchLabTest = async () => {
         setPartialState({ labTestloading: true, labTestError: null });
+        console.log("📤 Starting API call to clinical-analysis...");
+
         try {
+            const payload = { report_text: buildReportText(illness, symtomps, patient) };
+            console.log("📦 Request payload:", payload);
+
             const res = await axios.post(
-                "https://care-backend-sa3e.onrender.com/api/v1/analyze",
-
-                {
-                    report_text: buildReportText(illness, symtomps, patient)
-
-                }, {
-                timeout: 1000,
-                
-            }
+                "https://care-backend-sa3e.onrender.com/api/v1/clinical-analysis",
+                payload,
+                { timeout: 30000 }
             );
 
-            const analysis = res?.data?.analysis || [];
-            console.log(analysis)
-            const { tests, medicines } = extractLabTests(analysis);
-            console.log("test", tests)
-            console.log("mediciene", medicines)
+            console.log("✅ API response:", res.data?.data);
+
+            const { tests, medicines } = extractLabTests(res?.data?.data);
+            // const { tests, medicines } = extractLabTests(data);
+            console.log("🧪 Tests extracted:", tests);
+            console.log("💊 Medicines extracted:", medicines);
 
             setLabtestResult(tests);
-            setmediciene(medicines)
+            setmediciene(medicines);
         } catch (err) {
+            console.error("❌ Axios error:", err);
             setPartialState({
                 labTestError:
                     err.response?.data?.message || err.message || "Error fetching lab tests",
             });
         } finally {
+            console.log("🏁 Finished API call");
             setPartialState({ labTestloading: false });
         }
     };
+
 
     const {
         hospitalData,
@@ -728,8 +764,8 @@ export const Medication = () => {
                                     style={{
                                         display: 'flex',
                                         justifyContent: 'space-between',
-                                        padding: '20px',
-                                        height: '75px',
+                                        padding: '10px',
+                                        
                                         backgroundColor: 'white',
                                         borderBottom: '1px solid lightgray',
                                         borderRadius: '10px',
@@ -757,6 +793,8 @@ export const Medication = () => {
                                                 setselectedMediciene((prev) => [...prev, hos])
                                             }}
                                             style={{
+                                                width:'70px',
+                                                height:'35px',
                                                 padding: '10px',
                                                 fontSize: '12px',
                                                 border: '1px solid black'

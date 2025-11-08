@@ -26,10 +26,11 @@ export function ControlPannel() {
             <div style={{
                 display: 'flex',
                 justifyContent: 'space-between',
-                color: 'white'
+
+
             }}>
                 {!collapsed && (
-                    <div>
+                    <div className="navHeading">
                         <h3>EMR ( Electronic Medical Record )</h3>
                         <p>Super Admin</p>
                     </div>
@@ -40,10 +41,9 @@ export function ControlPannel() {
                     style={{
                         cursor: 'pointer',
                         marginLeft: collapsed ? '' : "20px",
-
                         display: 'block',
                         fontSize: '20px',
-                        color: 'white'
+
 
                     }} className={collapsed ? "ri-layout-left-line" : "ri-layout-right-line"}></i>
             </div>
@@ -64,10 +64,10 @@ export function ControlPannel() {
                         return <div onClick={() => {
                             setActiveTab(items.name)
                             navigate(items.navigate)
-                        }} className={`navDiv  ${activeTab === items.name ? "active" : ""}`} key={i}>
+                        }} className={`navDiv hover ${activeTab === items.name ? "active" : ""}`} key={i}>
 
                             <i className={`navIcon ${items.icon}`}></i>
-                            <span className="navText">{items.name}</span>
+                            <h5 className="navText">{items.name}</h5>
                         </div>
 
                     })}
