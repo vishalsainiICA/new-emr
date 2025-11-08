@@ -1,0 +1,476 @@
+/* New Deshbord */
+.Deshbord-main-container{
+    display: flex;
+    /* width: 100vw; */
+    height: 100vh;
+}
+.deshbord-panel {
+    background-color: rgba(241, 243, 251);
+    height: 100%;
+   width: 100%;
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
+.super-admin-logo
+{
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    margin: 15px;
+    /* height: 90px; */
+    width: 100%;
+    color: black;
+    background-color: rgba(254, 254, 255);
+    border-radius: 20px;
+}
+.super-admin {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.super-admin p {
+    font-size: 12px;
+} 
+
+.super-name {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    height: 70px;
+    width: 250px;
+    /* margin: 10px; */
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.hospital-card-list {
+
+    width: 100%; 
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 10px;
+    /* background-color:rgba(254, 254, 255) ; */
+}
+
+.card-list {
+    height: 130px;
+    width: 100%; 
+    border-radius: 20px;
+    background-color: rgba(254, 254, 255);
+    color: black;
+    margin-left: 15px;
+    display: flex;
+    flex-direction: column;
+    /* gap: 5px; */
+    padding: 15px;
+    transition: all 0.2s ease;
+}
+.card-name
+{
+    display: flex;
+    justify-content: space-between;
+}
+.card-list span
+{
+    font-weight: bold;
+    font-size: 0.7rem;
+}
+
+.card-list p{
+    color: green;
+}
+
+.card-list:hover{
+     transform: translateY(-10px);
+    box-shadow:  2px 2px 5px rgba(0, 0, 0, 0.3);
+
+}
+
+.card-list p {
+    font-size: 12px;
+}
+
+.card-list h2 {
+    font-size: 25px;
+}
+
+/* Hospital-performance and Networkoverview */
+.Hospital-perfo-and-Network {
+    display: flex;
+    /* justify-content: space-between; */
+  
+    width: 100%;
+    margin: 15px;
+    /* margin-top: 60px; */
+    color: black;
+    gap: 30px;
+
+}
+
+.hospital-performance {
+    /* height: 900px; */
+    width: 65%;
+    display: grid;
+    border-radius: 20px;
+    background-color: rgba(254, 254, 255);
+    padding:  10px;
+}
+
+.hospital-heading {
+    display: flex;
+    justify-content: space-between;
+    margin: 30px;
+}
+
+/* .hospital-heading button */
+.hbutton {
+    height: 40px;
+    width: 150px;
+    font-size: 13px;
+    display: flex;
+    padding: 9px;
+    justify-content: center;
+    align-content: center;
+     background-color: rgba(233, 233, 253, 1);
+     color: #333;
+     border-radius: 12px;
+     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+     transition: all 0.3s ease;
+}
+
+.hbutton:hover
+{
+  background: linear-gradient(135deg, rgba(220, 220, 255, 1), rgba(200, 200, 255, 1));
+  color: #1a1aff; /* text changes to a soft blue */
+  transform: translateY(-5px);
+  border-radius: 20px;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+
+}
+
+.hospital-name {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 10px 40px;
+    /* gap: -90px; */
+    border-radius: 20px;
+    transition: all 0.4s ease;
+}
+.hospital-name:hover
+{
+    transform: translateY(-10px);
+    box-shadow:  2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.logo {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50px;
+  background-color: #c8a2ff;
+}
+
+/* .hospital-name div {
+    margin-left: 20px;
+    margin-top: -15px;
+} */
+
+.hospital-name p {
+    /* height: 20px;
+    width: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px; */
+     height: 30px;
+    width: 90px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 13px;
+    /* margin-left: 210px; */
+    border-radius: 14px;
+    background-color: rgba(208, 234, 234);
+    color: rgb(10, 11, 11);
+}
+
+.hospital-name span {
+    font-size: 17px;
+}
+
+.network-overview {
+    height: 550px;
+    width: 35%;
+    /* margin: 30px; */
+    border-radius: 20px;
+    background-color: rgba(254, 254, 255);
+}
+
+.network-overview h4 {
+    margin: 30px;
+}
+
+.Network-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* align-items: center; */
+    margin-left: 30px;
+    padding: 20px;
+    height: 100px;
+    width: 250px;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    transition: all 0.2s ease;
+}
+
+.Network-card:hover
+{
+transform: translateY(-10px);
+box-shadow:  2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.Network-card span {
+    height: 30px;
+    width: 110px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 11px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    background-color: antiquewhite;
+}
+
+.Network-card p {
+    font-size: 13px;
+    margin-top: -2px;
+    margin-left: 5px;
+}
+
+.Network-card h5 {
+    margin-left: 5px;
+}
+.extra-main-block
+{
+    display: grid;
+    row-gap:10px;
+    justify-Content: space-between;
+    gap: 10px;
+
+}
+.extra-block {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    justify-content: center;
+    /* grid-template-rows: repeat(2,1fr); */
+    column-gap: 10px;
+    row-gap: 10px;
+    /* background-color: blue; */
+}
+
+.blocks {
+    height: 80px;
+    width: 150px;
+    border-radius: 20px;
+    color: rgba(60, 196, 154);
+    background-color: rgba(254, 254, 255);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.blocks span {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+@media  (max-width: 1024px) and (min-width: 600px)
+{   
+    .Hospital-perfo-and-Network
+    {
+        flex-direction: column;
+    }
+   .hospital-card-list
+   {
+       grid-template-columns: repeat(3,1fr);
+   }
+   .extra-block
+   {
+       grid-template-columns: repeat(1,1fr);
+      padding: 0px 50px;
+   }
+   .logo {
+    width: 45px;
+    height: 35px;
+
+   }
+      .hbutton {
+    height: 35px;
+    width: 130px;
+    font-size: 10px;
+    padding: 7px;
+   }
+   .hospital-name p {
+    height: 20px;
+    width: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 7px;
+   }
+   
+}
+
+@media  (max-width: 600px)
+{   
+   /* grid-template-columns : repeat() */
+   .hospital-card-list
+   {
+       grid-template-columns: repeat(2,1fr);
+   }
+   .network-overview
+   {
+    display: none;
+   }
+   .hospital-performance
+   {
+    width: 100%;
+   }
+    .logo {
+    width: 45px;
+    height: 35px;
+    
+   }
+
+   .hbutton {
+    height: 30px;
+    width: 110px;
+    font-size: 9px;
+    padding: 6px;
+   }
+    .hospital-name p {
+    height: 20px;
+    width: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 8px;
+   }
+}
+
+.system-administrator-profile
+{
+    background-color: rgba(254, 254, 255);
+    color: black;
+    display: flex;
+    flex-direction: column;
+    height: 460px;
+    width: 350px;
+    padding: 10px;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    position: absolute;
+    top: 130px;
+    right: 2px;
+    z-index: 3;
+    border-radius: 15px;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.2);
+}
+.profile
+{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    font-weight: bold;
+    font-size: large;
+}
+
+.profile button
+{
+   height: 30px;
+   width: 60px;
+   display: flex;
+   align-items: center;
+   font-size: 14px;
+
+}
+
+.profile-logo{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    font-weight: bold;
+    gap: 10px  ;
+}
+.admin-detail
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* padding: 10px; */
+
+}
+.admin-detail div{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    /* background-color: #1aff79; */
+}
+.admin-detail p
+{
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.admin-detail span
+{
+ font-size: 12px;
+}
+.acount-setting button
+{
+   display: grid;
+   justify-content: space-between;
+   align-items: center;
+   border-radius: 20px;
+    background-color: rgba(233, 233, 253, 1);
+    color: #333;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+.acount-setting button:hover
+{
+  background: linear-gradient(135deg, rgba(220, 220, 255, 1), rgba(200, 200, 255, 1));
+  color: #1a1aff; /* text changes to a soft blue */
+  transform: translateY(-5px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+
+}
+hr{
+    opacity: 0.3;
+    margin-top: 20px;
+}
+.acount-setting
+{
+    display: flex;
+    flex-direction: column;
+    gap: 10px; 
+    padding: 20px;
+       
+}
+.active
+{
+    display: none;
+}
