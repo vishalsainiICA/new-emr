@@ -193,6 +193,29 @@ i {
     white-space: nowrap;
 }
 
+
+/* New-Hospital */
+
+.New-hospital
+{
+    /* width: 100%;
+    height: 100%; */
+    padding: 20px;
+    color: black;
+     /* box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2); */
+
+}
+
+.hospitalMangement
+{  
+    display: grid;
+    gap: 2px;
+}
+.hospitalMangement span
+{
+   font-size: small;
+
+}
 /* hospitalOnboard */
 
 .hospitalOnboard {
@@ -218,7 +241,9 @@ i {
     flex-direction: column;
     row-gap: 15px;
     flex-wrap: wrap;
-    padding: 10px;
+    padding: 20px;
+    /* box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2); */
+
 }
 
 label {
@@ -239,27 +264,22 @@ input {
 select,
 option,
 textarea,
-button,
 input {
     outline: none;
     cursor: pointer;
+    background-color: white;
 }
 
 button:focus,
 button:active {
     outline: none;
-    /* removes blue outline */
     box-shadow: none;
-    /* removes shadow glow */
-    border-color: lightgray;
-    /* keeps border same */
 }
 
 .patientRecordsHeadings,
 .patientRecordBody>div {
     display: grid;
     grid-template-columns: 100px 1fr 80px 1fr 1fr 120px;
-    /* Fixed widths for each column */
     gap: 15px;
     background-color: rgb(245, 239, 239);
     padding: 20px;
@@ -278,9 +298,7 @@ button:active {
     background-color: white;
     cursor: pointer;
     border-top: none;
-    /* Remove double border */
     border-radius: 0;
-    /* Remove radius for body rows */
 }
 
 .patientRecordBody>div:last-child {

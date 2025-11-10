@@ -2,6 +2,7 @@ import { superAdminApi } from "../../auth";
 import { Circles, Grid } from 'react-loader-spinner';
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import '../../Jaffar.css'
 
 export function Dashboard() {
 
@@ -10,6 +11,10 @@ export function Dashboard() {
     const [data, setData] = useState([]);
     const [isProcessing, setIsProcessing] = useState(false);
     const [isCollapse, setCollapse] = useState(false);
+    const [isEditprofile, setEditprofile] = useState(false);
+    const [blur, setblur] = useState(false);
+    const [logOut, setlogOut] = useState(false);
+    // const [isCollapse, setCollapse] = useState(false);
     const [isHide, setisHide] = useState(false);
     const [error, setError] = useState(null);
     const [filterHospital, setFilterHospital] = useState([]);
@@ -37,24 +42,17 @@ export function Dashboard() {
         fetchHospital();
     }, []);
 
-    const handlonclick = () => {
-        if (!isCollapse) {
-            setCollapse(true);
-        }
-        else {
-            setCollapse(false)
-        }
-    }
-
-
     return (
         <div className="deshbord-panel">
+
+        <div className={blur? "blur" : "active"}></div>
+
             <div className="super-admin-logo">
                 <div className="super-admin">
                     <h3>Super Admin Dashboard</h3>
                     <p>Helthcare and Network</p>
                 </div>
-                <div className="super-name" onClick={handlonclick}>
+                <div className="super-name" onClick={() => setCollapse(!isCollapse)}>
                     <span className="logo">SA</span>
                     <div>
                         <h5>Welcome back, Super Admin</h5>
@@ -294,7 +292,7 @@ export function Dashboard() {
             <div className={isCollapse ? "system-administrator-profile" : ("active")}>
                 <div className="profile">
                     <span>Profile</span>
-                    <button onClick={handlonclick}>Back</button>
+                    <button onClick={() => setCollapse(!isCollapse)}>Back</button>
                 </div>
                 <hr />
 
@@ -368,15 +366,77 @@ export function Dashboard() {
                 </div>
 
                 <div className="acount-setting">
-                    <button>Edit profile</button>
-                    <button>Logout</button>
+                    <button onClick={() => {setEditprofile(!isEditprofile) ; setblur(!blur); setCollapse(!isCollapse)}}>Edit profile</button>
+                    <button onClick={() => {setlogOut(!logOut); setblur(!blur) ; setCollapse(!isCollapse)}}>Logout</button>
                 </div>
                 <hr />
 
             </div>
+
+            {/* Edit-Profile */}
+
+            {/* <div className="edit-profile"> */}
+            <div className={isEditprofile ? "edit-profile" : "active"}>
+                <div className="profile">
+                    <span>Edit Profile</span>
+                    <button onClick={() => {setEditprofile(!isEditprofile) ; setblur(!blur) ; setCollapse(!isCollapse)  }}>Back</button>
+                </div>
+                <hr />
+                <div className="edit-detail">
+                    <div className="detail">
+                        <div>
+                            <label htmlFor="User Name">Username</label>
+                            <input type="text" />
+                        </div>
+                        <div>
+                            <label htmlFor="Email">Email</label>
+                            <input type="email" />
+                        </div>
+                    </div>
+                    <div className="detail">
+                        <div>
+                            <label htmlFor="Phone">Phone</label>
+                            <input type="number" />
+                        </div>
+                        <div>
+                            <label htmlFor="Department">Department</label>
+                            <input type="text" />
+                        </div>
+                    </div>
+                    <div className="bio">
+                        <label htmlFor="Bio">Bio</label>
+                        <input type="text" />
+                    </div>
+                </div>
+                <hr />
+
+                <div className="final-process">
+                    <button>Save Profile</button>
+                    <button>Cancel</button>
+                </div>
+
+            </div>
+
+            {/* Logout page */}
+            <div className={logOut ? 'logout-page' : 'active'}>
+
+                <div className="profile">
+                    <span>Logout Confirmation</span>
+                    <button onClick={() => {setlogOut(!logOut) ; setblur(!blur) ; setCollapse(!isCollapse) }}>Back</button>
+                </div>
+                <div className="Logout-information">
+                    <span>🚪Confirm Logout</span>
+                    <br /> <br />
+                    <p>Are you sure you want to logout from the Super Admin Dashboard?</p>
+                </div>
+                <div className="log-btn">
+                    <button>Yes logout</button>
+                    <button>Cancel</button>
+                </div>
+
+            </div>
+
         </div>
-
-
         //  </div>
 
     );

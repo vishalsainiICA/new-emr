@@ -364,6 +364,24 @@
         align-items: center;
         font-size: 8px;
     }
+
+    .edit-profile {
+        display: grid;
+        padding: 20px;
+        border-radius: 20px;
+        position: fixed;
+        top: 100px;
+        left: 0px;
+        background-color: rgba(254, 254, 255);
+        width: 100%;
+        height: 550px;
+        color: black;
+        gap: 10px;
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+        z-index: 10;
+
+    }
+
 }
 
 .system-administrator-profile {
@@ -378,7 +396,7 @@
     scrollbar-width: none;
     position: absolute;
     top: 130px;
-    right: 2px;
+    right: 25px;
     z-index: 3;
     border-radius: 15px;
     transform: translateY(-5px);
@@ -399,7 +417,6 @@
     display: flex;
     align-items: center;
     font-size: 14px;
-
 }
 
 .profile-logo {
@@ -472,4 +489,106 @@ hr {
 
 .active {
     display: none;
+}
+
+
+/* Edit-Profile */
+
+.edit-profile {
+    display: grid;
+    padding: 20px;
+    border-radius: 20px;
+    position: absolute;
+    top: 4%;
+    left: 35%;
+    background-color: rgba(254, 254, 255);
+    width: 500px;
+    height: 550px;
+    color: black;
+    gap: 10px;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+
+}
+
+.edit-profile input {
+    background-color: white;
+    color: black;
+}
+
+.detail {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0px;
+    gap: 10px;
+}
+
+.detail div {
+    display: grid;
+    align-items: center;
+}
+
+.detail input {
+    width: 220px;
+}
+
+.bio input {
+    height: 60px;
+}
+
+.final-process {
+    display: flex;
+    gap: 20px;
+    justify-content: end;
+}
+
+.final-process button {
+    font-size: x-small;
+    height: 30px;
+    width: 100;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+/* logout-page */
+.logout-page {
+    position: absolute;
+    bottom: 200px;
+    left: 430px;
+    background-color: rgba(254, 254, 255);
+    color: black;
+    width: 500px;
+    padding: 25px;
+    border-radius: 20px;
+    display: grid;
+    gap: 30px;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+    /* opacity: 0.4; */
+
+}
+
+.logout-page p {
+    font-size: 13px;
+}
+
+.log-btn {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: 10px;
+    font-size: x-small;
+    height: 30px;
+    width: 100;
+}
+
+.blur {
+    position: fixed;
+    /* filter: blur(20px); */
+    backdrop-filter: blur(20px);
+    height: 100vh;
+    width: 100vw;
 }

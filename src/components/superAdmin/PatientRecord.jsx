@@ -49,7 +49,7 @@ export default function PatientRecords() {
 
 
     return (
-        <div>
+        <div >
             <div
                 style={{
                     width: '100%',

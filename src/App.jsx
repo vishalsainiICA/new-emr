@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
-import './Jaffar.css'
+// import './Jaffar.css'
 import ControlPannel from './components/superAdmin/ControlPannel'
 import Dashboard from './components/superAdmin/Dashboard'
 import DoctorControlPannel from './components/doctor/ControlPannel'

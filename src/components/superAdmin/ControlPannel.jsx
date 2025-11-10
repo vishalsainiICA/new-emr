@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { Outlet, useNavigate } from "react-router-dom"
 
+
 export function ControlPannel() {
     const [activeTab, setActiveTab] = useState('Dashboard')
     const [collapsed, setcollapsed] = useState(false)
@@ -21,8 +22,13 @@ export function ControlPannel() {
         }
     })
 
+    
+
     return <div className="controlPannel">
-        <div className={`navbar ${collapsed ? "collapse" : ""}`}>
+        <style>
+
+        </style>
+        <div className={`navbar ${collapsed ? "collapse" : ""}`} style={{color:'black'}} >
             <div style={{
                 display: 'flex',
                 justifyContent: 'space-between',

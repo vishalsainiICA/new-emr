@@ -47,7 +47,7 @@ export default function PatientRecords() {
     }, []);
 
     return (
-        <div>
+        <div  >
             <h2>Patient-Records</h2>
             <div
                 style={{
