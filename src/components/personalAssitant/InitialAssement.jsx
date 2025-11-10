@@ -66,17 +66,17 @@ const InitialAssesment = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const data = location.state?.patient;
+    const data = location.state?.patient || undefined;
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        if (!data) {
-            navigate("/pa/dashboard");
-            return;
-        }
-        console.log("Received Data:", data);
+    //     // if (!data) {
+    //     //     navigate("/pa/dashboard");
+    //     //     return;
+    //     // }
+    //     console.log("Received Data:", data);
 
-    }, [location.state, navigate]);
+    // }, [location.state, navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

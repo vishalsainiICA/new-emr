@@ -43,8 +43,8 @@ function App() {
         <Route path='view-hospital' element={<ViewHospital></ViewHospital>}></Route>
       </Route>
       <Route path='/final-prescription' element={<FinalPrescription />} ></Route>
-      <Route path='/doctor' element={<DoctorControlPannel />} >
-        <Route path='dashboard' element={<DoctorDashboard />}></Route>
+      <Route path='/doctor' element={<DoctorDashboard />} >
+        {/* <Route path='dashboard' element={<DoctorDashboard />}></Route> */}
         <Route path='medication' element={<Medication />}></Route>
         <Route path='patient-record' element={<PatientRecordsof_Doc></PatientRecordsof_Doc>}></Route>
       </Route>

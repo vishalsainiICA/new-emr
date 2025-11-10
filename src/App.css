@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    /* background-color: aqua; */
 }
 
 i {
@@ -35,7 +36,6 @@ i {
     border-radius: 10px;
     padding: 20px;
     transition: 1s ease;
-    width: 100%;
 
 }
 
@@ -118,11 +118,11 @@ i {
     background-color: rgba(241, 243, 251);
     overflow-y: scroll;
     /* background-color: rgb(247, 231, 231); */
-    padding: 30px;
+    padding: 10px;
 }
 
 .dashboard {
-    width: 100%;
+    width: 100vw;
 }
 
 .dashbaordcardList {

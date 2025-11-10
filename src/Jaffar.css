@@ -6,23 +6,21 @@
 }
 
 .deshbord-panel {
-    background-color: rgba(241, 243, 251);
-    height: 100%;
-    width: 100%;
-    overflow-y: scroll;
-    scrollbar-width: none;
+    /* background-color: rgba(241, 243, 251); */
+    /* overflow-y: scroll;
+    scrollbar-width: none; */
+    margin: 10px;
 }
 
 .super-admin-logo {
     display: flex;
     justify-content: space-between;
-    padding: 15px;
-    margin: 15px;
+    padding: 10px;
     /* height: 90px; */
-    width: 100%;
     color: black;
     background-color: rgba(254, 254, 255);
     border-radius: 20px;
+    margin-bottom: 10px;
 }
 
 .super-admin {
@@ -49,7 +47,6 @@
 
 .hospital-card-list {
 
-    width: 100%;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 10px;
@@ -58,11 +55,10 @@
 
 .card-list {
     height: 130px;
-    width: 100%;
     border-radius: 20px;
     background-color: rgba(254, 254, 255);
     color: black;
-    margin-left: 15px;
+
     display: flex;
     flex-direction: column;
     /* gap: 5px; */
@@ -102,9 +98,8 @@
 .Hospital-perfo-and-Network {
     display: flex;
     /* justify-content: space-between; */
-
     width: 100%;
-    margin: 15px;
+    margin-top: 10px;
     /* margin-top: 60px; */
     color: black;
     gap: 30px;
@@ -114,7 +109,6 @@
 .hospital-performance {
     /* height: 900px; */
     width: 65%;
-    display: grid;
     border-radius: 20px;
     background-color: rgba(254, 254, 255);
     padding: 10px;
@@ -123,7 +117,7 @@
 .hospital-heading {
     display: flex;
     justify-content: space-between;
-    margin: 30px;
+    margin: 10px 10px 30px 10px;
 }
 
 /* .hospital-heading button */

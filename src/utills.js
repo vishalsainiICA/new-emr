@@ -2,14 +2,14 @@ import axios from "axios";
 
 export const commonInstance = axios.create({
   baseURL: "http://localhost:8000/api",
-  timeout: 10000,
+  timeout: 100000,
   withCredentials: true,
 })
 
 //  super Admin
 export const superAdminInstance = axios.create({
   baseURL: "http://localhost:8000/api",
-  timeout: 10000, // 
+  timeout: 100000, // 
   withCredentials: true,
 });
 
@@ -27,7 +27,7 @@ superAdminInstance.interceptors.request.use((config) => {
 
 export const adminInstance = axios.create({
   baseURL: "http://localhost:8000/api",
-  timeout: 1000,
+  timeout: 10000,
   withCredentials: true,
 })
 
@@ -42,7 +42,7 @@ adminInstance.interceptors.request.use((config) => {
 
 export const medicalDirectorInstance = axios.create({
   baseURL: "http://localhost:8000/api",
-  timeout: 1000,
+  timeout: 10000,
   withCredentials: true,
   headers: {
     "Content-Type": 'application/json'
@@ -62,7 +62,7 @@ medicalDirectorInstance.interceptors.request.use((config) => {
 
 export const doctorInstance = axios.create({
   baseURL: "http://localhost:8000/api",
-  timeout: 1000,
+  timeout: 10000,
   withCredentials: true,
   headers: {
     "Content-Type": 'application/json'
@@ -82,7 +82,7 @@ export const doctorInstance = axios.create({
 
 export const perosnalAssistanceInstance = axios.create({
   baseURL: "http://localhost:8000/api",
-  timeout: 1000,
+  timeout: 10000,
   withCredentials: true,
   headers: {
     "Content-Type": 'application/json'

@@ -493,37 +493,42 @@ export const Medication = () => {
                     }}>Generate Prescription </button>
             </div>
         </div>
-
-        <div style={{
-            marginTop: '10px',
+        <div className="medicationPatieninfo" style={{
             display: 'flex',
-            gap: '10px'
+            justifyContent: 'space-between',
         }}>
-            <div className="medicationPatieninfo">
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                }}>
-                    <h4>Patient Information</h4>
-                </div>
 
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    flexWrap: 'wrap'
-                }}>
-                    <span>Name:<h4>{patient?.name}</h4></span>
-                    <span>Age:<h4>{patient?.age}</h4></span>
-                    <span>Gender:<h4>{patient?.gender}</h4></span>
-                    <span>Height:<h4>{patient?.initialAssementId?.height}.cm</h4></span>
-                    <span>Weight:<h4>{patient?.initialAssementId?.weight}.kg</h4></span>
-                    <span>BloodGroup:<h4>{patient?.initialAssementId?.bloodGroup}</h4></span>
-                    <span>HeartRate:<h4>{patient?.initialAssementId?.heartRate}</h4></span>
-                    <span>BP:<h4>{patient?.initialAssementId?.BP}</h4></span>
-                </div>
+            <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap'
+            }}>
+                <p>Name:<h4>{patient?.name}</h4></p>
+                <p>Age:<h4>{patient?.age}</h4></p>
+                <p>Gender:<h4>{patient?.gender}</h4></p>
+                <p>Height:<h4>{patient?.initialAssementId?.height}.cm</h4></p>
+                <p>Weight:<h4>{patient?.initialAssementId?.weight}.kg</h4></p>
+                <p>BloodGroup:<h4>{patient?.initialAssementId?.bloodGroup}</h4></p>
+                <p>HeartRate:<h4>{patient?.initialAssementId?.heartRate}</h4></p>
+                <p>BP:<h4>{patient?.initialAssementId?.BP}</h4></p>
+            </div>
 
+            <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap'
+            }}>
+                <p>Name:<h4>{patient?.name}</h4></p>
+                <p>Age:<h4>{patient?.age}</h4></p>
+                <p>Gender:<h4>{patient?.gender}</h4></p>
+                <p>Height:<h4>{patient?.initialAssementId?.height}.cm</h4></p>
+                <p>Weight:<h4>{patient?.initialAssementId?.weight}.kg</h4></p>
+                <p>BloodGroup:<h4>{patient?.initialAssementId?.bloodGroup}</h4></p>
+                <p>HeartRate:<h4>{patient?.initialAssementId?.heartRate}</h4></p>
+                <p>BP:<h4>{patient?.initialAssementId?.BP}</h4></p>
             </div>
         </div>
+
 
         {/* Symtomps/illness */}
         <div style={{
@@ -668,7 +673,7 @@ export const Medication = () => {
                                     }}>clear</button>
                                 {symtomps.map((sym, i) => {
                                     return (
-                                        <span
+                                        <p
                                             key={i}
                                             style={{
                                                 padding: '7px 12px',
@@ -695,7 +700,7 @@ export const Medication = () => {
                                                 onMouseOver={(e) => (e.target.style.color = 'red')}
                                                 onMouseOut={(e) => (e.target.style.color = '#555')}
                                             ></i>
-                                        </span>
+                                        </p>
                                     );
                                 })}
 
@@ -729,7 +734,7 @@ export const Medication = () => {
                     </div>
 
                     {labTestloading && (
-                        <span style={{
+                        <p style={{
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
@@ -738,7 +743,7 @@ export const Medication = () => {
                         }}>
                             <Circles height="40" width="40" color="#4f46e5" ariaLabel="loading" />
                             <br />Loading...
-                        </span>
+                        </p>
                     )}
 
                     {labTestError && (
@@ -765,7 +770,7 @@ export const Medication = () => {
                                         display: 'flex',
                                         justifyContent: 'space-between',
                                         padding: '10px',
-                                        
+
                                         backgroundColor: 'white',
                                         borderBottom: '1px solid lightgray',
                                         borderRadius: '10px',
@@ -793,8 +798,8 @@ export const Medication = () => {
                                                 setselectedMediciene((prev) => [...prev, hos])
                                             }}
                                             style={{
-                                                width:'70px',
-                                                height:'35px',
+                                                width: '70px',
+                                                height: '35px',
                                                 padding: '10px',
                                                 fontSize: '12px',
                                                 border: '1px solid black'
@@ -857,14 +862,14 @@ export const Medication = () => {
                                         display: 'flex',
                                         gap: '10px'
                                     }}>
-                                        <span
+                                        <p
                                             style={{
                                                 fontSize: '13px',
                                                 color: test.confidence > 0.5 ? 'green' : 'gray'
                                             }}
                                         >
                                             Confidence: {(test.confidence * 100).toFixed(0)}%
-                                        </span>
+                                        </p>
                                         <i onClick={() => {
                                             setselectedLabTest((prev) => prev.filter((t) => t.test !== test.test));
                                         }} class="ri-delete-bin-6-line"></i>
@@ -907,7 +912,7 @@ export const Medication = () => {
                                     }}
                                 > <div>
                                         <h4 style={{ margin: 0 }}>{hos?.drug_name}</h4>
-                                        <span>{hos?.dosage} <span></span>| {"Take After Meal"}</span>
+                                        <p>{hos?.dosage} <p></p>| {"Take After Meal"}</p>
 
                                     </div>
 

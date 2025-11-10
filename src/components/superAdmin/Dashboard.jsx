@@ -48,128 +48,10 @@ export function Dashboard() {
 
 
     return (
-        // <div className="dashboard">
-        //     <h2>Dashboard</h2>
-
-        //     { /* metrics cards */}
-
-        //     <div className="dashbaordcardList" style={{ display: 'flex', gap: '10px' }}>
-        //         {data?.metrices?.map((obj, index) => (
-        //             <div key={index}
-        //                 className="card"
-        //             >
-        //                 <span style={{ display: 'flex', gap: '20px' }}>
-        //                     <h3>{obj?.key}</h3>
-        //                     <span style={{
-        //                         backgroundColor: 'lightblue',
-        //                         padding: '10px',
-        //                         borderRadius: '10px'
-        //                     }}>
-        //                         <i className="ri-group-line"></i>
-        //                     </span>
-        //                 </span>
-        //                 <h2>
-        //                     {typeof obj?.value === "object"
-        //                         ? JSON.stringify(obj.value)
-        //                         : obj?.value ?? "N/A"}
-        //                 </h2>
-
-        //             </div>
-        //         ))}
-        //     </div>
-
-        //     {/* hospital performance */}
-        //     <div className="hospitalperformance" style={{
-        //         backgroundColor: 'white'
-        //     }}>
-        //         <h3>Hospital Performance</h3>
-
-        //         {isProcessing && (
-        //             <span style={{
-        //                 display: 'flex',
-        //                 justifyContent: 'center',
-        //                 alignItems: 'center',
-        //                 flexDirection: 'column',
-        //                 padding: '50px 0'
-        //             }}>
-        //                 <Circles height="40" width="40" color="#4f46e5" ariaLabel="loading" />
-        //                 <br />Loading...
-        //             </span>
-        //         )}
-
-        //         {error && (
-        //             <h4 style={{
-        //                 color: 'red',
-        //                 display: 'flex',
-        //                 justifyContent: 'center',
-        //                 alignItems: 'center',
-        //                 padding: '50px 0'
-        //             }}>{error}</h4>
-        //         )}
-
-        //         {!isProcessing && !error && Array.isArray(filterHospital) && filterHospital.length > 0 && (
-        //             <div style={{
-
-        //                 gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-        //                 gap: '20px',
-        //                 marginTop: '20px',
-        //                 // minHeight: '500px'
-        //             }}>
-        //                 {filterHospital.map((hos, i) => (
-        //                     <div key={i}
-        //                         style={{
-        //                             display: 'flex',
-        //                             justifyContent: 'space-between',
-        //                             width: '80%',
-        //                             height: '75px',
-        //                             backgroundColor: 'white',
-        //                             border: '1px solid lightgray',
-        //                             padding: '15px 15px 15px 30px',
-        //                             borderRadius: '10px',
-        //                             margin: '0 0 10px 10px',
-        //                             boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-        //                             cursor: 'pointer'
-        //                         }}>
-        //                         <div
-
-        //                             style={{
-
-        //                                 padding: "10px",
-        //                                 display: "flex",
-        //                                 alignItems: "center",
-        //                                 gap: "20px" // space between items
-        //                             }}
-        //                         >
-        //                             <span style={{ fontSize: '18px', fontFamily: 'cursive' }}>{i + 1}.</span>
-        //                             <div>
-        //                                 <h4 style={{ margin: 0 }}>{hos.name || "Unnamed Hospital"}</h4>
-        //                                 <p style={{ margin: 0 }}>{`${hos.city},${hos.state}`}</p>
-        //                             </div>
-
-        //                         </div>
-
-        //                         <div>
-        //                             <h4>{hos.totalRevenue || "Unnamed Hospital"}</h4>
-        //                             <p>{`patients: 0`}</p>
-        //                         </div>
-
-        //                     </div>
-        //                 ))}
-        //             </div>
-        //         )}
-
-        //         {!isProcessing && !error && Array.isArray(filterHospital) && filterHospital.length === 0 && (
-        //             <p
-        //                 style={{ textAlign: 'center', padding: '50px 0' }}
-        //             >No hospitals found</p>
-        //         )}
-        //     </div>
-        // </div>
-        //  <div className="Deshbord-main-container">
         <div className="deshbord-panel">
             <div className="super-admin-logo">
                 <div className="super-admin">
-                    <h2>Super Admin Dashboard</h2>
+                    <h3>Super Admin Dashboard</h3>
                     <p>Helthcare and Network</p>
                 </div>
                 <div className="super-name" onClick={handlonclick}>
@@ -232,62 +114,67 @@ export function Dashboard() {
 
                 <div className="hospital-performance">
                     <div className="hospital-heading">
-                        <h4>Hopital Performance</h4>
-                        <button className="hbutton">View All Hospital</button>
+                        <h4 style={{
+                            width: '100%'
+                        }}>Hopital Performance</h4>
+                        <input type="text" placeholder="type name..." />
+                    </div>
+                    <div >
+                        {isProcessing && (
+                            <span style={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                flexDirection: 'column',
+                                padding: '50px 0'
+                            }}>
+                                <Circles height="40" width="40" color="#4f46e5" ariaLabel="loading" />
+                                <br />Loading...
+                            </span>
+                        )}
+
+                        {error && (
+                            <h4 style={{
+                                color: 'red',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                padding: '50px 0'
+                            }}>{error}</h4>
+                        )}
+
+                        {!isProcessing && !error && Array.isArray(filterHospital) && filterHospital.length > 0 && (
+                            <div style={{
+
+                                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                                gap: '20px',
+                                // minHeight: '500px'
+                            }}>
+                                {filterHospital.map((hos, i) => (
+                                    <div key={i} className="hospital-name">
+                                        <div style={{ display: "flex", gap: "10px" }}>
+                                            <span className="logo">{hos?.name?.slice(0, 2).toUpperCase()}</span>
+                                            <div>
+                                                <h5>{hos?.name}</h5>
+                                                <span style={{
+                                                    fontSize: "12px"
+                                                }}>ID: H-001 • Patients: 2,847 • Revenue: $485K</span>
+                                            </div>
+                                        </div>
+                                        <p>Excellent</p>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        {!isProcessing && !error && Array.isArray(filterHospital) && filterHospital.length === 0 && (
+                            <p
+                                style={{ textAlign: 'center', padding: '50px 0' }}
+                            >No hospitals found</p>
+                        )}
                     </div>
 
-                    {isProcessing && (
-                        <span style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            flexDirection: 'column',
-                            padding: '50px 0'
-                        }}>
-                            <Circles height="40" width="40" color="#4f46e5" ariaLabel="loading" />
-                            <br />Loading...
-                        </span>
-                    )}
 
-                    {error && (
-                        <h4 style={{
-                            color: 'red',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            padding: '50px 0'
-                        }}>{error}</h4>
-                    )}
-
-                    {!isProcessing && !error && Array.isArray(filterHospital) && filterHospital.length > 0 && (
-                        <div style={{
-
-                            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                            gap: '20px',
-                            // minHeight: '500px'
-                        }}>
-                            {filterHospital.map((hos, i) => (
-                                <div key={i} className="hospital-name">
-                                    <div style={{ display: "flex", gap: "20px" }}>
-                                        <span className="logo">{hos?.name?.slice(0, 2).toUpperCase()}</span>
-                                        <div>
-                                            <h5>{hos?.name}</h5>
-                                            <span style={{
-                                                fontSize: "12px"
-                                            }}>ID: H-001 • Patients: 2,847 • Revenue: $485K</span>
-                                        </div>
-                                    </div>
-                                    <p>Excellent</p>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-
-                    {!isProcessing && !error && Array.isArray(filterHospital) && filterHospital.length === 0 && (
-                        <p
-                            style={{ textAlign: 'center', padding: '50px 0' }}
-                        >No hospitals found</p>
-                    )}
                 </div>
                 {/* <div className="hospital-name">
                         <div style={{ display: "flex", gap: "20px" }}>

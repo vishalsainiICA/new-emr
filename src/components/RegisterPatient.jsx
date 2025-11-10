@@ -3,89 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaArrowLeft } from "react-icons/fa";
 import { commonApi } from "../auth";
+import { CurrentStep, dummyDepartments, extractTextFromImage, indianStates, parseAadhaarText } from "./utility/CicularAvatar";
 
 
-const CurrentStep = ({ currentStep, totalSteps }) => {
-    // calculate progress in %
-    const progress = (currentStep / totalSteps) * 100;
-
-    return (
-        <div style={{ margin: "10px 0" }}>
-            {/* Step text */}
-            <p style={{ fontWeight: "500", marginBottom: "6px" }}>
-                Step {currentStep} of {totalSteps}
-            </p>
-
-            {/* Progress Bar */}
-            <div
-                style={{
-                    height: "8px",
-                    backgroundColor: "#e0e0e0",
-                    borderRadius: "4px",
-                    overflow: "hidden",
-                }}
-            >
-                <div
-                    style={{
-                        width: `${progress}%`,
-                        backgroundColor: "#007bff",
-                        height: "100%",
-                        transition: "width 0.3s ease",
-                    }}
-                ></div>
-            </div>
-        </div>
-    );
-};
-const indianStates = [
-    "Andhra Pradesh",
-    "Arunachal Pradesh",
-    "Assam",
-    "Bihar",
-    "Chhattisgarh",
-    "Goa",
-    "Gujarat",
-    "Haryana",
-    "Himachal Pradesh",
-    "Jharkhand",
-    "Karnataka",
-    "Kerala",
-    "Madhya Pradesh",
-    "Maharashtra",
-    "Manipur",
-    "Meghalaya",
-    "Mizoram",
-    "Nagaland",
-    "Odisha",
-    "Punjab",
-    "Rajasthan",
-    "Sikkim",
-    "Tamil Nadu",
-    "Telangana",
-    "Tripura",
-    "Uttar Pradesh",
-    "Uttarakhand",
-    "West Bengal",
-    "Andaman and Nicobar Islands",
-    "Chandigarh",
-    "Dadra and Nagar Haveli and Daman and Diu",
-    "Delhi",
-    "Jammu and Kashmir",
-    "Ladakh",
-    "Lakshadweep",
-    "Puducherry"
-];
-
-const dummyDepartments = [
-    { image: new URL('../assets/DepartmentsImages/cardiology.png', import.meta.url).href, name: "Cardiology" },
-    { image: new URL('../assets/DepartmentsImages/audiologist.png', import.meta.url).href, name: "ENT" },
-    { image: new URL('../assets/DepartmentsImages/medical.png', import.meta.url).href, name: "Radiology" },
-    { image: new URL('../assets/DepartmentsImages/arthritis.png', import.meta.url).href, name: "Orthopedics" },
-    { image: new URL('../assets/DepartmentsImages/pediatrics.png', import.meta.url).href, name: "Pediatrics" },
-    { image: new URL('../assets/DepartmentsImages/anesthesia.png', import.meta.url).href, name: "General Surgery" },
-    { image: new URL('../assets/DepartmentsImages/skin.png', import.meta.url).href, name: "Dermatology" },
-    { image: new URL('../assets/DepartmentsImages/neurology.png', import.meta.url).href, name: "Neurology" },
-];
 
 
 export default function RegisterPatient() {
@@ -96,8 +16,10 @@ export default function RegisterPatient() {
     const [currentStep, setCurrentStep] = useState(0); // start at step 1
     const [categoryName, setCategoryName] = useState(null)
     const [hospital, setHospital] = useState()
-    const [addCustomDep, setCustomDepartment] = useState(null)
     const [uploadedDocuments, setUploadedDocuments] = useState([]);
+    const [aadhaarFront, setAadhaarFront] = useState(null);
+    const [aadhaarBack, setAadhaarBack] = useState(null);
+
     const [patientData, setPatientData] = useState(
         {
             name: '',
@@ -119,16 +41,10 @@ export default function RegisterPatient() {
             attendeeRelation: '',
             departmentId: '',
             doctorId: null,
+            addharNo: "",
             addharDocuments: [],
         }
     );
-    const [doctorData, setDoctorData] = useState({
-        doctorName: "",
-        email: "",
-        contact: "",
-        experience: "",
-        qualification: ""
-    });
 
     const handelChange = (key, value) => {
         setPatientData((prev) => {
@@ -223,9 +139,58 @@ export default function RegisterPatient() {
             setIsProcessing(false);
         }
     };
+
+    // 🔹 Handle Front Upload
+    const handleFrontUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        setAadhaarFront(file);
+
+    };
+
+    // 🔹 Handle Back Upload
+    const handleBackUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        setAadhaarBack(file);
+    };
+
+    useEffect(() => {
+        const processBothSides = async () => {
+            if (!aadhaarFront || !aadhaarBack) return;
+            toast.info("Extracting text from both Aadhaar images...");
+
+            let combinedText = "";
+            const frontText = await extractTextFromImage(aadhaarFront);
+            const backText = await extractTextFromImage(aadhaarBack);
+
+            combinedText = frontText + " " + backText;
+
+            const parsed = parseAadhaarText(combinedText);
+            console.log("Parsed Aadhaar Data:", parsed);
+
+            setPatientData((prev) => ({
+                ...prev,
+                name: parsed.name || prev.name,
+                DOB: parsed.DOB || prev.DOB,
+                gender: parsed.gender || prev.gender,
+                permanentAddress: parsed.address || prev.permanentAddress,
+                addharDocuments: [aadhaarFront, aadhaarBack],
+                addharNo: parsed.aadhaarNumber,
+                city: parsed.city,
+                state: parsed.state,
+                pinCode: parsed.pinCode,
+            }));
+
+            toast.success("Aadhaar details extracted successfully ");
+            setCurrentStep(currentStep + 1)
+        };
+
+        processBothSides();
+    }, [aadhaarFront, aadhaarBack]);
     return <div className="patientRegister">
         <div style={{
-            maxWidth: '700px',
+
             maxHeight: '700px'
 
         }} >
@@ -275,6 +240,7 @@ export default function RegisterPatient() {
                                     Front Image *
                                 </p>
                                 <input
+                                    onChange={handleFrontUpload}
                                     style={{
                                         border: '1px solid black'
                                     }}
@@ -289,6 +255,7 @@ export default function RegisterPatient() {
                                     Back Image *
                                 </p>
                                 <input
+                                    onChange={handleBackUpload}
                                     style={{
                                         border: '1px solid black'
                                     }}
@@ -354,7 +321,7 @@ export default function RegisterPatient() {
                                 <select
                                     value={patientData.gender}
                                     onChange={(e) => handelChange("gender", e.target.value)}
-                                    style={{ padding: "10px", borderRadius: "7px", width: "100%" }}
+                                    style={{ padding: "7px", borderRadius: "7px", width: "100%" }}
                                 >
                                     <option value="">Select Gender</option>
                                     <option value="Male">Male</option>
@@ -437,13 +404,21 @@ export default function RegisterPatient() {
                                 />
                             </label>
 
+                        </div>
+
+
+
+                        <div style={{ display: "flex", gap: "10px" }}>
+
+
                             <label style={{ width: "100%" }}>
-                                State
+                                State *
                                 <select
                                     value={patientData.state}
-                                    onChange={(e) => handelChange("state", e.target.value)}
-                                    style={{ padding: "10px", borderRadius: "7px" }}
+                                    onChange={(e) => handelChange("gender", e.target.value)}
+                                    style={{ padding: "7px", borderRadius: "7px", width: "100%" }}
                                 >
+
                                     <option value="">Select State</option>
                                     {indianStates.map((s, i) => (
                                         <option key={i} value={s}>
@@ -452,7 +427,51 @@ export default function RegisterPatient() {
                                     ))}
                                 </select>
                             </label>
+
+                            <label style={{ width: "100%" }}>
+                                Addhar No*
+                                <input
+                                    type="text"
+                                    value={patientData.addharNo}
+                                    onChange={(e) => handelChange("addharNo", e.target.value)}
+                                    placeholder="Enter addharNo"
+                                />
+                            </label>
+
                         </div>
+
+
+                        {patientData.addharDocuments.length != 2 && (
+
+                            <div style={{ display: "flex", gap: "10px" }}>
+
+
+                                <label style={{ width: "100%" }}>
+                                    Front Addhar *
+                                    <input
+                                        type="file"
+
+                                        onChange={(e) => setAadhaarFront(e.target.files[0])}
+                                        placeholder="Enter addharNo"
+                                    />
+                                </label>
+
+
+                                <label style={{ width: "100%" }}>
+                                    Back Addhar *
+                                    <input
+                                        type="file"
+                                        value={patientData.addharNo}
+                                        onChange={(e) => handelChange("addharNo", e.target.value)}
+                                        placeholder="Enter addharNo"
+                                    />
+                                </label>
+
+                            </div>
+
+                        )}
+
+
 
                         <label style={{ width: "100%" }}>
                             Address
@@ -464,6 +483,9 @@ export default function RegisterPatient() {
                                 style={{ width: "100%", padding: "10px", borderRadius: "7px" }}
                             ></textarea>
                         </label>
+
+
+
                     </div>
                 )}
 
@@ -629,8 +651,7 @@ export default function RegisterPatient() {
                         <div style={{
                             padding: '20px',
                             display: "flex",
-                            justifyContent: 'center',
-                            alignItems: 'center',
+
                             border: '1px solid lightgray',
                             cursor: 'pointer',
                             borderRadius: '10px',
@@ -638,7 +659,8 @@ export default function RegisterPatient() {
                         }}>
 
                             <div style={{
-                                marginTop: '12px'
+                                marginTop: '12px',
+
                             }}>
                                 <input
                                     disabled={!categoryName}
@@ -673,7 +695,7 @@ export default function RegisterPatient() {
                                 <select
                                     value={categoryName}
                                     onChange={(e) => setCategoryName(e.target.value)}
-                                    style={{ padding: "10px", borderRadius: "7px", width: "100%" }}
+                                    style={{ padding: "7px", borderRadius: "7px", width: "100%", marginBottom: '25px' }}
                                 >
                                     <option value="">Select Category</option>
                                     <option value="Blood test">Blood test related</option>

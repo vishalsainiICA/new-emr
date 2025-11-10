@@ -171,6 +171,7 @@ export function HospitalManagement() {
             }}>
                 <h4>Hospital Directory</h4>
                 <div className="hostpitalmanagement-body" style={{
+                    marginTop: '12px',
                     height: "100vh"
                 }}>
                     {isProcessing && (
@@ -199,6 +200,9 @@ export function HospitalManagement() {
                     {!isProcessing && !error && Array.isArray(filterHospital) && filterHospital.length > 0 && filterHospital.map((hos, i) => (
                         <div key={i}
                             className="customCard hover "
+                            style={{
+                                maxHeight: '290px'
+                            }}
 
                         >
                             <div style={{
