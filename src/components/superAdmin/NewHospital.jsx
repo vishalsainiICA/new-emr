@@ -335,7 +335,7 @@ export const NewHospital = () => {
                                     justifyContent: "center",
                                     alignItems: "center",
                                     height: "30px",
-                                    width: "90px",
+                                    // width: "90px",
                                     backgroundColor: 'lightskyblue'
                                 }}
                             >+ Add</button>

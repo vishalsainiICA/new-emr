@@ -12,6 +12,7 @@ import { NewHospital } from './components/superAdmin/NewHospital'
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import PatientRecords from './components/superAdmin/PatientRecord'
+import Loginpage from './components/utility/Loginpage/Loginpage'
 import PatientRecordsof_Doc from './components/doctor/PatientRecord'
 import PatientRecordsof_Pa from './components/doctor/PatientRecord'
 import NewPatientRegister from './components/personalAssitant/NewPatient'
@@ -21,6 +22,7 @@ import { AdminManagement } from './components/superAdmin/AdminManagement'
 import InitialAssesment from './components/personalAssitant/InitialAssement'
 import { ViewHospital } from './components/superAdmin/ViewHospital'
 import RegisterPatient from './components/RegisterPatient'
+import Priscription from './components/doctor/priscription/priscription'
 
 
 
@@ -31,7 +33,10 @@ function App() {
   return <BrowserRouter>
 
     <Routes>
+
       {/* */}
+      <Route path='/Priscription' element={<Priscription></Priscription>}> </Route>
+      <Route path='/Login' element={<Loginpage></Loginpage>}></Route>
       <Route path='register' element={<RegisterPatient></RegisterPatient>}></Route>
       <Route path='/' element={<ControlPannel></ControlPannel>} >
         {/* <Route path='dashboard' element={<DoctorDashboard />}></Route> */}
