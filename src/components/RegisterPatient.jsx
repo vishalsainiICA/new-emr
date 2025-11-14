@@ -6,8 +6,6 @@ import { commonApi } from "../auth";
 import { CurrentStep, dummyDepartments, extractTextFromImage, indianStates, parseAadhaarText } from "./utility/CicularAvatar";
 
 
-
-
 export default function RegisterPatient() {
     const totalSteps = 5;
     const navigate = useNavigate()
@@ -187,13 +185,15 @@ export default function RegisterPatient() {
         };
 
         processBothSides();
-    }, [aadhaarFront, aadhaarBack]);
-    return <div className="patientRegister">
+     }, [aadhaarFront, aadhaarBack]);
+
+    return <div className="patientRegister" style={{color:"black"}}>
+
         <div style={{
 
             maxHeight: '700px'
 
-        }} >
+         }} >
             <div className="customCard" style={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -774,7 +774,7 @@ export default function RegisterPatient() {
                 minWidth: '400px',
                 display: 'flex',
                 justifyContent: 'space-between'
-            }}>
+             }}>
                 <button onClick={() => setCurrentStep(currentStep - 1)} disabled={currentStep == 1}> Previous</button>
                 <button
                     disabled={isProcessing}

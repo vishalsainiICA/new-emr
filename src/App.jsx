@@ -23,6 +23,8 @@ import InitialAssesment from './components/personalAssitant/InitialAssement'
 import { ViewHospital } from './components/superAdmin/ViewHospital'
 import RegisterPatient from './components/RegisterPatient'
 import Priscription from './components/doctor/priscription/priscription'
+import Patientregisteration from './components/PatientRegisteration/Patientregisteration'
+
 
 
 
@@ -35,9 +37,11 @@ function App() {
     <Routes>
 
       {/* */}
+      <Route path='register' element={<RegisterPatient></RegisterPatient>}></Route>
+       <Route path='/NewRegister' element={<Patientregisteration></Patientregisteration>}></Route>
       <Route path='/Priscription' element={<Priscription></Priscription>}> </Route>
       <Route path='/Login' element={<Loginpage></Loginpage>}></Route>
-      <Route path='register' element={<RegisterPatient></RegisterPatient>}></Route>
+
       <Route path='/' element={<ControlPannel></ControlPannel>} >
         {/* <Route path='dashboard' element={<DoctorDashboard />}></Route> */}
         <Route path='dashboard' element={<Dashboard></Dashboard>}></Route>
