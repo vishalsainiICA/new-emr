@@ -21,7 +21,8 @@
 .login-page-detail {
     width: 30%;
     height: 75%;
-    display: grid;
+    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 50px 20px;
@@ -49,17 +50,37 @@
     font-weight: bold;
 }
 
+.all-detai
+{
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+ }
+
 .detail {
     width: 100%;
-    display: grid;
+    display: flex;
+    flex-direction: column;
     /* background-color: #7944ab; */
     padding: 12px;
 }
 
 .login-button {
-    display: grid;
+    padding: 0px 5px;
+    width: 95%;
+    display: flex;
+    flex-direction: column;
     font-size: x-small;
     gap: 20px;
+    /* background-color: #42c5fd; */
+}
+.login-button button
+{
+    width: 100%;
+    border-radius: 5px;
+    height: 30px;
+
 }
 
 .other-detail {

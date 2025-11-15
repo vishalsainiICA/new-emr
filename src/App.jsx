@@ -22,7 +22,7 @@ import { AdminManagement } from './components/superAdmin/AdminManagement'
 import InitialAssesment from './components/personalAssitant/InitialAssement'
 import { ViewHospital } from './components/superAdmin/ViewHospital'
 import RegisterPatient from './components/RegisterPatient'
-import Priscription from './components/doctor/priscription/priscription'
+// import Priscription from './components/Priscription/Priscription'
 import Patientregisteration from './components/PatientRegisteration/Patientregisteration'
 
 
@@ -39,7 +39,7 @@ function App() {
       {/* */}
       <Route path='register' element={<RegisterPatient></RegisterPatient>}></Route>
        <Route path='/NewRegister' element={<Patientregisteration></Patientregisteration>}></Route>
-      <Route path='/Priscription' element={<Priscription></Priscription>}> </Route>
+      {/* <Route path='/Priscription' element={<Priscription></Priscription>}> </Route> */}
       <Route path='/Login' element={<Loginpage></Loginpage>}></Route>
 
       <Route path='/' element={<ControlPannel></ControlPannel>} >

@@ -17,12 +17,12 @@ function Loginpage(params) {
           <p>Welcome Back! Please enter your details</p>
         </div>
 
-        <div>
+        <div className="all-detai">
           <div className="detail">
             <label htmlFor="">Email</label>
-            <input style={{ color: "black", cursor: "auto" }} type="email" placeholder="Enter your email" />
+            <input style={{ width:"100%", color: "black", cursor: "auto" }} type="email" placeholder="Enter your email" />
             <label htmlFor="">Password</label>
-            <div style={{ display: "flex", width: '90%', padding: '0 5px', border: "0.3px solid lightgray ", borderRadius: "7px" }} >
+            <div style={{ display: "flex", width: '100%', padding: '0 5px', border: "0.3px solid lightgray ", borderRadius: "7px" }} >
               <input style={{ color: "black", cursor: "auto", border: "none" }} type={value ? 'text' : 'password'} placeholder="Enter your password" />
               <span onClick={() => { setvalue(!value); setEyelogo(!Eyelogo) }}>{Eyelogo ? <BsEyeSlash /> : <BsEye />}</span>
             </div>

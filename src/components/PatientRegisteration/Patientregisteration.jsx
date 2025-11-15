@@ -5,6 +5,7 @@ import adharimg from "../../assets/download.png"
 import manulimg from "../../assets/download.jpg"
 import { CgPlayTrackNextR } from "react-icons/cg";
 import { commonApi } from "../../auth";
+import { PiTrademarkRegisteredThin } from "react-icons/pi";
 
 
 const Patientregisteration = () => {
@@ -344,16 +345,58 @@ const Patientregisteration = () => {
           {/* Step 4 — Basic Details */}
           {currentStep == 4 && (
             <div className="patient-step-4">
-               <div>
-                
+              <h4>Upload Documents</h4>
+               <div className="upload-file">
+                  <div>
+                    <form action="">
+                      <input type="file" />
+                    </form>
+                  </div>
+                  <div>
+                  <form action="" style={{marginBottom:"20px", display:"grid"}}>
+                    <label htmlFor="">Category *</label>
+                    <select style={{width:"150px",height:"30px",color:"black",borderRadius:"10px",padding:"5px", border:"0.3px solid lightgray",}} name="" id="category">
+                      <option value="">Select Category</option>
+                      <option value="">Blood Test realeted</option>
+                      <option value="">Xray</option>
+                      <option value="">MRI CT scan</option>
+                      <option value="">other</option>
+                    </select>
+                  </form>
+                  </div>
                </div>
             </div>
           )}
 
           {/* Step 5 — Basic Details */}
           {currentStep == 5 && (
-            <div>
-
+            <div className="patient-step-5">
+               <h4>Reviwe & Submit</h4>
+               <div style={{width:"100%",
+                borderRadius:"20px",
+                border:"0.3px solid lightgray",
+                 }}>
+                 <p>Patient Information</p>
+                <div>
+                 <span>Name:</span>
+                 <span>Age:</span>
+                 <span>Gender:</span>
+                 <span>Phone:</span>
+                 <span>Email:</span>
+                 <span>Address:</span>
+                </div>
+               </div>
+               <div style={{width:"100%",
+                borderRadius:"20px",
+                border:"0.3px solid lightgray",
+                 }}>
+                <p>Attendee Information</p>
+                <div>
+                 <span>Name:</span>
+                 <span>Phone:</span>
+                 <span>Relation:</span>
+                </div>
+               </div>
             </div>
           )}
 
@@ -361,13 +404,14 @@ const Patientregisteration = () => {
 
         {currentStep != 0 && (
           <div className="page-handler">
+               <div>
 
-            <button onClick={() => setCurrentStep(currentStep - 1)} disabled={currentStep == 1}> <i class="ri-arrow-left-box-line"></i> Back</button>
+            <button onClick={() => setCurrentStep(currentStep - 1)} disabled={currentStep == 1}> ← Back</button>
             <button
               // disabled={isProcessing}
               onClick={(e) => {
                 e.preventDefault();
-
+                
                 if (currentStep < 5) {
                   setCurrentStep(currentStep + 1);
                 } else {
@@ -376,8 +420,9 @@ const Patientregisteration = () => {
                 }
               }}
             >
-              {currentStep < 5 ? <><CgPlayTrackNextR />Next</> : <><PiTrademarkRegisteredThin />Register</>}
+              {currentStep < 5 ? "Next →" : <><PiTrademarkRegisteredThin />Register</>}
             </button>
+              </div>
 
           </div>)}
 
