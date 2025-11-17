@@ -1,0 +1,38 @@
+.common-btn {
+    padding: 4px;
+    color: white;
+    background-color: black;
+    border-radius: 10px;
+    outline: none;
+    cursor: pointer;
+    font-size: 10px;
+}
+
+.cardList {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.customCard {
+    background-color: rgba(255, 255, 255);
+    border-radius: 10px;
+    padding: 20px;
+    transition: 1s ease;
+
+}
+
+.hover:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.hostpitalmanagement-body {
+    /* Kept original name (hostpital) but corrected 'overflow-y' syntax */
+    overflow-y: scroll;
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr)
+}

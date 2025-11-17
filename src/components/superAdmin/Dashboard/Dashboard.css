@@ -5,12 +5,24 @@
     height: 100vh;
 }
 
-.deshbord-panel {
-    /* background-color: rgba(241, 243, 251); */
-    /* overflow-y: scroll;
-    scrollbar-width: none; */
-    margin: 10px;
+
+.common-btn {
+    padding: 7px;
+    color: white;
+    background-color: black;
+    border-radius: 10px;
+    outline: none;
+    cursor: pointer;
 }
+
+.main-button {
+    padding: 7px;
+    background-color: linear-gradient(90deg, rgba(42, 123, 155, 1) 62%, rgba(87, 199, 133, 1) 100%, rgba(237, 221, 83, 1) 24%);
+    border-radius: 10px;
+    outline: none;
+    cursor: pointer;
+}
+
 
 .super-admin-logo {
     display: flex;
@@ -46,19 +58,17 @@
 }
 
 .hospital-card-list {
-
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
+    gap: 15px;
     /* background-color:rgba(254, 254, 255) ; */
 }
 
 .card-list {
-    height: 130px;
+    height: 110px;
     border-radius: 20px;
     background-color: rgba(254, 254, 255);
     color: black;
-
     display: flex;
     flex-direction: column;
     /* gap: 5px; */
@@ -118,6 +128,13 @@
     display: flex;
     justify-content: space-between;
     margin: 10px 10px 30px 10px;
+
+    input {
+        padding: 5px;
+        outline: none;
+        border-radius: 10px;
+        border: 0.1px solid black;
+    }
 }
 
 /* .hospital-heading button */
@@ -224,6 +241,15 @@
     margin-bottom: 20px;
     border-radius: 20px;
     transition: all 0.2s ease;
+
+    span{
+        padding: 10px;
+    }
+
+    p{
+        padding: 5px;
+        color: gray;
+    }
 }
 
 .Network-card:hover {
@@ -428,6 +454,7 @@
     font-weight: bold;
     gap: 10px;
 }
+
 
 .admin-detail {
     display: flex;

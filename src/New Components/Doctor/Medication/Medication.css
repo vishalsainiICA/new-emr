@@ -1,0 +1,194 @@
+.medication-page {
+    margin: 20px;
+    overflow-y: scroll;
+}
+
+.medication-heading-card {
+    background-color: white;
+    border-radius: 20px;
+    padding: 15px;
+    box-shadow: 0px 5px 5px rgb(0, 0, 0, 0.1);
+    transition: all 1s ease;
+}
+
+.medication-heading {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 1fr 0.1fr 1fr;
+    max-height: 1000px;
+    /* jitna bhi content ho */
+    opacity: 1;
+
+    h3 {
+        font-size: 20px;
+    }
+
+    p {
+        font-size: 12px;
+        color: gray;
+        display: flex;
+    }
+}
+
+.medication-heading.open {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: all 1.5s ease;
+}
+
+.patient-vitals {
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    h5 {
+        color: black;
+    }
+}
+
+.patient-vitals-item {
+    display: flex;
+    padding: 7px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.patient-history {
+
+    span {
+        padding: 10px;
+        cursor: pointer;
+        width: 110px;
+        height: 30px;
+        display: flex;
+        justify-self: center;
+        align-items: center;
+        border-radius: 10px;
+        font-size: 12px;
+
+    }
+
+    .line {
+        border-bottom: 2px solid #007bff;
+
+    }
+}
+
+.patient-history-images {
+    overflow-x: scroll;
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    border: 0.5px solid lightgray;
+    border-radius: 20px;
+    scrollbar-width: thin;
+    scroll-behavior: smooth;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 10px;
+}
+
+.patient-history-img-card {
+    padding: 10px;
+    width: 80px;
+    height: 60px;
+    cursor: pointer;
+
+    img {
+        width: 80px;
+        height: 50px;
+    }
+
+    h5 {
+        font-size: 10px;
+        font-weight: 100;
+    }
+
+}
+
+.openImage {
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 5px 5px rgb(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+
+    animation: fadeIn 0.3s ease-in-out;
+
+
+}
+
+.openImageCard {
+    background-color: white;
+    padding: 20px;
+    border-radius: 7px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+    animation: scaleup 0.3s ease-in-out;
+
+    img {
+
+        width: 730px;
+        height: 500px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-top: 20px;
+
+    }
+
+}
+
+.medication-body {
+    margin-top: 10px;
+    background-color: white;
+    border-radius: 20px;
+    padding: 15px;
+    box-shadow: 0px 5px 5px rgb(0, 0, 0, 0.1);
+    transition: all 1s ease;
+    min-height: 100vh;
+    overflow-y: scroll;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.medicationPatienmedication {
+    input {
+        margin: 7px;
+        padding: 5px;
+        outline: none;
+        border-radius: 20px;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+
+}
+
+@keyframes scaleup {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

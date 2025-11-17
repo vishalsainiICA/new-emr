@@ -1,10 +1,11 @@
-import { commonApi, superAdminApi } from "../../auth";
+import { commonApi, superAdminApi } from "../../../auth";
 import { Circles } from 'react-loader-spinner';
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import moment from 'moment'
+import './AdminManagement.css'
 
-export function HospitalManagement() {
+
+const AdminManagement = () => {
 
     const [data, setData] = useState([]);
 
@@ -67,30 +68,7 @@ export function HospitalManagement() {
 
                     }} className="commonBtn">+ Add New Hospital</button>
             </div>
-            {/* <div style={{
-                display: 'flex',
-                justifyContent: 'space-between'
-            }}>
-                <h2>Hospital Management</h2>
-                <div style={{
-                    display: 'flex',
-                    gap: '10px',
-                }}>
-                    <input style={{
-                        height: '40px',
-                        width: '300px',
-                        padding: '10px'
-                    }} type="search" placeholder="type name.." onChange={(e) => filter(e.target.value)} />
-                    <input style={{
-                        height: '40px',
-                        width: '250px',
-                        padding: '10px',
-                        cursor: "pointer"
-                    }} type="date" />
-                    <button className="commonBtn" onClick={() => navigate('/new-hosptial')}>Add New Hospital</button>
-                </div>
 
-            </div> */}
             <div className="cardList">
                 <div className="customCard hover" style={{
 
@@ -243,28 +221,18 @@ export function HospitalManagement() {
 
                             </div>
 
-                            <div style={{
-                                display: 'flex',
-                                justifyContent: "space-around"
-                            }}>
-                                <p style={{
-                                    fontSize: '14px'
-                                }}>Beds <h5>456</h5></p>
-                                <p style={{
-                                    fontSize: '14px'
-                                }}>Beds <h5>456</h5></p>
+                            <div className="hos-metrices">
+                                <div className="">
+                                    <p >Beds <h5>456</h5></p>
+                                    <p >Beds <h5>456</h5></p>
+                                </div>
+                                <div className="" >
+                                    <p >Beds <h5>456</h5></p>
+                                    <p >Beds <h5>456</h5></p>
+                                </div>
                             </div>
-                            <div style={{
-                                display: 'flex',
-                                justifyContent: "space-around"
-                            }}>
-                                <p style={{
-                                    fontSize: '14px'
-                                }}>Beds <h5>456</h5></p>
-                                <p style={{
-                                    fontSize: '14px'
-                                }}>Beds <h5>456</h5></p>
-                            </div>
+
+
 
                             <h5>Key Departments:</h5>
 
@@ -273,7 +241,7 @@ export function HospitalManagement() {
                                 gap: '10px'
                             }}>
                                 <button
-                                    onClick={() => navigate("/view-hospital", { state: { hospital: hos } })}
+                                    onClick={() => navigate("/super-admin/view-hospital", { state: { hospital: hos } })}
                                     style={{
                                         height: '30px',
                                         width: '70px',
@@ -317,4 +285,6 @@ export function HospitalManagement() {
         </div >
     );
 }
+
+export default AdminManagement
 

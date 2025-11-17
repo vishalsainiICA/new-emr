@@ -1,10 +1,10 @@
-import { superAdminApi } from "../../auth";
+import { superAdminApi } from "../../../auth";
 import { Circles, Grid } from 'react-loader-spinner';
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import '../../Jaffar.css'
+import { Navigate, useNavigate } from "react-router-dom";
+import './Dashboard.css'
 
-export function Dashboard() {
+const Dashboard = () => {
 
     const navigate = useNavigate()
 
@@ -44,9 +44,6 @@ export function Dashboard() {
 
     return (
         <div className="deshbord-panel">
-
-        <div className={blur? "blur" : "active"}></div>
-
             <div className="super-admin-logo">
                 <div className="super-admin">
                     <h3>Super Admin Dashboard</h3>
@@ -115,7 +112,7 @@ export function Dashboard() {
                         <h4 style={{
                             width: '100%'
                         }}>Hopital Performance</h4>
-                        <input type="text" placeholder="type name..." />
+                        <input type="search" placeholder="type name..." />
                     </div>
                     <div >
                         {isProcessing && (
@@ -292,7 +289,7 @@ export function Dashboard() {
             <div className={isCollapse ? "system-administrator-profile" : ("active")}>
                 <div className="profile">
                     <span>Profile</span>
-                    <button onClick={() => setCollapse(!isCollapse)}>Back</button>
+                    <button className="common-btn" onClick={() => setCollapse(!isCollapse)}>Back</button>
                 </div>
                 <hr />
 
@@ -366,8 +363,8 @@ export function Dashboard() {
                 </div>
 
                 <div className="acount-setting">
-                    <button onClick={() => {setEditprofile(!isEditprofile) ; setblur(!blur); setCollapse(!isCollapse)}}>Edit profile</button>
-                    <button onClick={() => {setlogOut(!logOut); setblur(!blur) ; setCollapse(!isCollapse)}}>Logout</button>
+                    <button className="main-button " onClick={() => { setEditprofile(!isEditprofile); setblur(!blur); setCollapse(!isCollapse) }}>Edit profile</button>
+                    <button className="main-button " onClick={() => { setlogOut(!logOut); setblur(!blur); setCollapse(!isCollapse) }}>Logout</button>
                 </div>
                 <hr />
 
@@ -379,7 +376,7 @@ export function Dashboard() {
             <div className={isEditprofile ? "edit-profile" : "active"}>
                 <div className="profile">
                     <span>Edit Profile</span>
-                    <button onClick={() => {setEditprofile(!isEditprofile) ; setblur(!blur) ; setCollapse(!isCollapse)  }}>Back</button>
+                    <button className="common-btn" onClick={() => { setEditprofile(!isEditprofile); setblur(!blur); setCollapse(!isCollapse) }}>Back</button>
                 </div>
                 <hr />
                 <div className="edit-detail">
@@ -411,8 +408,8 @@ export function Dashboard() {
                 <hr />
 
                 <div className="final-process">
-                    <button>Save Profile</button>
-                    <button>Cancel</button>
+                    <button className="main-button">Save Profile</button>
+                    <button className="common-btn" onClick={() => { setEditprofile(!isEditprofile); setblur(!blur); setCollapse(!isCollapse) }}>Cancel</button>
                 </div>
 
             </div>
@@ -422,7 +419,7 @@ export function Dashboard() {
 
                 <div className="profile">
                     <span>Logout Confirmation</span>
-                    <button onClick={() => {setlogOut(!logOut) ; setblur(!blur) ; setCollapse(!isCollapse) }}>Back</button>
+                    <button className="common-btn" onClick={() => { setlogOut(!logOut); setblur(!blur); setCollapse(!isCollapse) }}>Back</button>
                 </div>
                 <div className="Logout-information">
                     <span>🚪Confirm Logout</span>
@@ -430,13 +427,13 @@ export function Dashboard() {
                     <p>Are you sure you want to logout from the Super Admin Dashboard?</p>
                 </div>
                 <div className="log-btn">
-                    <button>Yes logout</button>
-                    <button>Cancel</button>
+                    <button className="main-button " onClick={() => navigate("/login", { replace: true })}>Yes logout</button>
+                    <button className="common-btn" onClick={() => { setlogOut(!logOut); setblur(!blur); setCollapse(!isCollapse) }}>Cancel</button>
                 </div>
 
             </div>
 
-        </div>
+        </div >
         //  </div>
 
     );

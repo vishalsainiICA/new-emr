@@ -1,0 +1,153 @@
+.New-hospital {
+    /* width: 100%;
+    height: 100%; */
+    padding: 20px;
+
+    /* box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2); */
+
+}
+
+.customCard {
+    border-radius: 10px;
+    padding: 20px;
+    transition: 1s ease;
+
+}
+
+.hospitalMangement {
+    display: grid;
+    gap: 2px;
+}
+
+.hospitalMangement span {
+    font-size: small;
+
+}
+
+.hospitalOnboard {
+    margin-top: 10px;
+    width: 60vw;
+    min-width: 400px;
+    background-color: white;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    min-height: 520px;
+    max-height: 520px;
+    border-radius: 10px;
+    scrollbar-width: thin;
+    overflow-y: auto;
+
+}
+
+
+.steps {
+    display: flex;
+    flex-direction: column;
+    row-gap: 15px;
+    flex-wrap: wrap;
+    padding: 20px;
+}
+
+
+label {
+    font-size: 12px;
+}
+
+input {
+    width: 100%;
+    min-width: 100px;
+    padding: 8px;
+    border-radius: 7px;
+    font-size: 12.5px;
+    border: 1px solid lightgray;
+
+
+}
+
+select,
+option,
+textarea,
+input {
+    outline: none;
+    cursor: pointer;
+    background-color: white;
+}
+
+button:focus,
+button:active {
+    outline: none;
+    box-shadow: none;
+}
+
+.common-btn {
+    padding: 7px;
+    color: white;
+    background-color: black;
+    border-radius: 10px;
+    outline: none;
+    cursor: pointer;
+}
+
+.saveHospital {
+    margin-Top: 10px;
+    width: 100%;
+    min-Width: 400px;
+    display: flex;
+    gap: 100px;
+    justify-Content: end;
+
+    button {
+        padding: 7px;
+        color: white;
+        background-color: black;
+        border-radius: 10px;
+        outline: none;
+        cursor: pointer;
+    }
+}
+
+.main-button {
+    padding: 7px;
+    background-color: linear-gradient(90deg, rgba(42, 123, 155, 1) 62%, rgba(87, 199, 133, 1) 100%, rgba(237, 221, 83, 1) 24%);
+    border-radius: 10px;
+    outline: none;
+    cursor: pointer;
+}
+
+.departmentCard {
+    padding: 10px;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    gap: 7px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 1s ease;
+
+    span {
+        font-size: 12px;
+    }
+}
+
+.departmentCard:hover {
+    transform: translateY(-10px);
+    background-color: rgba(241, 243, 251);
+}
+
+.review-strategy {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+
+    h3 {
+        font-size: 15px;
+    };   
+}
+
+.reviewtag{
+    font-size: 12px;
+}

@@ -155,7 +155,8 @@ export default function RegisterPatient() {
 
     useEffect(() => {
         const processBothSides = async () => {
-            if (!aadhaarFront || !aadhaarBack) return;
+            if (!aadhaarFront || !aadhaarBack) return console.log("phostos not uploaded");
+            ;
             toast.info("Extracting text from both Aadhaar images...");
 
             let combinedText = "";
@@ -185,15 +186,15 @@ export default function RegisterPatient() {
         };
 
         processBothSides();
-     }, [aadhaarFront, aadhaarBack]);
+    }, [aadhaarFront, aadhaarBack]);
 
-    return <div className="patientRegister" style={{color:"black"}}>
+    return <div className="patientRegister" style={{ color: "black" }}>
 
         <div style={{
 
             maxHeight: '700px'
 
-         }} >
+        }} >
             <div className="customCard" style={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -204,6 +205,8 @@ export default function RegisterPatient() {
 
                 <CurrentStep currentStep={currentStep} totalSteps={totalSteps}></CurrentStep>
             </div>
+
+            <form onSubmit={handleSubmit} encType="multipart/form-data" ></form>
 
             <div className="hospitalOnboard">
 
@@ -249,7 +252,6 @@ export default function RegisterPatient() {
                                     // onChange={(e) => handelChange("name", e.target.value)}
                                     placeholder="Enter Full Name"
                                 />
-
 
                                 <p>
                                     Back Image *
@@ -774,18 +776,16 @@ export default function RegisterPatient() {
                 minWidth: '400px',
                 display: 'flex',
                 justifyContent: 'space-between'
-             }}>
+            }}>
                 <button onClick={() => setCurrentStep(currentStep - 1)} disabled={currentStep == 1}> Previous</button>
                 <button
+                    type="submit"
                     disabled={isProcessing}
                     onClick={(e) => {
                         e.preventDefault();
 
                         if (currentStep < 5) {
                             setCurrentStep(currentStep + 1);
-                        } else {
-
-                            handleSubmit(e);
                         }
                     }}
                 >

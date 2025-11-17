@@ -1,0 +1,186 @@
+.logo {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50px;
+    background-color: #c8a2ff;
+}
+
+.doctor-dashboard {
+    margin: 20px;
+}
+
+.doctor-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0px 5px 5px rgb(0, 0, 0, 0.1);
+    padding: 15px;
+
+    h3 {
+        font-size: 20px;
+    }
+
+    p {
+        font-size: 12px;
+        color: gray;
+    }
+}
+
+.doctor-card-list {
+    margin-top: 20px;
+    display: grid;
+    gap: 50px;
+    grid-template-columns: repeat(4, 1fr);
+
+    /* background-color:rgba(254, 254, 255) ; */
+    span {
+        color: gray;
+    }
+}
+
+.card-list {
+    height: 110px;
+    border-radius: 20px;
+    background-color: rgba(254, 254, 255);
+    color: black;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    transition: all 1s ease;
+    box-shadow: 0px 5px 5px rgb(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.hover:hover {
+    transform: translateY(-5px);
+}
+
+.card-name {
+    display: flex;
+    justify-content: space-between;
+
+    span {
+        font-size: 14px;
+        font-weight: bold;
+    }
+}
+
+.card-Metrices {
+
+    p {
+        font-size: 12px;
+    }
+
+    h2 {
+        padding: 7px;
+        font-size: 25px;
+    }
+}
+
+.hospitalperformance {
+    margin-top: 20px;
+    height: 100vh;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0px 5px 5px rgb(0, 0, 0, 0.1);
+    padding: 15px;
+
+    input {
+        border-radius: 20px;
+        padding: 7px;
+        outline: none;
+        border: 0.5px solid lightgray;
+        cursor: pointer;
+    }
+
+    p {
+        font-size: 12px;
+        color: gray;
+    }
+
+    select {
+        outline: none;
+        padding: 5px;
+        min-width: 150px;
+        border: 0.5px solid lightgray;
+        border-radius: 20px;
+    }
+
+
+}
+
+.patient-card {
+    display: flex;
+    justify-content: 'space-between';
+    align-items: center;
+    padding: '20px';
+    height: '75px';
+    border-radius: '10px';
+    cursor: 'pointer';
+    transition: all 1s ease;
+    border-bottom: 0.5px solid lightgray;
+    /* box-shadow: 0px 5px 5px rgb(0, 0, 0, 0.1); */
+
+    button {
+        height: 30px;
+        width: 70px;
+        font-Size: 10px;
+        padding: 10px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+}
+
+.doctor-patient-list {
+    display: grid;
+    grid-template-columns: 2.5fr 0.75fr;
+    justify-Content: space-between;
+    gap: 10px;
+}
+
+@media screen and (max-width:600px) {
+    .doctor-controler {
+        display: none;
+    }
+
+    .doctor-card-list {
+        gap: 5px;
+        grid-template-columns: repeat(2, 1fr);
+        /* background-color:rgba(254, 254, 255) ; */
+
+        p {
+            font-size: 12px;
+        }
+
+        h2 {
+            padding: 7px;
+            font-size: 20px;
+        }
+    }
+}
+
+
+
+/* tablet*/
+@media screen and (min-width: 600px) and (max-width: 1024px) {
+
+    
+
+    .doctor-card-list {
+        gap: 5px;
+        grid-template-columns: repeat(3, 1fr);
+        /* background-color:rgba(254, 254, 255) ; */
+    }
+
+    .doctor-patient-list {
+        grid-template-columns: 1fr;
+
+    }
+}

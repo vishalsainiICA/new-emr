@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { superAdminApi } from "../../auth";
+import { superAdminApi } from "../../../auth";
 import { Circles } from "react-loader-spinner";
 import moment from "moment";
+import './ViewHospital.css'
 
-
-export function ViewHospital() {
+const ViewHospital = () => {
     const [data, setData] = useState([]);
     const [isProcessing, setIsProcessing] = useState(false);
     const [error, setError] = useState(null);
@@ -54,7 +54,7 @@ export function ViewHospital() {
     }, []);
 
 
-    return <div>
+    return <div className="viewhospital">
 
         <div className="cardList">
             <div className="customCard hover" style={{
@@ -149,12 +149,16 @@ export function ViewHospital() {
                 <h4>{"Hospital Information"}</h4>
 
                 <a style={{
+                    fontSize: '12px',
                     padding: '0 7px 0 7px'
-                }} className="commonBtn" href={"http://localhost:5173/register"}>Patient Registeratiion Link <i style={{
+
+                }} className="commonBtn" href={"http://localhost:5173/register-patient"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >Patient Registeratiion Link <i style={{
                     fontSize: '20px'
                 }} class="ri-external-link-line"></i></a>
             </div>
-
             <div style={{
                 marginTop: '10px',
                 display: 'grid',
@@ -227,7 +231,7 @@ export function ViewHospital() {
                     justifyContent: "space-between"
                 }}>
                     <h4>{"Department Overview"}</h4>
-                    <button className="commonBtn">+ New Department</button>
+                    <button className="common-btn">+ New Department</button>
                 </div>
 
                 <div style={{
@@ -616,3 +620,5 @@ export function ViewHospital() {
 
 
 }
+
+export default ViewHospital
