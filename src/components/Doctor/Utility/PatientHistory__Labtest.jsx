@@ -1,5 +1,7 @@
 
 import { useState } from 'react';
+import { IoChevronDown, IoChevronUp } from 'react-icons/io5';
+
 
 export function LabTest({ labTest = [], labTestError, labTestloading, onclose, setselectedLabTest, selectedLabTest }) {
     const [searchTerm, setSearchTerm] = useState('');
@@ -168,4 +170,88 @@ export function LabTest({ labTest = [], labTestError, labTestloading, onclose, s
 
         </div>
     );
+}
+
+export function Patient_Hisotry({ patient, onclose }) {
+    const [patientDetails, setpatientDetails] = useState(false)
+
+    return <div className='labtest'>
+        <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            marginBottom: '10px'
+        }}>
+            <h5 style={{
+                marginBottom: '15px',
+                color: '#333',
+                fontWeight: '600'
+            }}>
+                Select Lab Tests
+            </h5>
+            <div>
+                <button
+                    onClick={() => onclose?.(null)}
+                    className='common-btn'
+                    style={{
+                        marginRight: '10px'
+                    }}
+                >Save</button>
+                <i
+                    onClick={() => {
+                        onclose?.(null)
+                        // setselectedLabTest([])
+                    }}
+                    className="ri-close-large-fill"
+                    style={{
+                        fontSize: '20px',
+                        cursor: 'pointer',
+                        color: '#666',
+                        transition: '0.3s',
+                    }}
+                    onMouseOver={(e) => e.target.style.color = 'red'}
+                    onMouseOut={(e) => e.target.style.color = '#666'}
+                ></i>
+            </div>
+
+        </div>
+
+        {patientDetails ? (
+            <IoChevronDown style={{
+                cursor: 'pointer'
+            }} onClick={() => setpatientDetails(false)}></IoChevronDown>
+        ) : (<IoChevronUp style={{
+            cursor: 'pointer'
+        }} onClick={() => setpatientDetails(true)}></IoChevronUp>)}
+
+        <div style={{
+            display: 'flex',
+            justifyContent: 'space-between'
+        }}>
+            <h5>Patient Vitals:</h5>
+        </div>
+
+        <div className="patient-vitals">
+            <div className="patient-vitals-item">
+                <p>Name: <h5>{patient.name}</h5></p>
+                <p>Age: <h5>{patient.age}</h5></p>
+            </div>
+
+            <div className="patient-vitals-item">
+                <p>Gender: <h5>{patient.gender}</h5></p>
+                <p>Phone: <h5>{patient.phone}</h5></p>
+            </div>
+
+            <div className="patient-vitals-item">
+                <p>Blood Group: <h5>{patient.bloodGroup}</h5></p>
+                <p>Height: <h5>{patient.height}</h5></p>
+            </div>
+
+            <div className="patient-vitals-item">
+                <p>Weight: <h5>{patient.weight}</h5></p>
+                <p>Pulse: <h5>{patient.pulse}</h5></p>
+            </div>
+        </div>
+
+    </div>
+
 }

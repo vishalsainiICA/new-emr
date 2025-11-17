@@ -3,11 +3,13 @@ import './PatientRecord.css'
 import { Circles } from "react-loader-spinner";
 import moment from "moment";
 import { superAdminApi } from "../../../auth";
+import { LabTest, Patient_Hisotry } from "../../Doctor/Utility/PatientHistory__Labtest";
 
 
 export default function PatientRecords() {
     const [data, setData] = useState([]);
     const [isProcessing, setIsProcessing] = useState(false);
+    const [open, setClose] = useState(false)
     const [error, setError] = useState(null);
     const [filterPatient, setFilterPatient] = useState([]);
 
@@ -190,7 +192,9 @@ export default function PatientRecords() {
                 {!isProcessing && !error && Array.isArray(filterPatient) && filterPatient.length > 0 && (
                     <>
                         {filterPatient.map((patient, i) => (
-                            <div key={i} className="patientBody" >
+                            <div
+                                onClick={() => setClose(patient)}
+                                key={i} className="patientBody" >
                                 <p>{patient.uid}</p>
                                 <p>{patient.name}</p>
                                 <p>{patient.age}</p>
@@ -208,6 +212,15 @@ export default function PatientRecords() {
                     </p>
                 )}
             </div>
+
+            {
+                open && (
+                    <div className="patientHistory">
+                        <Patient_Hisotry patient ={open} onclose={() => setClose(false)} ></Patient_Hisotry>
+                        {/* <LabTest selectedLabTest={selectedLabTest} setselectedLabTest={setselectedLabTest} labTest={labtestResult} labTestError={labTestError} labTestloading={labTestloading} onclose={() => setClose(false)} ></LabTest> */}
+                    </div>
+                )
+            }
         </div>
     )
 }
