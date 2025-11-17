@@ -65,21 +65,24 @@ const Pricription = () => {
 
                 <div className="patient-box">
                     <span style={{ fontSize: "20px", fontWeight: "bold" }}>Rx</span>
+                    <br />
                     <div style={{
-                        minHeight: '100px'
-                    }}>
-                        <h3>Diagnosis:</h3>
+                    // minHeight: '100px',
+                        padding:"10px 30px"
+                     }}>
                         {
                             state?.illnessData && (
                                 <div style={{
                                     margin: '10px',
                                     display: 'flex',
                                     gap: '10px',
+                                    alignItems:"center",
                                     flexWrap: 'wrap'
                                 }}>
+                                     <h3>Diagnosis:</h3>
                                     {state?.illnessData?.map((item) => {
                                         return <p style={{
-                                            fontSize: '17px'
+                                            fontSize: '14px'
                                         }}>{item?.illnessName
                                             }</p>
                                     })}
@@ -90,9 +93,10 @@ const Pricription = () => {
                     </div>
 
                     <div style={{
-                        minHeight: '100px'
-                    }}>
-                        <h3>Presenting Symptoms:</h3>
+                        // minHeight: '100px',
+                        padding:"0px 40px"
+                     }}>
+                        <h4>Presenting Symptoms:</h4>
                         {
                             state?.symtomps && (
                                 <div style={{
@@ -104,9 +108,9 @@ const Pricription = () => {
                                     {state?.symtomps?.map((item) => {
                                         return <p style={{
                                             borderRadius: '10px',
-                                            padding: '10px',
+                                            padding: '5px',
                                             backgroundColor: 'rgba(240, 242, 245)',
-                                            fontSize: '17px'
+                                            fontSize: '10px'
                                         }}>{item
                                             }</p>
 
@@ -117,14 +121,14 @@ const Pricription = () => {
                         }
                     </div>
                     <div style={{
-                        padding: '20px'
+                     padding:"0px 40px"
                     }}>
                         {
                             state?.selectedLabTest?.length > 0 && (
                                 <div >
-                                    <h3>
+                                    <h4>
                                         Recommended Lab Tests:
-                                    </h3>
+                                    </h4>
 
                                     <div style={{
                                         borderLeft: '10px solid skyblue',
@@ -134,10 +138,9 @@ const Pricription = () => {
                                             state?.selectedLabTest.map((lab, i) => {
                                                 return <div style={{
                                                     padding: '10px',
-
                                                     display: 'flex',
-
-                                                    justifyContent: 'space-between'
+                                                    justifyContent: 'space-between',
+                                                    fontSize:"13px"
                                                 }}>
 
                                                     <span>{i + 1} <span>{lab.test}</span></span>
@@ -155,15 +158,19 @@ const Pricription = () => {
                         {
                             state?.medication?.length > 0 && (
                                 <div >
-                                    <h3>
+                                    <h4>
                                         Prescribed Medications:
-                                    </h3>
+                                    </h4>
 
                                     <div style={{
                                         marginTop: '10px',
                                         padding: '7px',
                                         borderRadius: '7px',
-                                        borderLeft: '10px solid skyblue'
+                                        borderLeft: '10px solid skyblue',
+                                        fontSize:"13px",
+                                        display:"flex",
+                                        flexDirection:"column",
+                                        gap:"10px"
                                     }}
                                     >
                                         {
@@ -198,6 +205,7 @@ const Pricription = () => {
 
                     </div>
                 </div>
+                
                 <div className="other-detail">
 
                     <div>

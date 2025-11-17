@@ -67,6 +67,9 @@
     height: 100%;
     border: 0.8px solid lightgray;
     padding: 20px;
+    overflow-y: scroll;
+    /* scrollbar-width: none; */
+    
 }
 
 .other-detail {
