@@ -164,80 +164,83 @@ const Patientregisteration = () => {
               <h4>Patient Detail</h4>
               <form className="All-detail" action="">
                 <div className="distance">
-                  <form action="">
+                  <div>
                     <label htmlFor="">Name *</label>
                     <input type="text" />
-                  </form>
-                  <form action="">
+                  </div>
+                  <div >
                     <label htmlFor="">Age *</label>
                     <input type="number" />
-                  </form>
+                  </div>
                 </div>
                 <div className="distance">
-                  <form action="">
+                  <div >
                     <label htmlFor="">Gender *</label>
                     <input type="text" />
-                  </form>
-                  <form action="">
+                  </div>
+                  <div >
                     <label htmlFor="">Date of Birth</label>
                     <input type="text" />
-                  </form>
+                  </div>
                 </div>
                 <div className="distance">
-                  <form action="">
+                  <div >
                     <label htmlFor="">Phone *</label>
                     <input type="number" />
-                  </form>
-                  <form action="">
+                  </div>
+                  <div >
                     <label htmlFor="">WhatsApp Number</label>
                     <input type="number" />
-                  </form>
+                  </div>
                 </div>
                 <div className="distance">
-                  <form action="">
+                  <div >
                     <label htmlFor="">Email</label>
                     <input type="email" />
-                  </form>
-                  <form action="">
+                  </div>
+                  <div >
                     <label htmlFor="">Nationality</label>
                     <input type="text" />
-                  </form>
+                  </div>
                 </div>
                 <div className="distance">
-                  <form action="">
+                  <div >
                     <label htmlFor="">PinCode</label>
                     <input type="number" />
-                  </form>
-                  <form action="">
+                  </div>
+                  <div >
                     <label htmlFor="">City</label>
                     <input type="text" />
-                  </form>
+                  </div>
                 </div>
                 <div className="distance">
-                  <form action="">
+                  <div >
                     <label htmlFor="">State *</label>
                     <input type="text" />
-                  </form>
-                  <form action="">
+                  </div>
+                  <div >
                     <label htmlFor="">Addhar No*</label>
                     <input type="number" />
-                  </form>
+                  </div>
                 </div>
                 <div className="distance">
-                  <form action="">
+                  <div >
                     <label htmlFor="">Front Addhar *</label>
                     <input type="file" />
-                  </form>
-                  <form action="">
+                  </div>
+                  <div >
                     <label htmlFor="">Back Addhar *</label>
                     <input type="file" />
-                  </form>
+                  </div>
                 </div>
-                <form action="">
+               <div className="distance">
+                <div >
                   <label htmlFor="">Address</label>
                   {/* <input type="text" name="" id="" /> */}
                   <textarea style={{ width: "100%", padding: "10px", borderRadius: "7px" }} name="" id=""></textarea>
-                </form>
+                </div>
+               </div>
+
               </form>
             </div>
           )}
@@ -246,19 +249,21 @@ const Patientregisteration = () => {
           {currentStep == 2 && (
             <div className="patient-step-2">
               <h4>Attendee Details</h4>
-              <div>
-                <form action="">
+              <form>
+              <div className="hold-data-div">
+                <div >
                   <label htmlFor="">Name *</label>
                   <input type="text" placeholder="Attendee Name" />
-                </form>
-                <form action="">
+                </div>
+                <div >
                   <label htmlFor="">Phone Number *</label>
                   <input type="number" placeholder="+91 XXXX XXXX XX" />
-                </form>
+                </div>
               </div>
-              <form action="">
+              <div >
                 <label htmlFor="">Relation with Patient</label>
                 <input type="text" placeholder="Father/Mother/Gurdian/etc." />
+              </div>
               </form>
             </div>
           )}
