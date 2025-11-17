@@ -273,10 +273,7 @@ const Patientregisteration = () => {
             <div className="patient-step-3">
               <h4>Select Department:</h4>
 
-              <div style={{
-                display: 'flex',
-                flexWrap: 'wrap'
-              }}>
+              <div className="main-select-content">
 
                 {
                   hospital?.supportedDepartments?.map((item, i) => {
@@ -288,33 +285,22 @@ const Patientregisteration = () => {
                     );
 
                     return (
-                      <span className="dep-card"
+                      <span className="card-hover"
                         key={i}
                         onClick={() => setSelectedDep(item)}
                         style={{
-                          backgroundColor: isSelected ? "rgb(245, 243, 243)" : "white",
-                          // backgroundColor: isSelected ? "lightgrey" : "white",
-                          margin: '10px',
-                          display: 'flex',
-                          padding: '7px',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          gap: '10px',
-                          transition: "1s ease",
-                          borderRadius: '10px',
-                          cursor: 'pointer',
-                          width: '170px',
-                          height: '70px'
-                        }}
-                      >
+                          backgroundColor: isSelected ? "rgb(245, 243, 243)" : "white"
+                        }}>
+                        <div>
                         <img
                           style={{ width: "50px", height: "50px" }}
                           src={matchedDept?.image || ""}
                           alt={item.departmentName}
-                        />
+                          />
                         <span style={{
                           fontSize: '12px'
                         }}>{item.departmentName}</span>
+                        </div>
                       </span>
                     );
                   })
@@ -378,7 +364,6 @@ const Patientregisteration = () => {
                 }
 
               </div>
-
             </div>
 
           )}
