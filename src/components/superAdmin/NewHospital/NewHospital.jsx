@@ -363,7 +363,7 @@ export const NewHospital = () => {
                                 return setCategoryName(e.target.value)
                             }} placeholder="patientCategory" />
                         </label>
-                        <div style={{ display: "flex", alignItems: "end" }}>
+                        <div className="add-button" style={{ display: "flex", alignItems: "end" }}>
                             <button
 
                                 className="main-button"
@@ -385,14 +385,7 @@ export const NewHospital = () => {
                     </div>
                     <hr />
 
-                    <div style={{
-                        // marginTop: '10px',
-                        width: "100%",
-                        // minWidth: '400px',
-                        display: 'flex',
-                        gap: "100px",
-                        justifyContent: 'end'
-                    }}>
+                    <div className="page-handler">
                         <button onClick={() => setCurrentStep(currentStep - 1)} disabled={currentStep == 1}> ← Back</button>
                         <button
                             disabled={isProcessing}
@@ -549,14 +542,7 @@ export const NewHospital = () => {
                     </div>
                     <hr />
 
-                    <div style={{
-                        marginTop: '60px',
-                        width: "100%",
-                        // minWidth: '400px',
-                        display: 'flex',
-                        gap: "100px",
-                        justifyContent: 'end',
-                    }}>
+                    <div className="page-handler" >
                         <button onClick={() => setCurrentStep(currentStep - 1)} disabled={currentStep == 1} >← Back</button>
                         <button
                             disabled={isProcessing}
@@ -702,14 +688,7 @@ export const NewHospital = () => {
                         )
                     }
                     <hr />
-                    <div style={{
-                        marginTop: '20px',
-                        width: "100%",
-                        // minWidth: '400px',
-                        display: 'flex',
-                        gap: "100px",
-                        justifyContent: 'end'
-                    }}>
+                    <div className="page-handler" >
                         <button onClick={() => setCurrentStep(currentStep - 1)} disabled={currentStep == 1}> ← Back</button>
                         <button
                             disabled={isProcessing}
@@ -862,14 +841,7 @@ export const NewHospital = () => {
                     </label>
                     <hr />
 
-                    <div style={{
-                        // marginTop: '10px',
-                        width: "100%",
-                        // minWidth: '400px',
-                        display: 'flex',
-                        gap: "100px",
-                        justifyContent: 'end'
-                    }}>
+                    <div className="page-handler">
                         <button onClick={() => setCurrentStep(currentStep - 1)} disabled={currentStep == 1}> ← Back</button>
                         <button
                             disabled={isProcessing}
@@ -977,13 +949,17 @@ export const NewHospital = () => {
                             <div style={{
                                 width: '80px'
                             }}>
-                                <img style={{
+            {hospitalData?.medicalDirector?.image && (
+      <img style={{
                                     width: "60px",
                                     height: "60px"
                                 }}
                                     // src={testimg}
-                                    src={URL.createObjectURL(hospitalData.medicalDirector.image)}
+                                    src={URL.createObjectURL(hospitalData?.medicalDirector?.image)}
                                     alt="image" />
+            )
+            }
+                          
                             </div>
 
                             <div style={{
@@ -1106,7 +1082,7 @@ export const NewHospital = () => {
                     </div>
                     <hr />
 
-                    <div className="saveHospital">
+                    <div className="saveHospital" >
                         <button style={{
                             padding: "7px",
                             color: "white",

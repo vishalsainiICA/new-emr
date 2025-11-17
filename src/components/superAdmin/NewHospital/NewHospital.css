@@ -27,6 +27,8 @@
 .hospitalOnboard {
     margin-top: 10px;
     width: 60vw;
+    /* height: 520px; */
+    /* height: 100vh; */
     min-width: 400px;
     background-color: white;
     padding: 10px;
@@ -34,7 +36,7 @@
     flex-direction: column;
     flex-wrap: wrap;
     min-height: 520px;
-    max-height: 520px;
+    /* max-height: 520px; */
     border-radius: 10px;
     scrollbar-width: thin;
     overflow-y: auto;
@@ -43,6 +45,8 @@
 
 
 .steps {
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     row-gap: 15px;
@@ -75,20 +79,13 @@ input {
     background-color: white;
 }
 
-button:focus,
+/* button:focus,
 button:active {
     outline: none;
     box-shadow: none;
-}
+} */
 
-.common-btn {
-    padding: 7px;
-    color: white;
-    background-color: black;
-    border-radius: 10px;
-    outline: none;
-    cursor: pointer;
-}
+
 
 .saveHospital {
     margin-Top: 10px;
@@ -145,9 +142,40 @@ button:active {
 
     h3 {
         font-size: 15px;
-    };   
+    }
+
+    ;
 }
 
-.reviewtag{
+.reviewtag {
     font-size: 12px;
+}
+
+/*  Page-Handler-Buttons*/
+
+
+  .page-handler
+  {
+    width: 100%;
+    display: flex;
+    gap: 100px;
+    align-items: end;
+    
+  }
+
+  .page-handler button
+  {
+     background-color: black;
+     color: alicebluex  ;
+     padding: 20px;
+ }
+.add-button button
+{
+    background-color: lightgreen;
+    color: aliceblue;
+    border-radius: 10px;
+    border: none;
+    font-size: 20px;
+    box-shadow: 2px 1px 1px 3px rgba(0, 0, 0, 0.1);
+
 }
