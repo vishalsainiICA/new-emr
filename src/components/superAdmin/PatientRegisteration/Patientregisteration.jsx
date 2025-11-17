@@ -288,7 +288,7 @@ const Patientregisteration = () => {
                     );
 
                     return (
-                      <span className="card hover"
+                      <span className="dep-card"
                         key={i}
                         onClick={() => setSelectedDep(item)}
                         style={{

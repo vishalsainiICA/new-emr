@@ -273,7 +273,7 @@ const DashBoard = () => {
                                         justifyContent: 'end',
                                     }}>
                                         <button
-                                            onClick={() => navigate("/doctor-pannel/medication", { state: { hospital: hos } })}
+                                            onClick={() => navigate("/medication", { state: { hospital: hos } })}
                                             style={{
                                                 backgroundColor: 'rgba(219, 219, 252)',
                                             }}> 👁️ View</button>

@@ -4,6 +4,7 @@ import { BsArrow90DegLeft, BsArrowBarLeft, BsArrowLeft } from "react-icons/bs";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Medication.css"
+import addImg from "../../../assets/download.png"
 // import { LabTest } from "./PatientHistory__Labtest";
 import { IoChevronDown, IoChevronDownCircleSharp, IoChevronUp, IoCloseCircle } from "react-icons/io5";
 import { doctorAPi, superAdminApi } from "../../../auth";
@@ -408,24 +409,25 @@ const Medication = () => {
         fetchIllness();
     }, []);
 
+
     const fetchLabTest = async () => {
         setPartialState({ labTestloading: true, labTestError: null });
         console.log("📤 Starting API call to clinical-analysis...");
 
         try {
-            const payload = { report_text: buildReportText(illness, symtomps, patient) };
-            console.log("📦 Request payload:", payload);
+            // const payload = { report_text: buildReportText(illness, symtomps, patient) };
+            // console.log("📦 Request payload:", payload);
 
-            const res = await axios.post(
-                "https://care-backend-sa3e.onrender.com/api/v1/clinical-analysis",
-                payload,
-                { timeout: 30000 }
-            );
+            // const res = await axios.post(
+            //     "https://care-backend-sa3e.onrender.com/api/v1/clinical-analysis",
+            //     payload,
+            //     { timeout: 30000 }
+            // );
 
-            console.log("✅ API response:", res.data?.data);
+            // console.log("✅ API response:", res.data?.data);
 
-            const { tests, medicines } = extractLabTests(res?.data?.data);
-            // const { tests, medicines } = extractLabTests(data);
+            // const { tests, medicines } = extractLabTests(res?.data?.data);
+            const { tests, medicines } = extractLabTests(data);
             console.log("🧪 Tests extracted:", tests);
             console.log("💊 Medicines extracted:", medicines);
 
@@ -442,6 +444,7 @@ const Medication = () => {
             setPartialState({ labTestloading: false });
         }
     };
+
 
 
     const {
@@ -532,7 +535,7 @@ const Medication = () => {
 
                                 <div className="patient-history-img-card" key={i} onClick={() => {
                                     setopenImage({
-                                        image: "public/Screenshot (103).png",
+                                        image: "C:/Users/Visha/OneDrive/Desktop/ICA/new-emr/src/assets/download.png",
                                         name: "name" + i
                                     })
                                 }}>
@@ -552,7 +555,8 @@ const Medication = () => {
                     <div style={{
                         display: 'flex',
                         gap: '10px',
-                        alignItems: 'center'
+                        alignItems: 'center',
+
                     }}>
                         <div>
                             <h5>Illness/Daignosis</h5>
@@ -626,9 +630,27 @@ const Medication = () => {
                             }}>
                                 <input type="search" placeholder="add more symtomps...." onChange={handleChangeSymtomps} value={searchTermforsymtoms} />
 
+                                {labtestResult.length > 0 && (
+                                    <button
+                                        disabled={labTestloading}
+                                        onClick={() => fetchLabTest()}
+                                        style={{
+                                            backgroundColor: "lightblue",
+                                            width: '120px',
+                                            padding: "7px",
+                                            cursor: 'pointer',
+                                            alignItems: 'center',
+                                            outline: "none",
+                                            border: 'none',
+                                            fontSize: '12px',
+                                            borderRadius: '10px'
+                                        }}>
+                                        LabTests
+                                    </button>
+                                )}
+
 
                             </div>
-
 
                             {filteredsymtomps.length > 0 && searchTermforsymtoms.trim() !== "" && (
                                 <>
@@ -676,20 +698,6 @@ const Medication = () => {
 
 
                         </div>
-                        <button
-                            disabled={labTestloading}
-                            onClick={() => fetchLabTest()}
-                            style={{
-                                marginTop: '15px',
-                                backgroundColor: "lightblue",
-                                width: '100px',
-                                height: '30px',
-                                padding: "8px",
-                                cursor: 'pointer',
-                                alignItems: 'center'
-                            }}>
-                            Generate
-                        </button>
 
                     </div>
                     <div style={{
@@ -704,7 +712,6 @@ const Medication = () => {
                             <h5>Medication:</h5>
 
                         </div>
-
                         {labTestloading && (
                             <p style={{
                                 display: 'flex',
@@ -729,53 +736,31 @@ const Medication = () => {
                         )}
 
                         {!labTestloading && !labTestError && Array.isArray(mediciene) && mediciene.length > 0 && (
-                            <div style={{
-                                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                                gap: '20px',
-                                marginTop: '20px',
-                                // minHeight: '500px'
+                            <div className="medication-card" style={{
+
                             }}>
                                 {mediciene.map((hos, i) => {
-
                                     return <div key={i}
                                         style={{
                                             display: 'flex',
                                             justifyContent: 'space-between',
                                             padding: '10px',
-
                                             backgroundColor: 'white',
                                             borderBottom: '1px solid lightgray',
                                             borderRadius: '10px',
                                             cursor: 'pointer'
                                         }}>
-                                        <div
-
-                                            style={{
-                                                padding: "10px",
-                                                display: "flex",
-                                                alignItems: "center",
-                                                gap: "20px" // space between items
-                                            }}
-                                        >
-                                            <div>
-                                                <h5 style={{ margin: 0 }}>{hos?.drug_name || "Unnamed Hospital"}</h5>
-                                                <p style={{ margin: 0 }}>{`${hos?.dosage}`}</p>
-                                                <p style={{ margin: 0 }}>{`${hos?.frequency}`}</p>
-                                            </div>
-
+                                        <div>
+                                            <h5 >{hos?.drug_name || "Unnamed Hospital"}</h5>
+                                            <p >{`${hos?.dosage}`}</p>
+                                            <p >{`${hos?.frequency}`}</p>
                                         </div>
                                         <div>
                                             <button
                                                 onClick={() => {
                                                     setselectedMediciene((prev) => [...prev, hos])
                                                 }}
-                                                style={{
-                                                    width: '70px',
-                                                    height: '35px',
-                                                    padding: '10px',
-                                                    fontSize: '12px',
-                                                    border: '1px solid black'
-                                                }}>+ Add </button>
+                                                className="common-btn">+ Add </button>
                                         </div>
 
                                     </div>
@@ -823,7 +808,7 @@ const Medication = () => {
                                                 gap: "20px" // space between items
                                             }}
                                         > <div>
-                                                <h5 style={{ margin: 0 }}>{test.test || "Unnamed Hospital"}</h5>
+                                                <h5 >{test.test || "Unnamed Hospital"}</h5>
                                                 <p>{test.disease} </p>
 
                                             </div>
@@ -876,7 +861,7 @@ const Medication = () => {
                                             gap: "20px" // space between items
                                         }}
                                     > <div>
-                                            <h5 style={{ margin: 0 }}>{hos?.drug_name}</h5>
+                                            <h5 >{hos?.drug_name}</h5>
                                             <p>{hos?.dosage} <p></p>| {"Take After Meal"}</p>
 
                                         </div>
@@ -898,6 +883,9 @@ const Medication = () => {
                             })
                         }
                     </div>
+
+                </div>
+                <div>
 
                 </div>
             </div>
@@ -922,7 +910,9 @@ const Medication = () => {
                 )
             }
             <div className={`symtomPopup ${symtom_popup ? "open" : "none"}`}>
-                <div className="symtomPopup-card">
+                <div style={{
+
+                }}>
                     {symtom_popup ? (
                         <IoChevronDown
                             style={{ cursor: "pointer" }}
@@ -935,6 +925,11 @@ const Medication = () => {
                         />
                     )}
 
+                </div>
+
+
+                <div className="symtomPopup-card">
+
                     <div style={{
                         display: "flex",
                         justifyContent: "space-between",
@@ -942,21 +937,40 @@ const Medication = () => {
                         marginTop: "10px"
                     }}>
                         <h4>Selected</h4>
-                        <button
-                            style={{
-                                width: "100px",
-                                border: "1px solid gray",
-                                padding: "5px",
-                                cursor: "pointer",
-                                borderRadius: "10px"
-                            }}
-                            onClick={() => {
-                                setSymptopms([]);
-                                setIllness([]);
-                            }}
-                        >
-                            Clear
-                        </button>
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            gap: '10px'
+                        }}>
+                            <button
+                                disabled={labTestloading}
+                                onClick={() => fetchLabTest()}
+                                style={{
+                                    backgroundColor: "lightblue",
+                                    width: '100px',
+                                    padding: "5px",
+                                    cursor: 'pointer',
+                                    alignItems: 'center'
+                                }}>
+                                Generate
+                            </button>
+                            <button
+                                style={{
+                                    width: "100px",
+                                    border: "1px solid gray",
+                                    padding: "5px",
+                                    cursor: "pointer",
+                                    borderRadius: "10px"
+                                }}
+                                onClick={() => {
+                                    setSymptopms([]);
+                                    setIllness([]);
+                                }}
+                            >
+                                Clear
+                            </button>
+                        </div>
+
                     </div>
 
                     {/* Illness list */}

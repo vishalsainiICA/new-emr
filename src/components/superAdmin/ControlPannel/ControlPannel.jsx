@@ -13,7 +13,7 @@ const ControlPannel = () => {
     const navLinks = [
         { name: 'DashBoard', icon: 'ri-dashboard-line', navigate: '/super-admin/dashboard' },
         { name: 'Hospital Management', icon: 'ri-building-line', navigate: '/super-admin/hospital-management' },
-        { name: 'Patients Records', icon: 'ri-group-line', navigate: '/super-admin/admin-management' },
+        { name: 'Patients Records', icon: 'ri-group-line', navigate: '/super-admin/patient-management' },
         { name: 'Admin Management', icon: 'ri-admin-line', navigate: '/super-admin/admin-management' },
     ]
 

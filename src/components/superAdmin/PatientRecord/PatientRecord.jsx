@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import './AdminManagement.css'
+import './PatientRecord.css'
 import { Circles } from "react-loader-spinner";
 import moment from "moment";
 import { superAdminApi } from "../../../auth";
 
 
-export default function AdminManagement() {
+export default function PatientRecords() {
     const [data, setData] = useState([]);
     const [isProcessing, setIsProcessing] = useState(false);
     const [error, setError] = useState(null);
