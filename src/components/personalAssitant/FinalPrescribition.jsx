@@ -128,8 +128,6 @@ const FinalPrescription = () => {
                         minHeight: '100px'
                     }}>
                         <h3>Diagnosis:</h3>
-                        {console.log('state', state)
-                        }
                         {
                             state?.illnessData && (
                                 <div style={{

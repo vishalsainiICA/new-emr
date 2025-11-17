@@ -228,7 +228,6 @@ const DashBoard = () => {
                         {filterPatient?.map((hos, i) => (
                             <div key={i} className="patient-card hover"
 
-                            // onClick={() => navigate('/doctor/medication', { state: { patient: hos } })}
                             > <div
                                 style={{
                                     width: '100%',
@@ -273,7 +272,7 @@ const DashBoard = () => {
                                         justifyContent: 'end',
                                     }}>
                                         <button
-                                            onClick={() => navigate("/medication", { state: { hospital: hos } })}
+                                            onClick={() => navigate('/medication', { state: { patient: hos } })}
                                             style={{
                                                 backgroundColor: 'rgba(219, 219, 252)',
                                             }}> 👁️ View</button>

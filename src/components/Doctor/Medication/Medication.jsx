@@ -8,6 +8,8 @@ import addImg from "../../../assets/download.png"
 // import { LabTest } from "./PatientHistory__Labtest";
 import { IoChevronDown, IoChevronDownCircleSharp, IoChevronUp, IoCloseCircle } from "react-icons/io5";
 import { doctorAPi, superAdminApi } from "../../../auth";
+import { LabTest } from "../Utility/PatientHistory__Labtest";
+import Switch from "react-switch";
 
 const buildReportText = (illness = [], symtomps = [], patient = {}) => {
     // Get illness names safely
@@ -285,7 +287,7 @@ const patientData = {
 const Medication = () => {
     const navigate = useNavigate()
     const location = useLocation()
-    const [patient, setPatient] = useState()
+    const [final, setFinal] = useState("Provisional");
     const [symtomps, setSymptopms] = useState([])
     const [illness, setIllness] = useState([])
     const [labtestResult, setLabtestResult] = useState([])
@@ -295,6 +297,7 @@ const Medication = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [searchTermforsymtoms, setsearchTermforsymtoms] = useState("");
     const [open, setClose] = useState(false)
+    const [patientDetails, setpatientDetails] = useState(false)
     const [symtom_popup, setSymtom_popup] = useState(false)
     const [active, setactive] = useState("Blood-test")
     const [filteredIllness, setFilteredIllness] = useState([]);
@@ -463,100 +466,153 @@ const Medication = () => {
     return (
         <div className="medication-page">
 
-            <div style={{
-                backgroundColor: 'white',
-                display: "flex",
-                borderRadius: '20px',
-                padding: '15px',
-                boxShadow: " 0px 5px 5px rgb(0, 0, 0, 0.1)",
-                marginBottom: '10px'
-                // borderRadius: "20px",
-                // padding:" 15px",
-                // box-shadow:" 0px 5px 5px rgb(0, 0, 0, 0.1)"
-            }}>
-                <h5><BsArrowLeft></BsArrowLeft> Back To Dashboard</h5>
-            </div>
 
-            <div className="medication-heading-card">
-                {open ? (
-                    <IoChevronDown style={{
-                        cursor: 'pointer'
-                    }} onClick={() => setClose(false)}></IoChevronDown>
-                ) : (<IoChevronUp style={{
-                    cursor: 'pointer'
-                }} onClick={() => setClose(true)}></IoChevronUp>)}
-
+            <div className="med-head">
                 <div style={{
                     display: 'flex',
                     justifyContent: 'space-between'
                 }}>
-                    <h5>Patient Vitals:</h5>
-                    <h5>Patient History:</h5>
+                    <div onClick={() => navigate(-1)} className="med-card">
+                        <h5><BsArrowLeft></BsArrowLeft> Back To Dashboard</h5>
+                    </div>
+                    <div className="med-card">
+
+                        <div className="med-toggle">
+                            <p>Provisonal</p>
+                            <Switch
+                                checked={final === "Final"}
+                                onChange={(checked) => setFinal(checked ? "Final" : "Provisional")}
+                                onColor="#d32f2f"          // Green background
+                                offColor="#00c853"         // Red background
+                                onHandleColor="#ffffff"    // White knob
+                                offHandleColor="#ffffff"
+                                height={22}
+                                width={48}
+                                handleDiameter={20}
+                                uncheckedIcon={false}
+                                checkedIcon={false}
+                            />
+                            <p>Final</p>
+                        </div>
+                        <button
+                            disabled={labTestloading}
+                            onClick={() => navigate("/prescribtion", {
+                                state: {
+                                    data: {
+                                        // patientInfo: patient,
+                                        type: final,
+                                        // hospitalData: patient?.hospitalId,
+                                        illnessData: illness,
+                                        symtomps: symtomps,
+                                        medication: selectedMediciene,
+                                        selectedLabTest: selectedLabTest
+                                    }
+                                }
+                            })}
+                            style={{
+                                backgroundColor: "#c8a2ff",
+                                width: '100px',
+                                padding: "10px",
+                                cursor: 'pointer',
+                                alignItems: 'center',
+                                outline: "none",
+                                border: "none",
+                                borderRadius: '10px'
+                            }}>
+                            Generate
+                        </button>
+
+
+
+
+
+                    </div>
+
                 </div>
-                <div className={`medication-heading ${open ? "open" : "closed"}`}>
-                    <div className="patient-vitals">
-                        <div className="patient-vitals-item">
-                            <p>Name: <h5>{patientData.name}</h5></p>
-                            <p>Age: <h5>{patientData.age}</h5></p>
+
+                <div className="medication-heading-card">
+
+                    {patientDetails ? (
+                        <IoChevronDown style={{
+                            cursor: 'pointer'
+                        }} onClick={() => setpatientDetails(false)}></IoChevronDown>
+                    ) : (<IoChevronUp style={{
+                        cursor: 'pointer'
+                    }} onClick={() => setpatientDetails(true)}></IoChevronUp>)}
+
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between'
+                    }}>
+                        <h5>Patient Vitals:</h5>
+                        <h5>Patient History:</h5>
+                    </div>
+                    <div className={`medication-heading ${patientDetails ? "open" : "closed"}`}>
+                        <div className="patient-vitals">
+                            <div className="patient-vitals-item">
+                                <p>Name: <h5>{patientData.name}</h5></p>
+                                <p>Age: <h5>{patientData.age}</h5></p>
+                            </div>
+
+                            <div className="patient-vitals-item">
+                                <p>Gender: <h5>{patientData.gender}</h5></p>
+                                <p>Phone: <h5>{patientData.phone}</h5></p>
+                            </div>
+
+                            <div className="patient-vitals-item">
+                                <p>Blood Group: <h5>{patientData.bloodGroup}</h5></p>
+                                <p>Height: <h5>{patientData.height}</h5></p>
+                            </div>
+
+                            <div className="patient-vitals-item">
+                                <p>Weight: <h5>{patientData.weight}</h5></p>
+                                <p>Pulse: <h5>{patientData.pulse}</h5></p>
+                            </div>
                         </div>
 
-                        <div className="patient-vitals-item">
-                            <p>Gender: <h5>{patientData.gender}</h5></p>
-                            <p>Phone: <h5>{patientData.phone}</h5></p>
-                        </div>
+                        <hr style={{
+                            width: '2px'
+                        }} />
+                        <div className="patient-history">
+                            <div style={{
+                                width: '100%',
+                                display: 'flex',
+                                gap: '10px'
+                            }}>
+                                <span className={active === "Blood-test" ? "line" : "none"} onClick={() => setactive("Blood-test")}>Blood test</span>
+                                <span className={active === "Xray" ? "line" : "none"} onClick={() => setactive("Xray")}>Xray</span>
+                                <span className={active === "MRI-CT-Scan" ? "line" : "none"} onClick={() => setactive("MRI-CT-Scan")}>MRI & CT Scan</span>
+                                <span className={active === "Other" ? "line" : "none"} onClick={() => setactive("Other")}>Other</span>
+                            </div>
+                            <div className="patient-history-images">
+                                {[1, 2, 3, 4, 5, 8, 8, 8, 8, 8].map((item, i) => (
 
-                        <div className="patient-vitals-item">
-                            <p>Blood Group: <h5>{patientData.bloodGroup}</h5></p>
-                            <p>Height: <h5>{patientData.height}</h5></p>
-                        </div>
+                                    <div className="patient-history-img-card" key={i} onClick={() => {
+                                        setopenImage({
+                                            image: "C:/Users/Visha/OneDrive/Desktop/ICA/new-emr/src/assets/download.png",
+                                            name: "name" + i
+                                        })
+                                    }}>
 
-                        <div className="patient-vitals-item">
-                            <p>Weight: <h5>{patientData.weight}</h5></p>
-                            <p>Pulse: <h5>{patientData.pulse}</h5></p>
+                                        <img key={item} src={`public/Screenshot (103).png`} />
+                                        <h5>{"Name"}{item}</h5>
+                                    </div>
+
+                                ))}
+                            </div>
                         </div>
                     </div>
 
-                    <hr style={{
-                        width: '2px'
-                    }} />
-                    <div className="patient-history">
-                        <div style={{
-                            width: '100%',
-                            display: 'flex',
-                            gap: '10px'
-                        }}>
-                            <span className={active === "Blood-test" ? "line" : "none"} onClick={() => setactive("Blood-test")}>Blood test</span>
-                            <span className={active === "Xray" ? "line" : "none"} onClick={() => setactive("Xray")}>Xray</span>
-                            <span className={active === "MRI-CT-Scan" ? "line" : "none"} onClick={() => setactive("MRI-CT-Scan")}>MRI & CT Scan</span>
-                            <span className={active === "Other" ? "line" : "none"} onClick={() => setactive("Other")}>Other</span>
-                        </div>
-                        <div className="patient-history-images">
-                            {[1, 2, 3, 4, 5, 8, 8, 8, 8, 8].map((item, i) => (
-
-                                <div className="patient-history-img-card" key={i} onClick={() => {
-                                    setopenImage({
-                                        image: "C:/Users/Visha/OneDrive/Desktop/ICA/new-emr/src/assets/download.png",
-                                        name: "name" + i
-                                    })
-                                }}>
-
-                                    <img key={item} src={`public/Screenshot (103).png`} />
-                                    <h5>{"Name"}{item}</h5>
-                                </div>
-
-                            ))}
-                        </div>
-                    </div>
                 </div>
 
             </div>
+
             <div className="medication-body" >
                 <div className="medicationPatienmedication">
                     <div style={{
                         display: 'flex',
                         gap: '10px',
                         alignItems: 'center',
-
                     }}>
                         <div>
                             <h5>Illness/Daignosis</h5>
@@ -632,8 +688,8 @@ const Medication = () => {
 
                                 {labtestResult.length > 0 && (
                                     <button
+                                        onClick={() => setClose(true)}
                                         disabled={labTestloading}
-                                        onClick={() => fetchLabTest()}
                                         style={{
                                             backgroundColor: "lightblue",
                                             width: '120px',
@@ -839,6 +895,12 @@ const Medication = () => {
                         </div>
                     )}
                     <div>
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'space-between'
+                        }}>
+                            <h5>Mediciene:</h5>
+                        </div>
                         {
                             selectedMediciene.length > 0 && selectedMediciene.map((hos, i) => {
                                 return <div key={i}
@@ -868,15 +930,9 @@ const Medication = () => {
 
                                     </div>
                                     <div>
-                                        <button
-                                            onClick={() => {
-                                                setselectedMediciene((prev) => prev.filter((item) => item?.drug_name !== hos?.drug_name))
-                                            }}
-                                            style={{
-                                                padding: '10px',
-                                                fontSize: '12px',
-                                                border: '1px solid black'
-                                            }}>Remove </button>
+                                        <i onClick={() => {
+                                            setselectedMediciene((prev) => prev.filter((item) => item?.drug_name !== hos?.drug_name))
+                                        }} class="ri-delete-bin-6-line"></i>
                                     </div>
 
                                 </div>
@@ -934,7 +990,8 @@ const Medication = () => {
                         display: "flex",
                         justifyContent: "space-between",
                         width: "100%",
-                        marginTop: "10px"
+                        marginTop: "10px",
+                        backgroundColor: "white"
                     }}>
                         <h4>Selected</h4>
                         <div style={{
@@ -1039,6 +1096,13 @@ const Medication = () => {
             </div>
 
 
+            {
+                open && (
+                    <div className="patientHistory">
+                        <LabTest selectedLabTest={selectedLabTest} setselectedLabTest={setselectedLabTest} labTest={labtestResult} labTestError={labTestError} labTestloading={labTestloading} onclose={() => setClose(false)} ></LabTest>
+                    </div>
+                )
+            }
         </div >
     )
 

@@ -4,7 +4,7 @@ import { Circles } from "react-loader-spinner";
 import { BsArrowLeft } from "react-icons/bs";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { LabTest } from "./PatientHistory__Labtest";
+import { LabTest } from "../Doctor/Utility/PatientHistory__Labtest";
 
 
 const buildReportText = (illness = [], symtomps = [], patient = {}) => {
@@ -440,7 +440,8 @@ export const Medication = () => {
                                     selectedLabTest: selectedLabTest
                                 }
                             }
-                        })
+                        }
+                    )
                     }}
                     style={{
                         padding: '10px',
@@ -671,7 +672,7 @@ export const Medication = () => {
                         marginTop: '10px',
                         display: 'flex',
                         justifyContent: 'space-between',
-                        boxShadow:'10px 20px 5px rg'
+                        boxShadow: '10px 20px 5px rg'
 
                     }}>
                         <h3>Suggested Medication:</h3>
@@ -715,6 +716,12 @@ export const Medication = () => {
                             marginTop: '20px',
                             // minHeight: '500px'
                         }}>
+                            <div style={{
+                                display: 'flex',
+                                justifyContent: 'space-between'
+                            }}>
+                                <h4>Mediciene:</h4>
+                            </div>
                             {mediciene.map((hos, i) => {
 
                                 return <div key={i}
@@ -868,15 +875,10 @@ export const Medication = () => {
 
                                 </div>
                                 <div>
-                                    <button
-                                        onClick={() => {
-                                            setselectedMediciene((prev) => prev.filter((item) => item?.drug_name !== hos?.drug_name))
-                                        }}
-                                        style={{
-                                            padding: '10px',
-                                            fontSize: '12px',
-                                            border: '1px solid black'
-                                        }}>Remove </button>
+                                    <i onClick={() => {
+                                        setselectedMediciene((prev) => prev.filter((item) => item?.drug_name !== hos?.drug_name))
+                                    }} class="ri-delete-bin-6-line"></i>
+
                                 </div>
 
                             </div>

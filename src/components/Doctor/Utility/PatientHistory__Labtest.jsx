@@ -5,7 +5,6 @@ export function LabTest({ labTest = [], labTestError, labTestloading, onclose, s
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredLabtest, setFilteredLabtest] = useState(labTest);
 
-
     // if (labTestError) {
     //     return <p style={{ color: 'red' }}>Error: {labTestError}</p>;
     // }
@@ -36,18 +35,7 @@ export function LabTest({ labTest = [], labTestError, labTestloading, onclose, s
     }
 
     return (
-        <div style={{
-            padding: '20px',
-            maxHeight: '700px',
-            minHeight: "700px",
-            backgroundColor: '#fff',
-            msOverflowX: 'scroll',
-            borderRadius: '20px',
-            overflowY: 'auto',
-            maxWidth: '900px',
-            minWidth: '900px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-        }}>
+        <div className='labtest' >
             {/* Heading */}
 
             <div style={{
@@ -55,23 +43,21 @@ export function LabTest({ labTest = [], labTestError, labTestloading, onclose, s
                 justifyContent: 'space-between',
                 marginBottom: '10px'
             }}>
-                <h4 style={{
+                <h5 style={{
                     marginBottom: '15px',
                     color: '#333',
                     fontWeight: '600'
                 }}>
                     Select Lab Tests
-                </h4>
+                </h5>
                 <div>
                     <button
                         onClick={() => onclose?.(null)}
+                        className='common-btn'
                         style={{
-                            padding: '10px',
-                            fontSize: '12px',
-                            width: '105px',
-                            border: '1px solid gray',
                             marginRight: '10px'
-                        }}>Save</button>
+                        }}
+                    >Save</button>
                     <i
                         onClick={() => {
                             onclose?.(null)
@@ -149,18 +135,14 @@ export function LabTest({ labTest = [], labTestError, labTestloading, onclose, s
                                             }}
                                         >
                                             <div>
-                                                <h4 style={{ margin: 0 }}>{test.test}</h4>
-                                                <p style={{ margin: 0, fontSize: '13px', color: '#555' }}>
+                                                <h5 style={{ margin: 0 }}>{test.test}</h5>
+                                                <p>
                                                     {test.disease}
                                                 </p>
                                             </div>
 
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                                 <span
-                                                    style={{
-                                                        fontSize: '13px',
-                                                        color: test.confidence > 0.5 ? 'green' : 'gray'
-                                                    }}
                                                 >
                                                     Confidence: {(test.confidence * 100).toFixed(0)}%
                                                 </span>
