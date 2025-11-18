@@ -14,6 +14,9 @@ const Patientregisteration = () => {
   const [currentStep, setCurrentStep] = useState(0)
   const [aadhaarFront, setAadhaarFront] = useState(null);
   const [aadhaarBack, setAadhaarBack] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false)
+  const [categoryName, setCategoryName] = useState(null)
+  const [uploadedDocuments, setUploadedDocuments] = useState([]);
   const [hospital, setHospital] = useState()
   const [patientData, setPatientData] = useState(
     {
@@ -41,12 +44,16 @@ const Patientregisteration = () => {
     }
   );
 
-  const location  = useLocation()
+  const location = useLocation()
+  const query = new URLSearchParams(location.search)
+  const hospitalId = query.get("id");
+
+  console.log("Hospital ID:", hospitalId)
   useEffect(() => {
     const fetch = async () => {
       try {
 
-        const res = await commonApi.fetchhospitalId("690eeab9521e26ba703e4962")
+        const res = await commonApi.fetchhospitalId(hospitalId)
 
         if (res.status == 200 || res.data.status === 200) {
           setHospital(res?.data?.data)
@@ -98,7 +105,7 @@ const Patientregisteration = () => {
 
       setPatientData((prev) => ({
         ...prev,
-        name: parsed.name || prev.name,
+        name: parsed.name,
         DOB: parsed.DOB || prev.DOB,
         gender: parsed.gender || prev.gender,
         permanentAddress: parsed.address || prev.permanentAddress,
@@ -117,6 +124,75 @@ const Patientregisteration = () => {
   }, [aadhaarFront, aadhaarBack]);
 
 
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsProcessing(true);
+
+    try {
+      const formdata = new FormData();
+      // multiple d
+
+      uploadedDocuments.forEach((doc, index) => {
+        formdata.append(`categories[${index}]`, doc.category);
+        formdata.append(`fileCount[${index}]`, doc.files.length);
+        doc.files.forEach((file) => {
+          formdata.append("documents", file);
+        });
+      });
+
+      formdata.append("addharfront", aadhaarFront)
+      formdata.append("addharback", aadhaarBack)
+      // patient details append
+      Object.keys(patientData).forEach((key) => {
+
+        let value = patientData[key]
+
+        if (typeof value === "object" && value !== null && !(value instanceof File)) {
+          value = JSON.stringify(value);
+        }
+        formdata.append(key, value ?? "");
+      });
+
+      formdata.append("hospitalId", hospitalId)
+
+      const res = await commonApi.registerPatient(formdata);
+      toast.success(res?.data?.message || "Patient registered successfully");
+
+      // reset
+      setPatientData({
+        name: '',
+        age: null,
+        gender: '',
+        phone: null,
+        email: '',
+        permanentAddress: '',
+        currentAddress: '',
+        whatsApp: null,
+        DOB: '',
+        city: '',
+        state: '',
+        nationality: '',
+        patienCategory: null,
+        attendeeName: '',
+        attendeePhone: null,
+        attendeeRelation: '',
+        departmentId: '',
+        doctorId: null,
+        addharDocuments: [],
+        hospitalId: null,
+        pastDocumnents: []
+      });
+      setUploadedDocuments([]);
+      navigate(-1);
+    } catch (err) {
+      console.log(err);
+
+      toast.error(err.response?.data?.message || "Something went wrong");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
   return (
     <div className="Patientregiteration-main">
 
@@ -128,9 +204,9 @@ const Patientregisteration = () => {
         </div>
         <hr />
         <hr />
-        
+
         <div className=" patient-steps">
-                  
+
           {/* Step 0 — Basic Details */}
           {currentStep == 0 && (
             <div className="patient-step-0">
@@ -163,107 +239,224 @@ const Patientregisteration = () => {
             <div className="patient-step-1">
               <h4>Patient Detail</h4>
               <form className="All-detail" action="">
+
                 <div className="distance">
                   <div>
-                    <label htmlFor="">Name *</label>
-                    <input type="text" />
+                    <label>Name *</label>
+                    <input
+                      type="text"
+                      value={patientData.name}
+                      onChange={(e) => setPatientData({
+                        ...patientData,
+                        name: e.target.value
+                      })}
+                    />
                   </div>
-                  <div >
-                    <label htmlFor="">Age *</label>
-                    <input type="number" />
+
+                  <div>
+                    <label>Age *</label>
+                    <input
+                      type="number"
+                      value={patientData.age}
+                      onChange={(e) => setPatientData({
+                        ...patientData,
+                        age: e.target.value
+                      })}
+                    />
                   </div>
                 </div>
+
                 <div className="distance">
-                  <div >
-                    <label htmlFor="">Gender *</label>
-                    <input type="text" />
+                  <div>
+                    <label>Gender *</label>
+                    <input
+                      type="text"
+                      value={patientData.gender}
+                      onChange={(e) => setPatientData({
+                        ...patientData,
+                        gender: e.target.value
+                      })}
+                    />
                   </div>
-                  <div >
-                    <label htmlFor="">Date of Birth</label>
-                    <input type="text" />
+
+                  <div>
+                    <label>Date of Birth</label>
+                    <input
+                      type="text"
+                      value={patientData.DOB}
+                      onChange={(e) => setPatientData({
+                        ...patientData,
+                        DOB: e.target.value
+                      })}
+                    />
                   </div>
                 </div>
+
                 <div className="distance">
-                  <div >
-                    <label htmlFor="">Phone *</label>
-                    <input type="number" />
+                  <div>
+                    <label>Phone *</label>
+                    <input
+                      type="number"
+                      value={patientData.phone}
+                      onChange={(e) => setPatientData({
+                        ...patientData,
+                        phone: e.target.value
+                      })}
+                    />
                   </div>
-                  <div >
-                    <label htmlFor="">WhatsApp Number</label>
-                    <input type="number" />
+
+                  <div>
+                    <label>WhatsApp Number</label>
+                    <input
+                      type="number"
+                      value={patientData.whatsApp}
+                      onChange={(e) => setPatientData({
+                        ...patientData,
+                        whatsApp: e.target.value
+                      })}
+                    />
                   </div>
                 </div>
+
+
                 <div className="distance">
-                  <div >
-                    <label htmlFor="">Email</label>
-                    <input type="email" />
+                  <div>
+                    <label>Email</label>
+                    <input
+                      type="email"
+                      value={patientData.email}
+                      onChange={(e) => setPatientData({
+                        ...patientData,
+                        email: e.target.value
+                      })}
+                    />
                   </div>
-                  <div >
-                    <label htmlFor="">Nationality</label>
-                    <input type="text" />
+
+                  <div>
+                    <label>Nationality</label>
+                    <input
+                      type="text"
+                      value={patientData.nationality}
+                      onChange={(e) => setPatientData({
+                        ...patientData,
+                        nationality: e.target.value
+                      })}
+                    />
                   </div>
                 </div>
+
+
                 <div className="distance">
-                  <div >
-                    <label htmlFor="">PinCode</label>
-                    <input type="number" />
+                  <div>
+                    <label>PinCode</label>
+                    <input
+                      type="number"
+                      value={patientData.pinCode}
+                      onChange={(e) => setPatientData({
+                        ...patientData,
+                        pinCode: e.target.value
+                      })}
+                    />
                   </div>
-                  <div >
-                    <label htmlFor="">City</label>
-                    <input type="text" />
+
+                  <div>
+                    <label>City</label>
+                    <input
+                      type="text"
+                      value={patientData.city}
+                      onChange={(e) => setPatientData({
+                        ...patientData,
+                        city: e.target.value
+                      })}
+                    />
                   </div>
                 </div>
+
+
                 <div className="distance">
-                  <div >
-                    <label htmlFor="">State *</label>
-                    <input type="text" />
+                  <div>
+                    <label>State *</label>
+                    <input
+                      type="text"
+                      value={patientData.state}
+                      onChange={(e) => setPatientData({
+                        ...patientData,
+                        state: e.target.value
+                      })}
+                    />
                   </div>
-                  <div >
-                    <label htmlFor="">Addhar No*</label>
-                    <input type="number" />
+
+                  <div>
+                    <label>Aadhaar No *</label>
+                    <input
+                      type="number"
+                      value={patientData.addharNo}
+                      onChange={(e) => setPatientData({
+                        ...patientData,
+                        addharNo: e.target.value
+                      })}
+                    />
                   </div>
                 </div>
+
+
                 <div className="distance">
-                  <div >
-                    <label htmlFor="">Front Addhar *</label>
-                    <input type="file" />
+                  <div>
+                    <label>Front Aadhaar *</label>
+                    <input
+                      type="file"
+                      onChange={(e) => setAadhaarFront(e.target.files[0])}
+                    />
                   </div>
-                  <div >
-                    <label htmlFor="">Back Addhar *</label>
-                    <input type="file" />
+
+                  <div>
+                    <label>Back Aadhaar *</label>
+                    <input
+                      type="file"
+                      onChange={(e) => setAadhaarBack(e.target.files[0])}
+                    />
                   </div>
                 </div>
-               <div className="distance">
-                <div >
-                  <label htmlFor="">Address</label>
-                  {/* <input type="text" name="" id="" /> */}
-                  <textarea style={{ width: "100%", padding: "10px", borderRadius: "7px" }} name="" id=""></textarea>
+
+
+                <div className="distance">
+                  <div>
+                    <label>Address</label>
+                    <textarea
+                      style={{ width: "100%", padding: "10px", borderRadius: "7px" }}
+                      value={patientData.permanentAddress}
+                      onChange={(e) => setPatientData({
+                        ...patientData,
+                        permanentAddress: e.target.value
+                      })}
+                    />
+                  </div>
                 </div>
-               </div>
 
               </form>
             </div>
           )}
+
 
           {/* Step 2 — Basic Details */}
           {currentStep == 2 && (
             <div className="patient-step-2">
               <h4>Attendee Details</h4>
               <form>
-              <div className="hold-data-div">
-                <div >
-                  <label htmlFor="">Name *</label>
-                  <input type="text" placeholder="Attendee Name" />
+                <div className="hold-data-div">
+                  <div >
+                    <label htmlFor="">Name *</label>
+                    <input type="text" value={patientData?.attendeeName} placeholder="Attendee Name" />
+                  </div>
+                  <div >
+                    <label htmlFor="">Phone Number *</label>
+                    <input type="number" value={patientData?.attendeePhone} placeholder="+91 XXXX XXXX XX" />
+                  </div>
                 </div>
                 <div >
-                  <label htmlFor="">Phone Number *</label>
-                  <input type="number" placeholder="+91 XXXX XXXX XX" />
+                  <label htmlFor="">Relation with Patient</label>
+                  <input type="text" value={patientData?.attendeeRelation} placeholder="Father/Mother/Gurdian/etc." />
                 </div>
-              </div>
-              <div >
-                <label htmlFor="">Relation with Patient</label>
-                <input type="text" placeholder="Father/Mother/Gurdian/etc." />
-              </div>
               </form>
             </div>
           )}
@@ -292,14 +485,14 @@ const Patientregisteration = () => {
                           backgroundColor: isSelected ? "rgb(245, 243, 243)" : "white"
                         }}>
                         <div>
-                        <img
-                          style={{ width: "50px", height: "50px" }}
-                          src={matchedDept?.image || ""}
-                          alt={item.departmentName}
+                          <img
+                            style={{ width: "50px", height: "50px" }}
+                            src={matchedDept?.image || ""}
+                            alt={item.departmentName}
                           />
-                        <span style={{
-                          fontSize: '12px'
-                        }}>{item.departmentName}</span>
+                          <span style={{
+                            fontSize: '12px'
+                          }}>{item.departmentName}</span>
                         </div>
                       </span>
                     );
@@ -375,22 +568,61 @@ const Patientregisteration = () => {
               <div className="upload-file">
                 <div>
                   <form action="">
-                    <input type="file" />
+                    <input
+                      multiple
+                      disabled={!categoryName}
+                      onChange={(e) => {
+                        const files = Array.from(e.target.files);
+                        setUploadedDocuments((prev) => [
+                          ...prev,
+                          { category: categoryName, files },
+                        ]);
+
+                        setCategoryName("")
+                      }} type="file" />
+                    {!categoryName && (
+                      <p style={{
+                        fontSize: '12px',
+                        color: 'red'
+                      }}>Pleae Select Cateogry First</p>
+                    )}
                   </form>
                 </div>
                 <div>
                   <form action="" style={{ marginBottom: "20px", display: "grid" }}>
                     <label htmlFor="">Category *</label>
-                    <select style={{ width: "150px", height: "30px", color: "black", borderRadius: "10px", padding: "5px", border: "0.3px solid lightgray", }} name="" id="category">
+                    <select
+                      value={categoryName}
+                      onChange={(e) => setCategoryName(e.target.value)}
+                      style={{ width: "150px", height: "30px", color: "black", borderRadius: "10px", padding: "5px", border: "0.3px solid lightgray", }} name="" id="category">
+
                       <option value="">Select Category</option>
-                      <option value="">Blood Test realeted</option>
-                      <option value="">Xray</option>
-                      <option value="">MRI CT scan</option>
-                      <option value="">other</option>
+                      <option value="Blood test">Blood test related</option>
+                      <option value="Xray">Xray</option>
+                      <option value="MRI & CT Scan">MRI & CT Scan</option>
+                      <option value="Other">Other</option>
                     </select>
                   </form>
                 </div>
               </div>
+
+              {uploadedDocuments.length > 0 && (
+                <div className="uploaded-docs">
+                  <h4>Uploaded Documents:</h4>
+                  <br />
+
+                  {uploadedDocuments.map((obj, index) => (
+                    <div key={index}>
+                      <h5>{obj?.category}</h5>
+
+                      {obj?.files?.map((file, i) => (
+                        <p key={i}>✓ {file.name || file} (Processing)</p>
+                      ))}
+                    </div>
+                  ))}
+
+                </div>
+              )}
             </div>
           )}
 
@@ -429,7 +661,7 @@ const Patientregisteration = () => {
           )}
 
         </div>
-       
+
         {currentStep != 0 && (
           <div className="page-handler">
             <div>
@@ -437,13 +669,14 @@ const Patientregisteration = () => {
               <button
                 // disabled={isProcessing}
                 onClick={(e) => {
-                  e.preventDefault();
+
 
                   if (currentStep < 5) {
+                    e.preventDefault();
                     setCurrentStep(currentStep + 1);
                   } else {
 
-                    // handleSubmit(e);
+                    handleSubmit(e);
                   }
                 }}
               >

@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
-import { IoChevronDown, IoChevronUp } from 'react-icons/io5';
-
+import { IoChevronDown, IoChevronUp, IoCloseCircle } from 'react-icons/io5';
+import "./Utility.css"
 
 export function LabTest({ labTest = [], labTestError, labTestloading, onclose, setselectedLabTest, selectedLabTest }) {
     const [searchTerm, setSearchTerm] = useState('');
@@ -112,8 +112,7 @@ export function LabTest({ labTest = [], labTestError, labTestloading, onclose, s
                     <div style={{
                         gap: '10px'
                     }}>
-                        {console.log('filterlsbtest', filteredLabtest)
-                        }
+
                         {
                             filteredLabtest.length > 0 ? (
                                 filteredLabtest.map((test, i) => {
@@ -174,6 +173,10 @@ export function LabTest({ labTest = [], labTestError, labTestloading, onclose, s
 
 export function Patient_Hisotry({ patient, onclose }) {
     const [patientDetails, setpatientDetails] = useState(false)
+    const [patientHistory, setpatientHistory] = useState(false)
+    const [patientprescbrition, setpatientprescbrition] = useState(false)
+    const [openImage, setopenImage] = useState(null)
+    const [active, setactive] = useState("Blood-test")
 
     return <div className='labtest'>
         <div style={{
@@ -181,13 +184,12 @@ export function Patient_Hisotry({ patient, onclose }) {
             justifyContent: 'space-between',
             marginBottom: '10px'
         }}>
-            <h5 style={{
+            <h3 style={{
                 marginBottom: '15px',
                 color: '#333',
-                fontWeight: '600'
             }}>
-                Select Lab Tests
-            </h5>
+                {`${patient?.name} details`}
+            </h3>
             <div>
                 <button
                     onClick={() => onclose?.(null)}
@@ -214,43 +216,119 @@ export function Patient_Hisotry({ patient, onclose }) {
             </div>
 
         </div>
-
-        {patientDetails ? (
-            <IoChevronDown style={{
+        {/* patient vitals */}
+        <div>
+            {patientDetails ? (
+                <IoChevronDown style={{
+                    cursor: 'pointer'
+                }} onClick={() => setpatientDetails(false)}></IoChevronDown>
+            ) : (<IoChevronUp style={{
                 cursor: 'pointer'
-            }} onClick={() => setpatientDetails(false)}></IoChevronDown>
-        ) : (<IoChevronUp style={{
-            cursor: 'pointer'
-        }} onClick={() => setpatientDetails(true)}></IoChevronUp>)}
+            }} onClick={() => setpatientDetails(true)}></IoChevronUp>)}
 
-        <div style={{
-            display: 'flex',
-            justifyContent: 'space-between'
-        }}>
-            <h5>Patient Vitals:</h5>
+            <div style={{
+            }}>
+                <h5>Patient Vitals:</h5>
+            </div>
+
+            <div className={`patient-vitals ${patientDetails ? "active" : ""}`}>
+                <div className="patient-vitals-item">
+                    <p>Name: <h5>{patient.name}</h5></p>
+                    <p>Age: <h5>{patient.age}</h5></p>
+                </div>
+                <div className="patient-vitals-item">
+                    <p>Gender: <h5>{patient.gender}</h5></p>
+                    <p>Phone: <h5>{patient.phone}</h5></p>
+                </div>
+                <div className="patient-vitals-item">
+                    <p>Blood Group: <h5>{patient.bloodGroup}</h5></p>
+                    <p>Height: <h5>{patient.height}</h5></p>
+                </div>
+                <div className="patient-vitals-item">
+                    <p>Weight: <h5>{patient.weight}</h5></p>
+                    <p>Pulse: <h5>{patient.pulse}</h5></p>
+                </div>
+            </div>
+            <br />
+            <h5>Uploaded Documents:</h5>
+            <div className="patient-history-images">
+                {[1, 2, 3, 4, 5, 8, 8, 8, 8, 8].map((item, i) => (
+
+                    <div className="patient-history-img-card" key={i} onClick={() => {
+                        setopenImage({
+                            image: "C:/Users/Visha/OneDrive/Desktop/ICA/new-emr/src/assets/download.png",
+                            name: "name" + i
+                        })
+                    }}>
+
+                        <img key={item} src={`public/Screenshot (103).png`} />
+                        <h5>{"Name"}{item}</h5>
+                    </div>
+
+                ))}
+            </div>
+
         </div>
 
-        <div className="patient-vitals">
-            <div className="patient-vitals-item">
-                <p>Name: <h5>{patient.name}</h5></p>
-                <p>Age: <h5>{patient.age}</h5></p>
+
+
+        {/* patient priscribtion */}
+        <div>
+            {patientprescbrition ? (
+                <IoChevronDown style={{
+                    cursor: 'pointer'
+                }} onClick={() => setpatientprescbrition(false)}></IoChevronDown>
+            ) : (<IoChevronUp style={{
+                cursor: 'pointer'
+            }} onClick={() => setpatientprescbrition(true)}></IoChevronUp>)}
+
+            <div style={{
+            }}>
+                <h5>Patient Priscribtion:</h5>
             </div>
 
-            <div className="patient-vitals-item">
-                <p>Gender: <h5>{patient.gender}</h5></p>
-                <p>Phone: <h5>{patient.phone}</h5></p>
+            <div className={`patient-vitals ${patientprescbrition ? "active" : ""}`}>
+                <div className="patient-vitals-item">
+                    <p>Name: <h5>{patient.name}</h5></p>
+                    <p>Age: <h5>{patient.age}</h5></p>
+                </div>
+                <div className="patient-vitals-item">
+                    <p>Gender: <h5>{patient.gender}</h5></p>
+                    <p>Phone: <h5>{patient.phone}</h5></p>
+                </div>
+                <div className="patient-vitals-item">
+                    <p>Blood Group: <h5>{patient.bloodGroup}</h5></p>
+                    <p>Height: <h5>{patient.height}</h5></p>
+                </div>
+                <div className="patient-vitals-item">
+                    <p>Weight: <h5>{patient.weight}</h5></p>
+                    <p>Pulse: <h5>{patient.pulse}</h5></p>
+                </div>
             </div>
 
-            <div className="patient-vitals-item">
-                <p>Blood Group: <h5>{patient.bloodGroup}</h5></p>
-                <p>Height: <h5>{patient.height}</h5></p>
-            </div>
-
-            <div className="patient-vitals-item">
-                <p>Weight: <h5>{patient.weight}</h5></p>
-                <p>Pulse: <h5>{patient.pulse}</h5></p>
-            </div>
         </div>
+
+        {
+            openImage && (
+                <div className="openImage" >
+                    <div className="openImageCard">
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'space-between'
+                        }}>
+                            <h3>{openImage.name}</h3>
+                            < IoCloseCircle onClick={() => setopenImage(null)} style={{
+                                cursor: 'pointer'
+                            }}></IoCloseCircle>
+                        </div>
+                        <img src={openImage.image} alt={openImage.name} />
+
+                    </div>
+
+                </div>
+            )
+        }
+
 
     </div>
 
