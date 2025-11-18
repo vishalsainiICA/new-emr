@@ -24,6 +24,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: black;
+    color: white;
+    border-radius: 10px;
 }
 
 .prisciption-detail-form {
@@ -54,7 +57,7 @@
 
 .lable-input {
     display: flex;
-    width: 70%;
+    width: 75%;
     gap: 20px;
     padding: 10px 20px;
     /* background-color: black; */
@@ -66,7 +69,7 @@
     width: 100%;
     height: 100%;
     border: 0.8px solid lightgray;
-    padding: 20px;
+    padding: 5px 20px;
     overflow-y: scroll;
     /* scrollbar-width: none; */
     

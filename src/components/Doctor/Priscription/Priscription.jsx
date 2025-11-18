@@ -68,7 +68,7 @@ const Pricription = () => {
                     <br />
                     <div style={{
                     // minHeight: '100px',
-                        padding:"10px 30px"
+                        padding:"4px 30px"
                      }}>
                         {
                             state?.illnessData && (
@@ -79,7 +79,7 @@ const Pricription = () => {
                                     alignItems:"center",
                                     flexWrap: 'wrap'
                                 }}>
-                                     <h3>Diagnosis:</h3>
+                                     <h4>Diagnosis:</h4>
                                     {state?.illnessData?.map((item) => {
                                         return <p style={{
                                             fontSize: '14px'
@@ -102,7 +102,7 @@ const Pricription = () => {
                                 <div style={{
                                     margin: '10px',
                                     display: 'flex',
-                                    gap: '10px',
+                                    gap: '15px',
                                     flexWrap: 'wrap'
                                 }}>
                                     {state?.symtomps?.map((item) => {
@@ -125,7 +125,7 @@ const Pricription = () => {
                     }}>
                         {
                             state?.selectedLabTest?.length > 0 && (
-                                <div >
+                                <div style={{display:"flex",flexDirection:"column",gap:"10px"}} >
                                     <h4>
                                         Recommended Lab Tests:
                                     </h4>
@@ -133,21 +133,26 @@ const Pricription = () => {
                                     <div style={{
                                         borderLeft: '10px solid skyblue',
                                         borderRadius: '0 0 0 10px',
+                                        display:"flex",
+                                        flexDirection:"column"
+                                        ,gap:"10px"
                                     }} >
                                         {
                                             state?.selectedLabTest.map((lab, i) => {
                                                 return <div style={{
-                                                    padding: '10px',
+                                                    padding: '2px',
                                                     display: 'flex',
                                                     justifyContent: 'space-between',
-                                                    fontSize:"13px"
+                                                    fontSize:"11px"
                                                 }}>
+
 
                                                     <span>{i + 1} <span>{lab.test}</span></span>
                                                 </div>
 
                                             })
                                         }
+
 
                                     </div>
 
@@ -167,10 +172,10 @@ const Pricription = () => {
                                         padding: '7px',
                                         borderRadius: '7px',
                                         borderLeft: '10px solid skyblue',
-                                        fontSize:"13px",
+                                        fontSize:"11px",
                                         display:"flex",
                                         flexDirection:"column",
-                                        gap:"10px"
+                                        gap:"5px",
                                     }}
                                     >
                                         {
@@ -178,14 +183,15 @@ const Pricription = () => {
 
                                                 return <div style={{
                                                     display: 'flex',
-                                                    justifyContent: 'space-between'
+                                                    justifyContent: 'space-between',
                                                 }}>
 
-                                                    <div>
-                                                        <span>{i + 1} <span>{med?.drug_name}</span></span>
-                                                        <p>{med?.dosage}</p>
+                                                    <div  style={{width:"70%",display:"flex",gap:"5px"}}>
+                                                        <span>{i + 1}</span>
+                                                         <span>{med?.drug_name}</span>
+                                                         <p>{med?.dosage}</p>
                                                     </div>
-                                                    <div style={{
+                                                    <div style={{width:"30%",
                                                         display: 'flex'
                                                     }}>
                                                         <p>5 Days</p>
