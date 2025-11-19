@@ -28,7 +28,6 @@ const Patientregisteration = () => {
       phone: null,
       email: '',
       permanentAddress: '',
-      currentAddress: '',
       whatsApp: null,
       DOB: '',
       city: '',
@@ -44,6 +43,9 @@ const Patientregisteration = () => {
       addharDocuments: [],
     }
   );
+
+  const [errors, setErrors] = useState({});
+
 
   const location = useLocation()
   const query = new URLSearchParams(location.search)
@@ -124,10 +126,36 @@ const Patientregisteration = () => {
     processBothSides();
   }, [aadhaarFront, aadhaarBack]);
 
+const validationRules = {
+  name: "Name is required",
+  age: "Age is required",
+  phone: "Phone is required",
+  email: "Email is required",
+  city: "City required",
+  state: "State required",
+  attendeeName: "Attendee required",
+};
+const validateForm = () => {
+  let errors = {};
+
+  Object.keys(validationRules).forEach((key) => {
+    if (!patientData[key] || patientData[key] === "") {
+      errors[key] = validationRules[key];
+    }
+  });
+
+  return errors;
+};
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const errors = validateForm();
+
+  if (Object.keys(errors).length > 0) {
+    setError(errors);
+    return;
+  }
     setIsProcessing(true);
 
     try {
@@ -194,6 +222,23 @@ const Patientregisteration = () => {
       setIsProcessing(false);
     }
   };
+
+
+
+  const handleValidation=(e)=>
+  {
+    e.preventDefault();
+     
+    let newErrors={};
+
+    if(!patientData.name.trim()){
+      newErrors.name="Name is required";
+    }
+
+    setErrors(newErrors);
+
+  }
+
   return (
     <div className="Patientregiteration-main">
 
@@ -206,7 +251,9 @@ const Patientregisteration = () => {
         <hr />
         <hr />
 
+
         <div className=" patient-steps">
+
 
           {/* Step 0 — Basic Details */}
           {currentStep == 0 && (
@@ -237,6 +284,7 @@ const Patientregisteration = () => {
 
           {/* Step 1 — Basic Details */}
           {currentStep == 1 && (
+
             <div className="patient-step-1">
               <h4>Patient Detail</h4>
               <form className="All-detail" action="">
@@ -252,6 +300,8 @@ const Patientregisteration = () => {
                         name: e.target.value
                       })}
                     />
+                  {errors.name && <p style={{ color: "red" }}>{errors.name}</p>}
+
                   </div>
 
                   <div>
@@ -435,6 +485,7 @@ const Patientregisteration = () => {
                 </div>
 
               </form>
+
             </div>
           )}
 
@@ -491,6 +542,9 @@ const Patientregisteration = () => {
                             src={matchedDept?.image || ""}
                             alt={item.departmentName}
                           />
+                          <span style={{
+                            fontSize: '12px'
+                          }}>{item.departmentName}</span>
                           <span style={{
                             fontSize: '12px'
                           }}>{item.departmentName}</span>
@@ -663,6 +717,7 @@ const Patientregisteration = () => {
 
         </div>
 
+
         {currentStep != 0 && (
           <div className="page-handler">
             <div>
@@ -671,7 +726,8 @@ const Patientregisteration = () => {
                 // disabled={isProcessing}
                 onClick={(e) => {
 
-
+                  // check_detail()
+                  handleValidation();
                   if (currentStep < 5) {
                     e.preventDefault();
                     setCurrentStep(currentStep + 1);

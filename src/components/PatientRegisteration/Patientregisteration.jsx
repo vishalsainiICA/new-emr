@@ -406,7 +406,8 @@ const Patientregisteration = () => {
           <div className="page-handler">
                <div>
 
-            <button onClick={() => setCurrentStep(currentStep - 1)} disabled={currentStep == 1}> ← Back</button>
+            <button onClick={() => setCurrentStep(currentStep - 1)} disabled={currentStep == 1}> ← Back
+            </button>
             <button
               // disabled={isProcessing}
               onClick={(e) => {

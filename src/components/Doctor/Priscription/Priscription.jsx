@@ -29,31 +29,59 @@ const Pricription = () => {
             <button onClick={() => navigate(-1)} style={{ display: "flex", gap: "8px" }}> <i class="ri-arrow-left-circle-line" ></i>Back</button>
             <div className="prisciption-detail-form">
                 <div className="logo-and-detail">
-                    <img src={srk} alt="logo-hospital" />
+                    <div  style={{width:"70%",backgroundColor:"Back"}}>
+                    <img src={srk} height="70px" width="250px" alt="logo-hospital" />
+                     <div className="User-inf">
+                        <div style={{display:"flex",gap:"50px"}}>
+                            <div style={{ width: "100%", display: "grid", alignItems: "center",}}>
+                                <label htmlFor="">Reg.No.</label>
+                                <input type="text" />
+                                <label htmlFor="">Name :</label>
+                                <input type="text" />
+                                <label htmlFor="">Age/Sex :</label>
+                                <input type="text" />
+                            </div>
+
+                            <div style={{ width: "100%", display: "grid", alignItems: "center",}}>
+                                <label htmlFor="">Reg.Date</label>
+                                <input type="text" />
+                                <label htmlFor="">Father Name :</label>
+                                <input type="text" />
+                                <label htmlFor="">Mobile.No</label>
+                                <input type="text" />
+                            </div>
+                        </div>
+                        <div>
+                               <label htmlFor="">Adderess :</label>
+                                <input type="text" />
+                        </div>
+                        </div>
+                    </div>
                     <div
                         style={{
-                            width: '50%',
+                            width: '35%',
                             display: "flex",
                             flexDirection: "column",
                             alignItems: "center",
-                            justifyContent: "center",
-                            gap: "10px"
+                            justifyContent: "space-between",
+                            gap: "10px",
+                            // backgroundColor:"gold"
                         }}
-                    >
+                     >
                         <div className="certified-logo">
                             <img src={nabh} alt="logo-hospital" style={{ height: '60px', width: '90px' }} />
-                            <img src={nabl} alt="logo-hospital" style={{ height: '50px', width: '70px' }} />
+                            <img src={nabl} alt="logo-hospital" style={{ height: '60px', width: '70px' }} />
                         </div>
 
                         <div className="lable-input">
-                            <div style={{ width: "100%", display: "grid", alignItems: "center", }}>
+                            <div style={{ width: "100%", display: "grid", alignItems: "center",}}>
                                 <label htmlFor="">BP :</label>
                                 <label htmlFor="">PULSE :</label>
                                 <label htmlFor="">WEIGHT :</label>
                                 <label htmlFor="">LMP :</label>
                             </div>
 
-                            <div>
+                            <div style={{display:"flex",flexDirection:"column",gap:"5px",}}>
                                 <input type="text" />
                                 <input type="text" />
                                 <input type="text" />
