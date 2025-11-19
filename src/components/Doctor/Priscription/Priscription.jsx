@@ -5,11 +5,54 @@ import nabh from "../../../assets/nabh-accreditated-inodaya-hospital.png"
 import nabl from "../../../assets/nabl-logo-png_seeklogo-398757.png"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
+import jsPDF from "jspdf"
+import html2canvas from "html2canvas"
+import { useRef } from "react"
+import { doctorAPi } from "../../../auth"
+import { toast } from "react-toastify"
+import moment from "moment"
 
 const Pricription = () => {
     const navigate = useNavigate()
     const [state, setState] = useState(null);
+    const [isProcessing, setIsProcessing] = useState(false)
     const location = useLocation();
+    const pdfRef = useRef();
+    const downloadPDF = () => {
+        const input = pdfRef.current;
+
+        html2canvas(input, { scale: 2 }).then((canvas) => {
+            const imgData = canvas.toDataURL("image/png");
+            const pdf = new jsPDF("p", "mm", "a4");
+
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+            pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+            pdf.save("prescription.pdf");
+        });
+    };
+
+    const generatePDFBlob = () => {
+        return new Promise((resolve) => {
+            const input = pdfRef.current;
+
+            html2canvas(input, { scale: 2 }).then((canvas) => {
+                const imgData = canvas.toDataURL("image/png");
+                const pdf = new jsPDF("p", "mm", "a4");
+
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+                pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+
+                // 👉 pdf को Blob में convert करें
+                const pdfBlob = pdf.output("blob");
+
+                resolve(pdfBlob);
+            });
+        });
+    };
 
 
     useEffect(() => {
@@ -23,38 +66,68 @@ const Pricription = () => {
     }, [location.state, navigate]);
 
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setIsProcessing(true);
+        try {
+            const form = new FormData()
+            const pdfBlob = await generatePDFBlob();
+            console.log("blog", pdfBlob);
+            form.append("prescriptionImage", pdfBlob, "prescription.pdf");
+            form.append("patientId", state?.patientInfo?._id)
+            form.append("initialAssementId", state?.patientInfo?.initialAssementId._id)
+            form.append("doctorId", state?.patientInfo?.doctorId._id)
+            form.append("hospitalId", state?.patientInfo?.hospitalId._id)
+            form.append("prescriptionType", state?.type)
+            form.append("prescriptionMediciene", state?.medication)
+            form.append("illness", state?.illnessData)
+            form.append("symptoms", state?.symtomps)
+            form.append("labTest", state?.selectedLabTest);
+
+
+            const res = await doctorAPi.savePrescribtion(form);
+            toast.success(res?.data?.message || "successfully");
+            navigate("/doctor")
+        } catch (err) {
+            console.log(err);
+            toast.error(err.response?.data?.message || "Something went wrong");
+        } finally {
+            setIsProcessing(false);
+        }
+    };
+
 
     return (
         <div className="priscription">
             <button onClick={() => navigate(-1)} style={{ display: "flex", gap: "8px" }}> <i class="ri-arrow-left-circle-line" ></i>Back</button>
-            <div className="prisciption-detail-form">
+            <div className="prisciption-detail-form" ref={pdfRef}>
                 <div className="logo-and-detail">
-                    <div  style={{width:"70%",backgroundColor:"Back"}}>
-                    <img src={srk} height="70px" width="250px" alt="logo-hospital" />
-                     <div className="User-inf">
-                        <div style={{display:"flex",gap:"50px"}}>
-                            <div style={{ width: "100%", display: "grid", alignItems: "center",}}>
-                                <label htmlFor="">Reg.No.</label>
-                                <input type="text" />
-                                <label htmlFor="">Name :</label>
-                                <input type="text" />
-                                <label htmlFor="">Age/Sex :</label>
-                                <input type="text" />
-                            </div>
+                    <div style={{ width: "70%", backgroundColor: "Back" }}>
+                        <img src={srk} height="70px" width="250px" alt="logo-hospital" />
+                        <div className="User-inf">
+                            <div style={{ display: "flex", gap: "50px" }}>
+                                <div style={{ width: "100%", display: "grid", alignItems: "center", }}>
+                                    <label htmlFor="">Reg.No.</label>
+                                    <input type="text" value={state?.patientInfo?.phone} />
+                                    <label htmlFor="">Name :</label>
+                                    <input type="text" value={state?.patientInfo?.name} />
+                                    <label htmlFor="">Age/Sex :</label>
+                                    <input type="text" />
+                                </div>
 
-                            <div style={{ width: "100%", display: "grid", alignItems: "center",}}>
-                                <label htmlFor="">Reg.Date</label>
-                                <input type="text" />
-                                <label htmlFor="">Father Name :</label>
-                                <input type="text" />
-                                <label htmlFor="">Mobile.No</label>
+                                <div style={{ width: "100%", display: "grid", alignItems: "center", }}>
+                                    <label htmlFor="">Reg.Date</label>
+                                    <input type="text" />
+                                    <label htmlFor="">Father Name :</label>
+                                    <input type="text" />
+                                    <label htmlFor="">Mobile.No</label>
+                                    <input type="text" />
+                                </div>
+                            </div>
+                            <div>
+                                <label htmlFor="">Adderess :</label>
                                 <input type="text" />
                             </div>
-                        </div>
-                        <div>
-                               <label htmlFor="">Adderess :</label>
-                                <input type="text" />
-                        </div>
                         </div>
                     </div>
                     <div
@@ -67,21 +140,21 @@ const Pricription = () => {
                             gap: "10px",
                             // backgroundColor:"gold"
                         }}
-                     >
+                    >
                         <div className="certified-logo">
                             <img src={nabh} alt="logo-hospital" style={{ height: '60px', width: '90px' }} />
                             <img src={nabl} alt="logo-hospital" style={{ height: '60px', width: '70px' }} />
                         </div>
 
                         <div className="lable-input">
-                            <div style={{ width: "100%", display: "grid", alignItems: "center",}}>
+                            <div style={{ width: "100%", display: "grid", alignItems: "center", }}>
                                 <label htmlFor="">BP :</label>
                                 <label htmlFor="">PULSE :</label>
                                 <label htmlFor="">WEIGHT :</label>
                                 <label htmlFor="">LMP :</label>
                             </div>
 
-                            <div style={{display:"flex",flexDirection:"column",gap:"5px",}}>
+                            <div style={{ display: "flex", flexDirection: "column", gap: "5px", }}>
                                 <input type="text" />
                                 <input type="text" />
                                 <input type="text" />
@@ -92,22 +165,30 @@ const Pricription = () => {
                 </div>
 
                 <div className="patient-box">
-                    <span style={{ fontSize: "20px", fontWeight: "bold" }}>Rx</span>
+                    <div className="RX">
+                        <span style={{ fontSize: "20px", fontWeight: "bold" }}>Rx</span>
+                        <div className="RX">
+                            <p>{`Type: ${state?.type}`}</p>
+                            <p>{moment().format("DD-MM-YYYY hh:mm A")}</p>
+                        </div>
+                    </div>
+
+
                     <br />
                     <div style={{
-                    // minHeight: '100px',
-                        padding:"4px 30px"
-                     }}>
+                        // minHeight: '100px',
+                        padding: "4px 30px"
+                    }}>
                         {
                             state?.illnessData && (
                                 <div style={{
                                     margin: '10px',
                                     display: 'flex',
                                     gap: '10px',
-                                    alignItems:"center",
+                                    alignItems: "center",
                                     flexWrap: 'wrap'
                                 }}>
-                                     <h4>Diagnosis:</h4>
+                                    <h4>Diagnosis:</h4>
                                     {state?.illnessData?.map((item) => {
                                         return <p style={{
                                             fontSize: '14px'
@@ -122,8 +203,8 @@ const Pricription = () => {
 
                     <div style={{
                         // minHeight: '100px',
-                        padding:"0px 40px"
-                     }}>
+                        padding: "0px 40px"
+                    }}>
                         <h4>Presenting Symptoms:</h4>
                         {
                             state?.symtomps && (
@@ -149,11 +230,11 @@ const Pricription = () => {
                         }
                     </div>
                     <div style={{
-                     padding:"0px 40px"
+                        padding: "0px 40px"
                     }}>
                         {
                             state?.selectedLabTest?.length > 0 && (
-                                <div style={{display:"flex",flexDirection:"column",gap:"10px"}} >
+                                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }} >
                                     <h4>
                                         Recommended Lab Tests:
                                     </h4>
@@ -161,9 +242,9 @@ const Pricription = () => {
                                     <div style={{
                                         borderLeft: '10px solid skyblue',
                                         borderRadius: '0 0 0 10px',
-                                        display:"flex",
-                                        flexDirection:"column"
-                                        ,gap:"10px"
+                                        display: "flex",
+                                        flexDirection: "column"
+                                        , gap: "10px"
                                     }} >
                                         {
                                             state?.selectedLabTest.map((lab, i) => {
@@ -171,7 +252,7 @@ const Pricription = () => {
                                                     padding: '2px',
                                                     display: 'flex',
                                                     justifyContent: 'space-between',
-                                                    fontSize:"11px"
+                                                    fontSize: "11px"
                                                 }}>
 
 
@@ -200,10 +281,10 @@ const Pricription = () => {
                                         padding: '7px',
                                         borderRadius: '7px',
                                         borderLeft: '10px solid skyblue',
-                                        fontSize:"11px",
-                                        display:"flex",
-                                        flexDirection:"column",
-                                        gap:"5px",
+                                        fontSize: "11px",
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        gap: "5px",
                                     }}
                                     >
                                         {
@@ -214,12 +295,13 @@ const Pricription = () => {
                                                     justifyContent: 'space-between',
                                                 }}>
 
-                                                    <div  style={{width:"70%",display:"flex",gap:"5px"}}>
+                                                    <div style={{ width: "70%", display: "flex", gap: "5px" }}>
                                                         <span>{i + 1}</span>
-                                                         <span>{med?.drug_name}</span>
-                                                         <p>{med?.dosage}</p>
+                                                        <span>{med?.drug_name}</span>
+                                                        <p>{med?.dosage}</p>
                                                     </div>
-                                                    <div style={{width:"30%",
+                                                    <div style={{
+                                                        width: "30%",
                                                         display: 'flex'
                                                     }}>
                                                         <p>5 Days</p>
@@ -239,7 +321,7 @@ const Pricription = () => {
 
                     </div>
                 </div>
-                
+
                 <div className="other-detail">
 
                     <div>
@@ -256,13 +338,10 @@ const Pricription = () => {
 
             </div>
             <div style={{ display: "flex", gap: "10px" }}>
-                <button style={{ display: "flex", gap: "8px" }}><i class="ri-chat-download-line"></i>Download</button>
+                <button onClick={downloadPDF} style={{ display: "flex", gap: "8px", width: '150px', cursor: 'pointer' }}><i class="ri-chat-download-line"></i>Download(.pdf)</button>
                 <br />
-                <button style={{ display: "flex", gap: "8px" }}><i class="ri-printer-line"></i> Print</button>
-
+                <button disabled={isProcessing} onClick={(e) => handleSubmit(e)} style={{ display: "flex", gap: "8px", width: '150px', cursor: 'pointer' }}>{` ${isProcessing ? "Saving...." : "Save And Continue`"}`}</button>
             </div>
-
-
         </div>
     );
 }

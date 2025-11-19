@@ -503,7 +503,7 @@ const Medication = () => {
                             onClick={() => navigate("/prescribtion", {
                                 state: {
                                     data: {
-                                        // patientInfo: patient,
+                                        patientInfo: patient,
                                         type: final,
                                         // hospitalData: patient?.hospitalId,
                                         illnessData: illness,

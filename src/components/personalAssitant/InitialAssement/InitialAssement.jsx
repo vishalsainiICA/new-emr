@@ -81,9 +81,9 @@ const InitialAssesment = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // if (!validateForm(patient)) {
-        //     return
-        // }; // stop if validation fails
+        if (!validateForm(patient)) {
+            return
+        }; // stop if validation fails
         setIsProcessing(true);
         try {
             const res = await perosnalAssistantAPI.saveInitialAssement(patient, data._id).then(res => {

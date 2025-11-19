@@ -174,21 +174,19 @@ width: '170px',
 height: '70px' */
 
 
-.main-select-content 
-{
-display: flex;
-flex-wrap: wrap ;
-gap: 50px;
-justify-content: center;
+.main-select-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 50px;
+    justify-content: center;
 
 }
 
-.card-hover
-{
+.card-hover {
     border-radius: 10px;
 }
-.card-hover div
-{
+
+.card-hover div {
     display: flex;
     flex-direction: column;
     padding: 10px 50px;
@@ -229,6 +227,13 @@ justify-content: center;
     display: flex;
     flex-direction: column;
     gap: 20px;
+
+
+    span {
+        font-size: 12px;
+        font-weight: 300;
+        padding: 10px;
+    }
 }
 
 .patient-step-5 div {

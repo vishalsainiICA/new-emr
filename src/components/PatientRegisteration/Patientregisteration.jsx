@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import "./Patientregistration.css"
-import { CurrentStep, dummyDepartments } from "../utility/CicularAvatar";
 import adharimg from "../../assets/download.png"
 import manulimg from "../../assets/download.jpg"
 import { CgPlayTrackNextR } from "react-icons/cg";

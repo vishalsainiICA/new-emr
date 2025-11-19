@@ -139,9 +139,8 @@ export const doctorAPi = {
         return await doctorInstance.get(`/patient/verifyUID?uid=${uid}`)
     },
 
-    savePrescribtionData: async (data) => {
-
-        return await doctorInstance.post('/patient/prescribtion-data', data)
+    savePrescribtion: async (data) => {
+        return await doctorInstance.post('/doctor/save-prescribtion', data)
     },
     getTodayPatient: async () => {
         return await doctorInstance.get('/doctor/today-Patient')

@@ -271,18 +271,31 @@ const DashBoard = () => {
                                         gap: '10px',
                                         justifyContent: 'end',
                                     }}>
-                                        <button
-                                            onClick={() => navigate('/medication', { state: { patient: hos } })}
-                                            style={{
-                                                backgroundColor: 'rgba(219, 219, 252)',
-                                            }}> 👁️ View</button>
+                                        {hos?.prescribtionId ? (
+                                            <p style={{
+                                                color: 'green',
+                                                padding: '7px',
+                                                backgroundColor: 'lightgray',
+                                                borderRadius: '10px'
+                                            }}>{"Prescbrtion Done"}</p>
+                                        ) : (
+                                            <>
+                                                <button
+                                                    onClick={() => navigate('/medication', { state: { patient: hos } })}
+                                                    style={{
+                                                        backgroundColor: 'rgba(219, 219, 252)',
+                                                    }}> 👁️ View</button>
 
-                                        <button
-                                            onClick={() => setEdit(edit === hos._id ? null : hos._id)}
-                                            style={{ backgroundColor: "rgba(235, 254, 246)" }}
-                                        >
-                                            ✏️ Edit
-                                        </button>
+                                                <button
+                                                    onClick={() => setEdit(edit === hos._id ? null : hos._id)}
+                                                    style={{ backgroundColor: "rgba(235, 254, 246)" }}
+                                                >
+                                                    ✏️ Edit
+                                                </button>
+                                            </>
+
+                                        )}
+
 
                                         {edit === hos._id && (
                                             <div
@@ -496,7 +509,7 @@ const DashBoard = () => {
             </div>
 
         </div>
-    </div>
+    </div >
 
 
 

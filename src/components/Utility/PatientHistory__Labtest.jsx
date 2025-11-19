@@ -53,6 +53,13 @@ export function LabTest({ labTest = [], labTestError, labTestloading, onclose, s
                     Select Lab Tests
                 </h5>
                 <div>
+                    <button
+                        onClick={() => onclose?.(null)}
+                        className='common-btn'
+                        style={{
+                            marginRight: '10px'
+                        }}
+                    >Save</button>
                     <i
                         onClick={() => {
                             onclose?.(null)
@@ -332,21 +339,16 @@ export function Patient_Hisotry({ patient, onclose }) {
 
             <div className={`patient-vitals ${patientprescbrition ? "active" : ""}`}>
                 <div className="patient-vitals-item">
-                    <p>Name: <h5>{patient.name}</h5></p>
-                    <p>Age: <h5>{patient.age}</h5></p>
+                    <p>Doctor Name: <h5>{patient.doctorId.name}</h5></p>
+                    <p>Experience: <h5>{patient.doctorId.experience}</h5></p>
                 </div>
-                <div className="patient-vitals-item">
-                    <p>Gender: <h5>{patient.gender}</h5></p>
-                    <p>Phone: <h5>{patient.phone}</h5></p>
-                </div>
-                <div className="patient-vitals-item">
-                    <p>Blood Group: <h5>{patient.bloodGroup}</h5></p>
+                <h5>Patient Dignosis</h5>
+                <div className="">
+                    <p>Illness/Dignosis: <h5>{patient.prescribtionId?.prescribtionId?.join(",")}</h5>
+                    </p>
                     <p>Height: <h5>{patient.height}</h5></p>
                 </div>
-                <div className="patient-vitals-item">
-                    <p>Weight: <h5>{patient.weight}</h5></p>
-                    <p>Pulse: <h5>{patient.pulse}</h5></p>
-                </div>
+
             </div>
 
         </div>

@@ -3,12 +3,10 @@ import "./Patientregistration.css"
 import adharimg from "../../../assets/download.png"
 import manulimg from "../../../assets/download.jpg"
 import { PiTrademarkRegisteredThin } from "react-icons/pi";
-
-// import { CurrentStep, dummyDepartments, extractTextFromImage, parseAadhaarText } from "../../utility/CicularAvatar";
 import { commonApi } from "../../../auth";
 import { toast } from "react-toastify";
 import { useLocation } from "react-router-dom";
-
+import { CurrentStep, dummyDepartments, extractTextFromImage, parseAadhaarText } from "../../Utility/CicularAvatar";
 const Patientregisteration = () => {
   const totalSteps = 5;
   const [selectedDep, setSelectedDep] = useState(null)
@@ -126,36 +124,32 @@ const Patientregisteration = () => {
     processBothSides();
   }, [aadhaarFront, aadhaarBack]);
 
-const validationRules = {
-  name: "Name is required",
-  age: "Age is required",
-  phone: "Phone is required",
-  email: "Email is required",
-  city: "City required",
-  state: "State required",
-  attendeeName: "Attendee required",
-};
-const validateForm = () => {
-  let errors = {};
+  const validationRules = {
+    name: "Name is required",
+    age: "Age is required",
+    phone: "Phone is required",
+    email: "Email is required",
+    city: "City required",
+    state: "State required",
+    attendeeName: "Attendee required",
+  };
+  const validateForm = () => {
+    let errors = {};
 
-  Object.keys(validationRules).forEach((key) => {
-    if (!patientData[key] || patientData[key] === "") {
-      errors[key] = validationRules[key];
-    }
-  });
+    Object.keys(validationRules).forEach((key) => {
+      if (!patientData[key] || patientData[key] === "") {
+        errors[key] = validationRules[key];
+      }
+    });
 
-  return errors;
-};
+    return errors;
+  };
 
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const errors = validateForm();
+    console.log("call");
 
-  if (Object.keys(errors).length > 0) {
-    setError(errors);
-    return;
-  }
+    e.preventDefault();
     setIsProcessing(true);
 
     try {
@@ -216,7 +210,6 @@ const validateForm = () => {
       navigate(-1);
     } catch (err) {
       console.log(err);
-
       toast.error(err.response?.data?.message || "Something went wrong");
     } finally {
       setIsProcessing(false);
@@ -225,14 +218,13 @@ const validateForm = () => {
 
 
 
-  const handleValidation=(e)=>
-  {
+  const handleValidation = (e) => {
     e.preventDefault();
-     
-    let newErrors={};
 
-    if(!patientData.name.trim()){
-      newErrors.name="Name is required";
+    let newErrors = {};
+
+    if (!patientData.name.trim()) {
+      newErrors.name = "Name is required";
     }
 
     setErrors(newErrors);
@@ -300,7 +292,7 @@ const validateForm = () => {
                         name: e.target.value
                       })}
                     />
-                  {errors.name && <p style={{ color: "red" }}>{errors.name}</p>}
+                    {errors.name && <p style={{ color: "red" }}>{errors.name}</p>}
 
                   </div>
 
@@ -498,16 +490,25 @@ const validateForm = () => {
                 <div className="hold-data-div">
                   <div >
                     <label htmlFor="">Name *</label>
-                    <input type="text" value={patientData?.attendeeName} placeholder="Attendee Name" />
+                    <input type="text" onChange={(e) => setPatientData({
+                      ...patientData,
+                      attendeeName: e.target.value
+                    })} value={patientData?.attendeeName} placeholder="Attendee Name" />
                   </div>
                   <div >
                     <label htmlFor="">Phone Number *</label>
-                    <input type="number" value={patientData?.attendeePhone} placeholder="+91 XXXX XXXX XX" />
+                    <input onChange={(e) => setPatientData({
+                      ...patientData,
+                      attendeePhone: e.target.value
+                    })} type="number" value={patientData?.attendeePhone} placeholder="+91 XXXX XXXX XX" />
                   </div>
                 </div>
                 <div >
                   <label htmlFor="">Relation with Patient</label>
-                  <input type="text" value={patientData?.attendeeRelation} placeholder="Father/Mother/Gurdian/etc." />
+                  <input onChange={(e) => setPatientData({
+                    ...patientData,
+                    attendeeRelation: e.target.value
+                  })} type="text" value={patientData?.attendeeRelation} placeholder="Father/Mother/Gurdian/etc." />
                 </div>
               </form>
             </div>
@@ -540,11 +541,8 @@ const validateForm = () => {
                           <img
                             style={{ width: "50px", height: "50px" }}
                             src={matchedDept?.image || ""}
-                            alt={item.departmentName}
+
                           />
-                          <span style={{
-                            fontSize: '12px'
-                          }}>{item.departmentName}</span>
                           <span style={{
                             fontSize: '12px'
                           }}>{item.departmentName}</span>
@@ -692,12 +690,12 @@ const validateForm = () => {
               }}>
                 <p>Patient Information</p>
                 <div>
-                  <span>Name:</span>
-                  <span>Age:</span>
-                  <span>Gender:</span>
-                  <span>Phone:</span>
-                  <span>Email:</span>
-                  <span>Address:</span>
+                  <span>Name:{patientData.name}</span>
+                  <span>Age:{patientData.age}</span>
+                  <span>Gender:{patientData.gender}</span>
+                  <span>Phone:{patientData.phone}</span>
+                  <span>Email:{patientData.email}</span>
+                  <span>Address: {patientData.permanentAddress}</span>
                 </div>
               </div>
               <div style={{
@@ -707,9 +705,9 @@ const validateForm = () => {
               }}>
                 <p>Attendee Information</p>
                 <div>
-                  <span>Name:</span>
-                  <span>Phone:</span>
-                  <span>Relation:</span>
+                  <span>Name:{patientData.attendeeName}</span>
+                  <span>Phone:{patientData.attendeePhone}</span>
+                  <span>Relation:{patientData.attendeeRelation}</span>
                 </div>
               </div>
             </div>
@@ -723,13 +721,9 @@ const validateForm = () => {
             <div>
               <button onClick={() => setCurrentStep(currentStep - 1)} disabled={currentStep == 1}> ← Back</button>
               <button
-                // disabled={isProcessing}
+                disabled={isProcessing}
                 onClick={(e) => {
-
-                  // check_detail()
-                  handleValidation();
-                  if (currentStep < 5) {
-                    e.preventDefault();
+                  if (currentStep < 4) {
                     setCurrentStep(currentStep + 1);
                   } else {
 
@@ -737,7 +731,7 @@ const validateForm = () => {
                   }
                 }}
               >
-                {currentStep < 5 ? "Next →" : <><PiTrademarkRegisteredThin />Register</>}
+                {currentStep < 4 ? "Next →" : "Register"}
               </button>
             </div>
 

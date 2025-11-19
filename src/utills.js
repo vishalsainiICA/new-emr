@@ -63,10 +63,7 @@ medicalDirectorInstance.interceptors.request.use((config) => {
 export const doctorInstance = axios.create({
   baseURL: "http://localhost:8000/api",
   timeout: 10000,
-  withCredentials: true,
-  headers: {
-    "Content-Type": 'application/json'
-  }
+  withCredentials: true
 })
 
 // doctorInstance.interceptors.request.use((config) => {
