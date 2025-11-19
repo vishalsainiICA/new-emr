@@ -155,5 +155,8 @@ export const perosnalAssistantAPI = {
     saveInitialAssement: async (data, id) => {
         return await perosnalAssistanceInstance.post(`/assitant/intital-assement?patientId=${id}`, data)
     },
+    getAllPatients: async () => {
+        return await perosnalAssistanceInstance.get('/assitant/all-patient-record')
+    },
 }
 

@@ -13,6 +13,8 @@ import Pricription from './components/Doctor/Priscription/Priscription';
 import { NewHospital } from './components/superAdmin/NewHospital/NewHospital';
 import Patientregisteration from './components/superAdmin/PatientRegisteration/Patientregisteration';
 import PatientRecords from './components/superAdmin/PatientRecord/PatientRecord';
+import Pa_Dashboard from "./components/personalAssitant/Dashboard/Dashboard.jsx"
+import InitialAssesment from './components/personalAssitant/InitialAssement/InitialAssement.jsx';
 
 
 function App() {
@@ -34,6 +36,12 @@ function App() {
       <Route path="/doctor" element={<Doc_Dashboard></Doc_Dashboard>}> </Route>
       <Route path="/medication" element={<Medication></Medication>} />
       <Route path="/prescribtion" element={<Pricription />} />
+
+      {/* personal Assitant */}
+      <Route path="/pa" element={<Pa_Dashboard></Pa_Dashboard>}> </Route>
+      <Route path="/intial-assement" element={<InitialAssesment></InitialAssesment>}> </Route>
+
+
     </Routes>
     <ToastContainer
       position="top-right"

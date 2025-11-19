@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 
-import { doctorAPi, perosnalAssistantAPI } from '../../auth';
+import { doctorAPi, perosnalAssistantAPI } from '../../../auth';
 import { toast } from 'react-toastify';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { BsArrowLeft } from 'react-icons/bs';
@@ -80,9 +80,9 @@ const InitialAssesment = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!validateForm(patient)) {
-            return
-        }; // stop if validation fails
+        // if (!validateForm(patient)) {
+        //     return
+        // }; // stop if validation fails
         setIsProcessing(true);
         try {
             const res = await perosnalAssistantAPI.saveInitialAssement(patient, data._id).then(res => {

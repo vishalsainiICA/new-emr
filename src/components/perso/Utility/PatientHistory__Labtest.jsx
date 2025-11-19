@@ -176,7 +176,7 @@ export function Patient_Hisotry({ patient, onclose }) {
     const [patientHistory, setpatientHistory] = useState(false)
     const [patientprescbrition, setpatientprescbrition] = useState(false)
     const [openImage, setopenImage] = useState(null)
-    const [active, setactive] = useState(null)
+    const [active, setactive] = useState("Blood-test")
 
     return <div className='labtest'>
         <div style={{
@@ -251,44 +251,21 @@ export function Patient_Hisotry({ patient, onclose }) {
             </div>
             <br />
             <h5>Uploaded Documents:</h5>
-            <div className="patient-history">
-                <div style={{
-                    width: '100%',
-                    display: 'flex',
-                    gap: '10px'
-                }}>
-                    {console.log(patient)
-                    }
-                    {patient?.pastDocuments?.map((doc, i) => {
-                        let isSelected = doc._id
-                        return <span className={active?.id === isSelected ? "line" : "none"} onClick={() => setactive({ id: doc._id, files: doc.files })}>{doc.category}</span>
-                    })}
+            <div className="patient-history-images">
+                {[1, 2, 3, 4, 5, 8, 8, 8, 8, 8].map((item, i) => (
 
+                    <div className="patient-history-img-card" key={i} onClick={() => {
+                        setopenImage({
+                            image: "C:/Users/Visha/OneDrive/Desktop/ICA/new-emr/src/assets/download.png",
+                            name: "name" + i
+                        })
+                    }}>
 
-                    {/* <span className={active === "Xray" ? "line" : "none"} onClick={() => setactive("Xray")}>Xray</span>
-                                <span className={active === "MRI-CT-Scan" ? "line" : "none"} onClick={() => setactive("MRI-CT-Scan")}>MRI & CT Scan</span>
-                                <span className={active === "Other" ? "line" : "none"} onClick={() => setactive("Other")}>Other</span> */}
-                </div>
+                        <img key={item} src={`public/Screenshot (103).png`} />
+                        <h5>{"Name"}{item}</h5>
+                    </div>
 
-                <div className="patient-history-images">
-                    {active && active?.files.map((file, i) => {
-
-                        return <div className="patient-history-img-card" key={i} onClick={() => {
-                            setopenImage({
-                                image: `http://localhost:8000/${file.path}`,
-                                name: "name" + i
-                            })
-                        }}>
-
-
-
-                            <img src={`http://localhost:8000/${file.path}`} />
-                            {/* <h5>{"Name"}{file}</h5> */}
-                        </div>
-
-                    })}
-                </div>
-
+                ))}
             </div>
 
         </div>

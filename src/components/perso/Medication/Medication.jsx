@@ -299,11 +299,10 @@ const Medication = () => {
     const [open, setClose] = useState(false)
     const [patientDetails, setpatientDetails] = useState(false)
     const [symtom_popup, setSymtom_popup] = useState(false)
-    const [active, setactive] = useState(null)
+    const [active, setactive] = useState("Blood-test")
     const [filteredIllness, setFilteredIllness] = useState([]);
     const [filteredsymtomps, setfilteredsymtomps] = useState([]);
     const [openImage, setopenImage] = useState(null)
-    const [patient, setPatient] = useState(null)
     const [state, setState] = useState({
         hospitalData: [],
         illnessData: [],
@@ -316,15 +315,13 @@ const Medication = () => {
         loadingIllness: false,
     });
 
-    useEffect(() => {
-        const patient = location.state?.patient || undefined
-        if (!patient) {
-            navigate('/doctor')
-        }
-        console.log("patietn", patient);
-
-        setPatient(patient)
-    }, [patient])
+    // useEffect(() => {
+    //     const patient = location.state?.patient || undefined
+    //     if (!patient) {
+    //         navigate('/doctor/dashboard')
+    //     }
+    //     setPatient(patient)
+    // }, [patient])
 
     const setPartialState = (updates) =>
         setState((prev) => ({ ...prev, ...updates }));
@@ -582,38 +579,27 @@ const Medication = () => {
                                 display: 'flex',
                                 gap: '10px'
                             }}>
-                                {patient?.pastDocuments?.map((doc, i) => {
-                                    let isSelected = doc._id
-                                    return <span className={active?.id === isSelected ? "line" : "none"} onClick={() => setactive({ id: doc._id, files: doc.files })}>{doc.category}</span>
-                                })}
-
-
-                                {/* <span className={active === "Xray" ? "line" : "none"} onClick={() => setactive("Xray")}>Xray</span>
+                                <span className={active === "Blood-test" ? "line" : "none"} onClick={() => setactive("Blood-test")}>Blood test</span>
+                                <span className={active === "Xray" ? "line" : "none"} onClick={() => setactive("Xray")}>Xray</span>
                                 <span className={active === "MRI-CT-Scan" ? "line" : "none"} onClick={() => setactive("MRI-CT-Scan")}>MRI & CT Scan</span>
-                                <span className={active === "Other" ? "line" : "none"} onClick={() => setactive("Other")}>Other</span> */}
+                                <span className={active === "Other" ? "line" : "none"} onClick={() => setactive("Other")}>Other</span>
                             </div>
-
                             <div className="patient-history-images">
-                                {active && active?.files.map((file, i) => {
+                                {[1, 2, 3, 4, 5, 8, 8, 8, 8, 8].map((item, i) => (
 
-                                    return <div className="patient-history-img-card" key={i} onClick={() => {
+                                    <div className="patient-history-img-card" key={i} onClick={() => {
                                         setopenImage({
-                                            image: `http://localhost:8000/${file.path}`,
+                                            image: "C:/Users/Visha/OneDrive/Desktop/ICA/new-emr/src/assets/download.png",
                                             name: "name" + i
                                         })
                                     }}>
 
-                                        
-
-                                        <img src={`http://localhost:8000/${file.path}`} />
-                                        {/* <h5>{"Name"}{file}</h5> */}
+                                        <img key={item} src={`public/Screenshot (103).png`} />
+                                        <h5>{"Name"}{item}</h5>
                                     </div>
 
-                                })}
-
-
+                                ))}
                             </div>
-
                         </div>
                     </div>
 
