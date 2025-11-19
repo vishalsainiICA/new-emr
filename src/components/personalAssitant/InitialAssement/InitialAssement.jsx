@@ -5,6 +5,7 @@ import { doctorAPi, perosnalAssistantAPI } from '../../../auth';
 import { toast } from 'react-toastify';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { BsArrowLeft } from 'react-icons/bs';
+import "./InitialAssement.css"
 
 const validationRules = {
     height: { min: 50, max: 250, label: "Height (cm)" },
@@ -124,31 +125,32 @@ const InitialAssesment = () => {
     };
 
     return (
-        <div style={{
-            backgroundColor: 'white',
-            padding: '20px',
+        
+        <div className="Patien-initial-form">
 
-        }} className="steps">
+         <div className='initial-main-form'>
             <span style={{
                 display: 'flex',
-                gap: '10px'
-            }}><BsArrowLeft onClick={() => navigate(-1)} style={{
-                fontSize: '40px',
-                cursor: 'pointer'
+                gap: '20px',
+                alignItems:"center"
+            }}><button onClick={() => navigate(-1)} style={{
+                fontSize: '10px',
+                cursor: 'pointer',
+                display:"flex",
+                alignItems:"center",
+                justifyContent:"center"
 
-            }}></BsArrowLeft> <h2>Initial Assessment (Vitals)</h2></span>
-            {data && (
+            }}>← Back</button > <h2>Initial Assessment (Vitals)</h2></span>
+            <hr />
+            <hr />
+        
+            <div className='patient-detail'>
+                {data && (
                 <h4>Patient Name:  <span style={{
                     fontSize: '20px'
                 }}>{data?.name}</span></h4>
-            )}
-            <div style={{
-                width: '80%',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '20px'
-            }}>
-                <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+             )}
+                <div style={{ display: "flex", gap: "100px", marginTop: "10px" }}>
                     <label style={{ width: "100%" }}>
                         Height (cm)
                         <input
@@ -170,7 +172,7 @@ const InitialAssesment = () => {
                     </label>
                 </div>
 
-                <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+                <div style={{ display: "flex", gap: "100px", marginTop: "10px" }}>
                     <label style={{ width: "100%" }}>
                         Blood Pressure (mmHg)
                         <input
@@ -192,7 +194,7 @@ const InitialAssesment = () => {
                     </label>
                 </div>
 
-                <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+                <div style={{ display: "flex", gap: "100px", marginTop: "10px" }}>
                     <label style={{ width: "100%" }}>
                         Heart Rate (bpm)
                         <input
@@ -214,7 +216,7 @@ const InitialAssesment = () => {
                     </label>
                 </div>
 
-                <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+                <div style={{ display: "flex", gap: "100px", marginTop: "10px" }}>
                     <label style={{ width: "100%" }}>
                         Hemoglobin (g/dL)
                         <input
@@ -238,7 +240,7 @@ const InitialAssesment = () => {
                     </label>
                 </div>
 
-                <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+                <div style={{ display: "flex", gap: "100px", marginTop: "10px" }}>
                     <label style={{ width: "100%" }}>
                         Respiratory Rate (breaths/min)
                         <input
@@ -268,14 +270,14 @@ const InitialAssesment = () => {
                     </label>
                 </div>
             </div>
-
+           <hr />
             <div style={{
                 marginTop: '10px',
                 width: " 60vw",
                 minWidth: '400px',
                 display: 'flex',
-                justifyContent: 'space-between'
-            }}>
+                justifyContent: 'end'
+             }}>
                 <button
                     disabled={isProcessing}
                     style={{
@@ -288,10 +290,8 @@ const InitialAssesment = () => {
                 >
                     {isProcessing ? "saving...." : "Save Vitals"}
                 </button>
-
-
             </div>
-
+           </div>
         </div>
 
     );

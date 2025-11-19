@@ -1,0 +1,41 @@
+*
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.Patien-initial-form
+{
+  width: 100vw;
+  height: 100vh;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+    background-color: rgba(233, 233, 253, 1);
+}
+
+.initial-main-form
+{
+    /* width: 60%; */
+    background-color: rgba(254, 254, 255);
+    padding: 20px;
+    border-radius: 20px;
+    /* background-color: ; */
+}
+.initial-main-form button
+{
+    background-color: black;
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.patient-detail
+{
+    margin: 20px 0px;
+    width: 100%;
+    display: flex;
+    flex-direction: column ;
+    gap: 10px;
+}
