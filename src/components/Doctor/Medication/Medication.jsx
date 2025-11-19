@@ -8,8 +8,9 @@ import addImg from "../../../assets/download.png"
 // import { LabTest } from "./PatientHistory__Labtest";
 import { IoChevronDown, IoChevronDownCircleSharp, IoChevronUp, IoCloseCircle } from "react-icons/io5";
 import { doctorAPi, superAdminApi } from "../../../auth";
-import { LabTest } from "../Utility/PatientHistory__Labtest";
+
 import Switch from "react-switch";
+import { LabTest } from "../../Utility/PatientHistory__Labtest";
 
 const buildReportText = (illness = [], symtomps = [], patient = {}) => {
     // Get illness names safely

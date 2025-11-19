@@ -4,7 +4,8 @@ import { Circles } from "react-loader-spinner";
 import { BsArrowLeft } from "react-icons/bs";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { LabTest } from "../Doctor/Utility/PatientHistory__Labtest";
+import { LabTest } from "../Utility/PatientHistory__Labtest";
+
 
 
 const buildReportText = (illness = [], symtomps = [], patient = {}) => {

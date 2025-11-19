@@ -53,13 +53,6 @@ export function LabTest({ labTest = [], labTestError, labTestloading, onclose, s
                     Select Lab Tests
                 </h5>
                 <div>
-                    <button
-                        onClick={() => onclose?.(null)}
-                        className='common-btn'
-                        style={{
-                            marginRight: '10px'
-                        }}
-                    >Save</button>
                     <i
                         onClick={() => {
                             onclose?.(null)
@@ -191,13 +184,6 @@ export function Patient_Hisotry({ patient, onclose }) {
                 {`${patient?.name} details`}
             </h3>
             <div>
-                <button
-                    onClick={() => onclose?.(null)}
-                    className='common-btn'
-                    style={{
-                        marginRight: '10px'
-                    }}
-                >Save</button>
                 <i
                     onClick={() => {
                         onclose?.(null)
@@ -248,48 +234,82 @@ export function Patient_Hisotry({ patient, onclose }) {
                     <p>Weight: <h5>{patient.weight}</h5></p>
                     <p>Pulse: <h5>{patient.pulse}</h5></p>
                 </div>
-            </div>
-            <br />
-            <h5>Uploaded Documents:</h5>
-            <div className="patient-history">
-                <div style={{
-                    width: '100%',
-                    display: 'flex',
-                    gap: '10px'
-                }}>
-                    {console.log(patient)
-                    }
-                    {patient?.pastDocuments?.map((doc, i) => {
-                        let isSelected = doc._id
-                        return <span className={active?.id === isSelected ? "line" : "none"} onClick={() => setactive({ id: doc._id, files: doc.files })}>{doc.category}</span>
-                    })}
+                <div>
+
+                </div>
+                {!patientDetails && (
+                    <h5>Uploaded Documents:</h5>
+                )}
+                <div className="patient-history">
+                    <div style={{
+                        width: '100%',
+                        display: 'flex',
+                        gap: '10px'
+                    }}>
+                        {console.log(patient)
+                        }
+                        {patient?.pastDocuments?.map((doc, i) => {
+                            let isSelected = doc._id
+                            return <span className={active?.id === isSelected ? "line" : "none"} onClick={() => setactive({ id: doc._id, files: doc.files })}>{doc.category}</span>
+                        })}
 
 
-                    {/* <span className={active === "Xray" ? "line" : "none"} onClick={() => setactive("Xray")}>Xray</span>
+                        {/* <span className={active === "Xray" ? "line" : "none"} onClick={() => setactive("Xray")}>Xray</span>
                                 <span className={active === "MRI-CT-Scan" ? "line" : "none"} onClick={() => setactive("MRI-CT-Scan")}>MRI & CT Scan</span>
                                 <span className={active === "Other" ? "line" : "none"} onClick={() => setactive("Other")}>Other</span> */}
+                    </div>
+
+                    <div className="patient-history-images">
+                        {active && active?.files.map((file, i) => {
+
+                            return <div className="patient-history-img-card" key={i} onClick={() => {
+                                setopenImage({
+                                    image: `http://localhost:8000/${file.path}`,
+                                    name: "name" + i
+                                })
+                            }}>
+
+
+
+                                <img src={`http://localhost:8000/${file.path}`} />
+                                {/* <h5>{"Name"}{file}</h5> */}
+                            </div>
+
+                        })}
+                    </div>
+
                 </div>
 
-                <div className="patient-history-images">
-                    {active && active?.files.map((file, i) => {
+                {!patientDetails && (
+                    <h5>Addhar Documents:</h5>
+                )}
+                <div className="patient-history">
+                    <div className="patient-history-images">
+                        {[
+                            patient.addharDocumnets.addharfrontPath,
+                            patient.addharDocumnets.addharbackPath
+                        ].map((image, i) => {
 
-                        return <div className="patient-history-img-card" key={i} onClick={() => {
-                            setopenImage({
-                                image: `http://localhost:8000/${file.path}`,
-                                name: "name" + i
-                            })
-                        }}>
+                            return (
+                                <div className="patient-history-img-card"
+                                    key={i}
+                                    onClick={() => {
+                                        setopenImage({
+                                            image: `http://localhost:8000/${image}`,
+                                            name: "name" + i
+                                        })
+                                    }}>
+                                    <img src={`http://localhost:8000/${image}`} />
+                                </div>
+                            )
+                        })}
+                    </div>
 
 
-
-                            <img src={`http://localhost:8000/${file.path}`} />
-                            {/* <h5>{"Name"}{file}</h5> */}
-                        </div>
-
-                    })}
                 </div>
-
             </div>
+
+
 
         </div>
 

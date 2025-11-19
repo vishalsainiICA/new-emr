@@ -3,7 +3,8 @@ import "./Patientregistration.css"
 import adharimg from "../../../assets/download.png"
 import manulimg from "../../../assets/download.jpg"
 import { PiTrademarkRegisteredThin } from "react-icons/pi";
-import { CurrentStep, dummyDepartments, extractTextFromImage, parseAadhaarText } from "../../utility/CicularAvatar";
+
+// import { CurrentStep, dummyDepartments, extractTextFromImage, parseAadhaarText } from "../../utility/CicularAvatar";
 import { commonApi } from "../../../auth";
 import { toast } from "react-toastify";
 import { useLocation } from "react-router-dom";

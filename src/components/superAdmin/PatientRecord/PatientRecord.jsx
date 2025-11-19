@@ -3,7 +3,7 @@ import './PatientRecord.css'
 import { Circles } from "react-loader-spinner";
 import moment from "moment";
 import { superAdminApi } from "../../../auth";
-import { LabTest, Patient_Hisotry } from "../../Doctor/Utility/PatientHistory__Labtest";
+import { LabTest, Patient_Hisotry } from "../../../components/Utility/PatientHistory__Labtest";
 
 
 export default function PatientRecords() {
@@ -216,7 +216,7 @@ export default function PatientRecords() {
             {
                 open && (
                     <div className="patientHistory">
-                        <Patient_Hisotry patient ={open} onclose={() => setClose(false)} ></Patient_Hisotry>
+                        <Patient_Hisotry patient={open} onclose={() => setClose(false)} ></Patient_Hisotry>
                         {/* <LabTest selectedLabTest={selectedLabTest} setselectedLabTest={setselectedLabTest} labTest={labtestResult} labTestError={labTestError} labTestloading={labTestloading} onclose={() => setClose(false)} ></LabTest> */}
                     </div>
                 )
