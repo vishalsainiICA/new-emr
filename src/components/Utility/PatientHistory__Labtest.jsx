@@ -224,7 +224,8 @@ export function Patient_Hisotry({ patient, onclose }) {
                 <h5>Patient Vitals:</h5>
             </div>
 
-            <div className={`patient-vitals ${patientDetails ? "active" : ""}`}>
+            <div style={{
+            }} className={`patient-vitals ${patientDetails ? "active" : ""}`}>
                 <div className="patient-vitals-item">
                     <p>Name: <h5>{patient.name}</h5></p>
                     <p>Age: <h5>{patient.age}</h5></p>
@@ -234,12 +235,12 @@ export function Patient_Hisotry({ patient, onclose }) {
                     <p>Phone: <h5>{patient.phone}</h5></p>
                 </div>
                 <div className="patient-vitals-item">
-                    <p>Blood Group: <h5>{patient.bloodGroup}</h5></p>
-                    <p>Height: <h5>{patient.height}</h5></p>
+                    <p>Blood Group: <h5>{patient?.initialAssementId?.bloodGroup}</h5></p>
+                    <p>Height: <h5>{patient?.initialAssementId?.height}</h5></p>
                 </div>
                 <div className="patient-vitals-item">
-                    <p>Weight: <h5>{patient.weight}</h5></p>
-                    <p>Pulse: <h5>{patient.pulse}</h5></p>
+                    <p>Weight: <h5>{patient?.initialAssementId?.weight}</h5></p>
+                    <p>Heart-Rate: <h5>{patient?.initialAssementId?.heartRate}</h5></p>
                 </div>
                 <div>
 
@@ -320,8 +321,6 @@ export function Patient_Hisotry({ patient, onclose }) {
 
         </div>
 
-
-
         {/* patient priscribtion */}
         <div>
             {patientprescbrition ? (
@@ -338,16 +337,37 @@ export function Patient_Hisotry({ patient, onclose }) {
             </div>
 
             <div className={`patient-vitals ${patientprescbrition ? "active" : ""}`}>
-                <div className="patient-vitals-item">
+                <div className="">
                     <p>Doctor Name: <h5>{patient.doctorId.name}</h5></p>
                     <p>Experience: <h5>{patient.doctorId.experience}</h5></p>
                 </div>
                 <h5>Patient Dignosis</h5>
                 <div className="">
-                    <p>Illness/Dignosis: <h5>{patient.prescribtionId?.prescribtionId?.join(",")}</h5>
-                    </p>
-                    <p>Height: <h5>{patient.height}</h5></p>
+                    <h5>Illness/Dignosis:</h5>
+                    {
+                        patient?.prescribtionId?.illness && JSON.parse(patient?.prescribtionId?.illness).map((item, i) => {
+                            return <p key={i}>{item?.illnessName}</p>;
+                        })
+                    }
                 </div>
+                <h5>symptoms:</h5>
+                <div style={{
+                    display: 'flex',
+                    gap: '10px',
+                    flexWrap: 'wrap'
+                }}>
+                    {
+                        patient?.prescribtionId?.symptoms && JSON.parse(patient?.prescribtionId?.symptoms).map((item, i) => {
+                            return <p key={i}>{item}</p>;
+                        })
+                    }
+                </div>
+
+                <p>Prescribtion:</p>
+                <iframe src={`http://localhost:8000/${patient?.prescribtionId?.prescriptionImage}`}
+                    width="100%"
+                    height="500px"
+                    frameborder="0"></iframe>
 
             </div>
 

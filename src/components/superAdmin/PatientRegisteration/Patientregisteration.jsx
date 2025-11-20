@@ -37,7 +37,7 @@ const Patientregisteration = () => {
       attendeeRelation: '',
       departmentId: '',
       doctorId: null,
-      addharNo: "",
+      addharNo: '',
       addharDocuments: [],
     }
   );
@@ -103,6 +103,8 @@ const Patientregisteration = () => {
 
       const parsed = parseAadhaarText(combinedText);
       console.log("Parsed Aadhaar Data:", parsed);
+      console.log("Parsed Aadhaar Data:", parsed?.aadhaarNumber);
+
 
       setPatientData((prev) => ({
         ...prev,
@@ -111,13 +113,21 @@ const Patientregisteration = () => {
         gender: parsed.gender || prev.gender,
         permanentAddress: parsed.address || prev.permanentAddress,
         addharDocuments: [aadhaarFront, aadhaarBack],
-        addharNo: parsed.aadhaarNumber,
+        addharNo: parsed.aadhaarNumber ? parsed.aadhaarNumber.trim() : prev.addharNo,
         city: parsed.city,
         state: parsed.state,
         pinCode: parsed.pinCode,
       }));
 
+      setPatientData((prev) => ({
+        ...prev,
+        addharNo: parsed.aadhaarNumber ? parsed.aadhaarNumber.trim() : prev.addharNo
+
+      }))
+
       toast.success("Aadhaar details extracted successfully ");
+      console.log(patientData);
+
       setCurrentStep(currentStep + 1)
     };
 
@@ -207,7 +217,7 @@ const Patientregisteration = () => {
         pastDocumnents: []
       });
       setUploadedDocuments([]);
-      navigate(-1);
+      // navigate(-1);
     } catch (err) {
       console.log(err);
       toast.error(err.response?.data?.message || "Something went wrong");
@@ -442,24 +452,26 @@ const Patientregisteration = () => {
                   </div>
                 </div>
 
+                {!aadhaarFront && !aadhaarBack && (
+                  <div className="distance">
+                    <div>
+                      <label>Front Aadhaar *</label>
+                      <input
+                        type="file"
+                        onChange={(e) => setAadhaarFront(e.target.files[0])}
+                      />
+                    </div>
 
-                <div className="distance">
-                  <div>
-                    <label>Front Aadhaar *</label>
-                    <input
-                      type="file"
-                      onChange={(e) => setAadhaarFront(e.target.files[0])}
-                    />
+                    <div>
+                      <label>Back Aadhaar *</label>
+                      <input
+                        type="file"
+                        onChange={(e) => setAadhaarBack(e.target.files[0])}
+                      />
+                    </div>
                   </div>
 
-                  <div>
-                    <label>Back Aadhaar *</label>
-                    <input
-                      type="file"
-                      onChange={(e) => setAadhaarBack(e.target.files[0])}
-                    />
-                  </div>
-                </div>
+                )}
 
 
                 <div className="distance">
@@ -650,6 +662,7 @@ const Patientregisteration = () => {
                       style={{ width: "150px", height: "30px", color: "black", borderRadius: "10px", padding: "5px", border: "0.3px solid lightgray", }} name="" id="category">
 
                       <option value="">Select Category</option>
+                      <option value="Prescription">Prescription</option>
                       <option value="Blood test">Blood test related</option>
                       <option value="Xray">Xray</option>
                       <option value="MRI & CT Scan">MRI & CT Scan</option>

@@ -66,6 +66,7 @@
 .patient-vitals.active {
     height: 0px;
     padding: 0px;
+    transition: all 1s ease;
 
     div {
         display: none;

@@ -79,10 +79,10 @@ const Pricription = () => {
             form.append("doctorId", state?.patientInfo?.doctorId._id)
             form.append("hospitalId", state?.patientInfo?.hospitalId._id)
             form.append("prescriptionType", state?.type)
-            form.append("prescriptionMediciene", state?.medication)
-            form.append("illness", state?.illnessData)
-            form.append("symptoms", state?.symtomps)
-            form.append("labTest", state?.selectedLabTest);
+            form.append("prescriptionMediciene", JSON.stringify(state?.medication))
+            form.append("illness", JSON.stringify(state?.illnessData))
+            form.append("symptoms", JSON.stringify(state?.symtomps))
+            form.append("labTest", JSON.stringify(state?.selectedLabTest));
 
 
             const res = await doctorAPi.savePrescribtion(form);
