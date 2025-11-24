@@ -22,10 +22,9 @@ function App() {
 
   return <BrowserRouter>
     <Routes>
-      <Route path="register-patient" element={<Patientregisteration />} />
-      <Route path="login" element={<Loginpage />} />
 
-      <Route path="register-patient" element={<Patientregisteration />} />
+      <Route path="/login" element={<Loginpage />} />
+      <Route path="/register-patient" element={<Patientregisteration />} />
 
       <Route path="/super-admin" element={<ControlPannel></ControlPannel>}>
         <Route path="dashboard" element={<Su_Dashboard></Su_Dashboard>} />
