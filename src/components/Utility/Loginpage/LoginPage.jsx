@@ -18,11 +18,16 @@ function Loginpage(params) {
     try {
       if (validation()) {      // <-- function ko call kiya
         const res = await commonApi.login(
-          JSON.stringify({ email: email, password: password })
+          { email: email, password: password }
         );
 
         if (res.status === 200) {
           console.log("Login successful");
+          if (res.data?.role === "medicalDirector")
+            { return localStorage.setItem("SuperAdmintoken", res.data?.token)}
+          if (res.data?.role === "doctor") return localStorage.setItem("Doctor", res.data?.token)
+          if (res.data?.role === "perosnalAssistant") return localStorage.setItem("PerosnalAssistant", res.data?.token)
+          
         }
       }
     } catch (error) {

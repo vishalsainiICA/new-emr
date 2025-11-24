@@ -17,6 +17,10 @@ export const commonApi = {
         console.log('Data', data);
         return await commonInstance.post(`/login`, data)
     },
+    addPa: async (data) => {
+        return await superAdminInstance.post('/common/doctor/add-pa', data)
+    },
+
 }
 // superAdmin API
 export const superAdminApi = {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { superAdminApi } from "../../../auth";
+import { adminApi, commonApi, superAdminApi } from "../../../auth";
 import { Circles } from "react-loader-spinner";
 import moment from "moment";
 import './ViewHospital.css'
@@ -10,7 +10,16 @@ const ViewHospital = () => {
     const [isProcessing, setIsProcessing] = useState(false);
     const [error, setError] = useState(null);
     const [filterPatient, setFilterPatient] = useState([]);
+    const [assinDoctor, setAssignDoctor] = useState(null)
     const location = useLocation()
+    const [doctorData, setDoctorData] = useState({
+        doctorName: "",
+        email: "",
+        contact: "",
+        experience: "",
+        qualification: "",
+        docId: null
+    });
 
     const hospital = location.state?.hospital || undefined
     console.log("hosptial", hospital);
@@ -52,6 +61,16 @@ const ViewHospital = () => {
 
         fetchPatient();
     }, []);
+
+    const handleAddPa = async () => {
+        try {
+
+
+            const res = await commonApi.addPa(doctorData)
+        } catch (error) {
+
+        }
+    }
 
 
     return <div className="viewhospital">
@@ -231,7 +250,7 @@ const ViewHospital = () => {
                     justifyContent: "space-between"
                 }}>
                     <h4>{"Department Overview"}</h4>
-                    <button className="common-btn">+ New Department</button>
+                    <button className="common-btn">+ New Doctor</button>
                 </div>
 
                 <div style={{
@@ -250,9 +269,8 @@ const ViewHospital = () => {
                                 fontWeight: 'bold'
                             }}>{dep?.departmentName}</span>
                             <a href="">patient:{i + 1}</a>
-
-
                         </div>
+
                     })}
 
                 </div>
@@ -284,11 +302,14 @@ const ViewHospital = () => {
                                 justifyContent: 'space-between',
                                 padding: '7px'
                             }}>
-                                <span style={{
-                                    fontSize: '13px',
-                                    fontWeight: 'bold'
-                                }}>{doc?.name}</span>
-                                <a href="">{dep?.departmentName}</a>
+                                <div>
+                                    <span style={{
+                                        fontSize: '13px',
+                                        fontWeight: 'bold'
+                                    }}>{doc?.name}</span>
+                                    <a href="">{dep?.departmentName}</a>
+                                </div>
+                                <button onClick={() => setAssignDoctor(doc)} className="common-btn">+ Add Pa</button>
 
 
                             </div>
@@ -420,123 +441,126 @@ const ViewHospital = () => {
         </div>
 
         {
-            //    assinDoctor !== null && (
-            //     <div style={{
-            //         position: 'absolute',
-            //         inset: 0,
-            //         zIndex: 9999,
-            //         display: 'flex',
-            //         justifyContent: 'center',
-            //         alignItems: 'center',
-            //         backdropFilter: 'blur(10px)',
-            //         backgroundColor: 'rgba(19, 5, 5, 0.6)',
-            //     }}>
-            //         <div style={{
-            //             backgroundColor: 'white',
-            //             minHeight: '400px',
-            //             width: '600px',
-            //             padding: '20px',
-            //             borderRadius: '10px'
-            //         }}>
-            //             <div style={{
-            //                 display: 'flex',
-            //                 justifyContent: 'space-between',
-            //                 alignItems: 'center'
-            //             }}>
-            //                 <h3>
-            //                     {`Add Doctor for ${hosptialData?.supportedDepartments[assinDoctor].departmentName}`}
-            //                 </h3>
-            //                 <i
-            //                     onClick={() => setAssignDoctor(null)}
-            //                     className="ri-close-large-line"
-            //                     style={{ cursor: 'pointer', fontSize: '20px' }}
-            //                 ></i>
-            //             </div>
+            assinDoctor !== null && (
+                <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    zIndex: 9999,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backdropFilter: 'blur(10px)',
+                    backgroundColor: 'rgba(19, 5, 5, 0.6)',
+                }}>
+                    <div style={{
+                        backgroundColor: 'white',
+                        minHeight: '400px',
+                        width: '600px',
+                        padding: '20px',
+                        borderRadius: '10px'
+                    }}>
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center'
+                        }}>
+                            <h3>
+                                {`P.A for ${assinDoctor.name}`}
+                            </h3>
+                            <i
+                                onClick={() => setAssignDoctor(null)}
+                                className="ri-close-large-line"
+                                style={{ cursor: 'pointer', fontSize: '20px' }}
+                            ></i>
+                        </div>
 
-            //             {/*Doctor Data Form */}
-            //             <div style={{
-            //                 marginTop: '10px',
-            //                 display: 'flex',
-            //                 columnGap: '10px'
-            //             }}>
-            //                 <label style={{ width: '100%' }}>
-            //                     Name *
-            //                     <input
-            //                         type="text"
-            //                         placeholder="Name"
-            //                         value={doctorData.doctorName}
-            //                         onChange={(e) => setDoctorData({ ...doctorData, doctorName: e.target.value })}
-            //                     />
-            //                 </label>
+                        {/*Doctor Data Form */}
+                        <div style={{
+                            marginTop: '10px',
+                            display: 'flex',
+                            columnGap: '10px'
+                        }}>
+                            <label style={{ width: '100%' }}>
+                                Name *
+                                <input
+                                    type="text"
+                                    placeholder="Name"
+                                    value={doctorData.doctorName}
+                                    onChange={(e) => setDoctorData({ ...doctorData, doctorName: e.target.value })}
+                                />
+                            </label>
 
-            //                 <label style={{ width: '100%' }}>
-            //                     Email *
-            //                     <input
-            //                         type="email"
-            //                         placeholder="Email"
-            //                         value={doctorData.email}
-            //                         onChange={(e) => setDoctorData({ ...doctorData, email: e.target.value })}
-            //                     />
-            //                 </label>
-            //             </div>
+                            <label style={{ width: '100%' }}>
+                                Email *
+                                <input
+                                    type="email"
+                                    placeholder="Email"
+                                    value={doctorData.email}
+                                    onChange={(e) => setDoctorData({ ...doctorData, email: e.target.value })}
+                                />
+                            </label>
+                        </div>
 
-            //             <div style={{
-            //                 marginTop: '10px',
-            //                 display: 'flex',
-            //                 columnGap: '10px'
-            //             }}>
-            //                 <label style={{ width: '100%' }}>
-            //                     Contact Number *
-            //                     <input
-            //                         type="text"
-            //                         placeholder="Contact Number"
-            //                         value={doctorData.contact}
-            //                         onChange={(e) => setDoctorData({ ...doctorData, contact: e.target.value })}
-            //                     />
-            //                 </label>
+                        <div style={{
+                            marginTop: '10px',
+                            display: 'flex',
+                            columnGap: '10px'
+                        }}>
+                            <label style={{ width: '100%' }}>
+                                Contact Number *
+                                <input
+                                    type="text"
+                                    placeholder="Contact Number"
+                                    value={doctorData.contact}
+                                    onChange={(e) => setDoctorData({ ...doctorData, contact: e.target.value })}
+                                />
+                            </label>
 
-            //                 <label style={{ width: '100%' }}>
-            //                     Experience (years) *
-            //                     <input
-            //                         type="number"
-            //                         placeholder="ex.2"
-            //                         value={doctorData.experience}
-            //                         onChange={(e) => setDoctorData({ ...doctorData, experience: e.target.value })}
-            //                     />
-            //                 </label>
-            //             </div>
+                            <label style={{ width: '100%' }}>
+                                Experience (years) *
+                                <input
+                                    type="number"
+                                    placeholder="ex.2"
+                                    value={doctorData.experience}
+                                    onChange={(e) => setDoctorData({ ...doctorData, experience: e.target.value })}
+                                />
+                            </label>
+                        </div>
 
-            //             <label style={{
-            //                 width: '100%',
-            //                 display: 'flex',
-            //                 flexDirection: 'column',
-            //                 marginTop: '10px'
-            //             }}>
-            //                 Qualification *
-            //                 <select
-            //                     style={{ padding: '10px', borderRadius: '7px' }}
-            //                     value={doctorData.qualification}
-            //                     onChange={(e) => setDoctorData({ ...doctorData, qualification: e.target.value })}
-            //                 >
-            //                     <option value="">Select_Degree</option>
-            //                     <option value="Graduation">Graduation</option>
-            //                     <option value="Post-Graduation">Post-Graduation</option>
-            //                 </select>
-            //             </label>
+                        <label style={{
+                            width: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            marginTop: '10px'
+                        }}>
+                            Qualification *
+                            <select
+                                style={{ padding: '10px', borderRadius: '7px' }}
+                                value={doctorData.qualification}
+                                onChange={(e) => setDoctorData({ ...doctorData, qualification: e.target.value })}
+                            >
+                                <option value="">Select_Degree</option>
+                                <option value="Graduation">Graduation</option>
+                                <option value="Post-Graduation">Post-Graduation</option>
+                            </select>
+                        </label>
 
-            //             {/*Action Buttons */}
-            //             <div style={{
-            //                 marginTop: '30px',
-            //                 display: 'flex',
-            //                 justifyContent: 'end',
-            //                 gap: '10px'
-            //             }}>
-            //                 <button onClick={() => setAssignDoctor(null)}>Cancel</button>
-            //                 <button onClick={handleAddDoctor}>Add Doctor</button>
-            //             </div>
-            //         </div>
-            //     </div>
-            // )
+                        {/*Action Buttons */}
+                        <div style={{
+                            marginTop: '30px',
+                            display: 'flex',
+                            justifyContent: 'end',
+                            gap: '10px'
+                        }}>
+                            <button onClick={() => setAssignDoctor(null)}>Cancel</button>
+                            <button onClick={() => {
+                                setDoctorData({ ...doctorData, docId: assinDoctor?._id })
+                                handleAddPa()
+                            }} >Add Doctor</button>
+                        </div>
+                    </div>
+                </div>
+            )
         }
         {
             // addCustomDep !== null && (
