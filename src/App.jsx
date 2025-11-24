@@ -15,6 +15,7 @@ import Patientregisteration from './components/superAdmin/PatientRegisteration/P
 import PatientRecords from './components/superAdmin/PatientRecord/PatientRecord';
 import Pa_Dashboard from "./components/personalAssitant/Dashboard/Dashboard.jsx"
 import InitialAssesment from './components/personalAssitant/InitialAssement/InitialAssement.jsx';
+import Loginpage from './components/utility/Loginpage/Loginpage.jsx';
 
 
 function App() {
@@ -22,7 +23,9 @@ function App() {
   return <BrowserRouter>
     <Routes>
       <Route path="register-patient" element={<Patientregisteration />} />
+      <Route path="login" element={<Loginpage />} />
 
+      <Route path="register-patient" element={<Patientregisteration />} />
 
       <Route path="/super-admin" element={<ControlPannel></ControlPannel>}>
         <Route path="dashboard" element={<Su_Dashboard></Su_Dashboard>} />

@@ -11,7 +11,7 @@ const ControlPannel = () => {
     const navigate = useNavigate()
 
     const navLinks = [
-        { name: 'DashBoard', icon: 'ri-dashboard-line', navigate: '/super-admin/dashboard' },
+        { name: 'Dashboard', icon: 'ri-dashboard-line', navigate: '/super-admin/dashboard' },
         { name: 'Hospital Management', icon: 'ri-building-line', navigate: '/super-admin/hospital-management' },
         { name: 'Patients Records', icon: 'ri-group-line', navigate: '/super-admin/patient-management' },
         { name: 'Admin Management', icon: 'ri-admin-line', navigate: '/super-admin/admin-management' },
@@ -47,7 +47,7 @@ const ControlPannel = () => {
 
                 <img src={emrimg} alt="emr" />
                 <span>
-                    <h2>EMR</h2>
+                    <h2>Dr. Parcha</h2>
                     <p>(Electronic Medical Record)</p>
                 </span>
             </div>

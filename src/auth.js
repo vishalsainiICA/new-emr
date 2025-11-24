@@ -13,6 +13,10 @@ export const commonApi = {
     patientsByHospitalId: async (id) => {
         return await superAdminInstance.get(`/common/hospital/all-patients?hospitalId=${id}`)
     },
+    login: async (data) => {
+        console.log('Data', data);
+        return await commonInstance.post(`/login`, data)
+    },
 }
 // superAdmin API
 export const superAdminApi = {
