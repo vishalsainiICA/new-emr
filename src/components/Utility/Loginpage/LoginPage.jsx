@@ -5,7 +5,7 @@ import { commonApi } from "../../../auth";
 
 
 
-const Loginpage = (params) => {
+const Loginpage = () => {
 
   const [password, setPassword] = useState(null)
   const [email, setemail] = useState(null)
