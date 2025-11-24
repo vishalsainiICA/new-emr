@@ -5,7 +5,7 @@ import { commonApi } from "../../../auth";
 
 
 
-function Loginpage(params) {
+const Loginpage = (params) => {
 
   const [password, setPassword] = useState(null)
   const [email, setemail] = useState(null)
@@ -23,11 +23,10 @@ function Loginpage(params) {
 
         if (res.status === 200) {
           console.log("Login successful");
-          if (res.data?.role === "medicalDirector")
-            { return localStorage.setItem("SuperAdmintoken", res.data?.token)}
+          if (res.data?.role === "medicalDirector") { return localStorage.setItem("SuperAdmintoken", res.data?.token) }
           if (res.data?.role === "doctor") return localStorage.setItem("Doctor", res.data?.token)
           if (res.data?.role === "perosnalAssistant") return localStorage.setItem("PerosnalAssistant", res.data?.token)
-          
+
         }
       }
     } catch (error) {
