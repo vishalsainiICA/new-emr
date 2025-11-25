@@ -43,7 +43,7 @@ function App() {
       {/* personal Assitant */}
       <Route path="/pa" element={<Pa_Dashboard></Pa_Dashboard>}> </Route>
       <Route path="/intial-assement" element={<InitialAssesment></InitialAssesment>}> </Route>
-      <Route path='*' element={<Errorpage />}></Route>
+
 
     </Routes>
     <ToastContainer
