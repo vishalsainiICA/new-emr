@@ -154,23 +154,21 @@ button:active {
 /*  Page-Handler-Buttons*/
 
 
-  .page-handler
-  {
+.page-handler {
     width: 100%;
     display: flex;
     gap: 100px;
     align-items: end;
-    
-  }
 
-  .page-handler button
-  {
-     background-color: black;
-     color: alicebluex  ;
-     padding: 20px;
- }
-.add-button button
-{
+}
+
+.page-handler button {
+    background-color: black;
+    color: alicebluex;
+    padding: 20px;
+}
+
+.add-button button {
     background-color: lightgreen;
     color: aliceblue;
     border-radius: 10px;
@@ -178,4 +176,22 @@ button:active {
     font-size: 20px;
     box-shadow: 2px 1px 1px 3px rgba(0, 0, 0, 0.1);
 
+}
+
+
+.common-btn {
+    padding: 7px;
+    color: white;
+    background-color: black;
+    border-radius: 10px;
+    outline: none;
+    cursor: pointer;
+}
+
+.regular-btn {
+    padding: 7px;
+    background-color: rgb(229, 230, 243);
+    border-radius: 10px;
+    outline: none;
+    cursor: pointer;
 }

@@ -3,6 +3,7 @@ import { Circles } from 'react-loader-spinner';
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import './HospitalManagement.css'
+import { toast } from "react-toastify";
 
 
 const HospitalManagement = () => {
@@ -10,6 +11,7 @@ const HospitalManagement = () => {
     const [data, setData] = useState([]);
 
     const [isProcessing, setIsProcessing] = useState(false);
+    const [refresh, setRefresh] = useState(false);
     const [error, setError] = useState(null);
     const [filterHospital, setFilterHospital] = useState([]);
     const navigate = useNavigate()
@@ -32,7 +34,8 @@ const HospitalManagement = () => {
                 const res = await superAdminApi.getAllhosptial();
                 if (res.status === 200) {
                     setData(res.data.data || []);
-                    setFilterHospital(res.data.data || []); // initialize filter
+                    setFilterHospital(res.data.data || []);
+               // initialize filter
                 } else {
                     setError(res.data?.message || "Something went wrong");
                 }
@@ -44,13 +47,15 @@ const HospitalManagement = () => {
         };
 
         fetchHospital();
-    }, []);
+    }, [refresh]);
 
-    const handledelete = async () => {
+    const handledelete = async (id) => {
         try {
+            setIsProcessing(true);
             const res = await superAdminApi.delethospital(id);
             if ((await res).status === 200 || (await res).data.status === 200) {
-                toast.success(res?.data?.message || "Hospital delete successfully");
+                toast.success("Hospital delete successfully");
+                  setRefresh(prev => !prev); 
             } else {
                 toast.error("Failed to register hospital")
             }
@@ -81,7 +86,7 @@ const HospitalManagement = () => {
 
                     }} className="common-btn">+ Add New Hospital</button>
             </div>
-
+{/* 
             <div className="cardList">
                 <div className="customCard hover" style={{
 
@@ -152,7 +157,7 @@ const HospitalManagement = () => {
                     }}>08%</p>
                 </div>
 
-            </div>
+            </div> */}
             {/* hospital performance */}
 
             <div className="customCard" style={{
@@ -262,16 +267,16 @@ const HospitalManagement = () => {
                                         border: "none"
                                     }}> 👁️ View</button>
 
-                                <button style={{
+                                {/* <button style={{
                                     height: '30px',
                                     width: '70px',
                                     fontSize: '10px',
                                     backgroundColor: 'rgba(235, 254, 246)',
                                     border: "none"
-                                }}>✏️ Edit</button>
+                                }}>✏️ Edit</button> */}
 
                                 <button
-                                    onClick={handledelete}
+                                    onClick={() => handledelete(hos?._id)}
                                     style={{
                                         height: '30px',
                                         width: '70px',

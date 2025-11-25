@@ -7,8 +7,28 @@ import { commonApi } from "../../../auth";
 import { toast } from "react-toastify";
 import { useLocation } from "react-router-dom";
 import { CurrentStep, dummyDepartments, extractTextFromImage, parseAadhaarText } from "../../Utility/CicularAvatar";
+function calculateAge(dob) {
+  if (!dob) return null;
+
+  const birthDate = new Date(dob);
+  if (isNaN(birthDate.getTime())) return null; // invalid date
+
+  const today = new Date();
+
+  let age = today.getFullYear() - birthDate.getFullYear();
+  let month = today.getMonth() - birthDate.getMonth();
+  let day = today.getDate() - birthDate.getDate();
+
+  // if birthday not reached in this year → reduce age
+  if (month < 0 || (month === 0 && day < 0)) {
+    age--;
+  }
+
+  return age;
+}
+
 const Patientregisteration = () => {
-  const totalSteps = 5;
+  const totalSteps = 4;
   const [selectedDep, setSelectedDep] = useState(null)
   const [currentStep, setCurrentStep] = useState(0)
   const [aadhaarFront, setAadhaarFront] = useState(null);
@@ -110,6 +130,7 @@ const Patientregisteration = () => {
         ...prev,
         name: parsed.name,
         DOB: parsed.DOB || prev.DOB,
+        age: parsed.DOB ? calculateAge(parsed.DOB) : prev.age,
         gender: parsed.gender || prev.gender,
         permanentAddress: parsed.address || prev.permanentAddress,
         addharDocuments: [aadhaarFront, aadhaarBack],

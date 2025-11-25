@@ -3,14 +3,23 @@ import './AdminManagement.css'
 import { Circles } from "react-loader-spinner";
 import moment from "moment";
 import { superAdminApi } from "../../../auth";
+import { toast } from "react-toastify";
 
 
 export default function AdminManagement() {
     const [data, setData] = useState([]);
     const [isProcessing, setIsProcessing] = useState(false);
     const [error, setError] = useState(null);
+    const [assinAdmin, setAssignAdmin] = useState(null)
     const [filterPatient, setFilterPatient] = useState([]);
-
+    const [doctorData, setDoctorData] = useState({
+        doctorName: "",
+        email: "",
+        contact: "",
+        experience: "",
+        qualification: "",
+        docId: null
+    });
 
     const filter = (value) => {
 
@@ -47,11 +56,22 @@ export default function AdminManagement() {
         fetchPatient();
     }, []);
 
-
+    const handleAddAdmin = async () => {
+        try {
+            const res = await superAdminApi.addAdmin(doctorData)
+            if (res.status === 200) {
+                toast.success(`Pa Added for ${assinDoctor?.name}`)
+                setAssignAdmin(null)
+            }
+        } catch (error) {
+            console.log(err);
+            toast.success(err.response?.data?.message || "Internal Server Error");
+        }
+    }
 
     return (
         <div >
-            <div className="cardList">
+            {/* <div className="cardList">
                 <div className="customCard hover" style={{
 
                 }}>
@@ -121,6 +141,23 @@ export default function AdminManagement() {
                     }}>08%</p>
                 </div>
 
+            </div> */}
+
+            <div className="customCard" style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+            }}>
+                <div className="hospitalMangement" >
+                    <h3>Admin Management</h3>
+                    <p style={{
+                        fontSize: '10px'
+                    }}>Manage and monitor all healthcare facilities in the network</p>
+                </div>
+                <button
+                    onClick={() => setAssignAdmin("NewAdmin")}
+                    style={{
+
+                    }} className="common-btn">+ New Admin</button>
             </div>
 
             <div className="customCard">
@@ -132,7 +169,7 @@ export default function AdminManagement() {
                         marginBottom: '10px'
                     }}
                 >
-                    <h4>Patient Records</h4>
+                    <h4>Admin Records</h4>
                     <div style={{
                         display: 'flex',
                         justifyContent: 'space-between',
@@ -156,11 +193,11 @@ export default function AdminManagement() {
 
                 </div>
                 <div className="patientHeading">
-                    <p>Patient ID</p>
+                    <p>Admin ID</p>
                     <p>Name</p>
                     <p>Age</p>
-                    <p>Hospital</p>
-                    <p>Doctor</p>
+                    <p>Email</p>
+                    <p>Active</p>
                     <p>Date</p>
                 </div>
 
@@ -204,10 +241,137 @@ export default function AdminManagement() {
 
                 {!isProcessing && !error && Array.isArray(filterPatient) && filterPatient.length === 0 && (
                     <p style={{ textAlign: 'center', padding: '50px 0' }}>
-                        No Patient found
+                        No Admin found
                     </p>
                 )}
             </div>
+            {
+                assinAdmin !== null && (
+                    <div style={{
+                        position: 'absolute',
+                        inset: 0,
+                        zIndex: 9999,
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backdropFilter: 'blur(10px)',
+                        backgroundColor: 'rgba(19, 5, 5, 0.6)',
+                    }}>
+                        <div style={{
+                            backgroundColor: 'white',
+                            minHeight: '400px',
+                            width: '600px',
+                            padding: '20px',
+                            borderRadius: '10px'
+                        }}>
+                            <div style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center'
+                            }}>
+                                <h3>
+                                    {`New Admin`}
+                                </h3>
+                                <i
+                                    onClick={() => setAssignAdmin(null)}
+                                    className="ri-close-large-line"
+                                    style={{ cursor: 'pointer', fontSize: '20px' }}
+                                ></i>
+                            </div>
+
+                            {/*Doctor Data Form */}
+                            <div style={{
+                                marginTop: '10px',
+                                display: 'flex',
+                                columnGap: '10px'
+                            }}>
+                                <label style={{ width: '100%' }}>
+                                    Name *
+                                    <input
+                                        type="text"
+                                        placeholder="Name"
+                                        value={doctorData.doctorName}
+                                        onChange={(e) => setDoctorData({ ...doctorData, doctorName: e.target.value })}
+                                    />
+                                </label>
+
+                                <label style={{ width: '100%' }}>
+                                    Email *
+                                    <input
+                                        type="email"
+                                        placeholder="Email"
+                                        value={doctorData.email}
+                                        onChange={(e) => setDoctorData({ ...doctorData, email: e.target.value })}
+                                    />
+                                </label>
+                            </div>
+
+                            <div style={{
+                                marginTop: '10px',
+                                display: 'flex',
+                                columnGap: '10px'
+                            }}>
+                                <label style={{ width: '100%' }}>
+                                    Contact Number *
+                                    <input
+                                        type="text"
+                                        placeholder="Contact Number"
+                                        value={doctorData.contact}
+                                        onChange={(e) => setDoctorData({ ...doctorData, contact: e.target.value })}
+                                    />
+                                </label>
+
+                                <label style={{ width: '100%' }}>
+                                    Experience (years) *
+                                    <input
+                                        type="number"
+                                        placeholder="ex.2"
+                                        value={doctorData.experience}
+                                        onChange={(e) => setDoctorData({ ...doctorData, experience: e.target.value })}
+                                    />
+                                </label>
+                            </div>
+
+                            <label style={{
+                                width: '100%',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                marginTop: '10px'
+                            }}>
+                                Qualification *
+                                <select
+                                    style={{ padding: '10px', borderRadius: '7px' }}
+                                    value={doctorData.qualification}
+                                    onChange={(e) => setDoctorData({ ...doctorData, qualification: e.target.value })}
+                                >
+                                    <option value="">Select_Degree</option>
+                                    <option value="Graduation">Graduation</option>
+                                    <option value="Post-Graduation">Post-Graduation</option>
+                                </select>
+                            </label>
+
+                            {/*Action Buttons */}
+                            <div style={{
+                                marginTop: '30px',
+                                display: 'flex',
+                                justifyContent: 'end',
+                                gap: '10px'
+                            }}>
+                                <button className="common-btn" onClick={() => setAssignAdmin(null)}>Cancel</button>
+                                <button onClick={() => {
+
+                                    setDoctorData({ ...doctorData, docId: assinAdmin._id })
+                                    // console.log("dodo", doctorData);
+                                    // console.log("assinAdmin", assinAdmin._id);
+
+                                    handleAddAdmin()
+                                }} >Add Doctor</button>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+
         </div>
     )
 }

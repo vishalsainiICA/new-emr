@@ -36,6 +36,7 @@ const DashBoard = () => {
 
     }
 
+
     const handelclick = () => {
         if (!isCollapse) {
             setCollapse(true);
@@ -63,6 +64,7 @@ const DashBoard = () => {
                 setIsProcessing(false);
             }
         };
+     
 
         fetchPatient();
     }, []);

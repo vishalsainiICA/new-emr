@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaArrowLeft } from "react-icons/fa";
 import { commonApi } from "../auth";
-import { CurrentStep, dummyDepartments, extractTextFromImage, indianStates, parseAadhaarText } from "./utility/CicularAvatar";
+import { CurrentStep, dummyDepartments, extractTextFromImage, indianStates, parseAadhaarText } from "./Utility/CicularAvatar";
 
 
 export default function RegisterPatient() {

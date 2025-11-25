@@ -17,9 +17,7 @@ export const commonApi = {
         console.log('Data', data);
         return await commonInstance.post(`/login`, data)
     },
-    addPa: async (data) => {
-        return await superAdminInstance.post('/common/doctor/add-pa', data)
-    },
+
 
 }
 // superAdmin API
@@ -83,6 +81,16 @@ export const superAdminApi = {
 
     allPatients: async () => {
         return await superAdminInstance.get(`/super-admin/patients/allPatients`)
+    },
+    hospitalAllPaitent: async (id) => {
+        return await superAdminInstance.get(`/super-admin/patients/hospitalAllPaitent?id=${id}`)
+    },
+
+    addPa: async (data) => {
+        return await superAdminInstance.post('/super-admin/doctor/add-pa', data)
+    },
+    removePa: async (id) => {
+        return await superAdminInstance.delete(`/super-admin/hospital/delete-pa?id=${id}`)
     },
 
     // updateAdmin : async(data)=>{
@@ -164,6 +172,9 @@ export const perosnalAssistantAPI = {
     },
     getAllPatients: async () => {
         return await perosnalAssistanceInstance.get('/assitant/all-patient-record')
+    },
+    fetchProfile: async () => {
+        return await perosnalAssistanceInstance.get('/assitant/auth/profile')
     },
 }
 

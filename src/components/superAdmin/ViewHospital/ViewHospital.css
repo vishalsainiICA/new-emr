@@ -1,11 +1,18 @@
 .common-btn {
-    padding: 4px;
+    padding: 7px;
     color: white;
     background-color: black;
     border-radius: 10px;
     outline: none;
     cursor: pointer;
-    font-size: 10px;
+}
+
+.regular-btn {
+    padding: 7px;
+    background-color: rgb(229, 230, 243);
+    border-radius: 10px;
+    outline: none;
+    cursor: pointer;
 }
 
 .cardList {

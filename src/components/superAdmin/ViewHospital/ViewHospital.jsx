@@ -4,13 +4,16 @@ import { adminApi, commonApi, superAdminApi } from "../../../auth";
 import { Circles } from "react-loader-spinner";
 import moment from "moment";
 import './ViewHospital.css'
+import { toast } from "react-toastify";
 
 const ViewHospital = () => {
     const [data, setData] = useState([]);
     const [isProcessing, setIsProcessing] = useState(false);
+    const [refresh, setRefresh] = useState(false);
     const [error, setError] = useState(null);
     const [filterPatient, setFilterPatient] = useState([]);
     const [assinDoctor, setAssignDoctor] = useState(null)
+    const [hospital, sethospital] = useState(null)
     const location = useLocation()
     const [doctorData, setDoctorData] = useState({
         doctorName: "",
@@ -21,8 +24,7 @@ const ViewHospital = () => {
         docId: null
     });
 
-    const hospital = location.state?.hospital || undefined
-    console.log("hosptial", hospital);
+    const hos = location.state?.hospital || undefined
 
     const filter = (value) => {
         if (value.trim() === "") {
@@ -36,6 +38,27 @@ const ViewHospital = () => {
 
     }
 
+    useEffect(() => {
+        const fetchHospital = async () => {
+            setIsProcessing(true);
+            setError(null);
+            try {
+                const res = await superAdminApi.getHospitalById(hos?._id);
+                if (res.status === 200) {
+                    sethospital(res.data?.data)
+                    // initialize filter
+                } else {
+                    setError(res.data?.message || "Something went wrong");
+                }
+            } catch (err) {
+                setError(err.response?.data?.message || "Internal Server Error");
+            } finally {
+                setIsProcessing(false);
+            }
+        };
+
+        fetchHospital();
+    }, [refresh]);
 
     useEffect(() => {
         const fetchPatient = async () => {
@@ -43,7 +66,7 @@ const ViewHospital = () => {
             setError(null);
             try {
 
-                const res = await superAdminApi.allPatients();
+                const res = await superAdminApi.hospitalAllPaitent(hos?._id);
                 if (res.status === 200) {
                     setData(res.data.data || []);
                     setFilterPatient(res.data.data || []); // initialize filter
@@ -58,17 +81,43 @@ const ViewHospital = () => {
                 setIsProcessing(false);
             }
         };
-
         fetchPatient();
     }, []);
 
+
+    const handleRemovePa = async (id) => {
+        try {
+            setIsProcessing(true);
+            const res = await superAdminApi.removePa(id);
+            if ((await res).status === 200 || (await res).data.status === 200) {
+                toast.success("pa remove successfully");
+                setRefresh(prev => !prev);
+            } else {
+                toast.error("Failed to register hospital")
+            }
+        } catch (err) {
+            console.error("Error while adding hospital:", err);
+            toast.error(err.response?.data?.message || "Something went wrong");
+        } finally {
+            setIsProcessing(false);
+        }
+    }
+
     const handleAddPa = async () => {
         try {
-
-
-            const res = await commonApi.addPa(doctorData)
+            setIsProcessing(true)
+            const res = await superAdminApi.addPa(doctorData)
+            if (res.status === 200) {
+                toast.success(`Pa Added for ${assinDoctor?.name}`)
+                setAssignDoctor(null)
+                setRefresh(prev => !prev);
+            }
         } catch (error) {
-
+            console.log(err);
+            toast.success(err.response?.data?.message || "Internal Server Error");
+        }
+        finally {
+            setIsProcessing(false)
         }
     }
 
@@ -84,16 +133,16 @@ const ViewHospital = () => {
                     justifyContent: 'space-between',
                     width: '100%'
                 }}>
-                    <h4>Total Hospitals</h4>
+                    <h4>Total Patient</h4>
                     <p style={{
                         fontSize: '12px'
                     }}>🏥</p>
                 </div>
-                <h2>6</h2>
-                <p style={{
+                <h2>{hospital?.totalPatient || "N/A"}</h2>
+                {/* <p style={{
                     color: 'rgba(125, 200, 176)',
                     fontWeight: "bold"
-                }}>08%</p>
+                }}>08%</p> */}
             </div>
             <div className="customCard hover" style={{
 
@@ -103,16 +152,16 @@ const ViewHospital = () => {
                     justifyContent: 'space-between',
                     width: '100%'
                 }}>
-                    <h4>Total Capacity</h4>
+                    <h4>Total Prescribtion</h4>
                     <p style={{
                         fontSize: '12px'
                     }}>🛏️</p>
                 </div>
-                <h2>6</h2>
-                <p style={{
+                <h2>{hospital?.totalPrescribtion || "N/A"}</h2>
+                {/* <p style={{
                     color: 'rgba(125, 200, 176)',
                     fontWeight: "bold"
-                }}>08%</p>
+                }}>08%</p> */}
             </div>
             <div className="customCard hover" style={{
 
@@ -122,16 +171,16 @@ const ViewHospital = () => {
                     justifyContent: 'space-between',
                     width: '100%'
                 }}>
-                    <h4>Current Occupancy</h4>
+                    <h4>Total Department</h4>
                     <p style={{
                         fontSize: '12px'
                     }}>👥</p>
                 </div>
-                <h2>6</h2>
-                <p style={{
+                <h2>{hospital?.supportedDepartments?.length || "N/A"}</h2>
+                {/* <p style={{
                     color: 'rgba(125, 200, 176)',
                     fontWeight: "bold"
-                }}>08%</p>
+                }}>08%</p> */}
             </div>
             <div className="customCard hover" style={{
 
@@ -141,16 +190,13 @@ const ViewHospital = () => {
                     justifyContent: 'space-between',
                     width: '100%'
                 }}>
-                    <h4>Total Staff</h4>
+                    <h4>Revenue</h4>
                     <p style={{
                         fontSize: '12px'
                     }}>👨‍⚕️</p>
                 </div>
-                <h2>6</h2>
-                <p style={{
-                    color: 'rgba(125, 200, 176)',
-                    fontWeight: "bold"
-                }}>08%</p>
+                <h2>{hospital?.totalRevenue || "N/A"}</h2>
+
             </div>
 
         </div>
@@ -171,7 +217,7 @@ const ViewHospital = () => {
                     fontSize: '12px',
                     padding: '0 7px 0 7px'
 
-                }} className="commonBtn" href={`http://localhost:5173/register-patient?id=${hospital._id}`}
+                }} className="commonBtn" href={`http://localhost:5173/register-patient?id=${hospital?._id}`}
                     target="_blank"
                     rel="noopener noreferrer"
                 >Patient Registeratiion Link <i style={{
@@ -212,9 +258,9 @@ const ViewHospital = () => {
 
                     fontSize: '13px',
                     fontWeight: 'bold'
-                }}>Phone:<span style={{
+                }}>Pincode:<span style={{
                     fontWeight: 'normal'
-                }}>7340479570</span></span>
+                }}></span>{hospital?.pinCode}</span>
             </div>
             <div style={{
                 marginTop: '10px',
@@ -231,9 +277,9 @@ const ViewHospital = () => {
 
                     fontSize: '13px',
                     fontWeight: 'bold'
-                }}>Director <span style={{
+                }}>Director: <span style={{
                     fontWeight: 'normal'
-                }}>456</span></span>
+                }}>{hospital?.medicalDirector?.name}</span></span>
             </div>
         </div>
         <div className="hostpitalmanagement-body">
@@ -250,7 +296,7 @@ const ViewHospital = () => {
                     justifyContent: "space-between"
                 }}>
                     <h4>{"Department Overview"}</h4>
-                    <button className="common-btn">+ New Doctor</button>
+                    {/* <button className="common-btn">+ New Doctor</button> */}
                 </div>
 
                 <div style={{
@@ -303,15 +349,33 @@ const ViewHospital = () => {
                                 padding: '7px'
                             }}>
                                 <div>
-                                    <span style={{
+                                    <p style={{
                                         fontSize: '13px',
                                         fontWeight: 'bold'
-                                    }}>{doc?.name}</span>
-                                    <a href="">{dep?.departmentName}</a>
+                                    }}>{doc?.name}</p>
+                                    <a style={{
+                                        fontSize: '10px',
+                                        fontWeight: 'bold'
+                                    }} href="">{dep?.departmentName}</a>
                                 </div>
-                                <button onClick={() => setAssignDoctor(doc)} className="common-btn">+ Add Pa</button>
-
-
+                                {
+                                    !hos?.personalAssitantId ? (
+                                        <button
+                                            onClick={() => setAssignDoctor(doc)}
+                                            className="common-btn"
+                                        >
+                                            + Add PA
+                                        </button>
+                                    ) : (
+                                        <button
+                                            disabled={isProcessing}
+                                            onClick={() => handleRemovePa(doc?._id)}
+                                            className="regular-btn"
+                                        >
+                                            {isProcessing ? "removing..." : "Remove PA"}
+                                        </button>
+                                    )
+                                }
                             </div>
                         })
 
@@ -552,11 +616,14 @@ const ViewHospital = () => {
                             justifyContent: 'end',
                             gap: '10px'
                         }}>
-                            <button onClick={() => setAssignDoctor(null)}>Cancel</button>
-                            <button onClick={() => {
-                                setDoctorData({ ...doctorData, docId: assinDoctor?._id })
+                            <button className="regular-btn" onClick={() => setAssignDoctor(null)}>Cancel</button>
+                            <button className="common-btn" onClick={() => {
+
+                                setDoctorData({ ...doctorData, docId: assinDoctor._id })
+                                // console.log("dodo", doctorData);
+                                // console.log("assinDoctor", assinDoctor._id);
                                 handleAddPa()
-                            }} >Add Doctor</button>
+                            }} >Assign Pa</button>
                         </div>
                     </div>
                 </div>

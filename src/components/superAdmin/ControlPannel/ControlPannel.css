@@ -196,12 +196,13 @@
 /* MAIN CONTENT AREA SHIFT */
 .mainContent {
     margin-left: 250px;
+    width: 100%;
     padding: 20px;
     transition: 0.3s ease;
-     transition: margin-left 0.3s ease;
+    transition: margin-left 0.3s ease;
 }
 
-.side-bar.collapsed ~ .mainContent {
+.side-bar.collapsed~.mainContent {
     margin-left: 70px;
     transition: 0.3s ease;
 
@@ -221,7 +222,7 @@
         margin-left: 220px;
     }
 
-    .side-bar.collapsed ~ .mainContent {
+    .side-bar.collapsed~.mainContent {
         margin-left: 70px;
     }
 }
@@ -241,7 +242,8 @@
 
     .side-bar-logo span,
     .side-bar-item h5 {
-        display: block; /* mobile me text hide mat karo */
+        display: block;
+        /* mobile me text hide mat karo */
     }
 
     .mainContent {

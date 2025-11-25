@@ -94,12 +94,12 @@ const dummyDepartments = [
 
 
 export const NewHospital = () => {
-    const totalSteps = 5;
+    const totalSteps = 4;
     const navigate = useNavigate(-1)
     const [assinDoctor, setAssignDoctor] = useState(null)
     const [isProcessing, setIsProcessing] = useState(false)
     const [currentStep, setCurrentStep] = useState(1); // start at step 1
-    const [categoryName, setCategoryName] = useState(null)
+    const [categoryName, setCategoryName] = useState("")
     const [addCustomDep, setCustomDepartment] = useState(null)
     const [hospitalData, setHospitalData] = useState({
         name: '',
@@ -359,13 +359,12 @@ export const NewHospital = () => {
                         <label style={{
                             width: '42%'
                         }} htmlFor="">Patient Category
-                            <input type="text" onChange={(e) => {
+                            <input value={categoryName} type="text" onChange={(e) => {
                                 return setCategoryName(e.target.value)
                             }} placeholder="patientCategory" />
                         </label>
                         <div className="add-button" style={{ display: "flex", alignItems: "end" }}>
                             <button
-
                                 className="main-button"
                                 style={{
                                     width: '80px'
@@ -375,7 +374,10 @@ export const NewHospital = () => {
                                         toast.error('Please Enter Scheme Name')
                                         return
                                     }
-                                    return setHospitalData({ ...hospitalData, patientCategories: [...hospitalData.patientCategories, categoryName] })
+
+                                    setHospitalData({ ...hospitalData, patientCategories: [...hospitalData.patientCategories, categoryName] })
+                                    setCategoryName("")
+                                    return
 
                                 }
                                 }
@@ -406,7 +408,7 @@ export const NewHospital = () => {
 
 
 
-                    {console.log(hospitalData.patientCategories.length)}
+
 
                     {hospitalData.patientCategories.length > 0 && (
 
@@ -417,14 +419,25 @@ export const NewHospital = () => {
                             display: 'flex',
                             gap: '10px'
                         }}>
-                            {hospitalData.patientCategories.map((item) => {
+                            {hospitalData.patientCategories.map((item, index) => {
 
-                                return <span style={{
+                                return <span key={index} style={{
                                     padding: '10px 17px 10px 17px',
                                     backgroundColor: 'lightgray',
-                                    borderRadius: '7px'
+                                    borderRadius: '7px',
+                                    fontSize: '15px'
 
-                                }}>{item} </span>
+                                }}>{item}  <i
+                                    onClick={() => {
+                                        setHospitalData(prev => ({
+                                            ...prev,
+                                            patientCategories: prev.patientCategories.filter((_, idx) => idx !== index)
+                                        }));
+                                    }}
+
+                                    className="ri-close-large-line"
+                                    style={{ cursor: 'pointer', fontSize: '15px' }}
+                                ></i></span>
 
                             })}
                         </div>
@@ -611,12 +624,12 @@ export const NewHospital = () => {
                         justifyContent: 'space-between'
                     }}>
                         <h4> Selected Department</h4>
-                        <button className="card hover" style={{
+                        {/* <button className="card hover" style={{
                             width: '160px',
                             height: "40px",
                             transition: "1s ease",
                             backgroundColor: "lightgreen"
-                        }} onClick={() => setCustomDepartment({ name: '', image: '' })}>+ Add Custom</button>
+                        }} onClick={() => setCustomDepartment({ name: '', image: '' })}>+ Add Custom</button> */}
                     </div>
                     {
                         hospitalData.supportedDepartments.length > 0 && (
@@ -711,158 +724,6 @@ export const NewHospital = () => {
             )}
             {currentStep == 4 && (
                 <div className="steps" >
-                    <h3>Custom Letterhead</h3>
-                    <hr />
-                    <div style={{
-                        display: 'flex',
-                        width: '100%',
-                        gap: '10px',
-                        marginTop: '10px',
-
-                    }}>
-                        <label style={{
-                            width: '100%',
-                            display: "grid"
-                        }} htmlFor="">Header Name *
-                            <input style={{ width: "43%" }} type="text"
-                                value={hospitalData.customLetterPad.headerName}
-                                onChange={(e) => setHospitalData({
-                                    ...hospitalData, customLetterPad: {
-                                        ...hospitalData.customLetterPad,
-                                        headerName: e.target.value
-                                    }
-                                })}
-                                placeholder="Hospital Name" />
-                        </label>
-                        {/* <label style={{
-                            width: '100%'
-                        }} htmlFor="">PinCode
-                            <input type="text" placeholder="PinCode" />
-                        </label> */}
-                    </div>
-                    <div style={{
-                        display: 'flex',
-                        width: '100%',
-                        gap: '100px',
-                        marginTop: '10px',
-
-                    }}>
-
-                        <label style={{
-                            width: '100%',
-                            // gap :"20px"
-                        }} htmlFor="">Tagline 1
-                            <input value={hospitalData.customLetterPad.tagline1}
-                                onChange={(e) => setHospitalData({
-                                    ...hospitalData, customLetterPad: {
-                                        ...hospitalData.customLetterPad,
-                                        tagline1: e.target.value
-                                    }
-                                })} type="text" />
-                        </label>
-                        <label style={{
-                            width: '100%'
-                        }} htmlFor="">Tagline 2
-                            <input value={hospitalData.customLetterPad.tagline2}
-                                onChange={(e) => setHospitalData({
-                                    ...hospitalData, customLetterPad: {
-                                        ...hospitalData.customLetterPad,
-                                        tagline2: e.target.value
-                                    }
-                                })} type="text" />
-                        </label>
-                    </div>
-
-                    <label style={{
-                        width: '100%'
-                    }} htmlFor="">Disclaimer
-                        <br />
-                        <textarea
-                            placeholder="disclaimer"
-                            value={hospitalData.customLetterPad.disclaimer}
-                            onChange={(e) => setHospitalData({
-                                ...hospitalData, customLetterPad: {
-                                    ...hospitalData.customLetterPad,
-                                    disclaimer: e.target.value
-                                }
-                            })}
-                            style={{
-                                width: '100%',
-                                padding: '10px',
-                                borderRadius: '7px',
-                                border: "0.3px solid lightgray"
-                            }} name="" id="" rows="3"></textarea>
-                    </label>
-                    <div style={{
-                        display: 'flex',
-                        width: '100%',
-                        gap: '120px',
-                        marginTop: '10px',
-
-                    }}>
-                        <label style={{
-                            width: '100%'
-                        }} htmlFor="">Header Email *
-                            <input value={hospitalData.customLetterPad.headerEmail}
-                                onChange={(e) => setHospitalData({
-                                    ...hospitalData, customLetterPad: {
-                                        ...hospitalData.customLetterPad,
-                                        headerEmail: e.target.value
-                                    }
-                                })} type="text" placeholder="hosptial@example.com" />
-                        </label>
-                        <label style={{
-                            width: '100%'
-                        }} htmlFor="">Header Phone *
-                            <input value={hospitalData.customLetterPad.headerPhone}
-                                onChange={(e) => setHospitalData({
-                                    ...hospitalData, customLetterPad: {
-                                        ...hospitalData.customLetterPad,
-                                        headerPhone: e.target.value
-                                    }
-                                })} type="text" placeholder="ex.+91 (7340479570)" />
-                        </label>
-                    </div>
-
-                    <label
-                        style={{
-                            display: "flex",
-                            flexDirection: "column",
-                        }}
-                    >
-                        Watermark*
-                        <input
-                            style={{
-                                border: '1px solid lightgray',
-                                textAlign: "center",
-                            }}
-                            type="file"
-                        />
-                    </label>
-                    <hr />
-
-                    <div className="page-handler">
-                        <button onClick={() => setCurrentStep(currentStep - 1)} disabled={currentStep == 1}> ← Back</button>
-                        <button
-                            disabled={isProcessing}
-                            onClick={(e) => {
-                                e.preventDefault();
-
-                                if (currentStep < 5) {
-                                    setCurrentStep(currentStep + 1);
-                                } else {
-
-                                    handleSubmit(e);
-                                }
-                            }}
-                        >
-                            {currentStep < 5 ? "Next →" : "Save Hospital"}
-                        </button>
-                    </div>
-                </div>
-            )}
-            {currentStep == 5 && (
-                <div className="steps" >
                     <h3>Review & Submit</h3>
                     <hr />
                     <div
@@ -949,17 +810,17 @@ export const NewHospital = () => {
                             <div style={{
                                 width: '80px'
                             }}>
-            {hospitalData?.medicalDirector?.image && (
-      <img style={{
-                                    width: "60px",
-                                    height: "60px"
-                                }}
-                                    // src={testimg}
-                                    src={URL.createObjectURL(hospitalData?.medicalDirector?.image)}
-                                    alt="image" />
-            )
-            }
-                          
+                                {hospitalData?.medicalDirector?.image && (
+                                    <img style={{
+                                        width: "60px",
+                                        height: "60px"
+                                    }}
+                                        // src={testimg}
+                                        src={URL.createObjectURL(hospitalData?.medicalDirector?.image)}
+                                        alt="image" />
+                                )
+                                }
+
                             </div>
 
                             <div style={{
@@ -1032,7 +893,7 @@ export const NewHospital = () => {
 
                         }
                     </div>
-                    <div
+                    {/* <div
                         style={{
                             backgroundColor: 'white',
                             border: '1px solid lightgray',
@@ -1079,7 +940,7 @@ export const NewHospital = () => {
                             </p>
                         </div>
 
-                    </div>
+                    </div> */}
                     <hr />
 
                     <div className="saveHospital" >
@@ -1093,12 +954,11 @@ export const NewHospital = () => {
                         }}
                             onClick={() => setCurrentStep(currentStep - 1)} disabled={currentStep == 1}> ← Back</button>
                         <button
-
                             disabled={isProcessing}
                             onClick={(e) => {
                                 e.preventDefault();
 
-                                if (currentStep < 5) {
+                                if (currentStep < 4) {
                                     setCurrentStep(currentStep + 1);
                                 } else {
 
@@ -1106,7 +966,7 @@ export const NewHospital = () => {
                                 }
                             }}
                         >
-                            {currentStep < 5 ? " Next →" : "Save Hospital"}
+                            {currentStep < 4 ? " Next →" : `${isProcessing ? "saving...." : "Save Hospital"}`}
                         </button>
                     </div>
                 </div>
@@ -1230,8 +1090,8 @@ export const NewHospital = () => {
                             justifyContent: 'end',
                             gap: '10px'
                         }}>
-                            <button onClick={() => setAssignDoctor(null)}>Cancel</button>
-                            <button onClick={handleAddDoctor}>Add Doctor</button>
+                            <button className="regular-btn" onClick={() => setAssignDoctor(null)}>Cancel</button>
+                            <button className="common-btn" onClick={handleAddDoctor}>Add Doctor</button>
                         </div>
                     </div>
                 </div>

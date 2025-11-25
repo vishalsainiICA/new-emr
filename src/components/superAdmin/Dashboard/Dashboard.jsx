@@ -17,7 +17,15 @@ const Dashboard = () => {
     // const [isCollapse, setCollapse] = useState(false);
     const [isHide, setisHide] = useState(false);
     const [error, setError] = useState(null);
+    const [metrices, setmetrices] = useState(null);
     const [filterHospital, setFilterHospital] = useState([]);
+    const [superAdmin, setSuperAdmin] = useState(null);
+
+
+    const getMetricValue = (name) => {
+        return metrices?.find((m) => m.key === name)?.value ?? 0;
+    };
+
 
     useEffect(() => {
         const fetchHospital = async () => {
@@ -27,6 +35,7 @@ const Dashboard = () => {
                 const res = await superAdminApi.getHosptialMetrices();
                 if (res.status === 200) {
                     setData(res.data.data || []);
+                    setmetrices(res.data?.data?.metrices)
                     setFilterHospital(res.data.data?.TopPerformanceHospital || []);
                 } else {
                     setError(res.data?.message || "Something went wrong");
@@ -38,7 +47,24 @@ const Dashboard = () => {
                 setIsProcessing(false);
             }
         };
-
+        const fetchProfile = async () => {
+            setIsProcessing(true);
+            setError(null);
+            try {
+                const res = await superAdminApi.fetchProfile();
+                if (res.status === 200) {
+                    setSuperAdmin(res.data?.data)
+                } else {
+                    setError(res.data?.message || "Something went wrong");
+                }
+            } catch (err) {
+                console.log(err);
+                setError(err.response?.data?.message || "Internal Server Error");
+            } finally {
+                setIsProcessing(false);
+            }
+        };
+        fetchProfile()
         fetchHospital();
     }, []);
 
@@ -52,7 +78,7 @@ const Dashboard = () => {
                 <div className="super-name" onClick={() => setCollapse(!isCollapse)}>
                     <span className="logo">SA</span>
                     <div>
-                        <h5>Welcome back, Super Admin</h5>
+                        <h5>Welcome back,{superAdmin?.name}</h5>
                         <span style={{
                             fontSize: "12px"
                         }}>System Administrator</span>
@@ -61,49 +87,57 @@ const Dashboard = () => {
             </div>
             {/* Hospital-card-list */}
             <div className="hospital-card-list">
+
+                {/* Total Hospital */}
                 <div id="total-hospital" className="card-list">
                     <div className="card-name">
-                        <span>Total Hospital  </span>
-                        <p style={{ fontSize: "20px" }}> 🏥</p>
+                        <span>Total Hospital</span>
+                        <p style={{ fontSize: "20px" }}>🏥</p>
                     </div>
                     <div>
-                        <h2>47</h2>
-                        <p>↑ 8% from last querter</p>
+                        <h2>{getMetricValue("Total Hospital")}</h2>
+                        {/* <p>↑ 8% from last quarter</p> */}
                     </div>
                 </div>
+
+                {/* Total Patients */}
                 <div id="total-patient" className="card-list">
                     <div className="card-name">
-                        <span>Total Patients </span>
+                        <span>Total Patients</span>
                         <p style={{ fontSize: "20px" }}>👥</p>
                     </div>
                     <div>
-                        <h2>125,847</h2>
-                        <p>↑ 15% Network growth</p>
+                        <h2>{getMetricValue("Total Patient")}</h2>
+                        {/* <p>↑ 15% Network growth</p> */}
                     </div>
                 </div>
+
+                {/* Total Prescription */}
                 <div id="total-prescription" className="card-list">
                     <div className="card-name">
-                        <span>Total Prescriptions </span>
+                        <span>Total Prescriptions</span>
                         <p style={{ fontSize: "20px" }}>💊</p>
                     </div>
-
                     <div>
-                        <h2>89,234</h2>
-                        <p>↑ This month processed</p>
+                        <h2>{getMetricValue("Total Prescbrition")}</h2>
+                        {/* <p>↑ This month processed</p> */}
                     </div>
                 </div>
+
+                {/* Total Revenue */}
                 <div id="total-revenue" className="card-list">
                     <div className="card-name">
-                        <span>Total Revenue </span>
-                        <p style={{ fontSize: "20px" }}
-                        >💰</p>
+                        <span>Total Revenue</span>
+                        <p style={{ fontSize: "20px" }}>💰</p>
                     </div>
                     <div>
-                        <h2>$2.4M</h2>
-                        <p>↑ 22% monthly revenue</p>
+                        <h2>₹{getMetricValue("Total Revenue")}</h2>
+                        {/* <p>↑ 22% monthly revenue</p> */}
                     </div>
                 </div>
+
             </div>
+
             {/* Hospital-performance and Networkoverview */}
             <div className="Hospital-perfo-and-Network">
 
@@ -171,118 +205,40 @@ const Dashboard = () => {
 
 
                 </div>
-                {/* <div className="hospital-name">
-                        <div style={{ display: "flex", gap: "20px" }}>
-                            <span className="logo">CH</span>
-                            <div>
-                                <h5>Central Hospital</h5>
-                                <span style={{
-                                    fontSize: "12px"
-                                }}>ID: H-001 • Patients: 2,847 • Revenue: $485K</span>
-                            </div>
-                        </div>
-                        <p>Excellent</p>
-                    </div>
-                    <div className="hospital-name">
-                        <div style={{ display: "flex", gap: "20px" }}>
-                            <span className="logo">MH</span>
-                            <div>
-                                <h5>Metro Health Center</h5>
-                                <span style={{
-                                    fontSize: "12px"
-                                }}>ID: H-002 • Patients: 1,923 • Revenue: $342K</span>
-                            </div>
-                        </div>
-                        <p>Good</p>
-                    </div>
-                    <div className="hospital-name">
-                        <div style={{ display: "flex", gap: "20px" }}>
-                            <span className="logo">RH</span>
-                            <div>
-                                <h5>Regional Hospital</h5>
-                                <span style={{
-                                    fontSize: "12px"
-                                }}>ID: H-003 • Patients: 3,156 • Revenue: $567K</span>
-                            </div>
-                        </div>
-                        <p>Critical load</p>
-                    </div>
-                    <div className="hospital-name">
-                        <div style={{ display: "flex", gap: "20px" }}>
-                            <span className="logo">KH</span>
-                            <div>
-                                <h5>Specialty Hospital</h5>
-                                <span style={{
-                                    fontSize: "12px"
-                                }}>ID: H-004 • Patients: 1,234 • Revenue: $298K</span>
-                            </div>
-                        </div>
-                        <p>Good</p>
-                    </div>
-                    <div className="hospital-name">
-                        <div style={{ display: "flex", gap: "20px" }}>
-                            <span className="logo">DH</span>
-                            <div>
-                                <h5>Emergency Hospital</h5>
-                                <span style={{
-                                    fontSize: "12px"
-                                }}>ID: H-005 • Patients: 4,567 • Revenue: $723K</span>
-                            </div>
-                        </div>
-                        <p>Well</p>
-                    </div>
-                </div> */}
                 {/* Network Overview */}
                 <div className="network-overview">
                     <h4>Network Overview</h4>
+
+                    {/* Active Hospital */}
                     <div className="Network-card">
-                        <span> Active Hospital</span>
-                        <h5>47 Facilities</h5>
+                        <span>Active Hospital</span>
+                        <h5>{getMetricValue("Total Hospital")} Facilities</h5>
                         <p>All systems operational</p>
                     </div>
+
+                    {/* Patient Load */}
                     <div className="Network-card">
                         <span>Patient Load</span>
-                        <h5>125,847 Total</h5>
+                        <h5>{getMetricValue("Total Patient")} Total</h5>
                         <p>15% increase this quarter</p>
                     </div>
+
+                    {/* Revenue Stream */}
                     <div className="Network-card">
                         <span>Revenue Stream</span>
-                        <h5>$2.4M Monthly</h5>
-                        <p>22% growth rate</p>
+                        <h5>₹{getMetricValue("Total Revenue")} Monthly</h5>
+                        {/* <p>22% growth rate</p>  <-- If you want to hide growth line */}
                     </div>
+
+                    {/* System Status (Static: backend me nahi aata) */}
                     <div className="Network-card">
                         <span>System Status</span>
                         <h5>99.8% Uptime</h5>
                         <p>Excellent performance</p>
                     </div>
 
-                    {/* Extra Block */}
-
-                    <div className="extra-main-block">
-
-                        <div className="extra-block">
-                            <div className="blocks" onClick={() => navigate("/new-hosptial")}>
-                                <p>🏥</p>
-                                <span>Add Hospital</span>
-                            </div>
-                            <div className="blocks">
-                                <p>👥</p>
-                                <span>Generate Report</span>
-                            </div>
-                        </div>
-                        <div className="extra-block">
-                            <div className="blocks">
-                                <p>👥</p>
-                                <span>Manage Admins</span>
-                            </div>
-                            <div className="blocks">
-                                <p>🏥</p>
-                                <span>System Settings</span>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
+
             </div>
 
             {/*  system-administrator-profile*/}
@@ -303,12 +259,12 @@ const Dashboard = () => {
                 <div className="admin-detail">
                     <div>
                         <p>Email</p>
-                        <span>superadmin@healthcare.com</span>
+                        <span>{superAdmin?.email}</span>
                     </div>
                     <hr />
                     <div>
                         <p>Phone</p>
-                        <span>+1 (555) 000-0001</span>
+                        <span>{superAdmin?.contact}</span>
                     </div>
                     <hr />
 
@@ -326,7 +282,7 @@ const Dashboard = () => {
 
                     <div>
                         <p>Last Login</p>
-                        <span>07/11/2025, 15:11:57</span>
+                        <span>{superAdmin?.createdAt}</span>
                     </div>
                     <hr />
 
@@ -338,21 +294,21 @@ const Dashboard = () => {
 
                     <div>
                         <p>Hospitals</p>
-                        <span>6 facilities</span>
+                        <span>{getMetricValue("Total Hospital")}</span>
                     </div>
                     <hr />
 
                     <div>
                         <p>Total Patients</p>
-                        <span>8</span>
+                        <span>{getMetricValue("Total Patient")}</span>
                     </div>
                     <hr />
-
+                    {/* 
                     <div>
                         <p>Administrators</p>
                         <span>10 active</span>
                     </div>
-                    <hr />
+                    <hr /> */}
 
                     <div>
                         <p>System Status</p>
@@ -427,7 +383,11 @@ const Dashboard = () => {
                     <p>Are you sure you want to logout from the Super Admin Dashboard?</p>
                 </div>
                 <div className="log-btn">
-                    <button className="main-button " onClick={() => navigate("/login", { replace: true })}>Yes logout</button>
+                    <button className="main-button " onClick={() => {
+                        localStorage.removeItem("token")
+                        localStorage.removeItem("role")
+                        navigate("/login", { replace: true })
+                    }}>Yes logout</button>
                     <button className="common-btn" onClick={() => { setlogOut(!logOut); setblur(!blur); setCollapse(!isCollapse) }}>Cancel</button>
                 </div>
 

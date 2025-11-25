@@ -2,37 +2,53 @@ import { BsEye, BsEyeSlash } from "react-icons/bs";
 import "./LoginPage.css"
 import { useState } from "react";
 import { commonApi } from "../../../auth";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 
 
 const Loginpage = () => {
-
+  const navigate = useNavigate()
   const [password, setPassword] = useState(null)
   const [email, setemail] = useState(null)
   const [error, seterror] = useState(null)
-
+  const [isProcessing, setIsProcessing] = useState(false)
   const [value, setvalue] = useState(false);
   const [Eyelogo, setEyelogo] = useState(false);
 
   const handlelogin = async () => {
     try {
-      if (validation()) {      // <-- function ko call kiya
-        const res = await commonApi.login(
-          { email: email, password: password }
-        );
+      setIsProcessing(true)
+      if (validation()) {
+        const res = await commonApi.login({ email, password });
 
         if (res.status === 200) {
-          console.log("Login successful");
-          if (res.data?.role === "medicalDirector") { return localStorage.setItem("SuperAdmintoken", res.data?.token) }
-          if (res.data?.role === "doctor") return localStorage.setItem("Doctor", res.data?.token)
-          if (res.data?.role === "perosnalAssistant") return localStorage.setItem("PerosnalAssistant", res.data?.token)
 
+          localStorage.setItem("token", res.data?.token);   // single token key
+          localStorage.setItem("role", res.data?.role);
+          // role saved
+
+          toast.success("Login success")
+
+          if (res.data?.role === "superadmin") {
+            navigate("/super-admin/dashboard", { replace: true });
+          }
+          else if (res.data?.role === "doctor") {
+            navigate("/doctor", { replace: true });
+          }
+          else if (res.data?.role === "personalAssitant") {
+            navigate("/pa", { replace: true });
+          }
         }
       }
     } catch (error) {
       console.error(error);
     }
+    finally {
+      setIsProcessing(false)
+    }
   };
+
 
   const validation = () => {
     if (!email) {
@@ -78,7 +94,7 @@ const Loginpage = () => {
           </div>
           <div className="login-button">
             <a href="">forgot Password?</a>
-            <button onClick={handlelogin}>Log in</button>
+            <button disabled={isProcessing} onClick={handlelogin}> {`${isProcessing ? "login...." : "Log in"}`} </button>
           </div>
 
 

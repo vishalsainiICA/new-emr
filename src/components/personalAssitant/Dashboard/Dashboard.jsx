@@ -20,8 +20,21 @@ const DashBoard = () => {
     const [isEditprofile, setEditprofile] = useState(false);
     const [blur, setblur] = useState(false);
     const [logOut, setlogOut] = useState(false);
+    const [pa, setpa] = useState(null);
+
+
+    const getMetricValue = (name) => {
+        return metrices?.find((m) => m.key === name)?.value ?? 0;
+    };
 
     const navigate = useNavigate()
+
+    useEffect(() => {
+        const token = localStorage.getItem("token") || undefined
+        if (!token) {
+            navigate("/login", { replace: true })
+        }
+    }, [])
 
     const filter = (value) => {
 
@@ -63,6 +76,24 @@ const DashBoard = () => {
                 setIsProcessing(false);
             }
         };
+        const fetchProfile = async () => {
+            setIsProcessing(true);
+            setError(null);
+            try {
+                const res = await perosnalAssistantAPI.fetchProfile();
+                if (res.status === 200) {
+                    setpa(res.data?.data)
+                } else {
+                    setError(res.data?.message || "Something went wrong");
+                }
+            } catch (err) {
+                console.log(err);
+                setError(err.response?.data?.message || "Internal Server Error");
+            } finally {
+                setIsProcessing(false);
+            }
+        };
+        fetchProfile()
 
         fetchPatient();
     }, []);
@@ -87,7 +118,7 @@ const DashBoard = () => {
                 }}
             >
                 <div>
-                    <h4 style={{ margin: 0 }}>{`Welcome back,Dr.${"vishal Saini"}`}</h4>
+                    <h4 style={{ margin: 0 }}>{`Welcome back,Dr.${pa?.name}`}</h4>
                     <p style={{ margin: 0, textAlign: "right" }}>{"Doctor Management"}</p>
                 </div>
                 <span style={{
@@ -111,7 +142,7 @@ const DashBoard = () => {
         </div>
 
         {/* Hospital-card-list */}
-        <div className="doctor-card-list">
+        {/* <div className="doctor-card-list">
             <div id="total-hospital" className="hover card-list">
                 <div className="card-name">
                     <span>Total Hospital  </span>
@@ -154,7 +185,7 @@ const DashBoard = () => {
                     <p>↑ 22% monthly revenue</p>
                 </div>
             </div>
-        </div>
+        </div> */}
         <div className="doctor-patient-list">
             <div style={{
                 width: '100%'
@@ -185,8 +216,7 @@ const DashBoard = () => {
                     }}>
                         <input type="search" placeholder="type name..." />
                         <select name="" id="">
-                            <option value="all">All</option>
-                            <option value="schedule">Schedule</option>
+                            <option value="all">Schedule</option>
                             <option value="cancel">Cancel</option>
                         </select>
                         <input type="date" />
@@ -249,10 +279,10 @@ const DashBoard = () => {
                                                 backgroundColor: 'lightgreen',
                                                 padding: '5px',
                                                 borderRadius: '10px'
-                                            }}>Shcdule</p>
+                                            }}>{hos?.status}</p>
                                         </div>
 
-                                        <p style={{}}>{`${hos.city || "N/A"} , ${hos.state || "N/A"} `}</p>
+                                        <p style={{}}>{`${hos.gender?.toLowerCase() || "N/A"} , ${hos?.age || "N/A"} `}</p>
                                     </div>
 
                                 </div>
@@ -278,7 +308,7 @@ const DashBoard = () => {
                                                 // onClick={() => navigate('/medication', { state: { patient: hos } })}
                                                 style={{
                                                     backgroundColor: 'rgba(219, 219, 252)',
-                                               
+
                                                     margin: '10px',
                                                     padding: '10px',
                                                     width: '150px'
@@ -377,7 +407,7 @@ const DashBoard = () => {
 
                 <div className="profile-logo">
                     <span className="logo">VS</span>
-                    <span>Dr.Vishal Saini</span>
+                    <span>Dr.{pa?.name}</span>
                     <p></p>
                 </div>
                 <hr />
@@ -385,16 +415,16 @@ const DashBoard = () => {
                 <div className="admin-detail">
                     <div>
                         <p>Email</p>
-                        <span>superadmin@healthcare.com</span>
+                        <span>{pa?.email}</span>
                     </div>
                     <hr />
                     <div>
                         <p>Phone</p>
-                        <span>+1 (555) 000-0001</span>
+                        <span>{pa?.contact}</span>
                     </div>
                     <hr />
 
-                    <div>
+                    {/* <div>
                         <p>Department</p>
                         <span>System Administration</span>
                     </div>
@@ -440,7 +470,7 @@ const DashBoard = () => {
                         <p>System Status</p>
                         <span>All Systems Operational</span>
                     </div>
-                    <hr />
+                    <hr /> */}
 
                 </div>
 
@@ -507,7 +537,11 @@ const DashBoard = () => {
                     <p>Are you sure you want to logout from the Super Admin Dashboard?</p>
                 </div>
                 <div className="log-btn">
-                    <button className="main-button" >Yes logout</button>
+                    <button className="main-button" onClick={() => {
+                        localStorage.removeItem("token")
+                        localStorage.removeItem("role")
+                        navigate("/login", { replace: true })
+                    }}>Yes logout</button>
                     <button className="common-btn" onClick={() => { setlogOut(!logOut); setblur(!blur); setCollapse(!isCollapse) }}>Cancel</button>
                 </div>
 
