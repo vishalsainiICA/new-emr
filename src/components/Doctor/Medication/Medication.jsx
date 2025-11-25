@@ -434,6 +434,8 @@ const Medication = () => {
             // console.log("✅ API response:", res.data?.data);
 
             // const { tests, medicines } = extractLabTests(res?.data?.data);
+            await new Promise(resolve => setTimeout(resolve, 10000));
+            console.log("⏳ Slept 10 seconds, continuing...");
             const { tests, medicines } = extractLabTests(data);
             console.log("🧪 Tests extracted:", tests);
             console.log("💊 Medicines extracted:", medicines);
@@ -604,7 +606,7 @@ const Medication = () => {
                                         })
                                     }}>
 
-                                        
+
 
                                         <img src={`http://localhost:8000/${file.path}`} />
                                         {/* <h5>{"Name"}{file}</h5> */}

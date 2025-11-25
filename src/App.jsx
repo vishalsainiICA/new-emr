@@ -15,17 +15,17 @@ import Patientregisteration from './components/superAdmin/PatientRegisteration/P
 import PatientRecords from './components/superAdmin/PatientRecord/PatientRecord';
 import Pa_Dashboard from "./components/personalAssitant/Dashboard/Dashboard.jsx"
 import InitialAssesment from './components/personalAssitant/InitialAssement/InitialAssement.jsx';
-import Errorpage from './components/Utility/Not-found/Not-found.jsx';
- 
+import LoginPage from './components/Utility/Loginpage/LoginPage.jsx';
+
 
 
 function App() {
 
   return <BrowserRouter>
     <Routes>
-      <Route path="register-patient" element={<Patientregisteration />} />
 
-
+      <Route path="/login" element={<LoginPage></LoginPage>} />
+      <Route path="/register-patient" element={<Patientregisteration />} />
 
       <Route path="/super-admin" element={<ControlPannel></ControlPannel>}>
         <Route path="dashboard" element={<Su_Dashboard></Su_Dashboard>} />

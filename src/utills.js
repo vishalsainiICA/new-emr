@@ -5,6 +5,15 @@ export const commonInstance = axios.create({
   timeout: 100000,
   withCredentials: true,
 })
+commonInstance.interceptors.request.use((config) => {
+  const token = localStorage.getItem("SuperAdmintoken") || localStorage.getItem("AdminToken");
+  console.log('intecepto', token);
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
 //  super Admin
 export const superAdminInstance = axios.create({
@@ -66,13 +75,13 @@ export const doctorInstance = axios.create({
   withCredentials: true
 })
 
-// doctorInstance.interceptors.request.use((config) => {
-//   const token = localStorage.getItem("Doctor");
-//   if (token) {
-//     config.headers.Authorization = `Bearer ${token}`;
-//   }
-//   return config;
-// });
+doctorInstance.interceptors.request.use((config) => {
+  const token = localStorage.getItem("Doctor");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
 // Converts nested object → FormData
 
@@ -85,6 +94,15 @@ export const perosnalAssistanceInstance = axios.create({
     "Content-Type": 'application/json'
   }
 })
+
+
+perosnalAssistanceInstance.interceptors.request.use((config) => {
+  const token = localStorage.getItem("PerosnalAssistant");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 export const createFormData = (obj, form = new FormData(), namespace = '') => {
   for (let key in obj) {
     if (obj[key] === undefined || obj[key] === null) continue;
