@@ -15,6 +15,8 @@ import Patientregisteration from './components/superAdmin/PatientRegisteration/P
 import PatientRecords from './components/superAdmin/PatientRecord/PatientRecord';
 import Pa_Dashboard from "./components/personalAssitant/Dashboard/Dashboard.jsx"
 import InitialAssesment from './components/personalAssitant/InitialAssement/InitialAssement.jsx';
+import Errorpage from './components/Utility/Not-found/Not-found.jsx';
+ 
 
 
 function App() {
@@ -22,6 +24,7 @@ function App() {
   return <BrowserRouter>
     <Routes>
       <Route path="register-patient" element={<Patientregisteration />} />
+
 
 
       <Route path="/super-admin" element={<ControlPannel></ControlPannel>}>
@@ -40,7 +43,7 @@ function App() {
       {/* personal Assitant */}
       <Route path="/pa" element={<Pa_Dashboard></Pa_Dashboard>}> </Route>
       <Route path="/intial-assement" element={<InitialAssesment></InitialAssesment>}> </Route>
-
+      <Route path='*' element={<Errorpage />}></Route>
 
     </Routes>
     <ToastContainer
