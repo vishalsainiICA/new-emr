@@ -318,7 +318,10 @@ const ViewHospital = () => {
                                 fontSize: '13px',
                                 fontWeight: 'bold'
                             }}>{dep?.departmentName}</span>
-                            <a href="">patient:{i + 1}</a>
+                            <p style={{
+                                fontSize: '12px',
+                                color: 'blue'
+                            }} href="">patient:{i + 1}</p>
                         </div>
 
                     })}
@@ -363,23 +366,29 @@ const ViewHospital = () => {
                                     }}>{doc?.email}</p>
                                 </div>
                                 {
-                                    hos?.personalAssitantId ? (
-                                        <button
-                                            onClick={() => setAssignDoctor(doc)}
-                                            className="common-btn"
-                                        >
-                                            + Add PA
-                                        </button>
-                                    ) : (
-                                        <button
-                                            disabled={isProcessing}
-                                            onClick={() => handleRemovePa(doc?._id)}
-                                            className="regular-btn"
-                                        >
-                                            {isProcessing ? "removing..." : "Remove PA"}
-                                        </button>
-                                    )
+                                    doc?.personalAssitantId ?
+                                        (
+                                            <div>
+                                                <h5>Pa Details:  </h5>
+                                                <p style={{
+                                                    fontSize: '13px',
+                                                    fontWeight: 'bold'
+                                                }}>name:  {doc?.personalAssitantId?.name}</p>
+                                                <p style={{
+                                                    fontSize: '12px',
+                                                    color: 'blue'
+                                                }}>{doc?.personalAssitantId?.email}</p>
+                                            </div>
+                                        ) : (
+                                            <button
+                                                onClick={() => setAssignDoctor(doc)}
+                                                className="common-btn"
+                                            >
+                                                + Add Pa
+                                            </button>
+                                        )
                                 }
+
                             </div>
                         })
 

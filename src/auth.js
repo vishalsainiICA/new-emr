@@ -117,7 +117,7 @@ export const adminApi = {
 
 export const medicalDirectorApi = {
     fetchProfile: async () => {
-        return await me.get('/medical-director/auth/profile')
+        return await medicalDirectorInstance.get('/medical-director/auth/profile')
     },
     getHospitalById: async (hospitalId) => {
         return await medicalDirectorInstance.get(`/common/hospital/single-hospital?hospitalId=${hospitalId}`)
