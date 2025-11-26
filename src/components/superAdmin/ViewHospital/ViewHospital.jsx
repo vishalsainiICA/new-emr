@@ -220,8 +220,8 @@ const ViewHospital = () => {
 
                 }}
 
-                    // className="commonBtn" href={`https://new-emr-pqlz.onrender.com/register-patient?id=${hospital?._id}`}
-                    className="commonBtn" href={`http://localhost:5173/register-patient?id=${hospital?._id}`}
+                    className="commonBtn" href={`https://new-emr-pqlz.onrender.com/register-patient?id=${hospital?._id}`}
+                    // className="commonBtn" href={`http://localhost:5173/register-patient?id=${hospital?._id}`}
                     target="_blank"
                     rel="noopener noreferrer"
                 >Patient Registeratiion Link <i style={{
