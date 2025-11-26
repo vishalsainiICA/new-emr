@@ -1,0 +1,281 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.Patientregiteration-main {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(233, 233, 253, 1);
+    display: flex;
+    padding: 20px;
+    justify-content: center;
+    /* align-items: center; */
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
+
+.patient-view-form {
+    width: 60%;
+    height: 820px;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(254, 254, 255);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.patientregisteration-header {
+    width: 100%;
+    display: flex;
+    color: black;
+    padding: 0 20px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+/* patient-Step-0 */
+
+.patient-step-0 {
+    width: 100%;
+    display: flex;
+    margin-top: 30px;
+    color: black;
+    /* background-color: black; */
+    /* align-items: center; */
+    justify-content: space-between;
+}
+
+.patient-step-0 .img-1 {
+    width: 50%;
+    /* background-color: aqua; */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    border-radius: 10px;
+    transition: all 0.8s ease;
+}
+
+.patient-step-0 .img-1:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+}
+
+
+.patient-step-0 .img-2 {
+    width: 50%;
+    /* background-color: rgb(0, 255, 98); */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.8s ease;
+    border-radius: 10px;
+}
+
+.patient-step-0 .img-2:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+}
+
+
+/* patient-Step-1 */
+
+.patient-step-1 {
+    width: 100%;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin: 30px 0px;
+}
+
+.All-detail form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.distance div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.All-detail div {
+    width: 100%;
+    display: flex;
+    padding: 5px;
+}
+
+.distance {
+    gap: 30px;
+}
+
+
+/* Patient-step-2 */
+
+.patient-step-2 {
+    width: 100%;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 30px 0;
+}
+
+.patient-step-2 .hold-data-div {
+    width: 100%;
+    display: flex;
+    padding: 5px;
+    gap: 20px;
+}
+
+.hold-data-div div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.patient-step-2 form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+
+
+/* patient-Step-3 */
+
+.patient-step-3 {
+    width: 100%;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    margin: 30px 0px;
+    /* background-color: aqua; */
+}
+
+/* margin: '10px',
+display: 'flex',
+padding: '7px',
+justifyContent: 'center',
+alignItems: 'center',
+gap: '10px',
+transition: "1s ease",
+borderRadius: '10px',
+cursor: 'pointer',
+width: '170px',
+height: '70px' */
+
+
+.main-select-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 50px;
+    justify-content: center;
+
+}
+
+.card-hover {
+    border-radius: 10px;
+    box-shadow: 0 5px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 1s ease;
+}
+
+.card-hover:hover {
+
+    transform: translateY(-5px);
+
+}
+
+.card-hover div {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 50px;
+    gap: 10px;
+}
+
+
+/* patient-step-4 */
+
+.patient-step-4 {
+    width: 100%;
+    margin: 30px 0px;
+    color: black;
+    /* padding: 20px; */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.upload-file {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0.3px solid lightgray;
+    border-radius: 10px;
+    gap: 30px;
+}
+
+
+/* patient-step-5 */
+
+.patient-step-5 {
+    width: 100%;
+    margin: 30px 0px;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+
+    span {
+        font-size: 12px;
+        font-weight: 300;
+        padding: 10px;
+    }
+}
+
+.patient-step-5 div {
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-weight: bold;
+}
+
+
+
+/* page-handler */
+
+.page-handler {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: end;
+    justify-content: end;
+    gap: 50px;
+}
+
+.page-handler div {
+    display: flex;
+    gap: 40px;
+}
+
+.page-handler button {
+    background-color: rgb(10, 10, 9);
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 15px;
+}

@@ -28,6 +28,9 @@ const DashBoard = () => {
     const [cancelReason, setCancelReason] = useState("");
 
 
+    const navigate = useNavigate()
+
+
     const changePatientStatus = async (id) => {
         setIsProcessing(true);
         setError(null);
@@ -49,8 +52,6 @@ const DashBoard = () => {
             setNewDate('')
         }
     }
-    const navigate = useNavigate()
-
     useEffect(() => {
         const token = localStorage.getItem("token") || undefined
         if (!token) {
@@ -187,6 +188,7 @@ const DashBoard = () => {
                             <option value="cancel">Cancel</option>
                         </select>
                         <input type="date" />
+                        <button className="regular-btn" onClick={ ()=>navigate("/new-patient" , {state:{pa}})}>+New</button>
 
                     </div>
 

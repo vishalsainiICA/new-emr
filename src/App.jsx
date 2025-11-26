@@ -17,6 +17,7 @@ import Pa_Dashboard from "./components/personalAssitant/Dashboard/Dashboard.jsx"
 import InitialAssesment from './components/personalAssitant/InitialAssement/InitialAssement.jsx';
 import RedirectToDashboard from './components/Handler.jsx';
 import Loginpage from './components/Utility/Loginpage/LoginPage.jsx';
+import Pa_PatientRegistertaion from "./components/personalAssitant/PatientRegisteration/Patientregisteration.jsx"
 
 
 
@@ -44,6 +45,7 @@ function App() {
       {/* personal Assitant */}
       <Route path="/pa" element={<Pa_Dashboard></Pa_Dashboard>}> </Route>
       <Route path="/intial-assement" element={<InitialAssesment></InitialAssesment>}> </Route>
+      <Route path="/new-patient" element={<Pa_PatientRegistertaion></Pa_PatientRegistertaion>}> </Route>
     </Routes>
     <ToastContainer
       position="top-right"

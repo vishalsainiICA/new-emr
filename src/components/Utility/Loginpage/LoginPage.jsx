@@ -40,9 +40,13 @@ const Loginpage = () => {
             navigate("/pa", { replace: true });
           }
         }
+        else {
+          seterror({ error: res.data?.message });
+        }
       }
     } catch (error) {
-      console.error(error);
+      console.log("ererfv", error);
+      seterror({ error: error.response?.data?.message || "Internal Server Error" });
     }
     finally {
       setIsProcessing(false)
@@ -96,8 +100,10 @@ const Loginpage = () => {
             <a href="">forgot Password?</a>
             <button disabled={isProcessing} onClick={handlelogin}> {`${isProcessing ? "login...." : "Log in"}`} </button>
           </div>
-
-
+          {error?.error && (<p style={{
+            fontSize: '10px',
+            color: 'red'
+          }}>{error?.error}</p>)}
         </div>
 
         <div className="other-detail">

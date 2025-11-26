@@ -21,7 +21,8 @@ const ViewHospital = () => {
         contact: "",
         experience: "",
         qualification: "",
-        docId: null
+        docId: null,
+        hosId: null
     });
 
     const hos = location.state?.hospital || undefined
@@ -617,13 +618,13 @@ const ViewHospital = () => {
                             gap: '10px'
                         }}>
                             <button className="regular-btn" onClick={() => setAssignDoctor(null)}>Cancel</button>
-                            <button className="common-btn" onClick={() => {
+                            <button className="common-btn" disabled={isProcessing} onClick={() => {
 
-                                setDoctorData({ ...doctorData, docId: assinDoctor._id })
+                                setDoctorData({ ...doctorData, docId: assinDoctor._id, hosId: assinDoctor?.hospitalId })
                                 // console.log("dodo", doctorData);
                                 // console.log("assinDoctor", assinDoctor._id);
                                 handleAddPa()
-                            }} >Assign Pa</button>
+                            }} >{isProcessing ? "saving..." : "Assign Pa"}</button>
                         </div>
                     </div>
                 </div>
