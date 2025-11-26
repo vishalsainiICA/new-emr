@@ -26,7 +26,7 @@ function App() {
   return <BrowserRouter>
     <Routes>
       <Route path="/" element={<RedirectToDashboard></RedirectToDashboard>} />
-      <Route path="/login" element={<Loginpage></Loginpage>} />
+      <Route path="/login" element={<Loginpage/>} />
       <Route path="/register-patient" element={<Patientregisteration />} />
 
       <Route path="/super-admin" element={<ControlPannel></ControlPannel>}>

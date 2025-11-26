@@ -218,7 +218,10 @@ const ViewHospital = () => {
                     fontSize: '12px',
                     padding: '0 7px 0 7px'
 
-                }} className="commonBtn" href={`https://new-emr-pqlz.onrender.com/register-patient?id=${hospital?._id}`}
+                }}
+
+                    // className="commonBtn" href={`https://new-emr-pqlz.onrender.com/register-patient?id=${hospital?._id}`}
+                    className="commonBtn" href={`http://localhost:5173/register-patient?id=${hospital?._id}`}
                     target="_blank"
                     rel="noopener noreferrer"
                 >Patient Registeratiion Link <i style={{
@@ -354,13 +357,13 @@ const ViewHospital = () => {
                                         fontSize: '13px',
                                         fontWeight: 'bold'
                                     }}>{doc?.name}</p>
-                                    <a style={{
-                                        fontSize: '10px',
-                                        fontWeight: 'bold'
-                                    }} href="">{dep?.departmentName}</a>
+                                    <p style={{
+                                        fontSize: '12px',
+                                        color: 'blue'
+                                    }}>{doc?.email}</p>
                                 </div>
                                 {
-                                    !hos?.personalAssitantId ? (
+                                    hos?.personalAssitantId ? (
                                         <button
                                             onClick={() => setAssignDoctor(doc)}
                                             className="common-btn"
