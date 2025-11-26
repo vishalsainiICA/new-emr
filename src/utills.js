@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const commonInstance = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
+  baseURL: import.meta.env.VITE_BASE_URL_API,
   timeout: 100000,
   withCredentials: true,
 })
@@ -17,7 +17,7 @@ commonInstance.interceptors.request.use((config) => {
 
 //  super Admin
 export const superAdminInstance = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
+  baseURL: import.meta.env.VITE_BASE_URL_API,
   timeout: 100000, // 
   withCredentials: true,
 });
@@ -35,7 +35,7 @@ superAdminInstance.interceptors.request.use((config) => {
 
 
 export const adminInstance = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
+  baseURL: import.meta.env.VITE_BASE_URL_API,
   timeout: 10000,
   withCredentials: true,
 })
@@ -50,7 +50,7 @@ adminInstance.interceptors.request.use((config) => {
 
 
 export const medicalDirectorInstance = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
+  baseURL: import.meta.env.VITE_BASE_URL_API,
   timeout: 10000,
   withCredentials: true,
   headers: {
@@ -70,7 +70,7 @@ medicalDirectorInstance.interceptors.request.use((config) => {
 
 
 export const doctorInstance = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
+  baseURL: import.meta.env.VITE_BASE_URL_API,
   timeout: 10000,
   withCredentials: true
 })
@@ -87,7 +87,7 @@ doctorInstance.interceptors.request.use((config) => {
 
 
 export const perosnalAssistanceInstance = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
+  baseURL: import.meta.env.VITE_BASE_URL_API,
   timeout: 10000,
   withCredentials: true,
   headers: {
