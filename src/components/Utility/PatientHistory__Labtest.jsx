@@ -179,7 +179,7 @@ export function Patient_Hisotry({ patient, onclose }) {
     const [active, setactive] = useState(null)
 
 
-    VITE_BASE_URL_API="https://emr-backend-5p2j.onrender.com"
+    VITE_BASE_URL_API = "https://emr-backend-5p2j.onrender.com"
     // VITE_BASE_URL_API="https://emr-backend-5p2j.onrender.com"
 
     return <div className='labtest'>
@@ -273,6 +273,10 @@ export function Patient_Hisotry({ patient, onclose }) {
 
                     <div className="patient-history-images">
                         {active && active?.files.map((file, i) => {
+
+                            const path = `${VITE_BASE_URL_API}/${file.path}`
+                            console.log("path", path);
+
 
                             return <div className="patient-history-img-card" key={i} onClick={() => {
                                 setopenImage({
