@@ -601,7 +601,7 @@ const Medication = () => {
 
                                     return <div className="patient-history-img-card" key={i} onClick={() => {
                                         setopenImage({
-                                            image: `http://localhost:8000/${file.path}`,
+                                            image: `${import.meta.env.VITE_BASE_URL}/${file.path}`,
                                             name: "name" + i
                                         })
                                     }}>
