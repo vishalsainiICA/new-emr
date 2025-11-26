@@ -44,8 +44,6 @@ function App() {
       {/* personal Assitant */}
       <Route path="/pa" element={<Pa_Dashboard></Pa_Dashboard>}> </Route>
       <Route path="/intial-assement" element={<InitialAssesment></InitialAssesment>}> </Route>
-
-
     </Routes>
     <ToastContainer
       position="top-right"

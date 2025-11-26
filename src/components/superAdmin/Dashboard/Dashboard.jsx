@@ -26,6 +26,25 @@ const Dashboard = () => {
         return metrices?.find((m) => m.key === name)?.value ?? 0;
     };
 
+    const filter = (value) => {
+
+        const search = value.toLowerCase().trim();
+
+        // Empty input → reset full list
+        if (!search) {
+            setFilterHospital(data);
+            return; // important
+        }
+
+        // Filter by name
+        const result = data.filter((hos) =>
+            hos.name.toLowerCase().startsWith(search)
+        );
+
+        setFilterHospital(result);
+    };
+
+
 
     useEffect(() => {
         const fetchHospital = async () => {
@@ -34,7 +53,7 @@ const Dashboard = () => {
             try {
                 const res = await superAdminApi.getHosptialMetrices();
                 if (res.status === 200) {
-                    setData(res.data.data || []);
+                    setData(res.data.data?.TopPerformanceHospital || []);
                     setmetrices(res.data?.data?.metrices)
                     setFilterHospital(res.data.data?.TopPerformanceHospital || []);
                 } else {
@@ -146,7 +165,7 @@ const Dashboard = () => {
                         <h4 style={{
                             width: '100%'
                         }}>Hopital Performance</h4>
-                        <input type="search" placeholder="type name..." />
+                        <input type="search" placeholder="type name..." onChange={(e) => filter(e.target.value)} />
                     </div>
                     <div >
                         {isProcessing && (
@@ -187,7 +206,9 @@ const Dashboard = () => {
                                                 <h5>{hos?.name}</h5>
                                                 <span style={{
                                                     fontSize: "12px"
-                                                }}>ID: H-001 • Patients: 2,847 • Revenue: $485K</span>
+                                                }}>ID: H-00{i + 1} • Schemes: <a style={{
+                                                    color: "blue"
+                                                }}>{hos?.patientCategories?.join(",")}</a>  • Md: {hos?.medicalDirector?.name}</span>
                                             </div>
                                         </div>
                                         <p>Excellent</p>

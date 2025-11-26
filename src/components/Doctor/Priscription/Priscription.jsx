@@ -72,12 +72,13 @@ const Pricription = () => {
         try {
             const form = new FormData()
             const pdfBlob = await generatePDFBlob();
+            console.log("state", state);
             console.log("blog", pdfBlob);
             form.append("prescriptionImage", pdfBlob, "prescription.pdf");
             form.append("patientId", state?.patientInfo?._id)
             form.append("initialAssementId", state?.patientInfo?.initialAssementId._id)
-            form.append("doctorId", state?.patientInfo?.doctorId._id)
-            form.append("hospitalId", state?.patientInfo?.hospitalId._id)
+            form.append("doctorId", state?.patientInfo?.doctorId)
+            form.append("hospitalId", state?.patientInfo?.hospitalId)
             form.append("prescriptionType", state?.type)
             form.append("prescriptionMediciene", JSON.stringify(state?.medication))
             form.append("illness", JSON.stringify(state?.illnessData))
@@ -102,33 +103,33 @@ const Pricription = () => {
             <button onClick={() => navigate(-1)} style={{ display: "flex", gap: "8px" }}> <i class="ri-arrow-left-circle-line" ></i>Back</button>
             <div className="prisciption-detail-form" ref={pdfRef}>
                 <div className="logo-and-detail">
-                    <div  style={{width:"70%",backgroundColor:"Back"}}>
-                    <img src={srk} height="70px" width="250px" alt="logo-hospital" />
-                     <div className="User-inf">
-                        <div style={{display:"flex",gap:"50px"}}>
-                            <div style={{ width: "100%", display: "grid", alignItems: "center",}}>
-                                <label htmlFor="">Reg.No.</label>
-                                {/* <input type="text" div/> */}
-                                <div className="user-detail"><p>{state?.patientInfo?.age}</p></div>
-                                <label htmlFor="">Name :</label>
-                                <div className="user-detail"><p>{state?.patientInfo?.name}</p></div>
-                                <label htmlFor="">Age/Sex :</label>
-                                <div className="user-detail"><p>{state?.patientInfo?.gender}</p></div>
-                            </div>
+                    <div style={{ width: "70%", backgroundColor: "Back" }}>
+                        <img src={srk} height="70px" width="250px" alt="logo-hospital" />
+                        <div className="User-inf">
+                            <div style={{ display: "flex", gap: "50px" }}>
+                                <div style={{ width: "100%", display: "grid", alignItems: "center", }}>
+                                    <label htmlFor="">Reg.No.</label>
+                                    {/* <input type="text" div/> */}
+                                    <div className="user-detail"><p>{state?.patientInfo?.age}</p></div>
+                                    <label htmlFor="">Name :</label>
+                                    <div className="user-detail"><p>{state?.patientInfo?.name}</p></div>
+                                    <label htmlFor="">Age/Sex :</label>
+                                    <div className="user-detail"><p>{state?.patientInfo?.gender}</p></div>
+                                </div>
 
-                            <div style={{ width: "100%", display: "grid", alignItems: "center",}}>
-                                <label htmlFor="">Reg.Date</label>
-                                <div className="user-detail"><p>{state?.patientInfo?.DOB}</p></div>
-                                <label htmlFor="">Attendee Relation :</label>
-                                <div className="user-detail"><p>{state?.patientInfo?.attendeeRelation}</p></div>
-                                <label htmlFor="">Mobile.No</label>
-                                <div className="user-detail"><p>{state?.patientInfo?.phone}</p></div>
+                                <div style={{ width: "100%", display: "grid", alignItems: "center", }}>
+                                    <label htmlFor="">Reg.Date</label>
+                                    <div className="user-detail"><p>{state?.patientInfo?.DOB}</p></div>
+                                    <label htmlFor="">Attendee Relation :</label>
+                                    <div className="user-detail"><p>{state?.patientInfo?.attendeeRelation}</p></div>
+                                    <label htmlFor="">Mobile.No</label>
+                                    <div className="user-detail"><p>{state?.patientInfo?.phone}</p></div>
+                                </div>
                             </div>
-                        </div>
-                        <div>
-                               <label htmlFor="">Adderess :</label>
-                                <div className="user-detail"><p style={{overflow:"hidden"}}>Jaipur</p></div>
-                        </div>
+                            <div>
+                                <label htmlFor="">Adderess :</label>
+                                <div className="user-detail"><p style={{ overflow: "hidden" }}>Jaipur</p></div>
+                            </div>
                         </div>
                     </div>
                     <div
@@ -156,10 +157,10 @@ const Pricription = () => {
                             </div>
 
                             <div style={{ display: "flex", flexDirection: "column", gap: "5px", }}>
-                                  <div className="user-detail"><p>{state?.patientInfo?.initialAssementId?.BP}</p></div>
-                                  <div className="user-detail"><p>{state?.patientInfo?.initialAssementId?.heartRate}</p></div>
-                                  <div className="user-detail"><p>{state?.patientInfo?.initialAssementId?.weight}</p></div>
-                                  <div className="user-detail"><p>{state?.patientInfo?.initialAssementId?.bloodGroup}</p></div>
+                                <div className="user-detail"><p>{state?.patientInfo?.initialAssementId?.BP}</p></div>
+                                <div className="user-detail"><p>{state?.patientInfo?.initialAssementId?.heartRate}</p></div>
+                                <div className="user-detail"><p>{state?.patientInfo?.initialAssementId?.weight}</p></div>
+                                <div className="user-detail"><p>{state?.patientInfo?.initialAssementId?.bloodGroup}</p></div>
                             </div>
                         </div>
                     </div>

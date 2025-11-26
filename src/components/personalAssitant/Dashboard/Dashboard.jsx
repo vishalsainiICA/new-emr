@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import { FaCableCar } from "react-icons/fa6";
 import { doctorAPi, perosnalAssistantAPI } from "../../../auth";
+import { toast } from "react-toastify";
 
 
 const DashBoard = () => {
@@ -21,12 +22,33 @@ const DashBoard = () => {
     const [blur, setblur] = useState(false);
     const [logOut, setlogOut] = useState(false);
     const [pa, setpa] = useState(null);
+    const [showPostponeModal, setShowPostponeModal] = useState(null);
+    const [showCancelModal, setShowCancelModal] = useState(null);
+    const [newDate, setNewDate] = useState("");
+    const [cancelReason, setCancelReason] = useState("");
 
 
-    const getMetricValue = (name) => {
-        return metrices?.find((m) => m.key === name)?.value ?? 0;
-    };
+    const changePatientStatus = async (id) => {
+        setIsProcessing(true);
+        setError(null);
+        try {
+            const res = await doctorAPi.changePatientStatus(id, newDate, cancelReason);
+            if (res.status === 200) {
+                toast.success("Status Updated")
 
+            } else {
+                setError(res.data?.message || "Something went wrong");
+            }
+        } catch (err) {
+            console.log(err);
+            setError(err.response?.data?.message || "Internal Server Error");
+        } finally {
+            setIsProcessing(false);
+            setEdit(null)
+            setCancelReason('')
+            setNewDate('')
+        }
+    }
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -127,65 +149,10 @@ const DashBoard = () => {
 
 
             </div>
-            {/* <div style={{
-                display: 'flex'
-            }} >
-                <span className="logo">SA</span>
-                <div className="doctor-controler">
-                    <h5>Welcome back, Super Admin</h5>
-                    <span style={{
-                        fontSize: "12px"
-                    }}>System Administrator</span>
-                </div>
-            </div> */}
 
         </div>
 
-        {/* Hospital-card-list */}
-        {/* <div className="doctor-card-list">
-            <div id="total-hospital" className="hover card-list">
-                <div className="card-name">
-                    <span>Total Hospital  </span>
-                    <p> 🏥</p>
-                </div>
-                <div className="card-Metrices">
-                    <h2>47</h2>
-                    <p >↑ 8% from last querter</p>
-                </div>
-            </div>
-            <div id="total-patient" className="hover card-list">
-                <div className="card-name">
-                    <span>Total Patients </span>
-                    <p >👥</p>
-                </div>
-                <div className="card-Metrices">
-                    <h2>125,847</h2>
-                    <p>↑ 15% Network growth</p>
-                </div>
-            </div>
-            <div id="total-prescription" className="hover card-list">
-                <div className="card-name">
-                    <span>Total Prescriptions </span>
-                    <p >💊</p>
-                </div>
 
-                <div className="card-Metrices">
-                    <h2>89,234</h2>
-                    <p>↑ This month processed</p>
-                </div>
-            </div>
-            <div id="total-revenue" className="hover card-list">
-                <div className="card-name">
-                    <span>Total Revenue </span>
-                    <p
-                    >💰</p>
-                </div>
-                <div className="card-Metrices">
-                    <h2>$2.4M</h2>
-                    <p>↑ 22% monthly revenue</p>
-                </div>
-            </div>
-        </div> */}
         <div className="doctor-patient-list">
             <div style={{
                 width: '100%'
@@ -214,7 +181,7 @@ const DashBoard = () => {
                         justifyContent: 'space-between',
                         gap: '7px'
                     }}>
-                        <input type="search" placeholder="type name..." />
+                        <input type="search" onChange={(e) => filter(e.target.value)} placeholder="type name..." />
                         <select name="" id="">
                             <option value="all">Schedule</option>
                             <option value="cancel">Cancel</option>
@@ -274,12 +241,29 @@ const DashBoard = () => {
                                             gap: '10px'
                                         }}>
                                             <h4 style={{ margin: 0 }}>{hos?.name}</h4>
-                                            <p style={{
-                                                color: 'green',
-                                                backgroundColor: 'lightgreen',
-                                                padding: '5px',
-                                                borderRadius: '10px'
-                                            }}>{hos?.status}</p>
+                                            <p
+                                                style={{
+                                                    color:
+                                                        hos?.status === "Cancel"
+                                                            ? "red"
+                                                            : hos?.status === "Postponed"
+                                                                ? "#b8860b"          // dark yellow
+                                                                : "green",
+
+                                                    backgroundColor:
+                                                        hos?.status === "Cancel"
+                                                            ? "#ffb3b3"          // light red
+                                                            : hos?.status === "Postponed"
+                                                                ? "#fff2a8"          // light yellow
+                                                                : "lightgreen",
+
+                                                    padding: "5px",
+                                                    borderRadius: "10px",
+                                                }}
+                                            >
+                                                {hos?.status}
+                                            </p>
+
                                         </div>
 
                                         <p style={{}}>{`${hos.gender?.toLowerCase() || "N/A"} , ${hos?.age || "N/A"} `}</p>
@@ -302,37 +286,83 @@ const DashBoard = () => {
                                         justifyContent: 'end',
                                     }}>
                                         {hos.initialAssementId != null ? (
+                                            /* ----------------------------------------
+                                               CASE: ASSESSMENT DONE (disable button)
+                                            ---------------------------------------- */
                                             <button
-
                                                 disabled={true}
-                                                // onClick={() => navigate('/medication', { state: { patient: hos } })}
                                                 style={{
                                                     backgroundColor: 'rgba(219, 219, 252)',
-
                                                     margin: '10px',
                                                     padding: '10px',
                                                     width: '150px'
-                                                }}> Assement Done</button>
+                                                }}
+                                            >
+                                                Assessment Done
+                                            </button>
+
+                                        ) : hos.status === "Cancel" ? (
+                                            /* ----------------------------------------
+                                               CASE: CANCELLED → No actions
+                                            ---------------------------------------- */
+                                            <p
+                                                style={{
+                                                    color: "red",
+                                                    backgroundColor: "#ffb3b3",
+                                                    padding: "5px",
+                                                    borderRadius: "10px",
+                                                    width: "150px",
+                                                    textAlign: "center"
+                                                }}
+                                            >
+                                                Cancelled
+                                            </p>
+
+                                        ) : hos.status === "Postponed" ? (
+                                            /* ----------------------------------------
+                                               CASE: POSTPONED → No actions
+                                            ---------------------------------------- */
+                                            <p
+                                                style={{
+                                                    color: "#b8860b",
+                                                    backgroundColor: "#fff2a8",
+                                                    padding: "5px",
+                                                    borderRadius: "10px",
+                                                    width: "150px",
+                                                    textAlign: "center"
+                                                }}
+                                            >
+                                                Postponed
+                                            </p>
+
                                         ) : (
+                                            /* ----------------------------------------
+                                               CASE: ONLY SCHEDULED → Buttons ENABLE
+                                            ---------------------------------------- */
                                             <div>
                                                 <button
-                                                    onClick={() => navigate("/intial-assement", { state: { patient: hos } })}
+                                                    onClick={() =>
+                                                        navigate("/intial-assement", { state: { patient: hos } })
+                                                    }
                                                     style={{
                                                         backgroundColor: 'rgba(219, 219, 252)',
-                                                    }}> 👁️ Ini</button>
+                                                        marginRight: "10px"
+                                                    }}
+                                                >
+                                                    👁️ Ini
+                                                </button>
 
                                                 <button
-                                                    onClick={() => setEdit(edit === hos._id ? null : hos._id)}
+                                                    onClick={() => setEdit(edit === hos._id ? null : hos)}
                                                     style={{ backgroundColor: "rgba(235, 254, 246)" }}
                                                 >
                                                     ✏️ Edit
                                                 </button>
                                             </div>
-
-
                                         )}
 
-                                        {edit === hos._id && (
+
+                                        {edit?._id === hos._id && (
                                             <div
                                                 style={{
                                                     position: "absolute",
@@ -346,10 +376,10 @@ const DashBoard = () => {
                                                 }}
                                             >
                                                 <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
-                                                    <li style={{ padding: "8px 12px", fontSize: "12px", cursor: "pointer" }}>
-                                                        Postpone
+                                                    <li onClick={() => setShowPostponeModal(edit)} style={{ padding: "8px 12px", fontSize: "12px", cursor: "pointer" }}>
+                                                        Postpond
                                                     </li>
-                                                    <li style={{ padding: "8px 12px", fontSize: "12px", cursor: "pointer" }}>
+                                                    <li onClick={() => setShowCancelModal(edit)} style={{ padding: "8px 12px", fontSize: "12px", cursor: "pointer" }}>
                                                         Cancel
                                                     </li>
                                                 </ul>
@@ -548,6 +578,64 @@ const DashBoard = () => {
             </div>
 
         </div>
+        {showPostponeModal && (
+            <div className="modal">
+                <div className="modal-box">
+                    <h3>Postpone Appointment of {showPostponeModal?.name}</h3>
+
+                    <label>New Date & Time:</label>
+                    <input
+                        type="datetime-local"
+                        value={newDate}
+                        onChange={(e) => setNewDate(e.target.value)}
+                    />
+
+                    <div className="modal-actions">
+                        <button className="regular-btn" onClick={() => setShowPostponeModal(null)}>Close</button>
+                        <button
+                            className="common-btn"
+                            onClick={() => {
+                                changePatientStatus(showPostponeModal?._id)
+                                setShowPostponeModal(null);
+                            }}
+                        >
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+        )}
+        {showCancelModal && (
+            <div className="modal">
+                <div className="modal-box">
+                    <h3>Cancel Appointment of {showCancelModal?.name}</h3>
+
+                    <label>Reason for cancellation:</label>
+                    <br />
+                    <br />
+                    <textarea
+                        placeholder="Enter reason..."
+                        value={cancelReason}
+                        onChange={(e) => setCancelReason(e.target.value)}
+                    ></textarea>
+
+                    <div className="modal-actions">
+                        <button className="regular-btn" onClick={() => setShowCancelModal(null)}>Close</button>
+                        <button
+                            className="common-btn"
+                            onClick={() => {
+
+                                changePatientStatus(showCancelModal?._id)
+                                setShowCancelModal(null)
+                            }}
+                        >
+                            Confirm Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        )}
+
     </div >
 
 

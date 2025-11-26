@@ -20,8 +20,19 @@ const DashBoard = () => {
     const [isEditprofile, setEditprofile] = useState(false);
     const [blur, setblur] = useState(false);
     const [logOut, setlogOut] = useState(false);
+    const [pa, setpa] = useState(null);
+    const [showPostponeModal, setShowPostponeModal] = useState(false);
+    const [showCancelModal, setShowCancelModal] = useState(false);
+    const [newDate, setNewDate] = useState("");
+    const [cancelReason, setCancelReason] = useState("");
+    const [metrices, setmetrices] = useState(null);
 
     const navigate = useNavigate()
+
+    const getMetricValue = (name) => {
+        return metrices?.[name] ?? 0;
+    };
+
 
     const filter = (value) => {
 
@@ -35,7 +46,6 @@ const DashBoard = () => {
         setFilterPatient(filter)
 
     }
-
 
     const handelclick = () => {
         if (!isCollapse) {
@@ -53,6 +63,7 @@ const DashBoard = () => {
                 const res = await doctorAPi.getAllPatients();
                 if (res.status === 200) {
                     setData(res.data.data || []);
+                    setmetrices(res.data?.metrices)
                     setFilterPatient(res.data.data || []); // initialize filter
                 } else {
                     setError(res.data?.message || "Something went wrong");
@@ -64,10 +75,45 @@ const DashBoard = () => {
                 setIsProcessing(false);
             }
         };
-     
-
+        const fetchProfile = async () => {
+            setIsProcessing(true);
+            setError(null);
+            try {
+                const res = await doctorAPi.fetchProfile();
+                if (res.status === 200) {
+                    setpa(res.data?.data)
+                } else {
+                    setError(res.data?.message || "Something went wrong");
+                }
+            } catch (err) {
+                console.log(err);
+                setError(err.response?.data?.message || "Internal Server Error");
+            } finally {
+                setIsProcessing(false);
+            }
+        };
+        fetchProfile()
         fetchPatient();
     }, []);
+
+
+    const changePatientStatus = async (date = none) => {
+        setIsProcessing(true);
+        setError(null);
+        try {
+            const res = await doctorAPi.fetchProfile();
+            if (res.status === 200) {
+                setpa(res.data?.data)
+            } else {
+                setError(res.data?.message || "Something went wrong");
+            }
+        } catch (err) {
+            console.log(err);
+            setError(err.response?.data?.message || "Internal Server Error");
+        } finally {
+            setIsProcessing(false);
+        }
+    }
 
     return <div className="doctor-dashboard">
 
@@ -89,7 +135,7 @@ const DashBoard = () => {
                 }}
             >
                 <div>
-                    <h4 style={{ margin: 0 }}>{`Welcome back,Dr.${"vishal Saini"}`}</h4>
+                    <h4 style={{ margin: 0 }}>{`Welcome back,Dr.${pa?.name}`}</h4>
                     <p style={{ margin: 0, textAlign: "right" }}>{"Doctor Management"}</p>
                 </div>
                 <span style={{
@@ -116,12 +162,12 @@ const DashBoard = () => {
         <div className="doctor-card-list">
             <div id="total-hospital" className="hover card-list">
                 <div className="card-name">
-                    <span>Total Hospital  </span>
+                    <span>Today Patient  </span>
                     <p> 🏥</p>
                 </div>
                 <div className="card-Metrices">
-                    <h2>47</h2>
-                    <p >↑ 8% from last querter</p>
+                    <h2>{getMetricValue("TodayPatient")}</h2>
+                    {/* <p >↑ 8% from last querter</p> */}
                 </div>
             </div>
             <div id="total-patient" className="hover card-list">
@@ -130,8 +176,8 @@ const DashBoard = () => {
                     <p >👥</p>
                 </div>
                 <div className="card-Metrices">
-                    <h2>125,847</h2>
-                    <p>↑ 15% Network growth</p>
+                    <h2>{getMetricValue("TotalPatient")}</h2>
+                    {/* <p>↑ 15% Network growth</p> */}
                 </div>
             </div>
             <div id="total-prescription" className="hover card-list">
@@ -141,19 +187,22 @@ const DashBoard = () => {
                 </div>
 
                 <div className="card-Metrices">
-                    <h2>89,234</h2>
-                    <p>↑ This month processed</p>
+                    <h2>{getMetricValue("TotalPrescrition")}</h2>
+                    {/* <p>↑ This month processed</p> */}
                 </div>
             </div>
             <div id="total-revenue" className="hover card-list">
                 <div className="card-name">
-                    <span>Total Revenue </span>
+                    <span>Cancel Patient </span>
                     <p
-                    >💰</p>
+                        style={{
+                            color: 'red'
+                        }}
+                    >X</p>
                 </div>
                 <div className="card-Metrices">
-                    <h2>$2.4M</h2>
-                    <p>↑ 22% monthly revenue</p>
+                    <h2>{getMetricValue("CancelPatient")}</h2>
+                    {/* <p>↑ 22% monthly revenue</p> */}
                 </div>
             </div>
         </div>
@@ -185,7 +234,7 @@ const DashBoard = () => {
                         justifyContent: 'space-between',
                         gap: '7px'
                     }}>
-                        <input type="search" placeholder="type name..." />
+                        <input type="search" onChange={(e) => filter(e.target.value)} placeholder="type name..." />
                         <select name="" id="">
                             <option value="all">All</option>
                             <option value="schedule">Schedule</option>
@@ -227,114 +276,115 @@ const DashBoard = () => {
                         marginTop: '20px',
                         // minHeight: '500px'
                     }}>
-                        {filterPatient?.map((hos, i) => (
-                            <div key={i} className="patient-card hover"
+                        {
+                            filterPatient?.map((hos, i) => (
+                                <div key={i} className="patient-card hover"
 
-                            > <div
-                                style={{
-                                    width: '100%',
-                                    padding: "10px",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: "20px" // space between items
-                                }}
-                            >
-                                    <span className="logo">{hos?.name.slice(0, 1).toUpperCase()}</span>
-                                    <div>
-                                        <div style={{
-                                            display: 'flex',
-                                            gap: '10px'
-                                        }}>
-                                            <h4 style={{ margin: 0 }}>{hos?.name}</h4>
-                                            <p style={{
-                                                color: 'green',
-                                                backgroundColor: 'lightgreen',
-                                                padding: '5px',
-                                                borderRadius: '10px'
-                                            }}>Shcdule</p>
+                                > <div
+                                    style={{
+                                        width: '100%',
+                                        padding: "10px",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "20px" // space between items
+                                    }}
+                                >
+                                        <span className="logo">{hos?.name.slice(0, 1).toUpperCase()}</span>
+                                        <div>
+                                            <div style={{
+                                                display: 'flex',
+                                                gap: '10px'
+                                            }}>
+                                                <h4 style={{ margin: 0 }}>{hos?.name}</h4>
+                                                <p style={{
+                                                    color: 'green',
+                                                    backgroundColor: 'lightgreen',
+                                                    padding: '5px',
+                                                    borderRadius: '10px'
+                                                }}>{hos?.status}</p>
+                                            </div>
+
+                                            <p style={{}}>{`${hos?.gender?.toLowerCase() || "N/A"} , ${hos?.age || "N/A"} `}</p>
                                         </div>
 
-                                        <p style={{}}>{`${hos.city || "N/A"} , ${hos.state || "N/A"} `}</p>
                                     </div>
 
-                                </div>
-
-                                <div style={{
-                                    width: '100%',
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    justifyContent: 'end',
-
-
-                                }}>
                                     <div style={{
+                                        width: '100%',
                                         display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '10px',
+                                        flexDirection: 'column',
                                         justifyContent: 'end',
+
+
                                     }}>
-                                        {hos?.prescribtionId ? (
-                                            <p style={{
-                                                color: 'green',
-                                                padding: '7px',
-                                                backgroundColor: 'lightgray',
-                                                borderRadius: '10px'
-                                            }}>{"Prescbrtion Done"}</p>
-                                        ) : (
-                                            <>
-                                                <button
-                                                    onClick={() => navigate('/medication', { state: { patient: hos } })}
+                                        <div style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '10px',
+                                            justifyContent: 'end',
+                                        }}>
+                                            {hos?.prescribtionId ? (
+                                                <p style={{
+                                                    color: 'green',
+                                                    padding: '7px',
+                                                    backgroundColor: 'lightgray',
+                                                    borderRadius: '10px'
+                                                }}>{"Prescbrtion Done"}</p>
+                                            ) : (
+                                                <>
+                                                    <button
+                                                        onClick={() => navigate('/medication', { state: { patient: hos } })}
+                                                        style={{
+                                                            backgroundColor: 'rgba(219, 219, 252)',
+                                                        }}> 👁️ View</button>
+
+                                                    <button
+                                                        onClick={() => setEdit(edit === hos._id ? null : hos._id)}
+                                                        style={{ backgroundColor: "rgba(235, 254, 246)" }}
+                                                    >
+                                                        ✏️ Edit
+                                                    </button>
+                                                </>
+
+                                            )}
+
+
+                                            {edit === hos._id && (
+                                                <div
                                                     style={{
-                                                        backgroundColor: 'rgba(219, 219, 252)',
-                                                    }}> 👁️ View</button>
-
-                                                <button
-                                                    onClick={() => setEdit(edit === hos._id ? null : hos._id)}
-                                                    style={{ backgroundColor: "rgba(235, 254, 246)" }}
+                                                        position: "absolute",
+                                                        top: "100%",
+                                                        right: 0,
+                                                        background: "white",
+                                                        boxShadow: "0px 2px 8px rgba(0,0,0,0.2)",
+                                                        borderRadius: "8px",
+                                                        padding: "8px 0",
+                                                        zIndex: 999,
+                                                    }}
                                                 >
-                                                    ✏️ Edit
-                                                </button>
-                                            </>
+                                                    <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
+                                                        <li onClick={() => setShowPostponeModal(true)} style={{ padding: "8px 12px", fontSize: "12px", cursor: "pointer" }}>
+                                                            Postpone
+                                                        </li>
+                                                        <li onClick={() => setShowCancelModal(true)} style={{ padding: "8px 12px", fontSize: "12px", cursor: "pointer" }}>
+                                                            Cancel
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            )}
+                                        </div>
 
-                                        )}
 
-
-                                        {edit === hos._id && (
-                                            <div
-                                                style={{
-                                                    position: "absolute",
-                                                    top: "100%",
-                                                    right: 0,
-                                                    background: "white",
-                                                    boxShadow: "0px 2px 8px rgba(0,0,0,0.2)",
-                                                    borderRadius: "8px",
-                                                    padding: "8px 0",
-                                                    zIndex: 999,
-                                                }}
-                                            >
-                                                <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
-                                                    <li style={{ padding: "8px 12px", fontSize: "12px", cursor: "pointer" }}>
-                                                        Postpone
-                                                    </li>
-                                                    <li style={{ padding: "8px 12px", fontSize: "12px", cursor: "pointer" }}>
-                                                        Cancel
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        )}
                                     </div>
-
 
                                 </div>
 
-                            </div>
 
-
-                        ))}
+                            ))}
                     </div>
                 )}
 
-                {!isProcessing && !error && Array.isArray(filterPatient?.todayPatient) && filterPatient?.todayPatient?.length === 0 && (
+                {!isProcessing && !error && Array.isArray(filterPatient) && filterPatient?.length === 0 && (
                     <p
                         style={{ textAlign: 'center', padding: '50px 0' }}
                     >No Patients found</p>
@@ -374,7 +424,7 @@ const DashBoard = () => {
 
                 <div className="profile-logo">
                     <span className="logo">VS</span>
-                    <span>Dr.Vishal Saini</span>
+                    <span>Dr.{pa?.name}</span>
                     <p></p>
                 </div>
                 <hr />
@@ -382,60 +432,12 @@ const DashBoard = () => {
                 <div className="admin-detail">
                     <div>
                         <p>Email</p>
-                        <span>superadmin@healthcare.com</span>
+                        <span>{pa?.email}</span>
                     </div>
                     <hr />
                     <div>
                         <p>Phone</p>
-                        <span>+1 (555) 000-0001</span>
-                    </div>
-                    <hr />
-
-                    <div>
-                        <p>Department</p>
-                        <span>System Administration</span>
-                    </div>
-                    <hr />
-
-                    <div>
-                        <p>Experience</p>
-                        <span>20+ years</span>
-                    </div>
-                    <hr />
-
-                    <div>
-                        <p>Last Login</p>
-                        <span>07/11/2025, 15:11:57</span>
-                    </div>
-                    <hr />
-
-                    <div>
-                        <p>Access Level</p>
-                        <span>Full System Access</span>
-                    </div>
-                    <hr />
-
-                    <div>
-                        <p>Hospitals</p>
-                        <span>6 facilities</span>
-                    </div>
-                    <hr />
-
-                    <div>
-                        <p>Total Patients</p>
-                        <span>8</span>
-                    </div>
-                    <hr />
-
-                    <div>
-                        <p>Administrators</p>
-                        <span>10 active</span>
-                    </div>
-                    <hr />
-
-                    <div>
-                        <p>System Status</p>
-                        <span>All Systems Operational</span>
+                        <span>{pa?.contact}</span>
                     </div>
                     <hr />
 
@@ -504,13 +506,70 @@ const DashBoard = () => {
                     <p>Are you sure you want to logout from the Super Admin Dashboard?</p>
                 </div>
                 <div className="log-btn">
-                    <button className="main-button" >Yes logout</button>
+                    <button className="main-button" onClick={() => {
+                        localStorage.removeItem("token")
+                        localStorage.removeItem("role")
+                        navigate("/login", { replace: true })
+                    }} >Yes logout</button>
                     <button className="common-btn" onClick={() => { setlogOut(!logOut); setblur(!blur); setCollapse(!isCollapse) }}>Cancel</button>
                 </div>
 
             </div>
 
         </div>
+        {showPostponeModal && (
+            <div className="modal">
+                <div className="modal-box">
+                    <h3>Postpone Appointment</h3>
+
+                    <label>New Date & Time:</label>
+                    <input
+                        type="datetime-local"
+                        value={newDate}
+                        onChange={(e) => setNewDate(e.target.value)}
+                    />
+
+                    <div className="modal-actions">
+                        <button onClick={() => setShowPostponeModal(false)}>Close</button>
+                        <button
+                            onClick={() => {
+                                console.log("Postponed to:", newDate);
+                                setShowPostponeModal(false);
+                            }}
+                        >
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+        )}
+        {showCancelModal && (
+            <div className="modal">
+                <div className="modal-box">
+                    <h3>Cancel Appointment</h3>
+
+                    <label>Reason for cancellation:</label>
+                    <textarea
+                        placeholder="Enter reason..."
+                        value={cancelReason}
+                        onChange={(e) => setCancelReason(e.target.value)}
+                    ></textarea>
+
+                    <div className="modal-actions">
+                        <button onClick={() => setShowCancelModal(false)}>Close</button>
+                        <button
+                            onClick={() => {
+                                console.log("Canceled Reason:", cancelReason);
+                                setShowCancelModal(false);
+                            }}
+                        >
+                            Confirm Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        )}
+
     </div >
 
 

@@ -422,21 +422,21 @@ const Medication = () => {
         console.log("📤 Starting API call to clinical-analysis...");
 
         try {
-            // const payload = { report_text: buildReportText(illness, symtomps, patient) };
-            // console.log("📦 Request payload:", payload);
+            const payload = { report_text: buildReportText(illness, symtomps, patient) };
+            console.log("📦 Request payload:", payload);
 
-            // const res = await axios.post(
-            //     "https://care-backend-sa3e.onrender.com/api/v1/clinical-analysis",
-            //     payload,
-            //     { timeout: 30000 }
-            // );
+            const res = await axios.post(
+                "https://care-backend-sa3e.onrender.com/api/v1/clinical-analysis",
+                payload,
+                { timeout: 30000 }
+            );
 
-            // console.log("✅ API response:", res.data?.data);
+            console.log("API response:", res.data?.data);
 
-            // const { tests, medicines } = extractLabTests(res?.data?.data);
-            await new Promise(resolve => setTimeout(resolve, 10000));
-            console.log("⏳ Slept 10 seconds, continuing...");
-            const { tests, medicines } = extractLabTests(data);
+            const { tests, medicines } = extractLabTests(res?.data?.data);
+            // await new Promise(resolve => setTimeout(resolve, 10000));
+            // console.log("⏳ Slept 10 seconds, continuing...");
+            // const { tests, medicines } = extractLabTests(data);
             console.log("🧪 Tests extracted:", tests);
             console.log("💊 Medicines extracted:", medicines);
 

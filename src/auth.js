@@ -163,7 +163,11 @@ export const doctorAPi = {
     },
     getAllIllness: async () => {
         return await doctorInstance.get('/doctor/all-illness')
-    }
+    },
+
+    changePatientStatus: async (id, newDate = null, cancelReason = null) => {
+        return await doctorInstance.put(`/doctor/change-status`, { id, newDate, cancelReason })
+    },
 }
 
 export const perosnalAssistantAPI = {
