@@ -178,6 +178,10 @@ export function Patient_Hisotry({ patient, onclose }) {
     const [openImage, setopenImage] = useState(null)
     const [active, setactive] = useState(null)
 
+
+    VITE_BASE_URL_API="https://emr-backend-5p2j.onrender.com"
+    // VITE_BASE_URL_API="https://emr-backend-5p2j.onrender.com"
+
     return <div className='labtest'>
         <div style={{
             display: 'flex',
@@ -272,14 +276,14 @@ export function Patient_Hisotry({ patient, onclose }) {
 
                             return <div className="patient-history-img-card" key={i} onClick={() => {
                                 setopenImage({
-                                    image: `${import.meta.env.VITE_BASE_URL}/${file.path}`,
+                                    image: `${VITE_BASE_URL_API}/${file.path}`,
                                     name: "name" + i
                                 })
                             }}>
 
 
 
-                                <img src={`${import.meta.env.VITE_BASE_URL}/${file.path}`} />
+                                <img src={`${VITE_BASE_URL_API}/${file.path}`} />
                                 {/* <h5>{"Name"}{file}</h5> */}
                             </div>
 
@@ -303,11 +307,11 @@ export function Patient_Hisotry({ patient, onclose }) {
                                     key={i}
                                     onClick={() => {
                                         setopenImage({
-                                            image: `${import.meta.env.VITE_BASE_URL}/${image}`,
+                                            image: `${VITE_BASE_URL_API}/${image}`,
                                             name: "name" + i
                                         })
                                     }}>
-                                    <img src={`${import.meta.env.VITE_BASE_URL}/${image}`} />
+                                    <img src={`${VITE_BASE_URL_API}/${image}`} />
                                 </div>
                             )
                         })}
@@ -364,7 +368,7 @@ export function Patient_Hisotry({ patient, onclose }) {
                 </div>
 
                 <p>Prescribtion:</p>
-                <iframe src={`${import.meta.env.VITE_BASE_URL}/${patient?.prescribtionId?.prescriptionImage}`}
+                <iframe src={`${VITE_BASE_URL_API}/${patient?.prescribtionId?.prescriptionImage}`}
                     width="100%"
                     height="500px"
                     frameborder="0"></iframe>
