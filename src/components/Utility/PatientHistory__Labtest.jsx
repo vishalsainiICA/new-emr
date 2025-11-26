@@ -272,14 +272,14 @@ export function Patient_Hisotry({ patient, onclose }) {
 
                             return <div className="patient-history-img-card" key={i} onClick={() => {
                                 setopenImage({
-                                    image: `http://localhost:8000/${file.path}`,
+                                    image: `${import.meta.env.VITE_BASE_URL}/${file.path}`,
                                     name: "name" + i
                                 })
                             }}>
 
 
 
-                                <img src={`http://localhost:8000/${file.path}`} />
+                                <img src={`${import.meta.env.VITE_BASE_URL}/${file.path}`} />
                                 {/* <h5>{"Name"}{file}</h5> */}
                             </div>
 
@@ -303,11 +303,11 @@ export function Patient_Hisotry({ patient, onclose }) {
                                     key={i}
                                     onClick={() => {
                                         setopenImage({
-                                            image: `http://localhost:8000/${image}`,
+                                            image: `${import.meta.env.VITE_BASE_URL}/${image}`,
                                             name: "name" + i
                                         })
                                     }}>
-                                    <img src={`http://localhost:8000/${image}`} />
+                                    <img src={`${import.meta.env.VITE_BASE_URL}/${image}`} />
                                 </div>
                             )
                         })}
@@ -364,7 +364,7 @@ export function Patient_Hisotry({ patient, onclose }) {
                 </div>
 
                 <p>Prescribtion:</p>
-                <iframe src={`http://localhost:8000/${patient?.prescribtionId?.prescriptionImage}`}
+                <iframe src={`${import.meta.env.VITE_BASE_URL}/${patient?.prescribtionId?.prescriptionImage}`}
                     width="100%"
                     height="500px"
                     frameborder="0"></iframe>
