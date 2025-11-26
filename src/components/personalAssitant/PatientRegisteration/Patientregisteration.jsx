@@ -68,11 +68,8 @@ const Patientregisteration = () => {
 
   const location = useLocation()
   const pa = location.state?.pa
-  console.log("paaa", pa);
-
   const hospitalId = pa?.hospitalId;
 
-  console.log("Hospital ID:", hospitalId)
   useEffect(() => {
     const fetch = async () => {
       try {
