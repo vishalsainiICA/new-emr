@@ -5,28 +5,27 @@ import manulimg from "../../../assets/download.jpg"
 import { PiTrademarkRegisteredThin } from "react-icons/pi";
 
 import { toast } from "react-toastify";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { CurrentStep, dummyDepartments, extractTextFromImage, parseAadhaarText } from "../../Utility/CicularAvatar";
 import { commonApi } from "../../../auth";
-function calculateAge(dob) {
+const calculateAge = (dob) => {
   if (!dob) return null;
 
   const birthDate = new Date(dob);
-  if (isNaN(birthDate.getTime())) return null; // invalid date
-
   const today = new Date();
 
   let age = today.getFullYear() - birthDate.getFullYear();
-  let month = today.getMonth() - birthDate.getMonth();
-  let day = today.getDate() - birthDate.getDate();
+  const monthDiff = today.getMonth() - birthDate.getMonth();
+  const dayDiff = today.getDate() - birthDate.getDate();
 
-  // if birthday not reached in this year → reduce age
-  if (month < 0 || (month === 0 && day < 0)) {
+  // Agar birthday abhi nahi aaya iss saal
+  if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
     age--;
   }
 
   return age;
-}
+};
+
 
 const Patientregisteration = () => {
   const totalSteps = 4;
@@ -67,6 +66,7 @@ const Patientregisteration = () => {
 
 
   const location = useLocation()
+  const navigate = useNavigate()
   const pa = location.state?.pa
   const hospitalId = pa?.hospitalId;
 
@@ -112,7 +112,7 @@ const Patientregisteration = () => {
 
   useEffect(() => {
     const processBothSides = async () => {
-      if (!aadhaarFront || !aadhaarBack) return;
+      if (!aadhaarFront || !aadhaarBack || currentStep == 1) return;
       toast.info("Extracting text from both Aadhaar images...");
 
       let combinedText = "";
@@ -238,7 +238,7 @@ const Patientregisteration = () => {
         pastDocumnents: []
       });
       setUploadedDocuments([]);
-      // navigate(-1);
+      navigate("/pa");
     } catch (err) {
       console.log(err);
       toast.error(err.response?.data?.message || "Something went wrong");
@@ -328,39 +328,50 @@ const Patientregisteration = () => {
                   </div>
 
                   <div>
-                    <label>Age *</label>
+                    <label>Date of Birth *</label>
                     <input
-                      type="number"
-                      value={patientData.age}
-                      onChange={(e) => setPatientData({
-                        ...patientData,
-                        age: e.target.value
-                      })}
+                      type="date"
+                      value={patientData.DOB}
+                      onChange={(e) => {
+                        const dob = e.target.value;
+                        const age = calculateAge(dob);
+
+                        setPatientData({
+                          ...patientData,
+                          DOB: dob,
+                          age: age
+                        });
+                      }}
                     />
                   </div>
                 </div>
 
                 <div className="distance">
-                  <div>
+                  <div className="">
                     <label>Gender *</label>
-                    <input
-                      type="text"
+                    <select
+                      name="gender"
                       value={patientData.gender}
-                      onChange={(e) => setPatientData({
-                        ...patientData,
-                        gender: e.target.value
-                      })}
-                    />
+                      onChange={(e) =>
+                        setPatientData({ ...patientData, gender: e.target.value })
+                      }
+                    >
+                      <option value="">Select Gender</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                      <option value="other">Other</option>
+                    </select>
+
                   </div>
 
                   <div>
-                    <label>Date of Birth</label>
+                    <label>Age *</label>
                     <input
                       type="text"
-                      value={patientData.DOB}
+                      value={patientData.age}
                       onChange={(e) => setPatientData({
                         ...patientData,
-                        DOB: e.target.value
+                        age: e.target.value
                       })}
                     />
                   </div>
@@ -472,8 +483,7 @@ const Patientregisteration = () => {
                     />
                   </div>
                 </div>
-
-                {!aadhaarFront && !aadhaarBack && (
+                {(!aadhaarFront || !aadhaarBack) && (
                   <div className="distance">
                     <div>
                       <label>Front Aadhaar *</label>
@@ -491,8 +501,8 @@ const Patientregisteration = () => {
                       />
                     </div>
                   </div>
-
                 )}
+
 
 
                 <div className="distance">
@@ -755,6 +765,7 @@ const Patientregisteration = () => {
             <div>
               <button onClick={() => setCurrentStep(currentStep - 1)} disabled={currentStep == 1}> ← Back</button>
               <button
+
                 disabled={isProcessing}
                 onClick={(e) => {
                   if (currentStep < 4) {
@@ -765,7 +776,13 @@ const Patientregisteration = () => {
                   }
                 }}
               >
-                {currentStep < 4 ? "Next →" : "Register"}
+                {
+                  currentStep < 4
+                    ? "Next →"
+                    : isProcessing
+                      ? "Saving..."
+                      : "Register"
+                }
               </button>
             </div>
 

@@ -608,7 +608,7 @@ const Medication = () => {
 
 
 
-                                        <img src={`http://localhost:8000/${file.path}`} />
+                                        <img src={`${import.meta.env.VITE_BASE_URL}/${file.path}`} />
                                         {/* <h5>{"Name"}{file}</h5> */}
                                     </div>
 

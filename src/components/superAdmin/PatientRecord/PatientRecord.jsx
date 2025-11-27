@@ -53,7 +53,7 @@ export default function PatientRecords() {
 
     return (
         <div >
-            <div className="cardList">
+            {/* <div className="cardList">
                 <div className="customCard hover" style={{
 
                 }}>
@@ -123,7 +123,7 @@ export default function PatientRecords() {
                     }}>08%</p>
                 </div>
 
-            </div>
+            </div> */}
 
             <div className="customCard">
                 <div

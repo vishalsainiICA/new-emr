@@ -330,7 +330,7 @@ const Patientregisteration = () => {
                   <div>
                     <label>Age *</label>
                     <input
-                      type="number"
+                      type="date"
                       value={patientData.age}
                       onChange={(e) => setPatientData({
                         ...patientData,

@@ -179,8 +179,8 @@ export function Patient_Hisotry({ patient, onclose }) {
     const [active, setactive] = useState(null)
 
 
-    VITE_BASE_URL_API = "https://emr-backend-5p2j.onrender.com"
-    // VITE_BASE_URL_API="https://emr-backend-5p2j.onrender.com"
+    const VITE_BASE_URL_API = "https://emr-backend-5p2j.onrender.com"
+    // const VITE_BASE_URL_API = "http://localhost:8000"
 
     return <div className='labtest'>
         <div style={{
@@ -380,6 +380,9 @@ export function Patient_Hisotry({ patient, onclose }) {
             </div>
 
         </div>
+
+        {console.log("open", openImage)
+        }
 
         {
             openImage && (

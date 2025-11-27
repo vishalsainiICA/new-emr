@@ -88,7 +88,7 @@ const Dashboard = () => {
     }, []);
 
     return (
-        <div className="deshbord-panel">
+        <div className="">
             <div className="super-admin-logo">
                 <div className="super-admin">
                     <h3>Super Admin Dashboard</h3>

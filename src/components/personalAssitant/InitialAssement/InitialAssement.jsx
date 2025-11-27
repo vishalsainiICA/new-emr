@@ -125,173 +125,175 @@ const InitialAssesment = () => {
     };
 
     return (
-        
+
         <div className="Patien-initial-form">
 
-         <div className='initial-main-form'>
-            <span style={{
-                display: 'flex',
-                gap: '20px',
-                alignItems:"center"
-            }}><button onClick={() => navigate(-1)} style={{
-                fontSize: '10px',
-                cursor: 'pointer',
-                display:"flex",
-                alignItems:"center",
-                justifyContent:"center"
+            <div className='initial-main-form'>
+                <span style={{
+                    display: 'flex',
+                    gap: '20px',
+                    alignItems: "center"
+                }}><button onClick={() => navigate(-1)} style={{
+                    fontSize: '10px',
+                    cursor: 'pointer',
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center"
 
-            }}>← Back</button > <h2>Initial Assessment (Vitals)</h2></span>
-            <hr />
-            <hr />
-        
-            <div className='patient-detail'>
-                {data && (
-                <h4>Patient Name:  <span style={{
-                    fontSize: '20px'
-                }}>{data?.name}</span></h4>
-             )}
-                <div style={{ display: "flex", gap: "100px", marginTop: "10px" }}>
-                    <label style={{ width: "100%" }}>
-                        Height (cm)
-                        <input
-                            type="number"
-                            value={patient.height || ""}
-                            onChange={(e) => setPatient({ ...patient, height: e.target.value })}
-                            placeholder="Enter Height"
-                        />
-                    </label>
+                }}>← Back</button > <h2>Initial Assessment (Vitals)</h2></span>
+                <hr />
+                <hr />
 
-                    <label style={{ width: "100%" }}>
-                        Weight (kg)
-                        <input
-                            type="number"
-                            value={patient.weight || ""}
-                            onChange={(e) => setPatient({ ...patient, weight: e.target.value })}
-                            placeholder="Enter Weight"
-                        />
-                    </label>
+                <div className='patient-detail'>
+                    {data && (
+                        <h4>Patient Name:  <span style={{
+                            fontSize: '20px'
+                        }}>{data?.name}</span></h4>
+                    )}
+                    <div style={{ display: "flex", gap: "100px", marginTop: "10px" }}>
+                        <label style={{ width: "100%" }}>
+                            Height (cm)
+                            <input
+                                type="number"
+                                value={patient.height || ""}
+                                onChange={(e) => setPatient({ ...patient, height: e.target.value })}
+                                placeholder="Enter Height"
+                            />
+                        </label>
+
+                        <label style={{ width: "100%" }}>
+                            Weight (kg)
+                            <input
+                                type="number"
+                                value={patient.weight || ""}
+                                onChange={(e) => setPatient({ ...patient, weight: e.target.value })}
+                                placeholder="Enter Weight"
+                            />
+                        </label>
+                    </div>
+
+                    <div style={{ display: "flex", gap: "100px", marginTop: "10px" }}>
+                        <label style={{ width: "100%" }}>
+                            Blood Pressure (mmHg)
+                            <input
+                                type="text"
+                                value={patient.BP || ""}
+                                onChange={(e) => setPatient({ ...patient, BP: e.target.value })}
+                                placeholder="e.g. 120/80"
+                            />
+                        </label>
+
+                        <label style={{ width: "100%" }}>
+                            O₂ Saturation (%)
+                            <input
+                                type="number"
+                                value={patient.o2 || ""}
+                                onChange={(e) => setPatient({ ...patient, o2: e.target.value })}
+                                placeholder="Enter O₂ Level"
+                            />
+                        </label>
+                    </div>
+
+                    <div style={{ display: "flex", gap: "100px", marginTop: "10px" }}>
+                        <label style={{ width: "100%" }}>
+                            Heart Rate (bpm)
+                            <input
+                                type="number"
+                                value={patient.heartRate || ""}
+                                onChange={(e) => setPatient({ ...patient, heartRate: e.target.value })}
+                                placeholder="Enter Heart Rate"
+                            />
+                        </label>
+
+                        <label style={{ width: "100%" }}>
+                            Sugar (mg/dL)
+                            <input
+                                type="number"
+                                value={patient.sugar || ""}
+                                onChange={(e) => setPatient({ ...patient, sugar: e.target.value })}
+                                placeholder="Enter Sugar Level"
+                            />
+                        </label>
+                    </div>
+
+                    <div style={{ display: "flex", gap: "100px", marginTop: "10px" }}>
+                        <label style={{ width: "100%" }}>
+                            Hemoglobin (g/dL)
+                            <input
+                                type="number"
+                                value={patient.hemoglobin || ""}
+                                onChange={(e) => setPatient({ ...patient, hemoglobin: e.target.value })}
+                                placeholder="Enter Hemoglobin"
+                            />
+                        </label>
+
+                        <label style={{ width: "100%" }}>
+                            Body Temperature (°C)
+                            <input
+                                type="number"
+                                value={patient.bodyTempreture || ""}
+                                onChange={(e) =>
+                                    setPatient({ ...patient, bodyTempreture: e.target.value })
+                                }
+                                placeholder="Enter Temperature"
+                            />
+                        </label>
+                    </div>
+
+                    <div style={{ display: "flex", gap: "100px", marginTop: "10px" }}>
+                        <label style={{ width: "100%" }}>
+                            Respiratory Rate (breaths/min)
+                            <input
+                                type="number"
+                                value={patient.respiratoryRate || ""}
+                                onChange={(e) =>
+                                    setPatient({ ...patient, respiratoryRate: e.target.value })
+                                }
+                                placeholder="Enter Respiratory Rate"
+                            />
+                        </label>
+
+                        <label style={{ width: "100%" }}>
+                            Blood Group
+                            <select
+                                value={patient.bloodGroup || ""}
+                                onChange={(e) => setPatient({ ...patient, bloodGroup: e.target.value })}
+                                style={{ padding: "10px", borderRadius: "7px", width: "100%" }}
+                            >
+                                <option value="">Select Blood Group</option>
+                                {["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"].map((g) => (
+                                    <option key={g} value={g}>
+                                        {g}
+                                    </option>
+                                ))}
+                            </select>
+                        </label>
+                    </div>
                 </div>
+                <hr />
+                <div style={{
+                    marginTop: '10px',
+                    width: " 60vw",
+                    minWidth: '400px',
+                    display: 'flex',
+                    justifyContent: 'end'
+                }}>
+                    <button
 
-                <div style={{ display: "flex", gap: "100px", marginTop: "10px" }}>
-                    <label style={{ width: "100%" }}>
-                        Blood Pressure (mmHg)
-                        <input
-                            type="text"
-                            value={patient.BP || ""}
-                            onChange={(e) => setPatient({ ...patient, BP: e.target.value })}
-                            placeholder="e.g. 120/80"
-                        />
-                    </label>
-
-                    <label style={{ width: "100%" }}>
-                        O₂ Saturation (%)
-                        <input
-                            type="number"
-                            value={patient.o2 || ""}
-                            onChange={(e) => setPatient({ ...patient, o2: e.target.value })}
-                            placeholder="Enter O₂ Level"
-                        />
-                    </label>
-                </div>
-
-                <div style={{ display: "flex", gap: "100px", marginTop: "10px" }}>
-                    <label style={{ width: "100%" }}>
-                        Heart Rate (bpm)
-                        <input
-                            type="number"
-                            value={patient.heartRate || ""}
-                            onChange={(e) => setPatient({ ...patient, heartRate: e.target.value })}
-                            placeholder="Enter Heart Rate"
-                        />
-                    </label>
-
-                    <label style={{ width: "100%" }}>
-                        Sugar (mg/dL)
-                        <input
-                            type="number"
-                            value={patient.sugar || ""}
-                            onChange={(e) => setPatient({ ...patient, sugar: e.target.value })}
-                            placeholder="Enter Sugar Level"
-                        />
-                    </label>
-                </div>
-
-                <div style={{ display: "flex", gap: "100px", marginTop: "10px" }}>
-                    <label style={{ width: "100%" }}>
-                        Hemoglobin (g/dL)
-                        <input
-                            type="number"
-                            value={patient.hemoglobin || ""}
-                            onChange={(e) => setPatient({ ...patient, hemoglobin: e.target.value })}
-                            placeholder="Enter Hemoglobin"
-                        />
-                    </label>
-
-                    <label style={{ width: "100%" }}>
-                        Body Temperature (°C)
-                        <input
-                            type="number"
-                            value={patient.bodyTempreture || ""}
-                            onChange={(e) =>
-                                setPatient({ ...patient, bodyTempreture: e.target.value })
-                            }
-                            placeholder="Enter Temperature"
-                        />
-                    </label>
-                </div>
-
-                <div style={{ display: "flex", gap: "100px", marginTop: "10px" }}>
-                    <label style={{ width: "100%" }}>
-                        Respiratory Rate (breaths/min)
-                        <input
-                            type="number"
-                            value={patient.respiratoryRate || ""}
-                            onChange={(e) =>
-                                setPatient({ ...patient, respiratoryRate: e.target.value })
-                            }
-                            placeholder="Enter Respiratory Rate"
-                        />
-                    </label>
-
-                    <label style={{ width: "100%" }}>
-                        Blood Group
-                        <select
-                            value={patient.bloodGroup || ""}
-                            onChange={(e) => setPatient({ ...patient, bloodGroup: e.target.value })}
-                            style={{ padding: "10px", borderRadius: "7px", width: "100%" }}
-                        >
-                            <option value="">Select Blood Group</option>
-                            {["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"].map((g) => (
-                                <option key={g} value={g}>
-                                    {g}
-                                </option>
-                            ))}
-                        </select>
-                    </label>
+                        disabled={isProcessing}
+                        style={{
+                            border: '1px solid black',
+                            cursor: "pointer"
+                        }}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            handleSubmit(e);
+                        }}
+                    >
+                        {isProcessing ? "saving...." : "Save Vitals"}
+                    </button>
                 </div>
             </div>
-           <hr />
-            <div style={{
-                marginTop: '10px',
-                width: " 60vw",
-                minWidth: '400px',
-                display: 'flex',
-                justifyContent: 'end'
-             }}>
-                <button
-                    disabled={isProcessing}
-                    style={{
-                        border: '1px solid black'
-                    }}
-                    onClick={(e) => {
-                        e.preventDefault();
-                        handleSubmit(e);
-                    }}
-                >
-                    {isProcessing ? "saving...." : "Save Vitals"}
-                </button>
-            </div>
-           </div>
         </div>
 
     );

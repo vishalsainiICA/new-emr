@@ -1,4 +1,4 @@
-/* .control-pannel {
+.control-pannel {
     width: 100vw;
     min-height: 100vh;
     display: flex;
@@ -20,6 +20,7 @@
     flex-direction: column;
     align-items: center;
     padding: 10px;
+    transition: all 1s ease;
 
 
     hr {
@@ -30,6 +31,10 @@
     }
 }
 
+.side-bar.acitve {
+    width: 60px;
+}
+
 
 .side-bar-logo {
     display: flex;
@@ -37,14 +42,14 @@
     align-items: center;
     margin: 0px 0 10px 0;
     gap: 10px;
-
     p {
-        font-size: 11px;
+        font-size: 10px;
+        font-weight: bold;
         color: gray;
     }
 
     img {
-        width: 100px;
+        width: 80px;
         height: 80px;
         border-radius: 20px;
         cursor: pointer;
@@ -89,7 +94,7 @@
 .collapse {
     width: 100%;
     display: flex;
-    justify-content: end;
+    justify-content: start;
     padding: 10px;
 
 }
@@ -100,183 +105,11 @@
     overflow-y: scroll;
     scrollbar-width: none;
     margin: 10px;
-} */
+}
 
 /* Whole layout */
-.control-pannel {
+/* .control-pannel {
     display: flex;
 }
 
 /* SIDEBAR */
-.side-bar {
-    width: 20%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    background: #fff;
-    border-right: 1px solid #ddd;
-    transition: 0.3s ease;
-    overflow: hidden;
-    position: fixed;
-
-}
-
-/* COLLAPSED SIDEBAR */
-.side-bar.collapsed {
-    width: 70px;
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    transition: all 0.5s ease;
-}
-
-/* Collapse Icon */
-.collapse {
-    padding: 15px;
-    transition: 0.3s ease;
-
-}
-
-.collapse i {
-    font-size: 22px;
-    cursor: pointer;
-    transition: 0.3s ease;
-
-}
-
-/* LOGO SECTION */
-.side-bar-logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 15px;
-    transition: 0.3s ease;
-
-    p {
-        font-size: 12px;
-        color: gray;
-    }
-}
-
-.side-bar-logo img {
-    width: 40px;
-    height: 40px;
-    transition: 0.3s ease;
-
-}
-
-/* Collapse पर text hide */
-.side-bar.collapsed .side-bar-logo span,
-.side-bar.collapsed .side-bar-item h5 {
-    display: none;
-    transition: 0.3s ease;
-
-}
-
-/* LINKS */
-.side-bar-links {
-    margin-top: 20px;
-    transition: 0.3s ease;
-
-}
-
-.side-bar-item {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    padding: 12px 20px;
-    cursor: pointer;
-    transition: 1s ease;
-}
-
-.side-bar-item:hover {
-    transform: translateY(-7px);
-    background-color: lightgray;
-}
-
-.side-bar-item i {
-    font-size: 20px;
-}
-
-/* MAIN CONTENT AREA SHIFT */
-.mainContent {
-    margin-left: 260px;
-    width: 100%;
-    overflow-y: scroll;
-    max-height: 100vh;
-    padding: 20px;
-    transition: 0.3s ease;
-    scrollbar-width: none;
-    transition: margin-left 0.3s ease;
-}
-
-.side-bar.collapsed~.mainContent {
-    margin-left: 70px;
-    transition: 0.3s ease;
-
-}
-
-
-@media (max-width: 1024px) {
-    .side-bar {
-        width: 220px;
-    }
-
-    .side-bar.collapsed {
-        width: 70px;
-    }
-
-    .mainContent {
-        margin-left: 220px;
-    }
-
-    .side-bar.collapsed~.mainContent {
-        margin-left: 70px;
-    }
-}
-
-/* =============== SMALL MOBILE (0 - 600px) =============== */
-@media (max-width: 600px) {
-
-    /* Sidebar hidden by default */
-    .side-bar {
-        left: -250px;
-        width: 250px;
-    }
-
-    .side-bar.open {
-        left: 0;
-    }
-
-    .side-bar-logo span,
-    .side-bar-item h5 {
-        display: block;
-
-        /* mobile me text hide mat karo */
-
-    }
-
-    .mainContent {
-        margin-left: 0 !important;
-        padding: 10px;
-    }
-
-    .collapse {
-        padding: 10px;
-    }
-}
-
-.collapse {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    padding: 15px;
-}
-
-.collapse-icon {
-    margin-left: 10px;
-    font-size: 22px;
-    cursor: pointer;
-    transition: 0.3s ease;
-}
