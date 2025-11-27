@@ -35,7 +35,7 @@ const HospitalManagement = () => {
                 if (res.status === 200) {
                     setData(res.data.data || []);
                     setFilterHospital(res.data.data || []);
-               // initialize filter
+                    // initialize filter
                 } else {
                     setError(res.data?.message || "Something went wrong");
                 }
@@ -51,11 +51,13 @@ const HospitalManagement = () => {
 
     const handledelete = async (id) => {
         try {
+            const isCheck = confirmPa("Are you Sure you Want to Delete this Hospital !")
+            if (!isCheck) return
             setIsProcessing(true);
             const res = await superAdminApi.delethospital(id);
             if ((await res).status === 200 || (await res).data.status === 200) {
                 toast.success("Hospital delete successfully");
-                  setRefresh(prev => !prev); 
+                setRefresh(prev => !prev);
             } else {
                 toast.error("Failed to register hospital")
             }
@@ -86,7 +88,7 @@ const HospitalManagement = () => {
 
                     }} className="common-btn">+ Add New Hospital</button>
             </div>
-{/* 
+            {/* 
             <div className="cardList">
                 <div className="customCard hover" style={{
 

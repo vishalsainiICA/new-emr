@@ -9,15 +9,16 @@ import { toast } from "react-toastify";
 export default function AdminManagement() {
     const [data, setData] = useState([]);
     const [isProcessing, setIsProcessing] = useState(false);
+    const [refresh, setrefresh] = useState(false);
     const [error, setError] = useState(null);
     const [assinAdmin, setAssignAdmin] = useState(null)
     const [filterPatient, setFilterPatient] = useState([]);
-    const [doctorData, setDoctorData] = useState({
-        doctorName: "",
+    const [doctorData, setadminData] = useState({
+        name: "",
         email: "",
         contact: "",
         experience: "",
-        qualification: "",
+        creationfor: "",
         docId: null
     });
 
@@ -39,10 +40,11 @@ export default function AdminManagement() {
             setIsProcessing(true);
             setError(null);
             try {
-                const res = await superAdminApi.allPatients();
+                const res = await superAdminApi.getAllAdmins();
                 if (res.status === 200) {
                     setData(res.data.data || []);
                     setFilterPatient(res.data.data || []); // initialize filter
+
                 } else {
                     setError(res.data?.message || "Something went wrong");
                 }
@@ -54,18 +56,41 @@ export default function AdminManagement() {
         };
 
         fetchPatient();
-    }, []);
+    }, [refresh]);
 
     const handleAddAdmin = async () => {
         try {
+            setIsProcessing(true)
             const res = await superAdminApi.addAdmin(doctorData)
             if (res.status === 200) {
-                toast.success(`Pa Added for ${assinDoctor?.name}`)
+                toast.success(`Admin Added Successfully`)
                 setAssignAdmin(null)
+                setadminData(null)
+                setrefresh((prev) => !prev)
             }
         } catch (error) {
-            console.log(err);
-            toast.success(err.response?.data?.message || "Internal Server Error");
+            console.log(error);
+            toast.error(error.response?.data?.message || "Internal Server Error");
+        }
+        finally {
+            setIsProcessing(false)
+        }
+    }
+
+    const handlechangeStatus = async (id, status) => {
+        try {
+            setIsProcessing(true)
+            const res = await superAdminApi.changeStatus(id, status)
+            if (res.status === 200) {
+                toast.success(` Status Updated`)
+                setrefresh((prev) => !prev)
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error(error.response?.data?.message || "Internal Server Error");
+        }
+        finally {
+            setIsProcessing(false)
         }
     }
 
@@ -195,10 +220,11 @@ export default function AdminManagement() {
                 <div className="patientHeading">
                     <p>Admin ID</p>
                     <p>Name</p>
-                    <p>Age</p>
+                    <p>Role</p>
                     <p>Email</p>
-                    <p>Active</p>
                     <p>Date</p>
+                    <p>Status</p>
+
                 </div>
 
                 {isProcessing && (
@@ -228,12 +254,22 @@ export default function AdminManagement() {
                     <>
                         {filterPatient.map((patient, i) => (
                             <div key={i} className="patientBody" >
-                                <p>{patient.uid}</p>
-                                <p>{patient.name}</p>
-                                <p>{patient.age}</p>
-                                <p>{patient?.hospitalId?.name || "N/A"}</p>
-                                <p>{patient?.doctorId?.name || "N/A"}</p>
+                                <p>{`${patient?.name?.trim().slice(0, 3).toUpperCase()}-${i + 1}`}</p>
+                                <p>{patient?.name}</p>
+                                <p>{patient?.role}({patient?.experience || "0"})</p>
+                                <p>{patient?.email || "N/A"}</p>
                                 <p>{moment(patient?.createdAt).format("DD/MM/YYYY, hh:mm A") || "N/A"}</p>
+                                <span >
+                                    <button
+                                        className={`${patient?.status ? "active-btn" : "de-active-btn"}`}
+                                        onClick={() => handlechangeStatus(patient?._id, patient?.status)}
+                                    >
+                                        {patient?.status ? "Active" : "De-Active"}
+                                    </button>
+                                    {/* <i class="ri-delete-bin-6-line"></i> */}
+                                </span>
+
+
                             </div>
                         ))}
                     </>
@@ -290,8 +326,8 @@ export default function AdminManagement() {
                                     <input
                                         type="text"
                                         placeholder="Name"
-                                        value={doctorData.doctorName}
-                                        onChange={(e) => setDoctorData({ ...doctorData, doctorName: e.target.value })}
+                                        value={doctorData.name}
+                                        onChange={(e) => setadminData({ ...doctorData, name: e.target.value })}
                                     />
                                 </label>
 
@@ -301,7 +337,7 @@ export default function AdminManagement() {
                                         type="email"
                                         placeholder="Email"
                                         value={doctorData.email}
-                                        onChange={(e) => setDoctorData({ ...doctorData, email: e.target.value })}
+                                        onChange={(e) => setadminData({ ...doctorData, email: e.target.value })}
                                     />
                                 </label>
                             </div>
@@ -317,7 +353,7 @@ export default function AdminManagement() {
                                         type="text"
                                         placeholder="Contact Number"
                                         value={doctorData.contact}
-                                        onChange={(e) => setDoctorData({ ...doctorData, contact: e.target.value })}
+                                        onChange={(e) => setadminData({ ...doctorData, contact: e.target.value })}
                                     />
                                 </label>
 
@@ -327,7 +363,7 @@ export default function AdminManagement() {
                                         type="number"
                                         placeholder="ex.2"
                                         value={doctorData.experience}
-                                        onChange={(e) => setDoctorData({ ...doctorData, experience: e.target.value })}
+                                        onChange={(e) => setadminData({ ...doctorData, experience: e.target.value })}
                                     />
                                 </label>
                             </div>
@@ -338,15 +374,15 @@ export default function AdminManagement() {
                                 flexDirection: 'column',
                                 marginTop: '10px'
                             }}>
-                                Qualification *
+                                Creationfor *
                                 <select
                                     style={{ padding: '10px', borderRadius: '7px' }}
-                                    value={doctorData.qualification}
-                                    onChange={(e) => setDoctorData({ ...doctorData, qualification: e.target.value })}
+                                    value={doctorData.creationfor}
+                                    onChange={(e) => setadminData({ ...doctorData, creationfor: e.target.value })}
                                 >
-                                    <option value="">Select_Degree</option>
-                                    <option value="Graduation">Graduation</option>
-                                    <option value="Post-Graduation">Post-Graduation</option>
+                                    <option value="">Select</option>
+                                    <option value="For Analyst">For Analyst</option>
+                                    <option value="Hospital Creation">Hospital Creation</option>
                                 </select>
                             </label>
 
@@ -357,15 +393,17 @@ export default function AdminManagement() {
                                 justifyContent: 'end',
                                 gap: '10px'
                             }}>
-                                <button className="common-btn" onClick={() => setAssignAdmin(null)}>Cancel</button>
-                                <button onClick={() => {
+                                <button className="regular-btn" onClick={() => setAssignAdmin(null)}>Cancel</button>
+                                <button className="common-btn"
+                                    disabled={isProcessing}
+                                    onClick={() => {
 
-                                    setDoctorData({ ...doctorData, docId: assinAdmin._id })
-                                    // console.log("dodo", doctorData);
-                                    // console.log("assinAdmin", assinAdmin._id);
+                                        setadminData({ ...doctorData, docId: assinAdmin._id })
+                                        // console.log("dodo", doctorData);
+                                        // console.log("assinAdmin", assinAdmin._id);
 
-                                    handleAddAdmin()
-                                }} >Add Doctor</button>
+                                        handleAddAdmin()
+                                    }} >{isProcessing ? "adding..." : "Add Admin"}</button>
                             </div>
                         </div>
                     </div>

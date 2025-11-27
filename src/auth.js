@@ -72,6 +72,10 @@ export const superAdminApi = {
     editAdmin: async (id, updatedData) => {
         return await superAdminInstance.put(`/super-admin/admin/update-admin?id=${id}`, updatedData)
     },
+
+    changeStatus: async (id , status) => {
+        return await superAdminInstance.put(`/super-admin/admin/update-status?id=${id}&status=${status}`)
+    },
     getAllAdmins: async () => {
         return await superAdminInstance.get('/super-admin/admin/all-admins')
     },
