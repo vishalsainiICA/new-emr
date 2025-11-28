@@ -5,11 +5,13 @@ import { Circles } from "react-loader-spinner";
 import moment from "moment";
 import './ViewHospital.css'
 import { toast } from "react-toastify";
+import { Patient_Hisotry } from "../../Utility/PatientHistory__Labtest";
 
 const ViewHospital = () => {
     const [data, setData] = useState([]);
     const [isProcessing, setIsProcessing] = useState(false);
     const [refresh, setRefresh] = useState(false);
+    const [open, setClose] = useState(false)
     const [error, setError] = useState(null);
     const [filterPatient, setFilterPatient] = useState([]);
     const [assinDoctor, setAssignDoctor] = useState(null)
@@ -483,7 +485,7 @@ const ViewHospital = () => {
                     {!isProcessing && !error && Array.isArray(filterPatient) && filterPatient.length > 0 && (
                         <>
                             {filterPatient.map((patient, i) => (
-                                <div key={i} className="hosptialBody" >
+                                <div onClick={() => setClose(patient)} key={i} className="hosptialBody" >
                                     <p style={{
                                         fontSize: '12px'
                                     }}>{patient.uid}</p>
@@ -718,7 +720,14 @@ const ViewHospital = () => {
             //     </div>
             // )
         }
-
+        {
+            open && (
+                <div className="patientHistory">
+                    <Patient_Hisotry patient={open} onclose={() => setClose(false)} ></Patient_Hisotry>
+                    {/* <LabTest selectedLabTest={selectedLabTest} setselectedLabTest={setselectedLabTest} labTest={labtestResult} labTestError={labTestError} labTestloading={labTestloading} onclose={() => setClose(false)} ></LabTest> */}
+                </div>
+            )
+        }
 
     </div>
 

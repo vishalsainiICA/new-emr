@@ -12,6 +12,7 @@ const Dashboard = () => {
     const [isProcessing, setIsProcessing] = useState(false);
     const [isCollapse, setCollapse] = useState(false);
     const [isEditprofile, setEditprofile] = useState(false);
+
     const [blur, setblur] = useState(false);
     const [logOut, setlogOut] = useState(false);
     // const [isCollapse, setCollapse] = useState(false);
@@ -97,7 +98,7 @@ const Dashboard = () => {
                 <div className="super-name" onClick={() => setCollapse(!isCollapse)}>
                     <span className="logo">SA</span>
                     <div>
-                        <h5>Welcome back,{superAdmin?.name}</h5>
+                        <h4>Welcome back,{superAdmin?.name}</h4>
                         <span style={{
                             fontSize: "12px"
                         }}>System Administrator</span>
@@ -108,7 +109,7 @@ const Dashboard = () => {
             <div className="hospital-card-list">
 
                 {/* Total Hospital */}
-                <div id="total-hospital" className="card-list">
+                <div onClick={() => navigate("/super-admin/hospital-management")} id="total-hospital" className="card-list">
                     <div className="card-name">
                         <span>Total Hospital</span>
                         <p style={{ fontSize: "20px" }}>🏥</p>
@@ -120,14 +121,17 @@ const Dashboard = () => {
                 </div>
 
                 {/* Total Patients */}
-                <div id="total-patient" className="card-list">
+                <div onClick={() => navigate("/super-admin/patient-management")} id="total-patient" className="card-list">
                     <div className="card-name">
                         <span>Total Patients</span>
                         <p style={{ fontSize: "20px" }}>👥</p>
                     </div>
                     <div>
-                        <h2>{getMetricValue("Total Patient")}</h2>
-                        {/* <p>↑ 15% Network growth</p> */}
+                        <h2>{Number(getMetricValue("Total MalePatient")) + Number(getMetricValue("Total FemalePatient"))}</h2>
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'space-between'
+                        }}> <p>Male:</p> <h4>{Number(getMetricValue("Total MalePatient"))}</h4> <p>Female:</p><h4> {Number(getMetricValue("Total FemalePatient"))}</h4></div>
                     </div>
                 </div>
 
@@ -203,7 +207,7 @@ const Dashboard = () => {
                                         <div style={{ display: "flex", gap: "10px" }}>
                                             <span className="logo">{hos?.name?.slice(0, 2).toUpperCase()}</span>
                                             <div>
-                                                <h5>{hos?.name}</h5>
+                                                <h4>{hos?.name}</h4>
                                                 <span style={{
                                                     fontSize: "12px"
                                                 }}>ID: H-00{i + 1} • Schemes: <a style={{
@@ -233,28 +237,28 @@ const Dashboard = () => {
                     {/* Active Hospital */}
                     <div className="Network-card">
                         <span>Active Hospital</span>
-                        <h5>{getMetricValue("Total Hospital")} Facilities</h5>
+                        <h4>{getMetricValue("Total Hospital")} Facilities</h4>
                         <p>All systems operational</p>
                     </div>
 
                     {/* Patient Load */}
                     <div className="Network-card">
                         <span>Patient Load</span>
-                        <h5>{getMetricValue("Total Patient")} Total</h5>
+                        <h4>{getMetricValue("Total Patient")} Total</h4>
                         <p>15% increase this quarter</p>
                     </div>
 
                     {/* Revenue Stream */}
                     <div className="Network-card">
                         <span>Revenue Stream</span>
-                        <h5>₹{getMetricValue("Total Revenue")} Monthly</h5>
+                        <h4>₹{getMetricValue("Total Revenue")} Monthly</h4>
                         {/* <p>22% growth rate</p>  <-- If you want to hide growth line */}
                     </div>
 
                     {/* System Status (Static: backend me nahi aata) */}
                     <div className="Network-card">
                         <span>System Status</span>
-                        <h5>99.8% Uptime</h5>
+                        <h4>99.8% Uptime</h4>
                         <p>Excellent performance</p>
                     </div>
 

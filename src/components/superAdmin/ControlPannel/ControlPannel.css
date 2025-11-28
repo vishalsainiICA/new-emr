@@ -42,6 +42,7 @@
     align-items: center;
     margin: 0px 0 10px 0;
     gap: 10px;
+
     p {
         font-size: 10px;
         font-weight: bold;
@@ -74,6 +75,27 @@
         width: 165px;
         padding: 10px;
     }
+}
+
+
+.side-bar-logout {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    padding: 10px;
+    cursor: pointer;
+    gap: 10px;
+    transition: all 1s ease;
+
+    h5 {
+        width: 165px;
+        padding: 10px;
+    }
+}
+
+.side-bar-logout:hover {
+    background-color: lightgray;
 }
 
 .side-bar-item:hover {
@@ -113,3 +135,42 @@
 }
 
 /* SIDEBAR */
+
+/* logout-page */
+.logout-page {
+    position: absolute;
+    bottom: 200px;
+    left: 430px;
+    background-color: rgba(254, 254, 255);
+    color: black;
+    width: 500px;
+    padding: 25px;
+    border-radius: 20px;
+    display: grid;
+    gap: 30px;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+    /* opacity: 0.4; */
+
+}
+
+.logout-page p {
+    font-size: 13px;
+}
+
+.log-btn {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: 10px;
+    font-size: x-small;
+    height: 30px;
+    width: 100;
+}
+
+.blur {
+    position: fixed;
+    /* filter: blur(20px); */
+    backdrop-filter: blur(20px);
+    height: 100vh;
+    width: 100vw;
+}
