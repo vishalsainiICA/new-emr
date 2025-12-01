@@ -6,8 +6,6 @@ export const commonApi = {
         return await commonInstance.get(`/common/hospital/single-hospital?hospitalId=${hospitalId}`)
     },
     registerPatient: async (data) => {
-        console.log('Data', data);
-
         return await commonInstance.post(`/common/patient/register-patient`, data)
     },
     patientsByHospitalId: async (id) => {
@@ -18,6 +16,9 @@ export const commonApi = {
         return await commonInstance.post(`/login`, data)
     },
 
+    changePatientStatus: async (id, newDate = null, cancelReason = null) => {
+        return await doctorInstance.put(`/common/change-status`, { id, newDate, cancelReason })
+    },
 
 }
 // superAdmin API
@@ -73,7 +74,7 @@ export const superAdminApi = {
         return await superAdminInstance.put(`/super-admin/admin/update-admin?id=${id}`, updatedData)
     },
 
-    changeStatus: async (id , status) => {
+    changeStatus: async (id, status) => {
         return await superAdminInstance.put(`/super-admin/admin/update-status?id=${id}&status=${status}`)
     },
     getAllAdmins: async () => {
@@ -148,8 +149,8 @@ export const doctorAPi = {
         return await doctorInstance.post('/patient/patient-registration', formData)
 
     },
-    getAllPatients: async () => {
-        return await doctorInstance.get('/doctor/all-patient-record')
+    getAllPatients: async (date = null, status = null) => {
+        return await doctorInstance.get(`/doctor/all-patient-record?date=${date}&status=${status}`)
     },
     getAllPatientsAssements: async () => {
         return await doctorInstance.get('/patient/getAllPatientsAssement')
@@ -169,8 +170,8 @@ export const doctorAPi = {
         return await doctorInstance.get('/doctor/all-illness')
     },
 
-    changePatientStatus: async (id, newDate = null, cancelReason = null) => {
-        return await doctorInstance.put(`/doctor/change-status`, { id, newDate, cancelReason })
+    dailyActivity: async () => {
+        return await doctorInstance.get('/doctor/daily-activity')
     },
 }
 
@@ -178,11 +179,15 @@ export const perosnalAssistantAPI = {
     saveInitialAssement: async (data, id) => {
         return await perosnalAssistanceInstance.post(`/assitant/intital-assement?patientId=${id}`, data)
     },
-    getAllPatients: async () => {
-        return await perosnalAssistanceInstance.get('/assitant/all-patient-record')
+    getAllPatients: async (date = null, status = null) => {
+        return await perosnalAssistanceInstance.get(`/assitant/all-patient-record?date=${date}&status=${status}`)
     },
     fetchProfile: async () => {
         return await perosnalAssistanceInstance.get('/assitant/auth/profile')
     },
+    registerPatient: async (data) => {
+        return await perosnalAssistanceInstance.post(`/assitant/patient/register-patient`, data)
+    },
+
 }
 

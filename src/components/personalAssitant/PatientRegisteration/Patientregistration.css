@@ -289,3 +289,12 @@ height: '70px' */
     font-size: 15px;
     cursor: pointer;
 }
+
+.common-btn {
+    padding: 7px;
+    color: white;
+    background-color: black;
+    border-radius: 10px;
+    outline: none;
+    cursor: pointer;
+}

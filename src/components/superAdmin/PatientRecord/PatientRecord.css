@@ -1,7 +1,7 @@
 .patientHeading {
     display: grid;
     font-size: 12px;
-    grid-template-columns: 2fr 2fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1.5fr 1.5fr 1fr 1fr 1fr 1fr 1fr;
     background-color: #f4f4f4;
     padding: 15px;
     border: 0 solid gray;
@@ -28,7 +28,7 @@
 .patientBody {
     cursor: pointer;
     display: grid;
-    grid-template-columns: 2fr 2fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1.5fr 1.5fr 1fr 1fr 1fr 1fr 1fr;
     border: 0 solid gray;
     background-color: white;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);

@@ -409,3 +409,142 @@ export function Patient_Hisotry({ patient, onclose }) {
     </div>
 
 }
+
+
+const statusTitle = (item) => {
+
+    if (item?.status === "Cancel") {
+        return (
+            <div style={styles.wrapper}>
+                <span style={{ ...styles.logo, backgroundColor: "#ffb3b3" }}>
+                    {item?.name.slice(0, 1).toUpperCase()}
+                </span>
+
+                <div style={styles.infoWrapper}>
+                    <div>
+                        <p>The Patient is Cancelled {item?.name}</p>
+                        <p>{`${item?.gender?.toLowerCase() || "N/A"} , ${item?.age || "N/A"}`}</p>
+                    </div>
+
+                    <p style={{ ...styles.tag, backgroundColor: "#ffb3b3", color: "red" }}>
+                        Cancelled
+                    </p>
+                </div>
+            </div>
+        );
+    }
+
+    else if (item?.status === "Postponed") {
+        return (
+            <div style={styles.wrapper}>
+                <span style={{ ...styles.logo, backgroundColor: "#fff2a8" }}>
+                    {item?.name.slice(0, 1).toUpperCase()}
+                </span>
+
+                <div style={styles.infoWrapper}>
+                    <div>
+                        <p>The Patient is Postponed {item?.name}</p>
+                        <p>{`${item?.gender?.toLowerCase() || "N/A"} , ${item?.age || "N/A"}`}</p>
+                    </div>
+
+                    <p style={{ ...styles.tag, backgroundColor: "#fff2a8", color: "#b8860b" }}>
+                        Postponed
+                    </p>
+                </div>
+            </div>
+        );
+    }
+
+    else if (item?.status === "Scheduled") {
+        return (
+            <div style={styles.wrapper}>
+                <span style={{ ...styles.logo, backgroundColor: "#b4da4e" }}>
+                    {item?.name.slice(0, 1).toUpperCase()}
+                </span>
+
+                <div style={styles.infoWrapper}>
+                    <div>
+                        <p>New Patient Registered {item?.name}</p>
+                        <p>{`${item?.gender?.toLowerCase() || "N/A"} , ${item?.age || "N/A"}`}</p>
+                    </div>
+
+                    <p style={{ ...styles.tag, backgroundColor: "#83e488", color: "green" }}>
+                        Scheduled
+                    </p>
+                </div>
+            </div>
+        );
+    }
+
+    else if (item?.prescribtionId != null) {
+        return (
+            <div style={styles.wrapper}>
+                <span style={{ ...styles.logo, backgroundColor: "#c8a2ff" }}>
+                    {item?.name.slice(0, 1).toUpperCase()}
+                </span>
+
+                <div style={styles.infoWrapper}>
+                    <div>
+                        <p>Prescription is generated for {item?.name}</p>
+                        <p>{`${item?.gender?.toLowerCase() || "N/A"} , ${item?.age || "N/A"}`}</p>
+                    </div>
+
+                    <p style={{ ...styles.tag, backgroundColor: "#c8a2ff", color: "black" }}>
+                        Prescription Done
+                    </p>
+                </div>
+            </div>
+        );
+    }
+};
+
+
+const styles = {
+    wrapper: {
+        width: "100%",
+        padding: "10px",
+        display: "flex",
+        alignItems: "center",
+        gap: "20px"
+    },
+    logo: {
+        borderRadius: "50%",
+        width: "40px",
+        height: "40px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        color: "white",
+        fontWeight: "bold",
+        fontSize: "18px"
+    },
+    infoWrapper: {
+        display: "flex",
+        justifyContent: "space-between",
+        width: "100%"
+    },
+    tag: {
+        padding: "5px",
+        borderRadius: "10px",
+        width: "100px",
+        height: "20px",
+        textAlign: "center",
+        fontSize: "12px"
+    }
+};
+
+
+// MAIN COMPONENT
+export const ActivityTimeline = ({ timeline }) => {
+    return (
+        <div className="activity-card">
+            {timeline.map((item, i) => (
+                <div key={i} className="patient-card">
+                    {statusTitle(item)}
+                </div>
+            ))}
+        </div>
+    );
+};
+
+

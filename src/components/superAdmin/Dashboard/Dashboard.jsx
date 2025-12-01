@@ -131,7 +131,8 @@ const Dashboard = () => {
                         <div style={{
                             display: 'flex',
                             justifyContent: 'space-between'
-                        }}> <p>Male:</p> <h4>{Number(getMetricValue("Total MalePatient"))}</h4> <p>Female:</p><h4> {Number(getMetricValue("Total FemalePatient"))}</h4></div>
+                        }}> <p>Male:</p> <h4>{Number(getMetricValue("Total MalePatient"))}</h4> <p>Female:</p><h4> {Number(getMetricValue("Total FemalePatient"))}</h4>
+                        </div>
                     </div>
                 </div>
 

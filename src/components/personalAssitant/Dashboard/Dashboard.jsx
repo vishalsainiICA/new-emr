@@ -6,8 +6,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import { FaCableCar } from "react-icons/fa6";
-import { doctorAPi, perosnalAssistantAPI } from "../../../auth";
+import { commonApi, doctorAPi, perosnalAssistantAPI } from "../../../auth";
 import { toast } from "react-toastify";
+import { ActivityTimeline } from "../../Utility/PatientHistory__Labtest";
 
 
 const DashBoard = () => {
@@ -26,6 +27,8 @@ const DashBoard = () => {
     const [showCancelModal, setShowCancelModal] = useState(null);
     const [newDate, setNewDate] = useState("");
     const [cancelReason, setCancelReason] = useState("");
+    const [refresh, setrefresh] = useState(false)
+    const [timeline, setimeline] = useState([]);
 
 
     const navigate = useNavigate()
@@ -35,9 +38,10 @@ const DashBoard = () => {
         setIsProcessing(true);
         setError(null);
         try {
-            const res = await doctorAPi.changePatientStatus(id, newDate, cancelReason);
+            const res = await commonApi.changePatientStatus(id, newDate, cancelReason);
             if (res.status === 200) {
                 toast.success("Status Updated")
+                setrefresh((prev) => !prev)
 
             } else {
                 setError(res.data?.message || "Something went wrong");
@@ -85,7 +89,7 @@ const DashBoard = () => {
             setIsProcessing(true);
             setError(null);
             try {
-                const res = await perosnalAssistantAPI.getAllPatients();
+                const res = await perosnalAssistantAPI.getAllPatients(newDate, cancelReason);
                 if (res.status === 200) {
                     setData(res.data.data || []);
                     setFilterPatient(res.data.data || []); // initialize filter
@@ -99,6 +103,10 @@ const DashBoard = () => {
                 setIsProcessing(false);
             }
         };
+
+        fetchPatient();
+    }, [cancelReason, newDate, refresh,])
+    useEffect(() => {
         const fetchProfile = async () => {
             setIsProcessing(true);
             setError(null);
@@ -116,12 +124,30 @@ const DashBoard = () => {
                 setIsProcessing(false);
             }
         };
+
+        const dailyActivity = async () => {
+            setIsProcessing(true);
+            setError(null);
+            try {
+                const res = await doctorAPi.dailyActivity();
+                if (res.status === 200) {
+                    setimeline(res.data.data || []);
+                } else {
+                    setError(res.data?.message || "Something went wrong");
+                }
+            } catch (err) {
+                console.log(err);
+                setError(err.response?.data?.message || "Internal Server Error");
+            } finally {
+                setIsProcessing(false);
+            }
+        };
+        dailyActivity()
         fetchProfile()
 
-        fetchPatient();
     }, []);
 
-    return <div className="doctor-dashboard">
+    return <div className="pa-dashboard">
 
         <div className="doctor-heading">
             <div style={{
@@ -156,7 +182,7 @@ const DashBoard = () => {
 
         <div className="doctor-patient-list">
             <div style={{
-                width: '100%'
+
             }} className="hospitalperformance">
                 <div style={{
                     display: 'flex',
@@ -183,12 +209,14 @@ const DashBoard = () => {
                         gap: '7px'
                     }}>
                         <input type="search" onChange={(e) => filter(e.target.value)} placeholder="type name..." />
-                        <select name="" id="">
-                            <option value="all">Schedule</option>
+                        <select onChange={(e) => setCancelReason(e.target.value)} name="" id="">
+                            <option value="today">Today</option>
+                            <option value="postponed">Postponed</option>
                             <option value="cancel">Cancel</option>
+                            <option value="all">All</option>
                         </select>
-                        <input type="date" />
-                        <button className="regular-btn" onClick={ ()=>navigate("/new-patient" , {state:{pa}})}>+New</button>
+                        <input type="date" onChange={(e) => setNewDate(e.target.value)} />
+                        <button className="regular-btn" onClick={() => navigate("/new-patient", { state: { pa } })}>+New</button>
 
                     </div>
 
@@ -222,6 +250,13 @@ const DashBoard = () => {
                         gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
                         gap: '20px',
                         marginTop: '20px',
+                        overflowY: "scroll",
+                        maxHeight: "100vh",
+                        minHeight: '100vh',
+                        scrollBehavior: 'smooth',
+                        scrollbarWidth: "none"
+
+
                         // minHeight: '500px'
                     }}>
                         {filterPatient?.map((hos, i) => (
@@ -242,7 +277,7 @@ const DashBoard = () => {
                                             display: 'flex',
                                             gap: '10px'
                                         }}>
-                                            <h4 style={{ margin: 0 }}>{hos?.name}</h4>
+                                            <h5 style={{ margin: 0 }}>{hos?.name}</h5>
                                             <p
                                                 style={{
                                                     color:
@@ -269,6 +304,8 @@ const DashBoard = () => {
                                         </div>
 
                                         <p style={{}}>{`${hos.gender?.toLowerCase() || "N/A"} , ${hos?.age || "N/A"} `}</p>
+                                        <p>{moment(hos?.updatedAt).format("DD/MM/YYYY, hh:mm A") || "N/A"}</p>
+
                                     </div>
 
                                 </div>
@@ -303,65 +340,67 @@ const DashBoard = () => {
                                                 Assessment Done
                                             </button>
 
-                                        ) : hos.status === "Cancel" ? (
-                                            /* ----------------------------------------
-                                               CASE: CANCELLED → No actions
-                                            ---------------------------------------- */
-                                            <p
-                                                style={{
-                                                    color: "red",
-                                                    backgroundColor: "#ffb3b3",
-                                                    padding: "5px",
-                                                    borderRadius: "10px",
-                                                    width: "150px",
-                                                    textAlign: "center"
-                                                }}
-                                            >
-                                                Cancelled
-                                            </p>
-
-                                        ) : hos.status === "Postponed" ? (
-                                            /* ----------------------------------------
-                                               CASE: POSTPONED → No actions
-                                            ---------------------------------------- */
-                                            <p
-                                                style={{
-                                                    color: "#b8860b",
-                                                    backgroundColor: "#fff2a8",
-                                                    padding: "5px",
-                                                    borderRadius: "10px",
-                                                    width: "150px",
-                                                    textAlign: "center"
-                                                }}
-                                            >
-                                                Postponed
-                                            </p>
-
-                                        ) : (
-                                            /* ----------------------------------------
-                                               CASE: ONLY SCHEDULED → Buttons ENABLE
-                                            ---------------------------------------- */
-                                            <div>
-                                                <button
-                                                    onClick={() =>
-                                                        navigate("/intial-assement", { state: { patient: hos } })
-                                                    }
+                                        )
+                                            : hos.status === "Cancel" ? (
+                                                /* ----------------------------------------
+                                                   CASE: CANCELLED → No actions
+                                                ---------------------------------------- */
+                                                <p
                                                     style={{
-                                                        backgroundColor: 'rgba(219, 219, 252)',
-                                                        marginRight: "10px"
+                                                        color: "red",
+                                                        backgroundColor: "#ffb3b3",
+                                                        padding: "5px",
+                                                        borderRadius: "10px",
+                                                        width: "150px",
+                                                        textAlign: "center"
                                                     }}
                                                 >
-                                                    👁️ Ini
-                                                </button>
+                                                    Cancelled
+                                                </p>
 
-                                                <button
-                                                    onClick={() => setEdit(edit === hos._id ? null : hos)}
-                                                    style={{ backgroundColor: "rgba(235, 254, 246)" }}
-                                                >
-                                                    ✏️ Edit
-                                                </button>
-                                            </div>
-                                        )}
+                                            )
+                                                : hos.status === "Postponed" ? (
+                                                    /* ----------------------------------------
+                                                       CASE: POSTPONED → No actions
+                                                    ---------------------------------------- */
+                                                    <p
+                                                        style={{
+                                                            color: "#b8860b",
+                                                            backgroundColor: "#fff2a8",
+                                                            padding: "5px",
+                                                            borderRadius: "10px",
+                                                            width: "150px",
+                                                            textAlign: "center"
+                                                        }}
+                                                    >
+                                                        Postponed
+                                                    </p>
+
+                                                ) : (
+                                                    /* ----------------------------------------
+                                                       CASE: ONLY SCHEDULED → Buttons ENABLE
+                                                    ---------------------------------------- */
+                                                    <div>
+                                                        <button
+                                                            onClick={() =>
+                                                                navigate("/intial-assement", { state: { patient: hos } })
+                                                            }
+                                                            style={{
+                                                                backgroundColor: 'rgba(219, 219, 252)',
+                                                                marginRight: "10px"
+                                                            }}
+                                                        >
+                                                            👁️ Ini
+                                                        </button>
+
+                                                        <button
+                                                            onClick={() => setEdit(edit === hos._id ? null : hos)}
+                                                            style={{ backgroundColor: "rgba(235, 254, 246)" }}
+                                                        >
+                                                            ✏️ Edit
+                                                        </button>
+                                                    </div>
+                                                )}
 
 
                                         {edit?._id === hos._id && (
@@ -399,7 +438,7 @@ const DashBoard = () => {
                     </div>
                 )}
 
-                {!isProcessing && !error && Array.isArray(filterPatient?.todayPatient) && filterPatient?.todayPatient?.length === 0 && (
+                {!isProcessing && !error && Array.isArray(filterPatient) && filterPatient?.length === 0 && (
                     <p
                         style={{ textAlign: 'center', padding: '50px 0' }}
                     >No Patients found</p>
@@ -424,6 +463,7 @@ const DashBoard = () => {
                         })}
                     </p>
 
+                    <ActivityTimeline timeline={timeline}></ActivityTimeline>
                 </div>
 
 

@@ -150,6 +150,14 @@ export default function PatientRecords() {
                             type="text"
                             placeholder="Search"
                         />
+                        <select
+                            style={{ padding: '6px', borderRadius: '7px', border: "0.5px solid lightgrey" }}
+                        >
+                            <option value="all">All</option>
+                            <option value="scheduled">Scheduled</option>
+                            <option value="cancel">Cancel</option>
+                            <option value="pospond">Pospond</option>
+                        </select>
                         <input style={{
                             padding: "7px"
                         }} type="date" />
@@ -163,6 +171,7 @@ export default function PatientRecords() {
                     <p>Age</p>
                     <p>Hospital</p>
                     <p>Doctor</p>
+                    <p>Status</p>
                     <p>Date</p>
                 </div>
 
@@ -200,6 +209,30 @@ export default function PatientRecords() {
                                 <p>{patient.age}</p>
                                 <p>{patient?.hospitalId?.name || "N/A"}</p>
                                 <p>{patient?.doctorId?.name || "N/A"}</p>
+                                <p
+                                    style={{
+                                        width: '70px',
+                                        fontSize: "12px",
+                                        color:
+                                            patient?.status === "Cancel"
+                                                ? "red"
+                                                : patient?.status === "Postponed"
+                                                    ? "#b8860b"          // dark yellow
+                                                    : "green",
+
+                                        backgroundColor:
+                                            patient?.status === "Cancel"
+                                                ? "#ffb3b3"          // light red
+                                                : patient?.status === "Postponed"
+                                                    ? "#fff2a8"          // light yellow
+                                                    : "lightgreen",
+
+                                        padding: "5px",
+                                        borderRadius: "10px",
+                                    }}
+                                >
+                                    {patient?.status}
+                                </p>
                                 <p>{moment(patient?.createdAt).format("DD/MM/YYYY, hh:mm A") || "N/A"}</p>
                             </div>
                         ))}

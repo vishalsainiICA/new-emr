@@ -7,7 +7,8 @@ import { PiTrademarkRegisteredThin } from "react-icons/pi";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CurrentStep, dummyDepartments, extractTextFromImage, parseAadhaarText } from "../../Utility/CicularAvatar";
-import { commonApi } from "../../../auth";
+import { commonApi, perosnalAssistantAPI } from "../../../auth";
+import { BsArrowLeft } from "react-icons/bs";
 const calculateAge = (dob) => {
   if (!dob) return null;
 
@@ -28,7 +29,7 @@ const calculateAge = (dob) => {
 
 
 const Patientregisteration = () => {
-  const totalSteps = 4;
+  const totalSteps = 3;
   const [selectedDep, setSelectedDep] = useState(null)
   const [currentStep, setCurrentStep] = useState(0)
   const [aadhaarFront, setAadhaarFront] = useState(null);
@@ -55,8 +56,6 @@ const Patientregisteration = () => {
       attendeeName: '',
       attendeePhone: null,
       attendeeRelation: '',
-      departmentId: '',
-      doctorId: null,
       addharNo: '',
       addharDocuments: [],
     }
@@ -69,6 +68,8 @@ const Patientregisteration = () => {
   const navigate = useNavigate()
   const pa = location.state?.pa
   const hospitalId = pa?.hospitalId;
+  console.log("pa", pa);
+
 
   useEffect(() => {
     const fetch = async () => {
@@ -178,8 +179,6 @@ const Patientregisteration = () => {
 
 
   const handleSubmit = async (e) => {
-    console.log("call");
-
     e.preventDefault();
     setIsProcessing(true);
 
@@ -187,6 +186,9 @@ const Patientregisteration = () => {
       const formdata = new FormData();
       // multiple d
 
+      formdata.append("hospitalId", hospitalId)
+      formdata.append("doctorId", pa?.doctorId?._id)
+      formdata.append("registerarId", pa?._id)
       uploadedDocuments.forEach((doc, index) => {
         formdata.append(`categories[${index}]`, doc.category);
         formdata.append(`fileCount[${index}]`, doc.files.length);
@@ -207,8 +209,6 @@ const Patientregisteration = () => {
         }
         formdata.append(key, value ?? "");
       });
-
-      formdata.append("hospitalId", hospitalId)
 
       const res = await commonApi.registerPatient(formdata);
       toast.success(res?.data?.message || "Patient registered successfully");
@@ -231,8 +231,6 @@ const Patientregisteration = () => {
         attendeeName: '',
         attendeePhone: null,
         attendeeRelation: '',
-        departmentId: '',
-        doctorId: null,
         addharDocuments: [],
         hospitalId: null,
         pastDocumnents: []
@@ -268,7 +266,7 @@ const Patientregisteration = () => {
       <div className="patient-view-form">
 
         <div className="patientregisteration-header">
-          <h3>Patient Registeration</h3>
+          <h3><button className="common-btn" onClick={() => navigate(-1)}> ← Back</button> Patient Registeration</h3>
           <CurrentStep currentStep={currentStep} totalSteps={totalSteps}></CurrentStep>
         </div>
         <hr />
@@ -382,6 +380,7 @@ const Patientregisteration = () => {
                     <label>Phone *</label>
                     <input
                       type="number"
+                      maxLength={10}
                       value={patientData.phone}
                       onChange={(e) => setPatientData({
                         ...patientData,
@@ -394,6 +393,7 @@ const Patientregisteration = () => {
                     <label>WhatsApp Number</label>
                     <input
                       type="number"
+                      maxLength={10}
                       value={patientData.whatsApp}
                       onChange={(e) => setPatientData({
                         ...patientData,
@@ -558,107 +558,8 @@ const Patientregisteration = () => {
           )}
 
           {/* Step 3 — Basic Details */}
-          {currentStep === 3 && (
-            <div className="patient-step-3">
-              <h4>Select Department:</h4>
 
-              <div className="main-select-content">
-
-                {
-                  hospital?.supportedDepartments?.map((item, i) => {
-                    const isSelected = selectedDep?.departmentName === item.departmentName;
-
-                    //Find matching dummy department image
-                    const matchedDept = dummyDepartments.find(
-                      (dep) => dep.name === item.departmentName
-                    );
-
-                    return (
-                      <span className="card-hover"
-                        key={i}
-                        onClick={() => setSelectedDep(item)}
-                        style={{
-                          backgroundColor: isSelected ? "rgb(245, 243, 243)" : "white"
-                        }}>
-                        <div>
-                          <img
-                            style={{ width: "50px", height: "50px" }}
-                            src={matchedDept?.image || ""}
-
-                          />
-                          <span style={{
-                            fontSize: '12px'
-                          }}>{item.departmentName}</span>
-                        </div>
-                      </span>
-                    );
-                  })
-                }
-
-              </div>
-
-
-              <div style={{
-                marginTop: '10px',
-              }}>
-                <h4> Doctors: </h4>
-                {
-                  selectedDep && selectedDep?.doctorIds?.map((doc, i) => {
-                    const isSelected = patientData?.doctorId === doc?._id
-                    return <div
-                      onClick={() => {
-                        setPatientData((prev) => {
-                          return { ...prev, doctorId: doc._id }
-                        })
-                      }}
-
-                      style={{
-                        border: '0.2px solid lightgrey',
-                        padding: '10px',
-                        borderRadius: '10px',
-                        width: '300px',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        marginTop: '10px',
-                        backgroundColor: isSelected ? 'rgb(247, 231, 231)' : ''
-
-                      }}>
-
-                      <span style={{
-                        fontFamily: 'sans-serif'
-
-                      }}>
-                        {i + 1}.
-                        <span style={{
-                          marginLeft: '10px',
-                          fontSize: '12px'
-
-                        }}>
-                          {doc?.name}
-                        </span>
-                      </span>
-                      {/* 
-                                                 <h5 style={{
-                                                     marginLeft: '12px'
-                                                 }}>Experience:{doc?.expierience || 5}</h4> */}
-                      <span style={{
-                        fontSize: '12px',
-                        display: 'flex'
-                      }}>Experience:<span style={{
-                        fontWeight: 'bold'
-                      }}>{doc?.experience}</span ></span>
-                    </div>
-                  })
-                }
-
-              </div>
-            </div>
-
-          )}
-
-          {/* Step 4 — Basic Details */}
-          {currentStep == 4 && (
+          {currentStep == 3 && (
             <div className="patient-step-4">
               <h4>Upload Documents</h4>
               <div className="upload-file">
@@ -724,7 +625,7 @@ const Patientregisteration = () => {
           )}
 
           {/* Step 5 — Basic Details */}
-          {currentStep == 5 && (
+          {currentStep == 4 && (
             <div className="patient-step-5">
               <h4>Reviwe & Submit</h4>
               <div style={{
@@ -768,7 +669,7 @@ const Patientregisteration = () => {
 
                 disabled={isProcessing}
                 onClick={(e) => {
-                  if (currentStep < 4) {
+                  if (currentStep < 3) {
                     setCurrentStep(currentStep + 1);
                   } else {
 
@@ -777,7 +678,7 @@ const Patientregisteration = () => {
                 }}
               >
                 {
-                  currentStep < 4
+                  currentStep < 3
                     ? "Next →"
                     : isProcessing
                       ? "Saving..."

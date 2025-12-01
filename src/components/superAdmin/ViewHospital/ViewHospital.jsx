@@ -456,6 +456,9 @@ const ViewHospital = () => {
                         }}>Doctor</p>
                         <p style={{
                             fontSize: '12px'
+                        }}>Status</p>
+                        <p style={{
+                            fontSize: '12px'
                         }}>Date</p>
                     </div>
 
@@ -501,6 +504,31 @@ const ViewHospital = () => {
                                     <p style={{
                                         fontSize: '12px'
                                     }}>{patient?.doctorId?.name || "N/A"}</p>
+                                    <p
+                                        style={{
+                                            width: '70px',
+                                            fontSize: "12px",
+                                            color:
+                                                patient?.status === "Cancel"
+                                                    ? "red"
+                                                    : patient?.status === "Postponed"
+                                                        ? "#b8860b"          // dark yellow
+                                                        : "green",
+
+                                            backgroundColor:
+                                                patient?.status === "Cancel"
+                                                    ? "#ffb3b3"          // light red
+                                                    : patient?.status === "Postponed"
+                                                        ? "#fff2a8"          // light yellow
+                                                        : "lightgreen",
+
+                                            padding: "5px",
+                                            borderRadius: "10px",
+                                        }}
+                                    >
+                                        {patient?.status}
+                                    </p>
+
                                     <p style={{
                                         fontSize: '12px'
                                     }}>{moment(patient?.createdAt).format("DD/MM/YYYY, hh:mm A") || "N/A"}</p>
