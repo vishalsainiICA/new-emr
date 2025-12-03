@@ -17,6 +17,7 @@ const ViewHospital = () => {
     const [assinDoctor, setAssignDoctor] = useState(null)
     const [hospital, sethospital] = useState(null)
     const location = useLocation()
+    const [addCustomDep, setCustomDepartment] = useState(null)
     const [doctorData, setDoctorData] = useState({
         doctorName: "",
         email: "",
@@ -141,7 +142,7 @@ const ViewHospital = () => {
                         fontSize: '12px'
                     }}>🏥</p>
                 </div>
-                <h2>{hospital?.totalPatient || "N/A"}</h2>
+                <h2>{hospital?.totalPatient || "0"}</h2>
                 {/* <p style={{
                     color: 'rgba(125, 200, 176)',
                     fontWeight: "bold"
@@ -160,7 +161,7 @@ const ViewHospital = () => {
                         fontSize: '12px'
                     }}>🛏️</p>
                 </div>
-                <h2>{hospital?.totalPrescribtion || "N/A"}</h2>
+                <h2>{hospital?.totalPrescribtion || "0"}</h2>
                 {/* <p style={{
                     color: 'rgba(125, 200, 176)',
                     fontWeight: "bold"
@@ -198,7 +199,7 @@ const ViewHospital = () => {
                         fontSize: '12px'
                     }}>👨‍⚕️</p>
                 </div>
-                <h2>{hospital?.totalRevenue || "N/A"}</h2>
+                <h2>{hospital?.totalRevenue || "0"}</h2>
 
             </div>
 
@@ -222,7 +223,7 @@ const ViewHospital = () => {
 
                 }}
 
-                    className="commonBtn" href={`https://new-emr-pqlz.onrender.com/register-patient?id=${hospital?._id}`}
+                    className="commonBtn" href={`${import.meta.env.VITE_FRONTEND_URL}/register-patient?id=${hospital?._id}`}
                     // className="commonBtn" href={`http://localhost:5173/register-patient?id=${hospital?._id}`}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -302,7 +303,7 @@ const ViewHospital = () => {
                     justifyContent: "space-between"
                 }}>
                     <h4>{"Department Overview"}</h4>
-                    {/* <button className="common-btn">+ New Doctor</button> */}
+                    <button className="common-btn" onClick={() => setCustomDepartment("new Dep")}>+ New Dep</button>
                 </div>
 
                 <div style={{
@@ -427,10 +428,6 @@ const ViewHospital = () => {
                         type="text"
                         placeholder="Search"
                     />
-                    <input style={{
-                        width: '170px',
-                    }} type="date" />
-
                 </div>
             </div>
 
@@ -673,80 +670,80 @@ const ViewHospital = () => {
             )
         }
         {
-            // addCustomDep !== null && (
-            //     <div style={{
-            //         position: 'absolute',
-            //         inset: 0,
-            //         zIndex: 9999,
-            //         display: 'flex',
-            //         justifyContent: 'center',
-            //         alignItems: 'center',
-            //         backdropFilter: 'blur(10px)',
-            //         backgroundColor: 'rgba(19, 5, 5, 0.6)',
-            //     }}>
-            //         <div style={{
-            //             backgroundColor: 'white',
-            //             minHeight: '400px',
-            //             width: '600px',
-            //             padding: '20px',
-            //             borderRadius: '10px',
-            //             display: 'flex',
-            //             flexDirection: 'column',
-            //             justifyContent: 'space-between'
-            //         }}>
-            //             <div style={{
-            //                 display: 'flex',
-            //                 justifyContent: 'space-between',
-            //                 alignItems: 'center'
-            //             }}>
-            //                 <h3>
-            //                     {`New Department`}
-            //                 </h3>
-            //                 <i
-            //                     onClick={() => setCustomDepartment(null)}
-            //                     className="ri-close-large-line"
-            //                     style={{ cursor: 'pointer', fontSize: '20px' }}
-            //                 ></i>
-            //             </div>
+            addCustomDep !== null && (
+                <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    zIndex: 9999,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backdropFilter: 'blur(10px)',
+                    backgroundColor: 'rgba(19, 5, 5, 0.6)',
+                }}>
+                    <div style={{
+                        backgroundColor: 'white',
+                        minHeight: '400px',
+                        width: '600px',
+                        padding: '20px',
+                        borderRadius: '10px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between'
+                    }}>
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center'
+                        }}>
+                            <h3>
+                                {`New Department`}
+                            </h3>
+                            <i
+                                onClick={() => setCustomDepartment(null)}
+                                className="ri-close-large-line"
+                                style={{ cursor: 'pointer', fontSize: '20px' }}
+                            ></i>
+                        </div>
 
-            //             <label style={{ width: '100%' }}>
-            //                 Name *
-            //                 <input
-            //                     type="text"
-            //                     placeholder="Name"
-            //                     value={addCustomDep.name}
-            //                     onChange={(e) => setCustomDepartment({ ...addCustomDep, name: e.target.value })}
-            //                 />
-            //             </label>
+                        <label style={{ width: '100%' }}>
+                            Name *
+                            <input
+                                type="text"
+                                placeholder="Name"
+                                value={addCustomDep?.name}
+                                onChange={(e) => setCustomDepartment({ ...addCustomDep, name: e.target.value })}
+                            />
+                        </label>
 
-            //             <label style={{
-            //                 width: '100%',
-            //                 display: 'flex',
-            //                 flexDirection: 'column',
-            //                 marginTop: '10px'
-            //             }}>
-            //                 Department Image *
-            //                 <input
-            //                     value={addCustomDep.image}
-            //                     onChange={(e) => setCustomDepartment({ ...addCustomDep, image: e.target.value })}
-            //                     style={{
-            //                         border: '0.5px solid black'
-            //                     }} type="file"></input>
-            //             </label>
+                        <label style={{
+                            width: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            marginTop: '10px'
+                        }}>
+                            Department Image *
+                            <input
+                                value={addCustomDep?.image}
+                                onChange={(e) => setCustomDepartment({ ...addCustomDep, image: e.target.value })}
+                                style={{
+                                    border: '0.5px solid black'
+                                }} type="file"></input>
+                        </label>
 
-            //             {/*Action Buttons */}
-            //             <div style={{
-            //                 marginTop: '30px',
-            //                 display: 'flex',
-            //                 justifyContent: 'end',
-            //                 gap: '10px'
-            //             }}>
-            //                 <button onClick={() => setCustomDepartment(null)}>Cancel</button>
-            //                 <button onClick={handelAddCustomDepartment}>Add Department</button>
-            //             </div>
-            //         </div>
-            //     </div>
-            // )
+                        {/*Action Buttons */}
+                        <div style={{
+                            marginTop: '30px',
+                            display: 'flex',
+                            justifyContent: 'end',
+                            gap: '10px'
+                        }}>
+                            <button onClick={() => setCustomDepartment(null)}>Cancel</button>
+                            <button >Add Department</button>
+                        </div>
+                    </div>
+                </div>
+            )
         }
         {
             open && (

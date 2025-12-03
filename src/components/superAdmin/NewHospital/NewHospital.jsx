@@ -101,6 +101,7 @@ export const NewHospital = () => {
     const [currentStep, setCurrentStep] = useState(1); // start at step 1
     const [categoryName, setCategoryName] = useState("")
     const [addCustomDep, setCustomDepartment] = useState(null)
+    const [edit, setEdit] = useState(null)
     const [hospitalData, setHospitalData] = useState({
         name: '',
         state: null,
@@ -140,6 +141,19 @@ export const NewHospital = () => {
             const updated = { ...prev, [key]: value }
             return updated
         })
+    }
+
+    const handelDoctorChange = (depIndex, docIndex, field, value) => {
+
+        const updated = [...hospitalData.supportedDepartments]
+
+        updated[depIndex].doctors[docIndex][field] = value
+
+        setHospitalData((prev) => ({
+            ...prev,
+            supportedDepartments: updated
+        }))
+        return
     }
 
     const handleAddDoctor = () => {
@@ -673,7 +687,14 @@ export const NewHospital = () => {
                                                 </div>
 
                                             </div>
-                                            <div>
+                                            <div style={{
+                                                display: 'flex',
+                                                gap: '10px'
+                                            }}>
+                                                {dep.doctors?.length !== 0 && (
+                                                    <i class="ri-edit-box-line" onClick={() => setEdit(i)}></i>
+                                                )}
+
                                                 <i class="ri-close-large-line" onClick={() => {
                                                     const updated = hospitalData.supportedDepartments.filter((item, index) => index !== i)
                                                     setHospitalData((prev) => {
@@ -1173,6 +1194,73 @@ export const NewHospital = () => {
                 </div>
             )
         }
+
+        {edit !== null && (
+            <div style={{
+                position: 'absolute',
+                inset: 0,
+                zIndex: 9999,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backdropFilter: 'blur(10px)',
+                backgroundColor: 'rgba(19, 5, 5, 0.6)',
+            }}>
+
+                <div className="editcard">
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        marginBottom: '20px',
+                        borderRadius: '7px'
+                    }}>
+                        <h4>{hospitalData.supportedDepartments[edit]?.departmentName}</h4>
+                        <i class="ri-close-large-line" style={{
+                            cursor: "pointer"
+                        }} onClick={() => {
+                            setEdit(null)
+                        }}></i>
+                    </div>
+
+                    {
+                        hospitalData.supportedDepartments[edit]?.doctors?.map((doc, i) => {
+                            return <div key={i} className="editdep">
+                                <div style={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between'
+                                }}>
+                                    <h5>doctor:{i + 1}</h5>
+                                    <i class="ri-delete-bin-7-line" onClick={() => {
+                                        const updatedDoctors = hospitalData.supportedDepartments[edit]?.doctors?.filter((_, idx) => idx !== i)
+                                        const updatedDepartments = [...hospitalData.supportedDepartments]
+                                        updatedDepartments[edit].doctors = updatedDoctors
+
+                                        setHospitalData((prev) => ({
+                                            ...prev,
+                                            supportedDepartments: updatedDepartments
+                                        }))
+
+                                    }}></i>
+                                </div>
+                                <div style={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    gap: '10px'
+                                }}>
+                                    <input type="text" onChange={(e) => handelDoctorChange(edit, i, "doctorName", e.target.value)} value={doc?.doctorName} />
+                                    <input type="text" onChange={(e) => handelDoctorChange(edit, i, "email", e.target.value)} value={doc?.email} />
+                                    <input type="text" onChange={(e) => handelDoctorChange(edit, i, "contact", e.target.value)} value={doc?.contact} />
+                                    <input type="text" onChange={(e) => handelDoctorChange(edit, i, "experience", e.target.value)} value={doc?.experience} />
+                                    <input type="text" onChange={(e) => handelDoctorChange(edit, i, "qualification", e.target.value)} value={doc?.qualification} />
+                                </div>
+
+                            </div>
+                        })
+                    }
+                </div>
+
+            </div>
+        )}
 
     </div >
 

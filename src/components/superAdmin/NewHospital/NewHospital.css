@@ -9,7 +9,7 @@
 
 .customCard {
     border-radius: 10px;
-    padding: 20px;
+    padding: 10px;
     transition: 1s ease;
 
 }
@@ -194,4 +194,21 @@ button:active {
     border-radius: 10px;
     outline: none;
     cursor: pointer;
+}
+
+.editcard {
+    background-color: white;
+    padding: 10px;
+    min-height: 400px;
+    max-height: 400px;
+    width: 900px;
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
+
+.editdep {
+    height: 80px;
+    margin-top: 7px;
+    padding: 10px;
+    border: 0.5px solid lightgray;
 }

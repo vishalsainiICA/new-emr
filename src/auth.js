@@ -84,8 +84,8 @@ export const superAdminApi = {
         return await superAdminInstance.delete(`/super-admin/admin/delete-admin?adminId=${id}`)
     },
 
-    allPatients: async () => {
-        return await superAdminInstance.get(`/super-admin/patients/allPatients`)
+    allPatients: async (date = null, status = null) => {
+        return await superAdminInstance.get(`/super-admin/patients/allPatients?date=${date}&status=${status}`)
     },
     hospitalAllPaitent: async (id) => {
         return await superAdminInstance.get(`/super-admin/patients/hospitalAllPaitent?id=${id}`)
@@ -187,6 +187,9 @@ export const perosnalAssistantAPI = {
     },
     registerPatient: async (data) => {
         return await perosnalAssistanceInstance.post(`/assitant/patient/register-patient`, data)
+    },
+        dailyActivity: async () => {
+        return await doctorInstance.get('/assitant/daily-activity')
     },
 
 }

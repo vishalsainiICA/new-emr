@@ -125,11 +125,11 @@ const DashBoard = () => {
             }
         };
 
-        const dailyActivity = async () => {
+      const dailyActivity = async () => {
             setIsProcessing(true);
             setError(null);
             try {
-                const res = await doctorAPi.dailyActivity();
+                const res = await perosnalAssistantAPI.dailyActivity();
                 if (res.status === 200) {
                     setimeline(res.data.data || []);
                 } else {

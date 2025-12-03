@@ -12,6 +12,8 @@ export default function PatientRecords() {
     const [open, setClose] = useState(false)
     const [error, setError] = useState(null);
     const [filterPatient, setFilterPatient] = useState([]);
+    const [newDate, setNewDate] = useState("");
+    const [cancelReason, setCancelReason] = useState("all");
 
 
     const filter = (value) => {
@@ -32,7 +34,7 @@ export default function PatientRecords() {
             setIsProcessing(true);
             setError(null);
             try {
-                const res = await superAdminApi.allPatients();
+                const res = await superAdminApi.allPatients(newDate, cancelReason);
                 if (res.status === 200) {
                     setData(res.data.data || []);
                     setFilterPatient(res.data.data || []); // initialize filter
@@ -47,7 +49,7 @@ export default function PatientRecords() {
         };
 
         fetchPatient();
-    }, []);
+    }, [newDate, cancelReason]);
 
 
 
@@ -151,14 +153,16 @@ export default function PatientRecords() {
                             placeholder="Search"
                         />
                         <select
+                            onChange={(e) => setCancelReason(e.target.value)}
                             style={{ padding: '6px', borderRadius: '7px', border: "0.5px solid lightgrey" }}
                         >
                             <option value="all">All</option>
-                            <option value="scheduled">Scheduled</option>
+                            <option value="today">Today</option>
+                            <option value="postponed">Postponed</option>
                             <option value="cancel">Cancel</option>
-                            <option value="pospond">Pospond</option>
+
                         </select>
-                        <input style={{
+                        <input onChange={(e) => setNewDate(e.target.value)} style={{
                             padding: "7px"
                         }} type="date" />
                     </div>

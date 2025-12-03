@@ -301,6 +301,7 @@ const DashBoard = () => {
                         maxHeight: "100vh",
                         minHeight: '100vh',
                         scrollBehavior: 'smooth',
+                        
                         scrollbarWidth: "none"
                     }}>
                         {
@@ -347,7 +348,6 @@ const DashBoard = () => {
                                                     {hos?.status}
                                                 </p>
                                             </div>
-
                                             <p style={{}}>{`${hos?.gender?.toLowerCase() || "N/A"} , ${hos?.age || "N/A"} `}</p>
                                             <p>{moment(hos?.updatedAt).format("DD/MM/YYYY, hh:mm A") || "N/A"}</p>
                                         </div>
