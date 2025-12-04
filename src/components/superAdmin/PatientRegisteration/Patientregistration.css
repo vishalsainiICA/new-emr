@@ -18,7 +18,9 @@
 
 .patient-view-form {
     width: 60%;
-    height: 820px;
+    height: 100%;
+    overflow-y: scroll;
+    /* overflow-y: hidden; */
     display: flex;
     flex-direction: column;
     background-color: rgba(254, 254, 255);
