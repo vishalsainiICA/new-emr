@@ -137,7 +137,7 @@ const Dashboard = () => {
                 </div>
 
                 {/* Total Prescription */}
-                <div id="total-prescription" className="card-list">
+                <div onClick={() => navigate("/super-admin/patient-management", { state: { status: "rx-done" } })} id="total-prescription" className="card-list">
                     <div className="card-name">
                         <span>Total Prescriptions</span>
                         <p style={{ fontSize: "20px" }}>💊</p>

@@ -658,10 +658,7 @@ const ViewHospital = () => {
                         }}>
                             <button className="regular-btn" onClick={() => setAssignDoctor(null)}>Cancel</button>
                             <button className="common-btn" disabled={isProcessing} onClick={() => {
-
                                 setDoctorData({ ...doctorData, docId: assinDoctor._id, hosId: assinDoctor?.hospitalId })
-                                // console.log("dodo", doctorData);
-                                // console.log("assinDoctor", assinDoctor._id);
                                 handleAddPa()
                             }} >{isProcessing ? "saving..." : "Assign Pa"}</button>
                         </div>

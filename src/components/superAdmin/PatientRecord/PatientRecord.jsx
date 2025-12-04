@@ -4,6 +4,7 @@ import { Circles } from "react-loader-spinner";
 import moment from "moment";
 import { superAdminApi } from "../../../auth";
 import { LabTest, Patient_Hisotry } from "../../../components/Utility/PatientHistory__Labtest";
+import { useLocation } from "react-router-dom";
 
 
 export default function PatientRecords() {
@@ -13,7 +14,17 @@ export default function PatientRecords() {
     const [error, setError] = useState(null);
     const [filterPatient, setFilterPatient] = useState([]);
     const [newDate, setNewDate] = useState("");
-    const [cancelReason, setCancelReason] = useState("all");
+    const [cancelReason, setCancelReason] = useState()
+
+    const location = useLocation()
+
+    console.log("location", location);
+
+
+    useEffect(() => {
+        setCancelReason(location.state?.status ? "rx-done" : "all");
+    }, [location.state]);
+
 
 
     const filter = (value) => {
@@ -157,7 +168,8 @@ export default function PatientRecords() {
                             style={{ padding: '6px', borderRadius: '7px', border: "0.5px solid lightgrey" }}
                         >
                             <option value="all">All</option>
-                            <option value="today">Today</option>
+                            <option value="today">Today</option>Rx Done
+                            <option value="rx-done">Rx Done</option>
                             <option value="postponed">Postponed</option>
                             <option value="cancel">Cancel</option>
 
@@ -213,30 +225,45 @@ export default function PatientRecords() {
                                 <p>{patient.age}</p>
                                 <p>{patient?.hospitalId?.name || "N/A"}</p>
                                 <p>{patient?.doctorId?.name || "N/A"}</p>
-                                <p
-                                    style={{
-                                        width: '70px',
-                                        fontSize: "12px",
-                                        color:
-                                            patient?.status === "Cancel"
-                                                ? "red"
-                                                : patient?.status === "Postponed"
-                                                    ? "#b8860b"          // dark yellow
-                                                    : "green",
+                                {patient?.prescribtionId ? (
+                                    <p
+                                        style={{
+                                            width: '70px',
+                                            fontSize: "12px",
+                                            color: "gray",
+                                            backgroundColor: "lightgrey",
+                                            padding: "5px",
+                                            borderRadius: "10px",
+                                        }}
+                                    >
+                                        {"Rx Done"}
+                                    </p>
+                                ) : (
+                                    <p
+                                        style={{
+                                            width: '70px',
+                                            fontSize: "12px",
+                                            color:
+                                                patient?.status === "Cancel"
+                                                    ? "red"
+                                                    : patient?.status === "Postponed"
+                                                        ? "#b8860b"          // dark yellow
+                                                        : "green",
 
-                                        backgroundColor:
-                                            patient?.status === "Cancel"
-                                                ? "#ffb3b3"          // light red
-                                                : patient?.status === "Postponed"
-                                                    ? "#fff2a8"          // light yellow
-                                                    : "lightgreen",
+                                            backgroundColor:
+                                                patient?.status === "Cancel"
+                                                    ? "#ffb3b3"          // light red
+                                                    : patient?.status === "Postponed"
+                                                        ? "#fff2a8"          // light yellow
+                                                        : "lightgreen",
 
-                                        padding: "5px",
-                                        borderRadius: "10px",
-                                    }}
-                                >
-                                    {patient?.status}
-                                </p>
+                                            padding: "5px",
+                                            borderRadius: "10px",
+                                        }}
+                                    >
+                                        {patient?.status}
+                                    </p>
+                                )}
                                 <p>{moment(patient?.createdAt).format("DD/MM/YYYY, hh:mm A") || "N/A"}</p>
                             </div>
                         ))}
@@ -258,6 +285,6 @@ export default function PatientRecords() {
                     </div>
                 )
             }
-        </div>
+        </div >
     )
 }
