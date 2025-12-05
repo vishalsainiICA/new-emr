@@ -27,6 +27,9 @@ export const superAdminApi = {
     fetchProfile: async () => {
         return await superAdminInstance.get('/super-admin/auth/profile')
     },
+    ediProfile: async (data) => {
+        return await superAdminInstance.put('/super-admin/auth/edit-profile', data)
+    },
     getAllhosptial: async () => {
         return await superAdminInstance.get('/super-admin/hospital/getAllHospital')
     },
@@ -149,6 +152,10 @@ export const doctorAPi = {
         return await doctorInstance.post('/patient/patient-registration', formData)
 
     },
+
+    ediProfile: async (data) => {
+        return await doctorInstance.put('/doctor/auth/edit-profile', data)
+    },
     getAllPatients: async (date = null, status = null) => {
         return await doctorInstance.get(`/doctor/all-patient-record?date=${date}&status=${status}`)
     },
@@ -185,10 +192,13 @@ export const perosnalAssistantAPI = {
     fetchProfile: async () => {
         return await perosnalAssistanceInstance.get('/assitant/auth/profile')
     },
+    ediProfile: async (data) => {
+        return await perosnalAssistanceInstance.put('/assitant/auth/edit-profile', data)
+    },
     registerPatient: async (data) => {
         return await perosnalAssistanceInstance.post(`/assitant/patient/register-patient`, data)
     },
-        dailyActivity: async () => {
+    dailyActivity: async () => {
         return await doctorInstance.get('/assitant/daily-activity')
     },
 

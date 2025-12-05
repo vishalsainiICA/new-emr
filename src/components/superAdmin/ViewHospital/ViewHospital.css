@@ -43,3 +43,13 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr)
 }
+
+
+.regular-btn {
+    padding: 7px;
+    background-color: rgb(229, 230, 243);
+    border-radius: 10px;
+    font-size: 10px;
+    outline: none;
+    cursor: pointer;
+}

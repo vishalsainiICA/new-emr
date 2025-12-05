@@ -29,14 +29,24 @@ const DashBoard = () => {
     const [cancelReason, setCancelReason] = useState("");
     const [refresh, setrefresh] = useState(false)
     const [timeline, setimeline] = useState([]);
-
+    const [changePassword, setChangePassword] = useState(false)
+    const [password, setpassword] = useState({
+        old: "",
+        new: ""
+    })
 
     const navigate = useNavigate()
+
+    const handleChange = (key, value) => {
+        setpa((prev) => ({
+            ...prev,
+            [key]: value
+        }))
+    }
 
 
     const changePatientStatus = async (id) => {
         setIsProcessing(true);
-        setError(null);
         try {
             const res = await commonApi.changePatientStatus(id, newDate, cancelReason);
             if (res.status === 200) {
@@ -87,7 +97,7 @@ const DashBoard = () => {
     useEffect(() => {
         const fetchPatient = async () => {
             setIsProcessing(true);
-            setError(null);
+
             try {
                 const res = await perosnalAssistantAPI.getAllPatients(newDate, cancelReason);
                 if (res.status === 200) {
@@ -109,7 +119,7 @@ const DashBoard = () => {
     useEffect(() => {
         const fetchProfile = async () => {
             setIsProcessing(true);
-            setError(null);
+
             try {
                 const res = await perosnalAssistantAPI.fetchProfile();
                 if (res.status === 200) {
@@ -125,7 +135,7 @@ const DashBoard = () => {
             }
         };
 
-      const dailyActivity = async () => {
+        const dailyActivity = async () => {
             setIsProcessing(true);
             setError(null);
             try {
@@ -146,6 +156,49 @@ const DashBoard = () => {
         fetchProfile()
 
     }, []);
+
+    const handleeditProfile = async () => {
+        setIsProcessing(true);
+        try {
+            const formdata = new FormData();
+            formdata.append("name", pa?.name);
+            formdata.append("email", pa?.email);
+            formdata.append("contact", pa?.contact);
+
+            //Only add password fields if user actually entered something
+            if (password.old.trim() !== "" && password.new.trim() !== "") {
+                formdata.append("oldPassword", password.old);
+                formdata.append("newPassword", password.new);
+            }
+
+            const res = await perosnalAssistantAPI.ediProfile(formdata);
+
+            if (res.status === 200) {
+                setpa(res.data?.data);
+                toast.success("Profile Updated");
+
+                // close edit section
+                setEditprofile(false);
+                setblur(false);
+                setCollapse(false);
+                setpassword({ old: '', new: '' });
+                setChangePassword(false)
+
+
+            } else {
+                setError({ profile: res.data?.message || "Something went wrong" });
+            }
+
+        } catch (err) {
+            console.log(err);
+            setError({ profile: err.response?.data?.message || "Internal Server Error" });
+        } finally {
+            setrefresh((prev) => !prev)
+            setIsProcessing(false);
+            console.log(error);
+
+        }
+    };
 
     return <div className="pa-dashboard">
 
@@ -235,17 +288,17 @@ const DashBoard = () => {
                     </span>
                 )}
 
-                {error && (
+                {error?.error && (
                     <h4 style={{
                         color: 'red',
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
                         padding: '50px 0'
-                    }}>{error}</h4>
+                    }}>{error?.error}</h4>
                 )}
 
-                {!isProcessing && !error && Array.isArray(filterPatient) && filterPatient?.length > 0 && (
+                {!isProcessing && !error?.error && Array.isArray(filterPatient) && filterPatient?.length > 0 && (
                     <div style={{
                         gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
                         gap: '20px',
@@ -438,7 +491,7 @@ const DashBoard = () => {
                     </div>
                 )}
 
-                {!isProcessing && !error && Array.isArray(filterPatient) && filterPatient?.length === 0 && (
+                {!isProcessing && !error?.error && Array.isArray(filterPatient) && filterPatient?.length === 0 && (
                     <p
                         style={{ textAlign: 'center', padding: '50px 0' }}
                     >No Patients found</p>
@@ -493,6 +546,11 @@ const DashBoard = () => {
                     <div>
                         <p>Phone</p>
                         <span>{pa?.contact}</span>
+                    </div>
+                    <hr />
+                    <div>
+                        <p>Qualification</p>
+                        <span>{pa?.qualification || "N/A"}</span>
                     </div>
                     <hr />
 
@@ -557,43 +615,62 @@ const DashBoard = () => {
             <hr />
             {/* Logout page */}
             <div className={isEditprofile ? "edit-profile" : "active"}>
-                <div className="profile">
-                    <span >Edit Profile</span>
-                    <button className="common-btn" onClick={() => { setEditprofile(!isEditprofile); setblur(!blur); setCollapse(!isCollapse) }}>Back</button>
-                </div>
-                <hr />
-                <div className="edit-detail">
-                    <div className="detail">
-                        <div>
-                            <label htmlFor="User Name">Username</label>
-                            <input type="text" />
-                        </div>
-                        <div>
-                            <label htmlFor="Email">Email</label>
-                            <input type="email" />
-                        </div>
-                    </div>
-                    <div className="detail">
-                        <div>
-                            <label htmlFor="Phone">Phone</label>
-                            <input type="number" />
-                        </div>
-                        <div>
-                            <label htmlFor="Department">Department</label>
-                            <input type="text" />
-                        </div>
-                    </div>
-                    <div className="bio">
-                        <label htmlFor="Bio">Bio</label>
-                        <br />
-                        <textarea name="" id=""></textarea>
-                    </div>
-                </div>
-                <hr />
 
-                <div className="final-process">
-                    <button className="main-button"> Save Profile</button>
-                    <button className="common-btn" onClick={() => { setEditprofile(!isEditprofile); setblur(!blur); setCollapse(!isCollapse) }}>Cancel</button>
+                <div className="editCard">
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: "space-between"
+                    }}>
+
+                        <span>Edit Profile</span>
+                        <button className="common-btn" onClick={() => { setEditprofile(!isEditprofile); setblur(!blur); setCollapse(!isCollapse); setChangePassword(false); setError({ profile: null }) }}>Back</button>
+
+                    </div>
+
+                    <div className="edit-detail">
+                        <label htmlFor="User Name">Name    <input type="text" onChange={(e) => handleChange("name", e.target.value)} value={pa?.name} /></label>
+
+                        <label htmlFor="Email">Email     <input type="email" onChange={(e) => handleChange("email", e.target.value)} value={pa?.email} /></label>
+
+                        <label htmlFor="Phone">Phone
+                            <input type="phone" onChange={(e) => handleChange("contact", e.target.value)} value={pa?.contact} />
+                        </label>
+                        {changePassword == false && (
+                            <label htmlFor="">
+                                <button className="main-button" onClick={() => setChangePassword(true)}>Change Password</button>
+                            </label>
+
+                        )}
+
+                        {
+                            changePassword == true && (
+                                <>
+                                    <label htmlFor="oldpassword">Old Password  <input value={password?.old} type="password" onChange={(e) =>
+                                        setpassword(prev => ({
+                                            ...prev,
+                                            old: e.target.value
+                                        }))
+                                    }
+                                    /></label>
+                                    <label htmlFor="newpassword">New Password    <input value={password?.new} onChange={(e) =>
+                                        setpassword(prev => ({
+                                            ...prev,
+                                            new: e.target.value
+                                        }))
+                                    }
+                                        type="password" /></label>
+
+                                </>
+
+                            )
+                        }
+                        {error?.profile && (<p style={{ color: 'red' }}>Error :{error?.profile}</p>)}
+
+                        <div className="final-process">
+                            <button className="common-btn" disabled={isProcessing} onClick={handleeditProfile}>{`${isProcessing ? <Circles height="40" width="40" color="#4f46e5" ariaLabel="loading" /> : "Save Profile"}`}</button>
+                            <button className="main-button" disabled={isProcessing} onClick={() => { setEditprofile(!isEditprofile); setblur(!blur); setCollapse(!isCollapse); setChangePassword(false); setError({ profile: null }) }}>Cancel</button>
+                        </div>
+                    </div>
                 </div>
 
             </div>

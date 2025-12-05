@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { adminApi, commonApi, superAdminApi } from "../../../auth";
 import { Circles } from "react-loader-spinner";
 import moment from "moment";
@@ -18,6 +18,7 @@ const ViewHospital = () => {
     const [hospital, sethospital] = useState(null)
     const location = useLocation()
     const [addCustomDep, setCustomDepartment] = useState(null)
+    const [edit, setEdit] = useState(null)
     const [doctorData, setDoctorData] = useState({
         doctorName: "",
         email: "",
@@ -29,6 +30,15 @@ const ViewHospital = () => {
     });
 
     const hos = location.state?.hospital || undefined
+
+    const navigate = useNavigate()
+
+    const handleChange = (key, value) => {
+        setSuperAdmin((prev) => ({
+            ...prev,
+            [key]: value
+        }))
+    }
 
     const filter = (value) => {
         if (value.trim() === "") {
@@ -217,19 +227,27 @@ const ViewHospital = () => {
             }}>
                 <h4>{"Hospital Information"}</h4>
 
-                <a style={{
-                    fontSize: '12px',
-                    padding: '0 7px 0 7px'
+                <div style={{
+                    display: 'flex',
+                    gap: '10px'
+                }}>
 
-                }}
+                    <button
+                        className="regular-btn"
+                        onClick={() =>
+                            window.open(
+                                `${import.meta.env.VITE_FRONTEND_URL}/register-patient?id=${hospital?._id}`,
+                                "_blank"
+                            )
+                        }
+                    >
+                        Registration Link
+                    </button>
 
-                    className="commonBtn" href={`${import.meta.env.VITE_FRONTEND_URL}/register-patient?id=${hospital?._id}`}
-                    // className="commonBtn" href={`http://localhost:5173/register-patient?id=${hospital?._id}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >Patient Registeratiion Link <i style={{
-                    fontSize: '20px'
-                }} class="ri-external-link-line"></i></a>
+                    <button className="regular-btn" onClick={() => setEdit(true)}> Edit Hospital </button>
+                </div>
+
+
             </div>
             <div style={{
                 marginTop: '10px',
@@ -751,7 +769,53 @@ const ViewHospital = () => {
             )
         }
 
-    </div>
+        {edit !== null && (
+            <div style={{
+                position: 'absolute',
+                inset: 0,
+                zIndex: 9999,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backdropFilter: 'blur(10px)',
+                backgroundColor: 'rgba(19, 5, 5, 0.6)',
+            }}>
+
+                <div className="editcard">
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        marginBottom: '20px',
+                        borderRadius: '7px'
+                    }}>
+                        <h4>Edit Hospital</h4>
+                        <i class="ri-close-large-line" style={{
+                            cursor: "pointer"
+                        }} onClick={() => {
+                            setEdit(null)
+                        }}></i>
+                    </div>
+
+                    <div className="edit-detail">
+                        <label htmlFor="">Hospital Name
+                            <input value={hospital?.name} type="text" onChange={(e) => handleChange("hospitalname", e.target.value)} />
+                        </label>
+                        <label htmlFor="">City
+                            <input value={hospital?.city} type="text" onChange={(e) => handleChange("city", e.target.value)} />
+                        </label>
+                        <label htmlFor="">State
+                            <input value={hospital?.state} type="text" onChange={(e) => handleChange("state", e.target.value)} />
+                        </label>
+                    </div>
+
+
+
+                </div>
+
+            </div>
+        )}
+
+    </div >
 
 
 }

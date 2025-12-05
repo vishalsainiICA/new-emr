@@ -3,6 +3,7 @@ import { Circles, Grid } from 'react-loader-spinner';
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import './Dashboard.css'
+import { toast } from "react-toastify";
 
 const Dashboard = () => {
 
@@ -13,15 +14,25 @@ const Dashboard = () => {
     const [isCollapse, setCollapse] = useState(false);
     const [isEditprofile, setEditprofile] = useState(false);
     const [changePassword, setChangePassword] = useState(false)
-
     const [blur, setblur] = useState(false);
     const [logOut, setlogOut] = useState(false);
     // const [isCollapse, setCollapse] = useState(false);
-    const [isHide, setisHide] = useState(false);
+    const [refresh, setrefresh] = useState(false);
     const [error, setError] = useState(null);
     const [metrices, setmetrices] = useState(null);
     const [filterHospital, setFilterHospital] = useState([]);
     const [superAdmin, setSuperAdmin] = useState(null);
+    const [password, setpassword] = useState({
+        old: "",
+        new: ""
+    })
+
+    const handleChange = (key, value) => {
+        setSuperAdmin((prev) => ({
+            ...prev,
+            [key]: value
+        }))
+    }
 
 
     const getMetricValue = (name) => {
@@ -58,12 +69,13 @@ const Dashboard = () => {
                     setData(res.data.data?.TopPerformanceHospital || []);
                     setmetrices(res.data?.data?.metrices)
                     setFilterHospital(res.data.data?.TopPerformanceHospital || []);
-                } else {
-                    setError(res.data?.message || "Something went wrong");
+                }
+                else {
+                    setError({ error: res.data?.message || "Something went wrong" });
                 }
             } catch (err) {
                 console.log(err);
-                setError(err.response?.data?.message || "Internal Server Error");
+                setError({ error: err.response?.data?.message || "Internal Server Error" });
             } finally {
                 setIsProcessing(false);
             }
@@ -76,18 +88,61 @@ const Dashboard = () => {
                 if (res.status === 200) {
                     setSuperAdmin(res.data?.data)
                 } else {
-                    setError(res.data?.message || "Something went wrong");
+                    setError({ error: res.data?.message || "Something went wrong" });
                 }
             } catch (err) {
                 console.log(err);
-                setError(err.response?.data?.message || "Internal Server Error");
+                setError({ error: err.response?.data?.message || "Internal Server Error" });
             } finally {
                 setIsProcessing(false);
             }
         };
         fetchProfile()
         fetchHospital();
-    }, []);
+    }, [refresh]);
+
+    const handleeditProfile = async () => {
+        setIsProcessing(true);
+        setError(null);
+
+        try {
+            const formdata = new FormData();
+            formdata.append("name", superAdmin?.name);
+            formdata.append("email", superAdmin?.email);
+            formdata.append("contact", superAdmin?.contact);
+
+            //Only add password fields if user actually entered something
+            if (password.old.trim() !== "" && password.new.trim() !== "") {
+                formdata.append("oldPassword", password.old);
+                formdata.append("newPassword", password.new);
+            }
+
+            const res = await superAdminApi.ediProfile(formdata);
+
+            if (res.status === 200) {
+                setSuperAdmin(res.data?.data);
+                toast.success("Profile Updated");
+
+                // close edit section
+                setEditprofile(false);
+                setblur(false);
+                setCollapse(false);
+                setpassword({ old: '', new: '' });
+
+
+            } else {
+                setError({ profile: res.data?.message || "Something went wrong" });
+            }
+
+        } catch (err) {
+            console.log(err);
+            setError({ profile: err.response?.data?.message || "Internal Server Error" });
+        } finally {
+            setrefresh((prev) => !prev)
+            setIsProcessing(false);
+        }
+    };
+
 
     return (
         <div className="">
@@ -194,7 +249,7 @@ const Dashboard = () => {
                                 justifyContent: 'center',
                                 alignItems: 'center',
                                 padding: '50px 0'
-                            }}>{error}</h4>
+                            }}>{error?.error}</h4>
                         )}
 
                         {!isProcessing && !error && Array.isArray(filterHospital) && filterHospital.length > 0 && (
@@ -357,61 +412,62 @@ const Dashboard = () => {
 
             {/* <div className="edit-profile"> */}
             <div className={isEditprofile ? "edit-profile" : "active"}>
-                <div className="profile">
-                    <span>Edit Profile</span>
-                    <button className="common-btn" onClick={() => { setEditprofile(!isEditprofile); setblur(!blur); setCollapse(!isCollapse) }}>Back</button>
-                </div>
-                <hr />
-                <div className="edit-detail">
-                    <div className="detail">
-                        <div>
-                            <label htmlFor="User Name">Username</label>
-                            <input type="text" />
-                        </div>
-                        <div>
-                            <label htmlFor="Email">Email</label>
-                            <input type="email" />
+
+                <div className="editCard">
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: "space-between"
+                    }}>
+
+                        <span>Edit Profile</span>
+                        <button className="common-btn" onClick={() => { setEditprofile(!isEditprofile); setblur(!blur); setCollapse(!isCollapse); setChangePassword(false) }}>Back</button>
+
+                    </div>
+
+                    <div className="edit-detail">
+                        <label htmlFor="User Name">Name    <input type="text" onChange={(e) => handleChange("name", e.target.value)} value={superAdmin?.name} /></label>
+
+                        <label htmlFor="Email">Email     <input type="email" onChange={(e) => handleChange("email", e.target.value)} value={superAdmin?.email} /></label>
+
+                        <label htmlFor="Phone">Phone
+                            <input type="phone" onChange={(e) => handleChange("contact", e.target.value)} value={superAdmin?.contact} />
+                        </label>
+                        {changePassword == false && (
+                            <label htmlFor="">
+                                <button className="main-button" onClick={() => setChangePassword(true)}>Change Password</button>
+                            </label>
+
+                        )}
+
+                        {
+                            changePassword == true && (
+                                <>
+                                    <label htmlFor="oldpassword">Old Password  <input value={password?.old} type="password" onChange={(e) =>
+                                        setpassword(prev => ({
+                                            ...prev,
+                                            old: e.target.value
+                                        }))
+                                    }
+                                    /></label>
+                                    <label htmlFor="newpassword">New Password    <input value={password?.new} onChange={(e) =>
+                                        setpassword(prev => ({
+                                            ...prev,
+                                            new: e.target.value
+                                        }))
+                                    }
+                                        type="password" /></label>
+
+                                </>
+
+                            )
+                        }
+                        {error?.profile && (<p style={{ color: 'red' }}>Error :{error?.profile}</p>)}
+
+                        <div className="final-process">
+                            <button className="common-btn" disabled={isProcessing} onClick={handleeditProfile}>{`${isProcessing ? <Circles height="40" width="40" color="#4f46e5" ariaLabel="loading" /> : "Save Profile"}`}</button>
+                            <button className="main-button" disabled={isProcessing} onClick={() => { setEditprofile(!isEditprofile); setblur(!blur); setCollapse(!isCollapse); setChangePassword(false) }}>Cancel</button>
                         </div>
                     </div>
-                    <div className="detail">
-                        <div>
-                            <label htmlFor="Phone">Phone</label>
-                            <input type="number" />
-                            <label htmlFor="Department">Department</label>
-                            <input type="text" />
-                        </div>
-                    </div>
-                    <div className="bio">
-                        <label htmlFor="Bio">Bio</label>
-                        <input type="text" />
-                    </div>
-                </div>
-
-                {changePassword == false && (
-                    <button className="main-button" onClick={() => setChangePassword(true)}>Change Password</button>
-                )}
-
-                {
-                    changePassword == true && (
-                        <div>
-                            <label htmlFor="oldpassword">Old Password</label>
-                            <input type="number" />
-                            <label htmlFor="newpassword">New Password</label>
-                            <input type="text" />
-                        </div>
-
-                    )
-                }
-
-                {changePassword == true && (
-                    <button className="main-button" onClick={() => setChangePassword(true)}>save</button>
-                )}
-
-                <hr />
-
-                <div className="final-process">
-                    <button className="main-button">Save Profile</button>
-                    <button className="common-btn" onClick={() => { setEditprofile(!isEditprofile); setblur(!blur); setCollapse(!isCollapse) }}>Cancel</button>
                 </div>
 
             </div>
