@@ -12,6 +12,7 @@ const Dashboard = () => {
     const [isProcessing, setIsProcessing] = useState(false);
     const [isCollapse, setCollapse] = useState(false);
     const [isEditprofile, setEditprofile] = useState(false);
+    const [changePassword, setChangePassword] = useState(false)
 
     const [blur, setblur] = useState(false);
     const [logOut, setlogOut] = useState(false);
@@ -204,7 +205,7 @@ const Dashboard = () => {
                                 // minHeight: '500px'
                             }}>
                                 {filterHospital.map((hos, i) => (
-                                    <div key={i} className="hospital-name">
+                                    <div onDoubleClick={() => navigate("/super-admin/view-hospital", { state: { hospital: hos } })} key={i} className="hospital-name">
                                         <div style={{ display: "flex", gap: "10px" }}>
                                             <span className="logo">{hos?.name?.slice(0, 2).toUpperCase()}</span>
                                             <div>
@@ -216,7 +217,7 @@ const Dashboard = () => {
                                                 }}>{hos?.patientCategories?.join(",")}</a>  • Md: {hos?.medicalDirector?.name}</span>
                                             </div>
                                         </div>
-                                        <p>Excellent</p>
+                                        <p>Revenue:{hos?.totalRevenue}</p>
                                     </div>
                                 ))}
                             </div>
@@ -376,8 +377,6 @@ const Dashboard = () => {
                         <div>
                             <label htmlFor="Phone">Phone</label>
                             <input type="number" />
-                        </div>
-                        <div>
                             <label htmlFor="Department">Department</label>
                             <input type="text" />
                         </div>
@@ -387,6 +386,27 @@ const Dashboard = () => {
                         <input type="text" />
                     </div>
                 </div>
+
+                {changePassword == false && (
+                    <button className="main-button" onClick={() => setChangePassword(true)}>Change Password</button>
+                )}
+
+                {
+                    changePassword == true && (
+                        <div>
+                            <label htmlFor="oldpassword">Old Password</label>
+                            <input type="number" />
+                            <label htmlFor="newpassword">New Password</label>
+                            <input type="text" />
+                        </div>
+
+                    )
+                }
+
+                {changePassword == true && (
+                    <button className="main-button" onClick={() => setChangePassword(true)}>save</button>
+                )}
+
                 <hr />
 
                 <div className="final-process">

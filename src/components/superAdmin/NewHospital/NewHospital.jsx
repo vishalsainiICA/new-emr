@@ -133,7 +133,8 @@ export const NewHospital = () => {
         email: "",
         contact: "",
         experience: "",
-        qualification: ""
+        qualification: "",
+        appointmentFees: null
     });
 
     const handelChange = (key, value) => {
@@ -176,7 +177,8 @@ export const NewHospital = () => {
             email: "",
             contact: "",
             experience: "",
-            qualification: ""
+            qualification: "",
+            appointmentFees: null
         });
     };
     const handelAddCustomDepartment = () => {
@@ -1085,23 +1087,40 @@ export const NewHospital = () => {
                             </label>
                         </div>
 
-                        <label style={{
-                            width: '100%',
+                        <div style={{
+                            marginTop: '10px',
                             display: 'flex',
-                            flexDirection: 'column',
-                            marginTop: '10px'
+                            columnGap: '80px'
                         }}>
-                            Qualification *
-                            <select
-                                style={{ padding: '10px', borderRadius: '7px', border: '0.3px solid lightgray' }}
-                                value={doctorData.qualification}
-                                onChange={(e) => setDoctorData({ ...doctorData, qualification: e.target.value })}
-                            >
-                                <option value="">Select_Degree</option>
-                                <option value="Graduation">Graduation</option>
-                                <option value="Post-Graduation">Post-Graduation</option>
-                            </select>
-                        </label>
+                            <label style={{
+                                width: '100%',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                marginTop: '10px'
+                            }}>
+                                Qualification *
+                                <select
+                                    style={{ padding: '10px', borderRadius: '7px', border: '0.3px solid lightgray' }}
+                                    value={doctorData.qualification}
+                                    onChange={(e) => setDoctorData({ ...doctorData, qualification: e.target.value })}
+                                >
+                                    <option value="">Select_Degree</option>
+                                    <option value="Graduation">Graduation</option>
+                                    <option value="Post-Graduation">Post-Graduation</option>
+                                </select>
+                            </label>
+                            <label style={{ width: '100%' }}>
+                                Appointment Fees *
+                                <input
+                                    type="number"
+                                    placeholder="ex.500"
+                                    value={doctorData?.appointmentFees}
+                                    onChange={(e) => setDoctorData({ ...doctorData, appointmentFees: e.target.value })}
+                                />
+                            </label>
+                        </div>
+
+
                         <hr />
 
                         {/*Action Buttons */}

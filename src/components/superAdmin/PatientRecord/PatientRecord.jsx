@@ -168,7 +168,7 @@ export default function PatientRecords() {
                             style={{ padding: '6px', borderRadius: '7px', border: "0.5px solid lightgrey" }}
                         >
                             <option value="all">All</option>
-                            <option value="today">Today</option>Rx Done
+                            <option value="today">Today</option>
                             <option value="rx-done">Rx Done</option>
                             <option value="postponed">Postponed</option>
                             <option value="cancel">Cancel</option>
