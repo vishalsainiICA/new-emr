@@ -14,10 +14,10 @@ const calculateAge = (dob) => {
   const today = new Date();
 
   let age = today.getFullYear() - birthDate.getFullYear();
+
   const monthDiff = today.getMonth() - birthDate.getMonth();
   const dayDiff = today.getDate() - birthDate.getDate();
 
-  // Agar birthday abhi nahi aaya iss saal
   if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
     age--;
   }
@@ -60,7 +60,75 @@ const Patientregisteration = () => {
     }
   );
 
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({
+
+      name: '',
+      age: null,
+      gender: '',
+      pinCode: '',
+      phone: null,
+      email: '',
+      permanentAddress: '',
+      whatsApp: null,
+      DOB: '',
+      city: '',
+      state: '',
+      nationality: '',
+      patienCategory: null,
+      attendeeName: '',
+      attendeePhone: null,
+      attendeeRelation: '',
+      departmentId: '',
+      doctorId: null,
+      addharNo: '',
+  });
+
+
+  function cheakfield()
+  {
+
+     const errors={};
+
+     // Step 1
+     if(currentStep == 1){
+       if(!patientData.name) errors.name ="Patient Name is Required"
+       if(!patientData.DOB) errors.DOB ="Patient DOB is Required"
+       if(!patientData.age) errors.age ="Patient age is Required"
+       if(!patientData.city) errors.city ="Patien.city is Required"
+       if(!patientData.gender) errors.gender ="Patient gender is Required"
+       if(!patientData.phone) errors.phone ="Patient phone is Required"
+       if(patientData.phone && patientData.phone.length !== 10) errors.phone ="Patient Contact Number must be 10 digit "
+       if(!patientData.pinCode) errors.pinCode ="Patient Name is Required"
+       if(!patientData.permanentAddress) errors.permanentAddress ="Patient Address is Required"
+       if(!patientData.nationality) errors.nationality ="Patient Nationality is Required"
+       if(!patientData.state) errors.state ="Patient Name is Required"
+       if(!patientData.addharNo) errors.addharNo = "Patient Aadhar Number is required"
+       if(patientData.addharNo && patientData.addharNo.length !== 12) errors.addharNo = "Patient Aadhar Number must be 10 digit"
+       if(!aadhaarFront) errors.aadhaarFront ="Patient Aadhar Front Image is required"
+       if(!aadhaarBack) errors.aadhaarBack ="Patient Aadhar Back Image is required"
+     }
+
+     if( currentStep == 2){
+      if(!patientData.attendeeName) errors.attendeeName ="Aattendee Name is required "
+      if(!patientData.attendeePhone) errors.attendeePhone ="Aattendee Contact Number  is required "
+      if(patientData.attendeePhone && patientData.attendeePhone.length !== 10) errors.attendeePhone ="Aattendee Contact Number must be 10 digit "
+      if(!patientData.attendeeRelation) errors.attendeeRelation ="Aattendee Relation is required "
+     }
+
+     if( currentStep == 3)
+     {
+      if(!selectedDep) errors.selectedDep ="Select Department first"
+      if(!patientData.doctorId) errors.doctorId ="Select Doctor first"
+     }
+
+     setErrors(errors)
+
+     return Object.keys(errors).length === 0;
+
+  }
+
+
+
   const navigate = useNavigate()
 
 
@@ -154,6 +222,9 @@ const Patientregisteration = () => {
     processBothSides();
   }, [aadhaarFront, aadhaarBack]);
 
+
+
+
   const validationRules = {
     name: "Name is required",
     age: "Age is required",
@@ -174,6 +245,7 @@ const Patientregisteration = () => {
 
     return errors;
   };
+
 
 
   const handleSubmit = async (e) => {
@@ -322,8 +394,7 @@ const Patientregisteration = () => {
                         name: e.target.value
                       })}
                     />
-                    {errors.name && <p style={{ color: "red" }}>{errors.name}</p>}
-
+                    {errors.name && <label style={{ color: "red", marginTop: "5px" }}>{errors.name}</label>}
                   </div>
 
                   <div>
@@ -341,32 +412,33 @@ const Patientregisteration = () => {
                           age: age
                         });
                       }}
-
                     />
+                    {errors.DOB && <label style={{ color: "red", marginTop: "5px" }}>{errors.DOB}</label>}
+
                   </div>
                 </div>
 
                 <div className="distance">
                   <div>
                     <label>Gender *</label>
-                    <select
-                      name="gender"
-                      value={patientData.gender}
-                      onChange={(e) =>
-                        setPatientData({ ...patientData, gender: e.target.value })
-                      }
-                    >
+                    <select value={patientData.gender}
+                      onChange={(e) => setPatientData({
+                        ...patientData,
+                        gender: e.target.value
+                      })} >
                       <option value="">Select Gender</option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                      <option value="other">Other</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="other">other</option>
                     </select>
+                    {errors.gender && <label style={{ color: "red", marginTop: "5px" }}>{errors.gender}</label>}
+
                   </div>
 
                   <div>
                     <label>Age *</label>
                     <input
-                      type="text"
+                      type="number"
                       value={patientData.age}
                       onChange={(e) => setPatientData({
                         ...patientData,
@@ -374,6 +446,8 @@ const Patientregisteration = () => {
                       })}
 
                     />
+                    {errors.age && <label style={{ color: "red", marginTop: "5px" }}>{errors.age}</label>}
+
                   </div>
                 </div>
 
@@ -388,6 +462,7 @@ const Patientregisteration = () => {
                         phone: e.target.value
                       })}
                     />
+                    {errors.phone && <label style={{ color: "red", marginTop: "5px" }}>{errors.phone}</label>}
                   </div>
 
                   <div>
@@ -400,6 +475,8 @@ const Patientregisteration = () => {
                         whatsApp: e.target.value
                       })}
                     />
+                    {errors.whatsApp && <label style={{ color: "red", marginTop: "5px" }}>{errors.whatsApp}</label>}
+
                   </div>
                 </div>
 
@@ -415,6 +492,8 @@ const Patientregisteration = () => {
                         email: e.target.value
                       })}
                     />
+                    {errors.email && <label style={{ color: "red", marginTop: "5px" }}>{errors.email}</label>}
+
                   </div>
 
                   <div>
@@ -427,6 +506,8 @@ const Patientregisteration = () => {
                         nationality: e.target.value
                       })}
                     />
+                    {errors.nationality && <label style={{ color: "red", marginTop: "5px" }}>{errors.nationality}</label>}
+
                   </div>
                 </div>
 
@@ -442,6 +523,8 @@ const Patientregisteration = () => {
                         pinCode: e.target.value
                       })}
                     />
+                    {errors.pinCode && <label style={{ color: "red", marginTop: "5px" }}>{errors.pinCode}</label>}
+
                   </div>
 
                   <div>
@@ -454,6 +537,8 @@ const Patientregisteration = () => {
                         city: e.target.value
                       })}
                     />
+                    {errors.city && <label style={{ color: "red", marginTop: "5px" }}>{errors.city}</label>}
+
                   </div>
                 </div>
 
@@ -469,6 +554,8 @@ const Patientregisteration = () => {
                         state: e.target.value
                       })}
                     />
+                    {errors.state && <label style={{ color: "red", marginTop: "5px" }}>{errors.state}</label>}
+
                   </div>
 
                   <div>
@@ -481,6 +568,8 @@ const Patientregisteration = () => {
                         addharNo: e.target.value
                       })}
                     />
+                    {errors.addharNo && <label style={{ color: "red", marginTop: "5px" }}>{errors.addharNo}</label>}
+
                   </div>
                 </div>
 
@@ -492,6 +581,8 @@ const Patientregisteration = () => {
                         type="file"
                         onChange={(e) => setAadhaarFront(e.target.files[0])}
                       />
+                    {errors.aadhaarFront && <label style={{ color: "red", marginTop: "5px" }}>{errors.aadhaarFront}</label>}
+
                     </div>
 
                     <div>
@@ -500,6 +591,8 @@ const Patientregisteration = () => {
                         type="file"
                         onChange={(e) => setAadhaarBack(e.target.files[0])}
                       />
+                    {errors.aadhaarBack && <label style={{ color: "red", marginTop: "5px" }}>{errors.aadhaarBack}</label>}
+
                     </div>
                   </div>
                 )}
@@ -516,6 +609,8 @@ const Patientregisteration = () => {
                         permanentAddress: e.target.value
                       })}
                     />
+                    {errors.permanentAddress && <label style={{ color: "red", marginTop: "5px" }}>{errors.permanentAddress}</label>}
+
                   </div>
                 </div>
 
@@ -533,10 +628,14 @@ const Patientregisteration = () => {
                 <div className="hold-data-div">
                   <div >
                     <label htmlFor="">Name *</label>
-                    <input type="text" onChange={(e) => setPatientData({
+                    <input type="text"
+                    value={patientData?.attendeeName} placeholder="Attendee Name"
+                     onChange={(e) => setPatientData({
                       ...patientData,
                       attendeeName: e.target.value
-                    })} value={patientData?.attendeeName} placeholder="Attendee Name" />
+                   })} />
+                    {errors.attendeeName && <label style={{ color: "red", marginTop: "5px" }}>{errors.attendeeName}</label>}
+
                   </div>
                   <div >
                     <label htmlFor="">Phone Number *</label>
@@ -544,6 +643,8 @@ const Patientregisteration = () => {
                       ...patientData,
                       attendeePhone: e.target.value
                     })} type="number" value={patientData?.attendeePhone} placeholder="+91 XXXX XXXX XX" />
+                    {errors.attendeePhone && <label style={{ color: "red", marginTop: "5px" }}>{errors.attendeePhone}</label>}
+
                   </div>
                 </div>
                 <div >
@@ -552,6 +653,8 @@ const Patientregisteration = () => {
                     ...patientData,
                     attendeeRelation: e.target.value
                   })} type="text" value={patientData?.attendeeRelation} placeholder="Father/Mother/Gurdian/etc." />
+                    {errors.attendeeRelation && <label style={{ color: "red", marginTop: "5px" }}>{errors.attendeeRelation}</label>}
+
                 </div>
               </form>
             </div>
@@ -560,8 +663,12 @@ const Patientregisteration = () => {
           {/* Step 3 — Basic Details */}
           {currentStep === 3 && (
             <div className="patient-step-3">
+              <div>
               <h4>Select Department:</h4>
+                    {errors.selectedDep && <label style={{ color: "red", marginTop: "5px" }}>{errors.selectedDep}</label>}
 
+              </div>
+              
               <div className="main-select-content">
 
                 {
@@ -602,6 +709,7 @@ const Patientregisteration = () => {
                 marginTop: '10px',
               }}>
                 <h4> Doctors: </h4>
+                  {errors.doctorId && <label style={{ color: "red", marginTop: "5px" }}>{errors.doctorId}</label>}
                 {
                   selectedDep && selectedDep?.doctorIds?.map((doc, i) => {
                     const isSelected = patientData?.doctorId === doc?._id
@@ -759,7 +867,6 @@ const Patientregisteration = () => {
 
         </div>
 
-
         {currentStep != 0 && (
           <div className="page-handler">
             <div>
@@ -767,7 +874,8 @@ const Patientregisteration = () => {
               <button
                 disabled={isProcessing}
                 onClick={(e) => {
-                  if (currentStep < 4) {
+                  const val=cheakfield()                  
+                  if (currentStep < 4 && val ) {
                     setCurrentStep(currentStep + 1);
                   } else {
 
