@@ -554,54 +554,6 @@ const DashBoard = () => {
                     </div>
                     <hr />
 
-                    {/* <div>
-                        <p>Department</p>
-                        <span>System Administration</span>
-                    </div>
-                    <hr />
-
-                    <div>
-                        <p>Experience</p>
-                        <span>20+ years</span>
-                    </div>
-                    <hr />
-
-                    <div>
-                        <p>Last Login</p>
-                        <span>07/11/2025, 15:11:57</span>
-                    </div>
-                    <hr />
-
-                    <div>
-                        <p>Access Level</p>
-                        <span>Full System Access</span>
-                    </div>
-                    <hr />
-
-                    <div>
-                        <p>Hospitals</p>
-                        <span>6 facilities</span>
-                    </div>
-                    <hr />
-
-                    <div>
-                        <p>Total Patients</p>
-                        <span>8</span>
-                    </div>
-                    <hr />
-
-                    <div>
-                        <p>Administrators</p>
-                        <span>10 active</span>
-                    </div>
-                    <hr />
-
-                    <div>
-                        <p>System Status</p>
-                        <span>All Systems Operational</span>
-                    </div>
-                    <hr /> */}
-
                 </div>
 
 

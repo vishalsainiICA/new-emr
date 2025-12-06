@@ -6,6 +6,7 @@ import moment from "moment";
 import './ViewHospital.css'
 import { toast } from "react-toastify";
 import { Patient_Hisotry } from "../../Utility/PatientHistory__Labtest";
+import userDefaultImage from "../../../assets/defualtUserImage.jpg"
 
 const ViewHospital = () => {
     const [data, setData] = useState([]);
@@ -272,7 +273,7 @@ const ViewHospital = () => {
                         Registration Link
                     </button>
 
-                    <button className="regular-btn" onClick={() => setEdit(true)}> Edit Hospital </button>
+                    <button className="regular-btn" onClick={() => setEdit("hospitalEdit")}> Edit Hospital </button>
                 </div>
 
 
@@ -425,50 +426,34 @@ const ViewHospital = () => {
 
                     {hospital?.supportedDepartments && hospital?.supportedDepartments?.map((dep, i) => {
                         return dep?.doctorIds?.map((doc, i) => {
-                            return <div key={i} style={{
-                                borderBottom: '0.5px solid lightgrey',
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                padding: '7px'
-                            }}>
-                                <div>
-                                    <p style={{
-                                        fontSize: '13px',
-                                        fontWeight: 'bold'
-                                    }}>{doc?.name}</p>
-                                    <p style={{
-                                        fontSize: '12px',
-                                        color: 'blue'
-                                    }}>{doc?.email}</p>
-                                </div>
-                                {
-                                    doc?.personalAssitantId ?
-                                        (
-                                            <div>
-                                                <h5>Pa Details:  </h5>
-                                                <p style={{
-                                                    fontSize: '13px',
-                                                    fontWeight: 'bold'
-                                                }}>name:  {doc?.personalAssitantId?.name}</p>
-                                                <p style={{
-                                                    fontSize: '12px',
-                                                    color: 'blue'
-                                                }}>{doc?.personalAssitantId?.email}</p>
-                                            </div>
-                                        ) : (
-                                            <button
-                                                onClick={() => setAssignDoctor(doc)}
-                                                className="common-btn"
-                                            >
-                                                + Add Pa
-                                            </button>
-                                        )
-                                }
+                            return <div key={i} className="patient-card"
 
+                            > <div
+                                onClick={() => setEdit(doc)}
+                                style={{
+                                    width: '100%',
+                                    padding: "10px",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "20px" // space between items
+                                }}
+                            >
+                                    <span className="logo">{doc?.name.slice(0, 1).toUpperCase()}</span>
+                                    <div>
+                                        <p style={{ margin: 0 }}>{doc?.name}</p>
+                                        <h5 style={{ color: 'blue' }}>{`${doc.email || "N/A"}`}</h5>
+                                    </div>
+
+                                </div>
                             </div>
+
+
                         })
 
                     })}
+
+
+
 
                 </div>
             </div>
@@ -824,7 +809,7 @@ const ViewHospital = () => {
             )
         }
 
-        {edit !== null && (
+        {edit === "hospitalEdit" && (
             <div style={{
                 position: 'absolute',
                 inset: 0,
@@ -974,6 +959,84 @@ const ViewHospital = () => {
                         <button className="common-btn" disabled={isProcessing} onClick={handleeditProfile}>{`${isProcessing ? "Saving....." : "Save Details"}`} </button>
                     </div>
 
+                </div>
+
+            </div>
+        )}
+
+        {edit !== null && edit !== "hospitalEdit" && (
+            <div style={{
+                position: 'absolute',
+                inset: 0,
+                zIndex: 9999,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backdropFilter: 'blur(10px)',
+                backgroundColor: 'rgba(19, 5, 5, 0.6)',
+            }}>
+                <div className="editcards">
+
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        marginBottom: '20px',
+                        borderRadius: '7px'
+                    }}>
+                        <h4>Edit {edit?.name} Profile</h4>
+                        <i class="ri-close-large-line" style={{
+                            cursor: "pointer"
+                        }} onClick={() => {
+                            setEdit(null)
+                        }}></i>
+                    </div>
+                    <div className="docProfile">
+                        <div className="docWithImage">
+                            <div className="docImage">
+                                <img src={userDefaultImage} alt="" />
+                            </div>
+                            <div className="docbasicdetails">
+                                <label htmlFor="">Name <p>{edit?.name}</p></label>
+                                <label htmlFor="">Gender <p>{edit?.gender || "N/A"}</p></label>
+                                <label htmlFor="">Email <p>{edit?.email}</p></label>
+                                <label htmlFor="">Experience <p>{edit?.experience}</p></label>
+                                <label htmlFor="">Qualification <p>{edit?.qualification}</p></label>
+                            </div>
+                        </div>
+                        {edit?.personalAssitantId ? (
+                            <div className="paProfile">
+                                <div style={{
+                                    marginTop: '7px',
+                                    marginBottom: '7px'
+                                }}>
+                                    <h5>Pa Detials</h5>
+                                </div>
+                                <div className="pawithImage">
+                                    <div className="paImage">
+                                        <img src={userDefaultImage} alt="" />
+                                    </div>
+                                    <div className="paBasicDetails">
+                                        <label htmlFor="">Name <p>{edit?.name}</p></label>
+                                        <label htmlFor="">Gender <p>{edit?.gender || "N/A"}</p></label>
+                                        <label htmlFor="">Email <p>{edit?.email}</p></label>
+                                        <label htmlFor="">Experience <p>{edit?.experience}</p></label>
+                                        <label htmlFor="">Qualification <p>{edit?.qualification}</p></label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        ) : (
+                            <>
+                                <br />
+
+                                <button className="common-btn" onClick={() => {
+                                    setEdit(null)
+                                    setAssignDoctor(true)
+                                }}>+ Add Assistant</button>
+                            </>
+
+                        )}
+                    </div>
                 </div>
 
             </div>

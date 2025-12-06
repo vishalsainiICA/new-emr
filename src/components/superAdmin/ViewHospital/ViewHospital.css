@@ -97,3 +97,107 @@
     overflow-y: scroll;
     scrollbar-width: none;
 }
+
+.patient-card {
+    display: flex;
+    justify-content: 'space-between';
+    align-items: center;
+    padding: '20px';
+    height: '75px';
+    border-radius: '10px';
+    cursor: 'pointer';
+    transition: all 1s ease;
+    border-bottom: 0.5px solid lightgray;
+    border-radius: 20px;
+    cursor: pointer;
+    /* box-shadow: 0px 5px 5px rgb(0, 0, 0, 0.1); */
+
+    button {
+        height: 30px;
+        width: 70px;
+        font-Size: 10px;
+        padding: 10px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+}
+
+
+.logo {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50px;
+    background-color: #c8a2ff;
+}
+
+.docWithImage {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+
+    img {
+        width: 200px;
+        height: 200px;
+        float: right;
+        border-radius: 20px;
+    }
+}
+
+.docbasicdetails {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    justify-content: space-between;
+    width: 100%;
+
+    label {
+        color: gray;
+    }
+
+    ;
+
+    p {
+        color: black;
+    }
+}
+
+.docImage {
+    border-radius: 20px;
+}
+
+.docProfile {
+    overflow-y: scroll;
+
+}
+
+.pawithImage {
+    img {
+        height: 50px;
+        width: 50px;
+    }
+}
+
+.paProfile {
+    margin-top: 10px;
+}
+
+.paBasicDetails {
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+
+    label {
+        color: gray;
+    }
+
+    ;
+
+    p {
+        color: black;
+    }
+}
