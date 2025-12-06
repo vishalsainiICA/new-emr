@@ -116,24 +116,24 @@ const ViewHospital = () => {
             setIsProcessing(false);
         }
     }
-
-    const handleAddPa = async () => {
+    const handleAddPa = async (finalData) => {
         try {
-            setIsProcessing(true)
-            const res = await superAdminApi.addPa(doctorData)
+            setIsProcessing(true);
+            const res = await superAdminApi.addPa(finalData);
+
             if (res.status === 200) {
-                toast.success(`Pa Added for ${assinDoctor?.name}`)
-                setAssignDoctor(null)
+                toast.success(`PA Added for ${assinDoctor?.name}`);
+                setAssignDoctor(null);
                 setRefresh(prev => !prev);
             }
-        } catch (error) {
+        } catch (err) {
             console.log(err);
-            toast.success(err.response?.data?.message || "Internal Server Error");
+            toast.error(err.response?.data?.message || "Internal Server Error");
+        } finally {
+            setIsProcessing(false);
         }
-        finally {
-            setIsProcessing(false)
-        }
-    }
+    };
+
 
     const handleeditProfile = async () => {
         setIsProcessing(true);
@@ -715,10 +715,18 @@ const ViewHospital = () => {
                             gap: '10px'
                         }}>
                             <button className="regular-btn" onClick={() => setAssignDoctor(null)}>Cancel</button>
-                            <button className="common-btn" disabled={isProcessing} onClick={() => {
-                                setDoctorData({ ...doctorData, docId: assinDoctor._id, hosId: assinDoctor?.hospitalId })
-                                handleAddPa()
-                            }} >{isProcessing ? "saving..." : "Assign Pa"}</button>
+                            <button
+                                className="common-btn"
+                                disabled={isProcessing}
+                                onClick={() => handleAddPa({
+                                    ...doctorData,
+                                    docId: assinDoctor._id,
+                                    hosId: assinDoctor?.hospitalId
+                                })}
+                            >
+                                {isProcessing ? "saving..." : "Assign Pa"}
+                            </button>
+
                         </div>
                     </div>
                 </div>
