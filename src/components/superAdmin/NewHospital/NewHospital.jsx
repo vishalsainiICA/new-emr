@@ -102,6 +102,7 @@ export const NewHospital = () => {
     const [categoryName, setCategoryName] = useState("")
     const [addCustomDep, setCustomDepartment] = useState(null)
     const [edit, setEdit] = useState(null)
+
     const [hospitalData, setHospitalData] = useState({
         name: '',
         state: null,
@@ -128,6 +129,7 @@ export const NewHospital = () => {
             headerPhone: '',
         }
     });
+
     const [doctorData, setDoctorData] = useState({
         doctorName: "",
         email: "",
@@ -136,6 +138,88 @@ export const NewHospital = () => {
         qualification: "",
         appointmentFees: null
     });
+
+
+    const [errors,setErrors]=useState({
+         name: '',
+        state: null,
+        pinCode: '',
+        city: '',
+        address: '',
+        patientCategories: [],
+         medicalDirectorName:'',
+         medicalDirectorContact:'',
+         medicalDirectorEmail:'',
+         medicalDirectorExperience:'',
+         medicalDirectorImage:'',
+        customLetterPad: {
+            headerName: '',
+            disclaimer: '',
+            tagline1: '',
+            tagline2: '',
+            watermarkImg: null,
+            watermarkText: '',
+            headerEmail: '',
+            headerPhone: '',
+        }
+    });
+
+    const checkfield=()=>{
+      
+        const errors ={}
+        // step 1 Validation
+      if( currentStep==1)
+      {
+          if (!hospitalData.name) errors.name ="Hospital Name is required"
+          if (!hospitalData.state) errors.state =" state is required"
+          if (!hospitalData.city) errors.city ="City is required"
+          if (!hospitalData.pinCode) errors.pinCode =" pinCode is required"
+          if (!hospitalData.address) errors.address =" address is required"
+          if (hospitalData.patientCategories?.length === 0) errors.patientCategories =" Patient Category  is required"
+      }
+
+       // step 2 Validation
+
+       if( currentStep==2)
+        {
+          if(!hospitalData.medicalDirector?.name) errors.medicalDirectorName="Medical director Name is required"
+          if(!hospitalData.medicalDirector?.experience) errors.medicalDirectorExperience="Medical director Experience is required"
+          if(!hospitalData.medicalDirector?.contact) errors.medicalDirectorContact="Medical director contact is required"
+          if(hospitalData.medicalDirector?.contact && hospitalData.medicalDirector?.contact.length !==10) errors.medicalDirectorContact="Medical director Number Must be 10 digits"
+          if(!hospitalData.medicalDirector?.email) errors.medicalDirectorEmail="Medical director email is required"
+          // medical director Image Optional
+        //   if(!hospitalData.medicalDirector?.image) errors.medicalDirectorImage="Medical director Document  is required"
+       }
+       
+       if( currentStep ===3)
+       {
+         if(hospitalData.supportedDepartments.length === 0) errors.supportedDepartments="Please Select Department is Required"
+        //  if(hospitalData.supportedDepartments?.doctors?.length=== 0) errors.supportedDepartmentsdoctors="Please Add  One doctor  is Required"
+         
+        const hasDoctor = hospitalData.supportedDepartments.every(
+         (dep) => dep.doctors && dep.doctors.length > 0);
+
+        if(!hasDoctor)errors.supportedDepartmentsdoctors = "Each department must have at least one doctor";
+        
+     }
+
+    //    if( currentStep ===3 && hospitalData.supportedDepartments.length !==0)
+    //    {
+    //       if(!doctorData.doctorName) errors.doctorName ="Doctor name is required"
+    //       if(!doctorData.email) errors.doctorEmail ="Doctor Email is required"
+    //       if(!doctorData.experience) errors.doctorExperience ="Doctor Experience is required"
+    //       if(!doctorData.qualification) errors.doctorQualification ="Doctor Qualification is required"
+    //       if(!doctorData.contact) errors.doctorContact ="Doctor Contact Number is required"
+    //       if(!doctorData.appointmentFees) errors.doctorAppointmentFees ="Doctor Appointment Fee is required"
+         
+    //        const isTrue = hospitalData.supportedDepartments.some((item)=> item?.doctors?.length===0)
+    //    }
+
+
+        setErrors(errors);
+        
+        return Object.keys(errors).length === 0;
+    }
 
     const handelChange = (key, value) => {
         setHospitalData((prev) => {
@@ -158,7 +242,7 @@ export const NewHospital = () => {
     }
 
     const handleAddDoctor = () => {
-        if (!doctorData.doctorName || !doctorData.email) {
+        if (!doctorData.doctorName || !doctorData.email || !doctorData.contact || !doctorData.experience || !doctorData.qualification || !doctorData.appointmentFees) {
             toast.error("Please fill all required fields!");
             return;
         }
@@ -278,7 +362,7 @@ export const NewHospital = () => {
             {currentStep == 1 && (
                 <div className="steps" >
 
-                    <h3>Hospital Details</h3>
+                    <h3>Hospital Details </h3>
 
                     <hr />
 
@@ -295,9 +379,10 @@ export const NewHospital = () => {
                             <input
                                 type="text"
                                 value={hospitalData?.name}
-                                onChange={(e) => handelChange("name", e.target.value)}
                                 placeholder="Hospital Name"
+                                onChange={(e) => handelChange("name", e.target.value)}
                             />
+                            {errors.name && <label style={{color:"red"}}>{errors.name}</label>}
 
                         </label>
                         <label style={{
@@ -305,6 +390,8 @@ export const NewHospital = () => {
                         }} htmlFor="">PinCode
                             <input type="text" value={hospitalData?.pinCode}
                                 onChange={(e) => handelChange("pinCode", e.target.value)} placeholder="PinCode" />
+                            {errors.pinCode && <label style={{color:"red"}}>{errors.pinCode}</label>}
+
                         </label>
                     </div>
                     <div style={{
@@ -319,6 +406,7 @@ export const NewHospital = () => {
                         }} htmlFor="">City
                             <input type="text" value={hospitalData?.city}
                                 onChange={(e) => handelChange("city", e.target.value)} placeholder="Enter City" />
+                            {errors.city && <label style={{color:"red"}}>{errors.city}</label>}
                         </label>
                         <label style={{
                             width: '100%',
@@ -344,6 +432,7 @@ export const NewHospital = () => {
                                     return <option key={i} value={s}>{s}</option>
                                 })}
                             </select>
+                            {errors.state && <label style={{color:"red"}}>{errors.state}</label>}
                         </label>
                     </div>
 
@@ -364,7 +453,10 @@ export const NewHospital = () => {
                                 fontsize: "12.5px",
                                 border: "1px solid lightgray",
                             }} name="" id="" rows="3"></textarea>
+                            {errors.address && <label style={{color:"red"}}>{errors.address}</label>}
                     </label>
+
+
                     {/* patient category */}
                     <div style={{
                         display: 'flex',
@@ -375,9 +467,11 @@ export const NewHospital = () => {
                         <label style={{
                             width: '42%'
                         }} htmlFor="">Patient Category
-                            <input value={categoryName} type="text" onChange={(e) => {
+                            <input value={categoryName} type="text"placeholder="patientCategory"
+                             onChange={(e) => {
                                 return setCategoryName(e.target.value)
-                            }} placeholder="patientCategory" />
+                            }} />
+                            {errors.patientCategories && <label style={{color:"red"}}>{errors.patientCategories}</label>}
                         </label>
                         <div className="add-button" style={{ display: "flex", alignItems: "end" }}>
                             <button
@@ -409,10 +503,11 @@ export const NewHospital = () => {
                             disabled={isProcessing}
                             onClick={(e) => {
                                 e.preventDefault();
+                                const val=checkfield();
 
-                                if (currentStep < 5) {
+                                if (currentStep < 5 && val) {
                                     setCurrentStep(currentStep + 1);
-                                } else {
+                                } else if(currentStep === 2)  {
 
                                     handleSubmit(e);
                                 }
@@ -486,6 +581,7 @@ export const NewHospital = () => {
                                     }
                                 })}
                                 type="text" placeholder="Enter Full Name" />
+                            {errors.medicalDirectorName && <label style={{color:"red"}}>{errors.medicalDirectorName}</label>}
                         </label>
                         <label style={{
                             width: '100%'
@@ -498,6 +594,8 @@ export const NewHospital = () => {
                                     }
                                 })}
                                 type="number" placeholder="Ex.2" />
+                            {errors.medicalDirectorExperience && <label style={{color:"red"}}>{errors.medicalDirectorExperience}</label>}
+
                         </label>
                     </div>
                     <div style={{
@@ -517,6 +615,8 @@ export const NewHospital = () => {
                                         email: e.target.value
                                     }
                                 })} type="text" placeholder="email@example.com" />
+                            {errors.medicalDirectorEmail && <label style={{color:"red"}}>{errors.medicalDirectorEmail}</label>}
+
                         </label>
                         <label style={{
                             width: '100%'
@@ -530,6 +630,8 @@ export const NewHospital = () => {
                                     }
                                 })}
                                 type="text" placeholder="+91 7340479570" />
+                            {errors.medicalDirectorContact && <label style={{color:"red"}}>{errors.medicalDirectorContact}</label>}
+
                         </label>
                     </div>
                     <div
@@ -567,6 +669,8 @@ export const NewHospital = () => {
                                     }
                                 })}
                             />
+                            {errors.medicalDirectorImage && <label style={{color:"red"}}>{errors.medicalDirectorImage}</label>}
+
                         </label>
                     </div>
                     <hr />
@@ -577,10 +681,10 @@ export const NewHospital = () => {
                             disabled={isProcessing}
                             onClick={(e) => {
 
-
-                                if (currentStep < 5) {
+                                 const val=checkfield();
+                                if (currentStep < 5 && val) {
                                     setCurrentStep(currentStep + 1);
-                                } else {
+                                } else if(currentStep===3) {
 
                                     handleSubmit(e);
                                 }
@@ -591,9 +695,14 @@ export const NewHospital = () => {
                     </div>
                 </div>
             )}
+            {console.log("error" , errors)
+            }
             {currentStep == 3 && (
                 <div className="steps">
                     <h3>Department Setup</h3>
+
+                    {errors.supportedDepartments && <label style={{color:"red"}}>{errors.supportedDepartments}</label>}
+
                     <hr />
 
                     <div style={{
@@ -639,7 +748,11 @@ export const NewHospital = () => {
                         display: 'flex',
                         justifyContent: 'space-between'
                     }}>
-                        <h4> Selected Department</h4>
+                        <h4> Selected Department </h4>
+                                             
+                    {errors.supportedDepartmentsdoctors && <label style={{color:"red"}}>{errors.supportedDepartmentsdoctors}</label>}
+                        {/* {errors.medicalDirectorName && <label style={{color:"red"}}>{errors.medicalDirectorName}</label>} */}
+
                         {/* <button className="card hover" style={{
                             width: '160px',
                             height: "40px",
@@ -730,10 +843,10 @@ export const NewHospital = () => {
                             disabled={isProcessing}
                             onClick={(e) => {
                                 e.preventDefault();
-
-                                if (currentStep < 5) {
+                                  const val=checkfield()
+                                if (currentStep < 5 && val) {
                                     setCurrentStep(currentStep + 1);
-                                } else {
+                                } else if(currentStep === 4) {
 
                                     handleSubmit(e);
                                 }
@@ -1023,7 +1136,7 @@ export const NewHospital = () => {
                             display: 'flex',
                             justifyContent: 'space-between',
                             alignItems: 'center'
-                        }}>
+                         }}>
                             <h3>
                                 {`Add Doctor for ${hospitalData?.supportedDepartments[assinDoctor].departmentName}`}
                             </h3>
@@ -1039,7 +1152,7 @@ export const NewHospital = () => {
                             marginTop: '10px',
                             display: 'flex',
                             columnGap: '80px'
-                        }}>
+                         }}>
                             <label style={{ width: '100%' }}>
                                 Name *
                                 <input
@@ -1048,6 +1161,7 @@ export const NewHospital = () => {
                                     value={doctorData.doctorName}
                                     onChange={(e) => setDoctorData({ ...doctorData, doctorName: e.target.value })}
                                 />
+                    {/* {errors.doctorName && <label style={{color:"red"}}>{errors.doctorName}</label>} */}
                             </label>
 
                             <label style={{ width: '100%' }}>
@@ -1058,6 +1172,8 @@ export const NewHospital = () => {
                                     value={doctorData.email}
                                     onChange={(e) => setDoctorData({ ...doctorData, email: e.target.value })}
                                 />
+                     {/* {errors.doctorEmail && <label style={{color:"red"}}>{errors.doctorEmail}</label>} */}
+
                             </label>
                         </div>
 
@@ -1074,6 +1190,8 @@ export const NewHospital = () => {
                                     value={doctorData.contact}
                                     onChange={(e) => setDoctorData({ ...doctorData, contact: e.target.value })}
                                 />
+                    {/* {errors.doctorContact && <label style={{color:"red"}}>{errors.doctorContact}</label>} */}
+
                             </label>
 
                             <label style={{ width: '100%' }}>
@@ -1084,6 +1202,8 @@ export const NewHospital = () => {
                                     value={doctorData.experience}
                                     onChange={(e) => setDoctorData({ ...doctorData, experience: e.target.value })}
                                 />
+                    {/* {errors.doctorExperience && <label style={{color:"red"}}>{errors.doctorExperience}</label>} */}
+
                             </label>
                         </div>
 
@@ -1108,6 +1228,8 @@ export const NewHospital = () => {
                                     <option value="Graduation">Graduation</option>
                                     <option value="Post-Graduation">Post-Graduation</option>
                                 </select>
+                    {/* {errors.doctorQualification && <label style={{color:"red"}}>{errors.doctorQualification}</label>} */}
+
                             </label>
                             <label style={{ width: '100%' }}>
                                 Appointment Fees *
@@ -1117,6 +1239,8 @@ export const NewHospital = () => {
                                     value={doctorData?.appointmentFees}
                                     onChange={(e) => setDoctorData({ ...doctorData, appointmentFees: e.target.value })}
                                 />
+                    {/* {errors.doctorAppointmentFees && <label style={{color:"red"}}>{errors.doctorAppointmentFees}</label>} */}
+
                             </label>
                         </div>
 
@@ -1131,7 +1255,11 @@ export const NewHospital = () => {
                             gap: '10px'
                         }}>
                             <button className="regular-btn" onClick={() => setAssignDoctor(null)}>Cancel</button>
-                            <button className="common-btn" onClick={handleAddDoctor}>Add Doctor</button>
+                            <button className="common-btn"
+                             onClick={()=>{
+                                // checkfield()
+                                handleAddDoctor();
+                                }}>Add Doctor</button>
                         </div>
                     </div>
                 </div>

@@ -61,7 +61,63 @@ const Patientregisteration = () => {
     }
   );
 
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({
+      name: '',
+      age: null,
+      gender: '',
+      pinCode: '',
+      phone: null,
+      email: '',
+      permanentAddress: '',
+      whatsApp: null,
+      DOB: '',
+      city: '',
+      state: '',
+      nationality: '',
+      patienCategory: null,
+      attendeeName: '',
+      attendeePhone: null,
+      attendeeRelation: '',
+      addharNo: '',
+  });
+
+
+   function cheakfield()
+  {
+
+     const errors={};
+
+     // Step 1
+     if(currentStep == 1){
+       if(!patientData.name) errors.name ="Patient Name is Required"
+       if(!patientData.DOB) errors.DOB ="Patient DOB is Required"
+       if(!patientData.age) errors.age ="Patient age is Required"
+       if(!patientData.city) errors.city ="Patien.city is Required"
+       if(!patientData.gender) errors.gender ="Patient gender is Required"
+       if(!patientData.phone) errors.phone ="Patient phone is Required"
+       if(patientData.phone && patientData.phone.length !== 10) errors.phone ="Patient Contact Number must be 10 digit "
+       if(!patientData.pinCode) errors.pinCode ="Patient Name is Required"
+       if(!patientData.permanentAddress) errors.permanentAddress ="Patient Address is Required"
+       if(!patientData.nationality) errors.nationality ="Patient Nationality is Required"
+       if(!patientData.state) errors.state ="Patient Name is Required"
+       if(!patientData.addharNo) errors.addharNo = "Patient Aadhar Number is required"
+       if(patientData.addharNo && patientData.addharNo.length !== 12) errors.addharNo = "Patient Aadhar Number must be 12 digit"
+       if(!aadhaarFront) errors.aadhaarFront ="Patient Aadhar Front Image is required"
+       if(!aadhaarBack) errors.aadhaarBack ="Patient Aadhar Back Image is required"
+     }
+
+     if( currentStep == 2){
+      if(!patientData.attendeeName) errors.attendeeName ="Aattendee Name is required "
+      if(!patientData.attendeePhone) errors.attendeePhone ="Aattendee Contact Number  is required "
+      if(patientData.attendeePhone && patientData.attendeePhone.length !== 10) errors.attendeePhone ="Aattendee Contact Number must be 10 digit "
+      if(!patientData.attendeeRelation) errors.attendeeRelation ="Aattendee Relation is required "
+     }
+
+     setErrors(errors)
+
+     return Object.keys(errors).length == 0;
+
+  }
 
 
   const location = useLocation()
@@ -283,7 +339,7 @@ const Patientregisteration = () => {
               <div className="img-1">
                 <img src={adharimg} alt="adhar img" />
                 <form action="">
-                  <label htmlFor="">Front Image*</label>
+                  <label htmlFor="">Front Image*  </label>
 
                   <input
                     onChange={handleFrontUpload}
@@ -321,8 +377,7 @@ const Patientregisteration = () => {
                         name: e.target.value
                       })}
                     />
-                    {errors.name && <p style={{ color: "red" }}>{errors.name}</p>}
-
+                    {errors.name && <label style={{ color: "red", marginTop: "5px" }}>{errors.name}</label>}
                   </div>
 
                   <div>
@@ -341,37 +396,41 @@ const Patientregisteration = () => {
                         });
                       }}
                     />
+                    {errors.DOB && <label style={{ color: "red", marginTop: "5px" }}>{errors.DOB}</label>}
+
                   </div>
                 </div>
 
                 <div className="distance">
-                  <div className="">
+                  <div>
                     <label>Gender *</label>
-                    <select
-                      name="gender"
-                      value={patientData.gender}
-                      onChange={(e) =>
-                        setPatientData({ ...patientData, gender: e.target.value })
-                      }
-                    >
+                    <select value={patientData.gender}
+                      onChange={(e) => setPatientData({
+                        ...patientData,
+                        gender: e.target.value
+                      })} >
                       <option value="">Select Gender</option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                      <option value="other">Other</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="other">other</option>
                     </select>
+                    {errors.gender && <label style={{ color: "red", marginTop: "5px" }}>{errors.gender}</label>}
 
                   </div>
 
                   <div>
                     <label>Age *</label>
                     <input
-                      type="text"
+                      type="number"
                       value={patientData.age}
                       onChange={(e) => setPatientData({
                         ...patientData,
                         age: e.target.value
                       })}
+
                     />
+                    {errors.age && <label style={{ color: "red", marginTop: "5px" }}>{errors.age}</label>}
+
                   </div>
                 </div>
 
@@ -380,26 +439,27 @@ const Patientregisteration = () => {
                     <label>Phone *</label>
                     <input
                       type="number"
-                      maxLength={10}
                       value={patientData.phone}
                       onChange={(e) => setPatientData({
                         ...patientData,
                         phone: e.target.value
                       })}
                     />
+                    {errors.phone && <label style={{ color: "red", marginTop: "5px" }}>{errors.phone}</label>}
                   </div>
 
                   <div>
                     <label>WhatsApp Number</label>
                     <input
                       type="number"
-                      maxLength={10}
                       value={patientData.whatsApp}
                       onChange={(e) => setPatientData({
                         ...patientData,
                         whatsApp: e.target.value
                       })}
                     />
+                    {errors.whatsApp && <label style={{ color: "red", marginTop: "5px" }}>{errors.whatsApp}</label>}
+
                   </div>
                 </div>
 
@@ -415,6 +475,8 @@ const Patientregisteration = () => {
                         email: e.target.value
                       })}
                     />
+                    {errors.email && <label style={{ color: "red", marginTop: "5px" }}>{errors.email}</label>}
+
                   </div>
 
                   <div>
@@ -427,6 +489,8 @@ const Patientregisteration = () => {
                         nationality: e.target.value
                       })}
                     />
+                    {errors.nationality && <label style={{ color: "red", marginTop: "5px" }}>{errors.nationality}</label>}
+
                   </div>
                 </div>
 
@@ -442,6 +506,8 @@ const Patientregisteration = () => {
                         pinCode: e.target.value
                       })}
                     />
+                    {errors.pinCode && <label style={{ color: "red", marginTop: "5px" }}>{errors.pinCode}</label>}
+
                   </div>
 
                   <div>
@@ -454,6 +520,8 @@ const Patientregisteration = () => {
                         city: e.target.value
                       })}
                     />
+                    {errors.city && <label style={{ color: "red", marginTop: "5px" }}>{errors.city}</label>}
+
                   </div>
                 </div>
 
@@ -469,6 +537,8 @@ const Patientregisteration = () => {
                         state: e.target.value
                       })}
                     />
+                    {errors.state && <label style={{ color: "red", marginTop: "5px" }}>{errors.state}</label>}
+
                   </div>
 
                   <div>
@@ -481,8 +551,11 @@ const Patientregisteration = () => {
                         addharNo: e.target.value
                       })}
                     />
+                    {errors.addharNo && <label style={{ color: "red", marginTop: "5px" }}>{errors.addharNo}</label>}
+
                   </div>
                 </div>
+
                 {(!aadhaarFront || !aadhaarBack) && (
                   <div className="distance">
                     <div>
@@ -491,6 +564,8 @@ const Patientregisteration = () => {
                         type="file"
                         onChange={(e) => setAadhaarFront(e.target.files[0])}
                       />
+                    {errors.aadhaarFront && <label style={{ color: "red", marginTop: "5px" }}>{errors.aadhaarFront}</label>}
+
                     </div>
 
                     <div>
@@ -499,10 +574,11 @@ const Patientregisteration = () => {
                         type="file"
                         onChange={(e) => setAadhaarBack(e.target.files[0])}
                       />
+                    {errors.aadhaarBack && <label style={{ color: "red", marginTop: "5px" }}>{errors.aadhaarBack}</label>}
+
                     </div>
                   </div>
                 )}
-
 
 
                 <div className="distance">
@@ -516,6 +592,8 @@ const Patientregisteration = () => {
                         permanentAddress: e.target.value
                       })}
                     />
+                    {errors.permanentAddress && <label style={{ color: "red", marginTop: "5px" }}>{errors.permanentAddress}</label>}
+
                   </div>
                 </div>
 
@@ -526,17 +604,21 @@ const Patientregisteration = () => {
 
 
           {/* Step 2 — Basic Details */}
-          {currentStep == 2 && (
+           {currentStep == 2 && (
             <div className="patient-step-2">
               <h4>Attendee Details</h4>
               <form>
                 <div className="hold-data-div">
                   <div >
                     <label htmlFor="">Name *</label>
-                    <input type="text" onChange={(e) => setPatientData({
+                    <input type="text"
+                    value={patientData?.attendeeName} placeholder="Attendee Name"
+                     onChange={(e) => setPatientData({
                       ...patientData,
                       attendeeName: e.target.value
-                    })} value={patientData?.attendeeName} placeholder="Attendee Name" />
+                   })} />
+                    {errors.attendeeName && <label style={{ color: "red", marginTop: "5px" }}>{errors.attendeeName}</label>}
+
                   </div>
                   <div >
                     <label htmlFor="">Phone Number *</label>
@@ -544,6 +626,8 @@ const Patientregisteration = () => {
                       ...patientData,
                       attendeePhone: e.target.value
                     })} type="number" value={patientData?.attendeePhone} placeholder="+91 XXXX XXXX XX" />
+                    {errors.attendeePhone && <label style={{ color: "red", marginTop: "5px" }}>{errors.attendeePhone}</label>}
+
                   </div>
                 </div>
                 <div >
@@ -552,6 +636,8 @@ const Patientregisteration = () => {
                     ...patientData,
                     attendeeRelation: e.target.value
                   })} type="text" value={patientData?.attendeeRelation} placeholder="Father/Mother/Gurdian/etc." />
+                    {errors.attendeeRelation && <label style={{ color: "red", marginTop: "5px" }}>{errors.attendeeRelation}</label>}
+
                 </div>
               </form>
             </div>
@@ -666,12 +752,12 @@ const Patientregisteration = () => {
             <div>
               <button onClick={() => setCurrentStep(currentStep - 1)} disabled={currentStep == 1}> ← Back</button>
               <button
-
                 disabled={isProcessing}
                 onClick={(e) => {
-                  if (currentStep < 3) {
+                  const val = cheakfield()
+                  if (currentStep < 3 && val) {
                     setCurrentStep(currentStep + 1);
-                  } else {
+                  } else if( currentStep ===3) {
 
                     handleSubmit(e);
                   }
