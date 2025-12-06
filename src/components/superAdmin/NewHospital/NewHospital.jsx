@@ -593,7 +593,9 @@ export const NewHospital = () => {
                         <label style={{
                             width: '100%'
                         }} htmlFor="">Experience
-                            <input value={hospitalData?.medicalDirector?.experience}
+                            <input 
+                            style={{cursor:"text"}}
+                            value={hospitalData?.medicalDirector?.experience}
                                 onChange={(e) => setHospitalData({
                                     ...hospitalData, medicalDirector: {
                                         ...hospitalData.medicalDirector,
@@ -629,6 +631,7 @@ export const NewHospital = () => {
                             width: '100%'
                         }} htmlFor="">Contact Number *
                             <input
+                            style={{cursor:"text"}}
                                 value={hospitalData?.medicalDirector?.contact}
                                 onChange={(e) => setHospitalData({
                                     ...hospitalData, medicalDirector: {
@@ -1193,7 +1196,7 @@ export const NewHospital = () => {
                                 Contact Number *
                                 <input
                                     type="Number"
-                                    style={{cursor:"none"}}
+                                    style={{cursor:"text"}}
                                     placeholder="Contact Number"
                                     value={doctorData.contact}
                                     onChange={(e) => setDoctorData({ ...doctorData, contact: e.target.value })}
@@ -1205,6 +1208,7 @@ export const NewHospital = () => {
                             <label style={{ width: '100%' }}>
                                 Experience (years) *
                                 <input
+                                    style={{cursor:"text"}}
                                     type="number"
                                     placeholder="ex.2"
                                     value={doctorData.experience}
@@ -1250,7 +1254,7 @@ export const NewHospital = () => {
                             <label style={{ width: '100%' }}>
                                 Appointment Fees *
                                 <input
-                                    style={{cursor:"none"}}
+                                    style={{cursor:"text"}}
                                     type="number"
                                     placeholder="ex.500"
                                     value={doctorData?.appointmentFees}
