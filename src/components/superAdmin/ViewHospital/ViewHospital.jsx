@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { adminApi, commonApi, superAdminApi } from "../../../auth";
 import { Circles } from "react-loader-spinner";
 import moment from "moment";
 import './ViewHospital.css'
 import { toast } from "react-toastify";
 import { Patient_Hisotry } from "../../Utility/PatientHistory__Labtest";
+import userDefaultImage from "../../../assets/defualtUserImage.jpg"
 
 const ViewHospital = () => {
     const [data, setData] = useState([]);
@@ -18,6 +19,8 @@ const ViewHospital = () => {
     const [hospital, sethospital] = useState(null)
     const location = useLocation()
     const [addCustomDep, setCustomDepartment] = useState(null)
+    const [categoryName, setCategoryName] = useState("")
+    const [edit, setEdit] = useState(null)
     const [doctorData, setDoctorData] = useState({
         doctorName: "",
         email: "",
@@ -29,6 +32,15 @@ const ViewHospital = () => {
     });
 
     const hos = location.state?.hospital || undefined
+
+    const navigate = useNavigate()
+
+    const handleChange = (key, value) => {
+        sethospital((prev) => ({
+            ...prev,
+            [key]: value
+        }))
+    }
 
     const filter = (value) => {
         if (value.trim() === "") {
@@ -45,17 +57,16 @@ const ViewHospital = () => {
     useEffect(() => {
         const fetchHospital = async () => {
             setIsProcessing(true);
-            setError(null);
             try {
                 const res = await superAdminApi.getHospitalById(hos?._id);
                 if (res.status === 200) {
                     sethospital(res.data?.data)
                     // initialize filter
                 } else {
-                    setError(res.data?.message || "Something went wrong");
+                    setError({ error: res.data?.message || "Something went wrong" });
                 }
             } catch (err) {
-                setError(err.response?.data?.message || "Internal Server Error");
+                setError({ error: err.response?.data?.message || "Internal Server Error" });
             } finally {
                 setIsProcessing(false);
             }
@@ -67,7 +78,6 @@ const ViewHospital = () => {
     useEffect(() => {
         const fetchPatient = async () => {
             setIsProcessing(true);
-            setError(null);
             try {
 
                 const res = await superAdminApi.hospitalAllPaitent(hos?._id);
@@ -75,12 +85,12 @@ const ViewHospital = () => {
                     setData(res.data.data || []);
                     setFilterPatient(res.data.data || []); // initialize filter
                 } else {
-                    setError(res.data?.message || "Something went wrong");
+                    setError({ error: res.data?.message || "Something went wrong" });
                 }
             } catch (err) {
                 console.log(err);
 
-                setError(err.response?.data?.message || "Internal Server Error");
+                setError({ error: err.response?.data?.message || "Internal Server Error" });
             } finally {
                 setIsProcessing(false);
             }
@@ -106,24 +116,53 @@ const ViewHospital = () => {
             setIsProcessing(false);
         }
     }
-
-    const handleAddPa = async () => {
+    const handleAddPa = async (finalData) => {
         try {
-            setIsProcessing(true)
-            const res = await superAdminApi.addPa(doctorData)
+            setIsProcessing(true);
+            const res = await superAdminApi.addPa(finalData);
+
             if (res.status === 200) {
-                toast.success(`Pa Added for ${assinDoctor?.name}`)
-                setAssignDoctor(null)
+                toast.success(`PA Added for ${assinDoctor?.name}`);
+                setAssignDoctor(null);
                 setRefresh(prev => !prev);
             }
-        } catch (error) {
+        } catch (err) {
             console.log(err);
-            toast.success(err.response?.data?.message || "Internal Server Error");
+            toast.error(err.response?.data?.message || "Internal Server Error");
+        } finally {
+            setIsProcessing(false);
         }
-        finally {
-            setIsProcessing(false)
+    };
+
+
+    const handleeditProfile = async () => {
+        setIsProcessing(true);
+
+        try {
+            const formdata = new FormData();
+            formdata.append("hospitalId", hospital?._id);
+            formdata.append("name", hospital?.name);
+            formdata.append("state", hospital?.state);
+            formdata.append("city", hospital?.city);
+            formdata.append("pinCode", hospital?.pinCode);
+            formdata.append("address", hospital?.address);
+            formdata.append("patientCategories", hospital?.patientCategories);
+            const res = await commonApi.editHospital(formdata);
+            if (res.status === 200) {
+                toast.success("Hospital Updated Successfully")
+                setEdit(null);
+            } else {
+                setError({ profile: res.data?.message || "Something went wrong" });
+            }
+
+        } catch (err) {
+            console.log(err);
+            setError({ profile: err.response?.data?.message || "Internal Server Error" });
+        } finally {
+            setRefresh((prev) => !prev)
+            setIsProcessing(false);
         }
-    }
+    };
 
 
     return <div className="viewhospital">
@@ -217,19 +256,27 @@ const ViewHospital = () => {
             }}>
                 <h4>{"Hospital Information"}</h4>
 
-                <a style={{
-                    fontSize: '12px',
-                    padding: '0 7px 0 7px'
+                <div style={{
+                    display: 'flex',
+                    gap: '10px'
+                }}>
 
-                }}
+                    <button
+                        className="regular-btn"
+                        onClick={() =>
+                            window.open(
+                                `${import.meta.env.VITE_FRONTEND_URL}/register-patient?id=${hospital?._id}`,
+                                "_blank"
+                            )
+                        }
+                    >
+                        Registration Link
+                    </button>
 
-                    className="commonBtn" href={`${import.meta.env.VITE_FRONTEND_URL}/register-patient?id=${hospital?._id}`}
-                    // className="commonBtn" href={`http://localhost:5173/register-patient?id=${hospital?._id}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >Patient Registeratiion Link <i style={{
-                    fontSize: '20px'
-                }} class="ri-external-link-line"></i></a>
+                    <button className="regular-btn" onClick={() => setEdit("hospitalEdit")}> Edit Hospital </button>
+                </div>
+
+
             </div>
             <div style={{
                 marginTop: '10px',
@@ -278,7 +325,11 @@ const ViewHospital = () => {
                     fontSize: '13px',
                     fontWeight: 'bold'
                 }}>Status: <span style={{
-                    fontWeight: 'normal'
+                    fontWeight: 'normal',
+                    padding: '1px 7px 1px 7px',
+                    color: 'green',
+                    backgroundColor: 'lightgreen',
+                    borderRadius: '10px'
                 }}>Active</span></span>
                 <span style={{
 
@@ -288,6 +339,29 @@ const ViewHospital = () => {
                     fontWeight: 'normal'
                 }}>{hospital?.medicalDirector?.name}</span></span>
             </div>
+
+            {hospital?.patientCategories?.length > 0 && (
+                <div style={{
+                    marginTop: '10px',
+                }}>
+                    <span style={{
+                        fontSize: '13px',
+                        fontWeight: 'bold'
+                    }}>Schemes:
+                        <span style={{
+                            fontWeight: 'normal',
+                            color: 'blue'
+
+                        }}>  {hospital?.patientCategories.join(",")}</span></span>
+
+                </div>
+            )}
+
+
+
+
+
+
         </div>
         <div className="hostpitalmanagement-body">
             <div
@@ -352,50 +426,34 @@ const ViewHospital = () => {
 
                     {hospital?.supportedDepartments && hospital?.supportedDepartments?.map((dep, i) => {
                         return dep?.doctorIds?.map((doc, i) => {
-                            return <div key={i} style={{
-                                borderBottom: '0.5px solid lightgrey',
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                padding: '7px'
-                            }}>
-                                <div>
-                                    <p style={{
-                                        fontSize: '13px',
-                                        fontWeight: 'bold'
-                                    }}>{doc?.name}</p>
-                                    <p style={{
-                                        fontSize: '12px',
-                                        color: 'blue'
-                                    }}>{doc?.email}</p>
-                                </div>
-                                {
-                                    doc?.personalAssitantId ?
-                                        (
-                                            <div>
-                                                <h5>Pa Details:  </h5>
-                                                <p style={{
-                                                    fontSize: '13px',
-                                                    fontWeight: 'bold'
-                                                }}>name:  {doc?.personalAssitantId?.name}</p>
-                                                <p style={{
-                                                    fontSize: '12px',
-                                                    color: 'blue'
-                                                }}>{doc?.personalAssitantId?.email}</p>
-                                            </div>
-                                        ) : (
-                                            <button
-                                                onClick={() => setAssignDoctor(doc)}
-                                                className="common-btn"
-                                            >
-                                                + Add Pa
-                                            </button>
-                                        )
-                                }
+                            return <div key={i} className="patient-card"
 
+                            > <div
+                                onClick={() => setEdit(doc)}
+                                style={{
+                                    width: '100%',
+                                    padding: "10px",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "20px" // space between items
+                                }}
+                            >
+                                    <span className="logo">{doc?.name.slice(0, 1).toUpperCase()}</span>
+                                    <div>
+                                        <p style={{ margin: 0 }}>{doc?.name}</p>
+                                        <h5 style={{ color: 'blue' }}>{`${doc.email || "N/A"}`}</h5>
+                                    </div>
+
+                                </div>
                             </div>
+
+
                         })
 
                     })}
+
+
+
 
                 </div>
             </div>
@@ -472,17 +530,17 @@ const ViewHospital = () => {
                         </span>
                     )}
 
-                    {error && (
+                    {error?.error && (
                         <h4 style={{
                             color: 'red',
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
                             padding: '50px 0'
-                        }}>{error}</h4>
+                        }}>{error?.error}</h4>
                     )}
 
-                    {!isProcessing && !error && Array.isArray(filterPatient) && filterPatient.length > 0 && (
+                    {!isProcessing && !error?.error && Array.isArray(filterPatient) && filterPatient.length > 0 && (
                         <>
                             {filterPatient.map((patient, i) => (
                                 <div onClick={() => setClose(patient)} key={i} className="hosptialBody" >
@@ -534,7 +592,7 @@ const ViewHospital = () => {
                         </>
                     )}
 
-                    {!isProcessing && !error && Array.isArray(filterPatient) && filterPatient.length === 0 && (
+                    {!isProcessing && !error?.error && Array.isArray(filterPatient) && filterPatient.length === 0 && (
                         <p style={{ textAlign: 'center', padding: '50px 0' }}>
                             No Patient found
                         </p>
@@ -657,10 +715,18 @@ const ViewHospital = () => {
                             gap: '10px'
                         }}>
                             <button className="regular-btn" onClick={() => setAssignDoctor(null)}>Cancel</button>
-                            <button className="common-btn" disabled={isProcessing} onClick={() => {
-                                setDoctorData({ ...doctorData, docId: assinDoctor._id, hosId: assinDoctor?.hospitalId })
-                                handleAddPa()
-                            }} >{isProcessing ? "saving..." : "Assign Pa"}</button>
+                            <button
+                                className="common-btn"
+                                disabled={isProcessing}
+                                onClick={() => handleAddPa({
+                                    ...doctorData,
+                                    docId: assinDoctor._id,
+                                    hosId: assinDoctor?.hospitalId
+                                })}
+                            >
+                                {isProcessing ? "saving..." : "Assign Pa"}
+                            </button>
+
                         </div>
                     </div>
                 </div>
@@ -751,7 +817,240 @@ const ViewHospital = () => {
             )
         }
 
-    </div>
+        {edit === "hospitalEdit" && (
+            <div style={{
+                position: 'absolute',
+                inset: 0,
+                zIndex: 9999,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backdropFilter: 'blur(10px)',
+                backgroundColor: 'rgba(19, 5, 5, 0.6)',
+            }}>
+
+                <div className="editcards">
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        marginBottom: '20px',
+                        borderRadius: '7px'
+                    }}>
+                        <h4>Edit Hospital</h4>
+                        <i class="ri-close-large-line" style={{
+                            cursor: "pointer"
+                        }} onClick={() => {
+                            setEdit(null)
+                        }}></i>
+                    </div>
+
+                    <div className="edit-scroll">
+                        <div className="edit-detail">
+                            <label htmlFor="">Hospital Name
+                                <input value={hospital?.name} type="text" onChange={(e) => handleChange("name", e.target.value)} />
+                            </label>
+                            <label htmlFor="">State
+                                <input value={hospital?.state} type="text" onChange={(e) => handleChange("state", e.target.value)} />
+                            </label>
+                        </div>
+
+                        <div className="edit-detail">
+                            <label htmlFor="">City
+                                <input value={hospital?.city} type="text" onChange={(e) => handleChange("city", e.target.value)} />
+                            </label>
+                            <label htmlFor="">PinCode
+                                <input value={hospital?.pinCode} type="text" onChange={(e) => handleChange("pinCode", e.target.value)} />
+                            </label>
+                        </div>
+
+
+                        <div className="edit-detail-address">
+                            <div>
+                                <label style={{
+                                    width: '100%',
+                                    marginTop: '10px',
+                                    marginBottom: '10px'
+                                }} htmlFor="">Address
+                                    <br />
+                                    <textarea
+                                        type="text"
+                                        value={hospital?.address}
+                                        onChange={(e) => handleChange("address", e.target.value)}
+                                        placeholder="address"
+                                        style={{
+                                            width: '100%',
+                                            borderRadius: '7px',
+                                            padding: '8px',
+                                            color: 'black',
+                                            fontsize: "12.5px",
+                                            border: "1px solid lightgray",
+                                        }} name="" id="" rows="3"></textarea>
+                                </label>
+                            </div>
+                            <div style={{
+                                display: 'flex',
+                                width: '100%',
+                                gap: '120px',
+
+                            }}>
+
+                                <label style={{
+                                    width: '42%'
+                                }} htmlFor="">Patient Category
+                                    <input value={categoryName} type="text" onChange={(e) => {
+                                        return setCategoryName(e.target.value)
+                                    }} placeholder="patientCategory" />
+                                </label>
+
+                                <div className="add-button" style={{ display: "flex", alignItems: "end" }}>
+                                    <button
+                                        className="main-buttons"
+                                        onClick={() => {
+                                            if (!categoryName || categoryName === '') {
+                                                toast.error('Please Enter Scheme Name')
+                                                return
+                                            }
+
+                                            sethospital({ ...hospital, patientCategories: [...hospital.patientCategories, categoryName] })
+                                            setCategoryName("")
+                                            return
+                                        }
+                                        }
+
+                                    >+ Add</button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        {hospital?.patientCategories?.length > 0 && (
+                            <div style={{
+                                width: '100%',
+                                marginTop: '10px',
+                                display: 'flex',
+                                gap: '10px'
+                            }}>
+                                {hospital.patientCategories.map((item, index) => {
+
+                                    return <span key={index} style={{
+                                        padding: '10px 17px 10px 17px',
+                                        backgroundColor: 'lightgray',
+                                        borderRadius: '7px',
+                                        fontSize: '12px'
+
+                                    }}>{item}  <i
+                                        onClick={() => {
+                                            sethospital(prev => ({
+                                                ...prev,
+                                                patientCategories: prev.patientCategories.filter((_, idx) => idx !== index)
+                                            }));
+                                        }}
+
+                                        className="ri-close-large-line"
+                                        style={{ cursor: 'pointer', fontSize: '12px' }}
+                                    ></i></span>
+
+                                })}
+                            </div>
+                        )}
+
+
+                        {error?.profile && (<p style={{ color: 'red', marginTop: '10px' }}>Error :{error?.profile}</p>)}
+                    </div>
+                    <div style={{
+                        marginTop: '30px',
+                        display: 'flex',
+                        justifyContent: 'end',
+                        gap: '10px'
+                    }}>
+                        <button className="regular-btn" disabled={isProcessing} onClick={() => setEdit(null)}>Cancel</button>
+                        <button className="common-btn" disabled={isProcessing} onClick={handleeditProfile}>{`${isProcessing ? "Saving....." : "Save Details"}`} </button>
+                    </div>
+
+                </div>
+
+            </div>
+        )}
+
+        {edit !== null && edit !== "hospitalEdit" && (
+            <div style={{
+                position: 'absolute',
+                inset: 0,
+                zIndex: 9999,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backdropFilter: 'blur(10px)',
+                backgroundColor: 'rgba(19, 5, 5, 0.6)',
+            }}>
+                <div className="editcards">
+
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        marginBottom: '20px',
+                        borderRadius: '7px'
+                    }}>
+                        <h4>Edit {edit?.name} Profile</h4>
+                        <i class="ri-close-large-line" style={{
+                            cursor: "pointer"
+                        }} onClick={() => {
+                            setEdit(null)
+                        }}></i>
+                    </div>
+                    <div className="docProfile">
+                        <div className="docWithImage">
+                            <div className="docImage">
+                                <img src={userDefaultImage} alt="" />
+                            </div>
+                            <div className="docbasicdetails">
+                                <label htmlFor="">Name <p>{edit?.name}</p></label>
+                                <label htmlFor="">Gender <p>{edit?.gender || "N/A"}</p></label>
+                                <label htmlFor="">Email <p>{edit?.email}</p></label>
+                                <label htmlFor="">Experience <p>{edit?.experience}</p></label>
+                                <label htmlFor="">Qualification <p>{edit?.qualification}</p></label>
+                            </div>
+                        </div>
+                        {edit?.personalAssitantId ? (
+                            <div className="paProfile">
+                                <div style={{
+                                    marginTop: '7px',
+                                    marginBottom: '7px'
+                                }}>
+                                    <h5>Pa Detials</h5>
+                                </div>
+                                <div className="pawithImage">
+                                    <div className="paImage">
+                                        <img src={userDefaultImage} alt="" />
+                                    </div>
+                                    <div className="paBasicDetails">
+                                        <label htmlFor="">Name <p>{edit?.name}</p></label>
+                                        <label htmlFor="">Gender <p>{edit?.gender || "N/A"}</p></label>
+                                        <label htmlFor="">Email <p>{edit?.email}</p></label>
+                                        <label htmlFor="">Experience <p>{edit?.experience}</p></label>
+                                        <label htmlFor="">Qualification <p>{edit?.qualification}</p></label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        ) : (
+                            <>
+                                <br />
+
+                                <button className="common-btn" onClick={() => {
+                                    setEdit(null)
+                                    setAssignDoctor(true)
+                                }}>+ Add Assistant</button>
+                            </>
+
+                        )}
+                    </div>
+                </div>
+
+            </div>
+        )}
+
+    </div >
 
 
 }

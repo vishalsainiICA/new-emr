@@ -43,3 +43,161 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr)
 }
+
+
+.regular-btn {
+    padding: 7px;
+    background-color: rgb(229, 230, 243);
+    border-radius: 10px;
+    font-size: 10px;
+    outline: none;
+    cursor: pointer;
+}
+
+.editcard {
+    background-color: white;
+    padding: 10px;
+    min-height: 400px;
+    max-height: 400px;
+    width: 700px;
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
+
+.edit-detail {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: 10px;
+}
+
+.main-buttons {
+    padding: 7px;
+    background-color: lightcyan;
+    border-radius: 10px;
+    outline: none;
+    cursor: pointer;
+}
+
+.editcards {
+    background-color: white;
+    padding: 10px;
+    min-height: 450px;
+    max-height: 450px;
+    width: 700px;
+}
+
+.edit-detail-address {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.edit-scroll {
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
+
+.patient-card {
+    display: flex;
+    justify-content: 'space-between';
+    align-items: center;
+    padding: '20px';
+    height: '75px';
+    border-radius: '10px';
+    cursor: 'pointer';
+    transition: all 1s ease;
+    border-bottom: 0.5px solid lightgray;
+    border-radius: 20px;
+    cursor: pointer;
+    /* box-shadow: 0px 5px 5px rgb(0, 0, 0, 0.1); */
+
+    button {
+        height: 30px;
+        width: 70px;
+        font-Size: 10px;
+        padding: 10px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+}
+
+
+.logo {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50px;
+    background-color: #c8a2ff;
+}
+
+.docWithImage {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+
+    img {
+        width: 200px;
+        height: 200px;
+        float: right;
+        border-radius: 20px;
+    }
+}
+
+.docbasicdetails {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    justify-content: space-between;
+    width: 100%;
+
+    label {
+        color: gray;
+    }
+
+    ;
+
+    p {
+        color: black;
+    }
+}
+
+.docImage {
+    border-radius: 20px;
+}
+
+.docProfile {
+    overflow-y: scroll;
+
+}
+
+.pawithImage {
+    img {
+        height: 50px;
+        width: 50px;
+    }
+}
+
+.paProfile {
+    margin-top: 10px;
+}
+
+.paBasicDetails {
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+
+    label {
+        color: gray;
+    }
+
+    ;
+
+    p {
+        color: black;
+    }
+}
