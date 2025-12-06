@@ -20,6 +20,10 @@ export const commonApi = {
         return await doctorInstance.put(`/common/change-status`, { id, newDate, cancelReason })
     },
 
+    editHospital: async (data) => {
+        return await commonInstance.put('/common/hospital/edit-hospital', data)
+    },
+
 }
 // superAdmin API
 export const superAdminApi = {

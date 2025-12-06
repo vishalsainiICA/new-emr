@@ -53,3 +53,47 @@
     outline: none;
     cursor: pointer;
 }
+
+.editcard {
+    background-color: white;
+    padding: 10px;
+    min-height: 400px;
+    max-height: 400px;
+    width: 700px;
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
+
+.edit-detail {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: 10px;
+}
+
+.main-buttons {
+    padding: 7px;
+    background-color: lightcyan;
+    border-radius: 10px;
+    outline: none;
+    cursor: pointer;
+}
+
+.editcards {
+    background-color: white;
+    padding: 10px;
+    min-height: 450px;
+    max-height: 450px;
+    width: 700px;
+}
+
+.edit-detail-address {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.edit-scroll {
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
