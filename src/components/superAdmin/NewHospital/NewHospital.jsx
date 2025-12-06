@@ -136,6 +136,7 @@ export const NewHospital = () => {
         contact: "",
         experience: "",
         qualification: "",
+        gender:"",
         appointmentFees: null
     });
 
@@ -380,6 +381,7 @@ export const NewHospital = () => {
                                 type="text"
                                 value={hospitalData?.name}
                                 placeholder="Hospital Name"
+                                // onWheel={(e) => e.preventDefault()}
                                 onChange={(e) => handelChange("name", e.target.value)}
                             />
                             {errors.name && <label style={{color:"red"}}>{errors.name}</label>}
@@ -388,7 +390,12 @@ export const NewHospital = () => {
                         <label style={{
                             width: '100%'
                         }} htmlFor="">PinCode
-                            <input type="text" value={hospitalData?.pinCode}
+                            <input type="number" 
+                            style={{cursor:"text",
+                                //   pointerEvents: "none"
+
+                            }}
+                            value={hospitalData?.pinCode}
                                 onChange={(e) => handelChange("pinCode", e.target.value)} placeholder="PinCode" />
                             {errors.pinCode && <label style={{color:"red"}}>{errors.pinCode}</label>}
 
@@ -400,7 +407,7 @@ export const NewHospital = () => {
                         gap: '100px',
                         // marginTop: '10px',
 
-                    }}>
+                     }}>
                         <label style={{
                             width: '100%'
                         }} htmlFor="">City
@@ -413,7 +420,7 @@ export const NewHospital = () => {
                             display: 'flex',
                             flexDirection: 'column'
 
-                        }} htmlFor="">State*
+                         }} htmlFor="">State*
                             <select
                                 type="text"
                                 value={hospitalData?.state}
@@ -629,7 +636,7 @@ export const NewHospital = () => {
                                         contact: e.target.value
                                     }
                                 })}
-                                type="text" placeholder="+91 7340479570" />
+                                type="number" placeholder="+91 7340479570" />
                             {errors.medicalDirectorContact && <label style={{color:"red"}}>{errors.medicalDirectorContact}</label>}
 
                         </label>
@@ -1148,7 +1155,7 @@ export const NewHospital = () => {
                         </div>
                         <hr />
                         {/*Doctor Data Form */}
-                        <div style={{
+                        <div style={{ 
                             marginTop: '10px',
                             display: 'flex',
                             columnGap: '80px'
@@ -1185,7 +1192,8 @@ export const NewHospital = () => {
                             <label style={{ width: '100%' }}>
                                 Contact Number *
                                 <input
-                                    type="text"
+                                    type="Number"
+                                    style={{cursor:"none"}}
                                     placeholder="Contact Number"
                                     value={doctorData.contact}
                                     onChange={(e) => setDoctorData({ ...doctorData, contact: e.target.value })}
@@ -1210,17 +1218,69 @@ export const NewHospital = () => {
                         <div style={{
                             marginTop: '10px',
                             display: 'flex',
-                            columnGap: '80px'
+                            columnGap: '80px',
+                            display:"flex",
+                            justifyContent:"center"
                         }}>
-                            <label style={{
+                           <label style={{
                                 width: '100%',
                                 display: 'flex',
                                 flexDirection: 'column',
-                                marginTop: '10px'
+                                // marginTop: '10px'
+                            }}>
+                                Gender
+                                    <select 
+                                    style={{
+                                    width: "100%",
+                                    padding: '8px',
+                                    borderRadius: '7px',
+                                    color: 'black',
+                                    fontsize: "12.5px",
+                                    border: "1px solid lightgray",
+                                }}
+                                    value={doctorData.gender}
+                                    onChange={(e) => setDoctorData({ ...doctorData, gender: e.target.value })}
+                                    >
+                                        <option>Select Gender</option>
+                                        <option>Male</option>
+                                        <option>Female</option>
+                                        <option>other</option>
+                                    </select>
+                            </label>
+                            <label style={{ width: '100%' }}>
+                                Appointment Fees *
+                                <input
+                                    style={{cursor:"none"}}
+                                    type="number"
+                                    placeholder="ex.500"
+                                    value={doctorData?.appointmentFees}
+                                    onChange={(e) => setDoctorData({ ...doctorData, appointmentFees: e.target.value })}
+                                />
+                    {/* {errors.doctorAppointmentFees && <label style={{color:"red"}}>{errors.doctorAppointmentFees}</label>} */}
+
+                            </label>
+                        </div>
+                        <div style={{
+                            marginTop: '10px',
+                            display: 'flex',
+                            columnGap: '80px'
+                        }}>
+                             <label style={{
+                                width: '100%',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                // marginTop: '10px'
                             }}>
                                 Qualification *
                                 <select
-                                    style={{ padding: '10px', borderRadius: '7px', border: '0.3px solid lightgray' }}
+                                style={{
+                                    width: "100%",
+                                    padding: '8px',
+                                    borderRadius: '7px',
+                                    color: 'black',
+                                    fontsize: "12.5px",
+                                    border: "1px solid lightgray",
+                                }}
                                     value={doctorData.qualification}
                                     onChange={(e) => setDoctorData({ ...doctorData, qualification: e.target.value })}
                                 >
@@ -1229,17 +1289,6 @@ export const NewHospital = () => {
                                     <option value="Post-Graduation">Post-Graduation</option>
                                 </select>
                     {/* {errors.doctorQualification && <label style={{color:"red"}}>{errors.doctorQualification}</label>} */}
-
-                            </label>
-                            <label style={{ width: '100%' }}>
-                                Appointment Fees *
-                                <input
-                                    type="number"
-                                    placeholder="ex.500"
-                                    value={doctorData?.appointmentFees}
-                                    onChange={(e) => setDoctorData({ ...doctorData, appointmentFees: e.target.value })}
-                                />
-                    {/* {errors.doctorAppointmentFees && <label style={{color:"red"}}>{errors.doctorAppointmentFees}</label>} */}
 
                             </label>
                         </div>
