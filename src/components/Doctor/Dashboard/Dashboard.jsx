@@ -610,7 +610,7 @@ const DashBoard = () => {
                     }}>
 
                         <span>Edit Profile</span>
-                        <button className="common-btn" onClick={() => { setEditprofile(!isEditprofile); setblur(!blur); setCollapse(!isCollapse); setChangePassword(false);setError({profile :null}) }}>Back</button>
+                        <button className="common-btn" onClick={() => { setEditprofile(!isEditprofile); setblur(!blur); setCollapse(!isCollapse); setChangePassword(false); setError({ profile: null }) }}>Back</button>
 
                     </div>
 
@@ -622,41 +622,44 @@ const DashBoard = () => {
                         <label htmlFor="Phone">Phone
                             <input type="phone" onChange={(e) => handleChange("contact", e.target.value)} value={pa?.contact} />
                         </label>
-                        {changePassword == false && (
-                            <label htmlFor="">
-                                <button className="main-button" onClick={() => setChangePassword(true)}>Change Password</button>
-                            </label>
 
-                        )}
+                    </div>
 
-                        {
-                            changePassword == true && (
-                                <>
-                                    <label htmlFor="oldpassword">Old Password  <input value={password?.old} type="password" onChange={(e) =>
-                                        setpassword(prev => ({
-                                            ...prev,
-                                            old: e.target.value
-                                        }))
-                                    }
-                                    /></label>
-                                    <label htmlFor="newpassword">New Password    <input value={password?.new} onChange={(e) =>
-                                        setpassword(prev => ({
-                                            ...prev,
-                                            new: e.target.value
-                                        }))
-                                    }
-                                        type="password" /></label>
+                    <br />
+                    {changePassword == false && (
+                        <label htmlFor="">
+                            <button className="main-button" onClick={() => setChangePassword(true)}>Change Password</button>
+                        </label>
 
-                                </>
+                    )}
 
-                            )
-                        }
-                        {error?.profile && (<p style={{ color: 'red' }}>Error :{error?.profile}</p>)}
+                    {
+                        changePassword == true && (
+                            <>
+                                <label htmlFor="oldpassword">Old Password  <input value={password?.old} type="password" onChange={(e) =>
+                                    setpassword(prev => ({
+                                        ...prev,
+                                        old: e.target.value
+                                    }))
+                                }
+                                /></label>
+                                <label htmlFor="newpassword">New Password    <input value={password?.new} onChange={(e) =>
+                                    setpassword(prev => ({
+                                        ...prev,
+                                        new: e.target.value
+                                    }))
+                                }
+                                    type="password" /></label>
 
-                        <div className="final-process">
-                            <button className="common-btn" disabled={isProcessing} onClick={handleeditProfile}>{`${isProcessing ? <Circles height="40" width="40" color="#4f46e5" ariaLabel="loading" /> : "Save Profile"}`}</button>
-                            <button className="main-button" disabled={isProcessing} onClick={() => { setEditprofile(!isEditprofile); setblur(!blur); setCollapse(!isCollapse); setChangePassword(false);setError({profile :null}) }}>Cancel</button>
-                        </div>
+                            </>
+
+                        )
+                    }
+                    {error?.profile && (<p style={{ color: 'red' }}>Error :{error?.profile}</p>)}
+
+                    <div className="final-process">
+                        <button className="common-btn" disabled={isProcessing} onClick={handleeditProfile}>{`${isProcessing ? <Circles height="40" width="40" color="#4f46e5" ariaLabel="loading" /> : "Save Profile"}`}</button>
+                        <button className="main-button" disabled={isProcessing} onClick={() => { setEditprofile(!isEditprofile); setblur(!blur); setCollapse(!isCollapse); setChangePassword(false); setError({ profile: null }) }}>Cancel</button>
                     </div>
                 </div>
 
