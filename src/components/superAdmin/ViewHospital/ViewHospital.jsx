@@ -164,6 +164,27 @@ const ViewHospital = () => {
         }
     };
 
+    const handledeletedoc = async (doc) => {
+        try {
+            const isConfirm = confirm(`Are You Sure You Want To Delete Dr.${doc?.name}`)
+
+            if (!isConfirm) return
+
+            setIsProcessing(true);
+            const res = await commonApi.removeDoc(doc?._id);
+            if ((await res).status === 200 || (await res).data.status === 200) {
+                toast.success("Doctor remove successfully");
+                setRefresh(prev => !prev);
+            } else {
+                toast.error("Failed to remove Doctor")
+            }
+        } catch (err) {
+            console.error("Error:", err);
+            toast.error(err.response?.data?.message || "Something went wrong");
+        } finally {
+            setIsProcessing(false);
+        }
+    }
 
     return <div className="viewhospital">
 
@@ -426,26 +447,39 @@ const ViewHospital = () => {
 
                     {hospital?.supportedDepartments && hospital?.supportedDepartments?.map((dep, i) => {
                         return dep?.doctorIds?.map((doc, i) => {
-                            return <div key={i} className="patient-card"
+                            return <div
 
-                            > <div
-                                onClick={() => setEdit(doc)}
-                                style={{
-                                    width: '100%',
-                                    padding: "10px",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: "20px" // space between items
-                                }}
+                                key={i} className="patient-card"
+
                             >
+                                <div
+
+                                    style={{
+                                        width: '100%',
+                                        padding: "10px",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "20px" // space between items
+                                    }}
+                                >
                                     <span className="logo">{doc?.name.slice(0, 1).toUpperCase()}</span>
-                                    <div>
+                                    <div onClick={() => setEdit(doc)}>
                                         <p style={{ margin: 0 }}>{doc?.name}</p>
                                         <h5 style={{ color: 'blue' }}>{`${doc.email || "N/A"}`}</h5>
                                     </div>
 
                                 </div>
+
+                                <div style={{
+                                    display: "flex",
+                                    gap: '10px',
+                                    marginRight: '10px'
+                                }}>
+                                    <i class="ri-edit-box-line" onClick={() => setEdit(doc)}></i>
+                                    <i class="ri-delete-bin-7-line" onClick={() => handledeletedoc(doc)} ></i>
+                                </div>
                             </div>
+
 
 
                         })

@@ -17,11 +17,14 @@ export const commonApi = {
     },
 
     changePatientStatus: async (id, newDate = null, cancelReason = null) => {
-        return await doctorInstance.put(`/common/change-status`, { id, newDate, cancelReason })
+        return await commonInstance.put(`/common/change-status`, { id, newDate, cancelReason })
     },
-
     editHospital: async (data) => {
         return await commonInstance.put('/common/hospital/edit-hospital', data)
+    },
+
+    removeDoc: async (id) => {
+        return await commonInstance.delete(`/common/doctor/remove-doc?docId=${id}`)
     },
 
 }
@@ -105,9 +108,6 @@ export const superAdminApi = {
         return await superAdminInstance.delete(`/super-admin/hospital/delete-pa?id=${id}`)
     },
 
-    // updateAdmin : async(data)=>{
-
-    // }
 }
 // Admin Api 
 
