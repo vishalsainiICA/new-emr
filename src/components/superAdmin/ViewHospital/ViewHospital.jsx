@@ -103,7 +103,7 @@ const ViewHospital = () => {
         try {
             setIsProcessing(true);
             const res = await superAdminApi.removePa(id);
-            if ((await res).status === 200 || (await res).data.status === 200) {
+            if (res.status === 200 || (await res).data.status === 200) {
                 toast.success("pa remove successfully");
                 setRefresh(prev => !prev);
             } else {
@@ -114,7 +114,9 @@ const ViewHospital = () => {
             toast.error(err.response?.data?.message || "Something went wrong");
         } finally {
             setIsProcessing(false);
+            setEdit(null)
         }
+
     }
     const handleAddPa = async (finalData) => {
         try {
@@ -1025,7 +1027,7 @@ const ViewHospital = () => {
                         marginBottom: '20px',
                         borderRadius: '7px'
                     }}>
-                        <h4>Edit {edit?.name} Profile</h4>
+                        <h4>{edit?.name} Profile</h4>
                         <i class="ri-close-large-line" style={{
                             cursor: "pointer"
                         }} onClick={() => {
@@ -1049,9 +1051,21 @@ const ViewHospital = () => {
                             <div className="paProfile">
                                 <div style={{
                                     marginTop: '7px',
-                                    marginBottom: '7px'
+                                    marginBottom: '7px',
+                                    display: 'flex',
+                                    justifyContent: 'space-between'
                                 }}>
-                                    <h5>Pa Detials</h5>
+                                    <h5>Personal Assitant Detials</h5>
+
+                                    <div style={{
+                                        display: 'flex',
+                                        gap: '10px'
+                                    }}>
+
+
+                                        <button className="regular-btn" disabled={isProcessing}> <i class="ri-edit-box-line" onClick={() => setEdit(edit)}></i>Edit</button>
+                                        <button className="regular-btn" disabled={isProcessing}><i class="ri-delete-bin-7-line" onClick={() => handleRemovePa(edit?.personalAssitantId?._id)} ></i>{`${isProcessing ? "removing..." : "Remove"}`} </button>
+                                    </div>
                                 </div>
                                 <div className="pawithImage">
                                     <div className="paImage">
@@ -1072,8 +1086,8 @@ const ViewHospital = () => {
                                 <br />
 
                                 <button className="common-btn" onClick={() => {
-                                    setEdit(null)
-                                    setAssignDoctor(true)
+                                    setAssignDoctor(edit);
+                                    setEdit(null);
                                 }}>+ Add Assistant</button>
                             </>
 
