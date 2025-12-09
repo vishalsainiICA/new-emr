@@ -264,7 +264,7 @@ export default function PatientRecords() {
                                         {patient?.status}
                                     </p>
                                 )}
-                                <p>{moment(patient?.createdAt).format("DD/MM/YYYY, hh:mm A") || "N/A"}</p>
+                                <p>{moment(patient?.updatedAt).format("DD/MM/YYYY, hh:mm A") || "N/A"}</p>
                             </div>
                         ))}
                     </>

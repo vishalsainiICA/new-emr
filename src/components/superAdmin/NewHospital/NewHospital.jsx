@@ -136,23 +136,23 @@ export const NewHospital = () => {
         contact: "",
         experience: "",
         qualification: "",
-        gender:"",
+        gender: "",
         appointmentFees: null
     });
 
 
-    const [errors,setErrors]=useState({
-         name: '',
+    const [errors, setErrors] = useState({
+        name: '',
         state: null,
         pinCode: '',
         city: '',
         address: '',
         patientCategories: [],
-         medicalDirectorName:'',
-         medicalDirectorContact:'',
-         medicalDirectorEmail:'',
-         medicalDirectorExperience:'',
-         medicalDirectorImage:'',
+        medicalDirectorName: '',
+        medicalDirectorContact: '',
+        medicalDirectorEmail: '',
+        medicalDirectorExperience: '',
+        medicalDirectorImage: '',
         customLetterPad: {
             headerName: '',
             disclaimer: '',
@@ -165,60 +165,57 @@ export const NewHospital = () => {
         }
     });
 
-    const checkfield=()=>{
-      
-        const errors ={}
+    const checkfield = () => {
+
+        const errors = {}
         // step 1 Validation
-      if( currentStep==1)
-      {
-          if (!hospitalData.name) errors.name ="Hospital Name is required"
-          if (!hospitalData.state) errors.state =" state is required"
-          if (!hospitalData.city) errors.city ="City is required"
-          if (!hospitalData.pinCode) errors.pinCode =" pinCode is required"
-          if (!hospitalData.address) errors.address =" address is required"
-          if (hospitalData.patientCategories?.length === 0) errors.patientCategories =" Patient Category  is required"
-      }
+        if (currentStep == 1) {
+            if (!hospitalData.name) errors.name = "Hospital Name is required"
+            if (!hospitalData.state) errors.state = " state is required"
+            if (!hospitalData.city) errors.city = "City is required"
+            if (!hospitalData.pinCode) errors.pinCode = " pinCode is required"
+            if (!hospitalData.address) errors.address = " address is required"
+            if (hospitalData.patientCategories?.length === 0) errors.patientCategories = " Patient Category  is required"
+        }
 
-       // step 2 Validation
+        // step 2 Validation
 
-       if( currentStep==2)
-        {
-          if(!hospitalData.medicalDirector?.name) errors.medicalDirectorName="Medical director Name is required"
-          if(!hospitalData.medicalDirector?.experience) errors.medicalDirectorExperience="Medical director Experience is required"
-          if(!hospitalData.medicalDirector?.contact) errors.medicalDirectorContact="Medical director contact is required"
-          if(hospitalData.medicalDirector?.contact && hospitalData.medicalDirector?.contact.length !==10) errors.medicalDirectorContact="Medical director Number Must be 10 digits"
-          if(!hospitalData.medicalDirector?.email) errors.medicalDirectorEmail="Medical director email is required"
-          // medical director Image Optional
-        //   if(!hospitalData.medicalDirector?.image) errors.medicalDirectorImage="Medical director Document  is required"
-       }
-       
-       if( currentStep ===3)
-       {
-         if(hospitalData.supportedDepartments.length === 0) errors.supportedDepartments="Please Select Department is Required"
-        //  if(hospitalData.supportedDepartments?.doctors?.length=== 0) errors.supportedDepartmentsdoctors="Please Add  One doctor  is Required"
-         
-        const hasDoctor = hospitalData.supportedDepartments.every(
-         (dep) => dep.doctors && dep.doctors.length > 0);
+        if (currentStep == 2) {
+            if (!hospitalData.medicalDirector?.name) errors.medicalDirectorName = "Medical director Name is required"
+            if (!hospitalData.medicalDirector?.experience) errors.medicalDirectorExperience = "Medical director Experience is required"
+            if (!hospitalData.medicalDirector?.contact) errors.medicalDirectorContact = "Medical director contact is required"
+            if (hospitalData.medicalDirector?.contact && hospitalData.medicalDirector?.contact.length !== 10) errors.medicalDirectorContact = "Medical director Number Must be 10 digits"
+            if (!hospitalData.medicalDirector?.email) errors.medicalDirectorEmail = "Medical director email is required"
+            // medical director Image Optional
+            //   if(!hospitalData.medicalDirector?.image) errors.medicalDirectorImage="Medical director Document  is required"
+        }
 
-        if(!hasDoctor)errors.supportedDepartmentsdoctors = "Each department must have at least one doctor";
-        
-     }
+        if (currentStep === 3) {
+            if (hospitalData.supportedDepartments.length === 0) errors.supportedDepartments = "Please Select Department is Required"
+            //  if(hospitalData.supportedDepartments?.doctors?.length=== 0) errors.supportedDepartmentsdoctors="Please Add  One doctor  is Required"
 
-    //    if( currentStep ===3 && hospitalData.supportedDepartments.length !==0)
-    //    {
-    //       if(!doctorData.doctorName) errors.doctorName ="Doctor name is required"
-    //       if(!doctorData.email) errors.doctorEmail ="Doctor Email is required"
-    //       if(!doctorData.experience) errors.doctorExperience ="Doctor Experience is required"
-    //       if(!doctorData.qualification) errors.doctorQualification ="Doctor Qualification is required"
-    //       if(!doctorData.contact) errors.doctorContact ="Doctor Contact Number is required"
-    //       if(!doctorData.appointmentFees) errors.doctorAppointmentFees ="Doctor Appointment Fee is required"
-         
-    //        const isTrue = hospitalData.supportedDepartments.some((item)=> item?.doctors?.length===0)
-    //    }
+            const hasDoctor = hospitalData.supportedDepartments.every(
+                (dep) => dep.doctors && dep.doctors.length > 0);
+
+            if (!hasDoctor) errors.supportedDepartmentsdoctors = "Each department must have at least one doctor";
+
+        }
+
+        //    if( currentStep ===3 && hospitalData.supportedDepartments.length !==0)
+        //    {
+        //       if(!doctorData.doctorName) errors.doctorName ="Doctor name is required"
+        //       if(!doctorData.email) errors.doctorEmail ="Doctor Email is required"
+        //       if(!doctorData.experience) errors.doctorExperience ="Doctor Experience is required"
+        //       if(!doctorData.qualification) errors.doctorQualification ="Doctor Qualification is required"
+        //       if(!doctorData.contact) errors.doctorContact ="Doctor Contact Number is required"
+        //       if(!doctorData.appointmentFees) errors.doctorAppointmentFees ="Doctor Appointment Fee is required"
+
+        //        const isTrue = hospitalData.supportedDepartments.some((item)=> item?.doctors?.length===0)
+        //    }
 
 
         setErrors(errors);
-        
+
         return Object.keys(errors).length === 0;
     }
 
@@ -384,20 +381,21 @@ export const NewHospital = () => {
                                 // onWheel={(e) => e.preventDefault()}
                                 onChange={(e) => handelChange("name", e.target.value)}
                             />
-                            {errors.name && <label style={{color:"red"}}>{errors.name}</label>}
+                            {errors.name && <label style={{ color: "red" }}>{errors.name}</label>}
 
                         </label>
                         <label style={{
                             width: '100%'
                         }} htmlFor="">PinCode
-                            <input type="number" 
-                            style={{cursor:"text",
-                                //   pointerEvents: "none"
+                            <input type="number"
+                                style={{
+                                    cursor: "text",
+                                    //   pointerEvents: "none"
 
-                            }}
-                            value={hospitalData?.pinCode}
+                                }}
+                                value={hospitalData?.pinCode}
                                 onChange={(e) => handelChange("pinCode", e.target.value)} placeholder="PinCode" />
-                            {errors.pinCode && <label style={{color:"red"}}>{errors.pinCode}</label>}
+                            {errors.pinCode && <label style={{ color: "red" }}>{errors.pinCode}</label>}
 
                         </label>
                     </div>
@@ -407,20 +405,20 @@ export const NewHospital = () => {
                         gap: '100px',
                         // marginTop: '10px',
 
-                     }}>
+                    }}>
                         <label style={{
                             width: '100%'
                         }} htmlFor="">City
                             <input type="text" value={hospitalData?.city}
                                 onChange={(e) => handelChange("city", e.target.value)} placeholder="Enter City" />
-                            {errors.city && <label style={{color:"red"}}>{errors.city}</label>}
+                            {errors.city && <label style={{ color: "red" }}>{errors.city}</label>}
                         </label>
                         <label style={{
                             width: '100%',
                             display: 'flex',
                             flexDirection: 'column'
 
-                         }} htmlFor="">State*
+                        }} htmlFor="">State*
                             <select
                                 type="text"
                                 value={hospitalData?.state}
@@ -439,7 +437,7 @@ export const NewHospital = () => {
                                     return <option key={i} value={s}>{s}</option>
                                 })}
                             </select>
-                            {errors.state && <label style={{color:"red"}}>{errors.state}</label>}
+                            {errors.state && <label style={{ color: "red" }}>{errors.state}</label>}
                         </label>
                     </div>
 
@@ -460,7 +458,7 @@ export const NewHospital = () => {
                                 fontsize: "12.5px",
                                 border: "1px solid lightgray",
                             }} name="" id="" rows="3"></textarea>
-                            {errors.address && <label style={{color:"red"}}>{errors.address}</label>}
+                        {errors.address && <label style={{ color: "red" }}>{errors.address}</label>}
                     </label>
 
 
@@ -474,11 +472,11 @@ export const NewHospital = () => {
                         <label style={{
                             width: '42%'
                         }} htmlFor="">Patient Category
-                            <input value={categoryName} type="text"placeholder="patientCategory"
-                             onChange={(e) => {
-                                return setCategoryName(e.target.value)
-                            }} />
-                            {errors.patientCategories && <label style={{color:"red"}}>{errors.patientCategories}</label>}
+                            <input value={categoryName} type="text" placeholder="patientCategory"
+                                onChange={(e) => {
+                                    return setCategoryName(e.target.value)
+                                }} />
+                            {errors.patientCategories && <label style={{ color: "red" }}>{errors.patientCategories}</label>}
                         </label>
                         <div className="add-button" style={{ display: "flex", alignItems: "end" }}>
                             <button
@@ -510,11 +508,11 @@ export const NewHospital = () => {
                             disabled={isProcessing}
                             onClick={(e) => {
                                 e.preventDefault();
-                                const val=checkfield();
+                                const val = checkfield();
 
                                 if (currentStep < 5 && val) {
                                     setCurrentStep(currentStep + 1);
-                                } else if(currentStep === 2)  {
+                                } else if (currentStep === 2) {
 
                                     handleSubmit(e);
                                 }
@@ -588,14 +586,14 @@ export const NewHospital = () => {
                                     }
                                 })}
                                 type="text" placeholder="Enter Full Name" />
-                            {errors.medicalDirectorName && <label style={{color:"red"}}>{errors.medicalDirectorName}</label>}
+                            {errors.medicalDirectorName && <label style={{ color: "red" }}>{errors.medicalDirectorName}</label>}
                         </label>
                         <label style={{
                             width: '100%'
                         }} htmlFor="">Experience
-                            <input 
-                            style={{cursor:"text"}}
-                            value={hospitalData?.medicalDirector?.experience}
+                            <input
+                                style={{ cursor: "text" }}
+                                value={hospitalData?.medicalDirector?.experience}
                                 onChange={(e) => setHospitalData({
                                     ...hospitalData, medicalDirector: {
                                         ...hospitalData.medicalDirector,
@@ -603,7 +601,7 @@ export const NewHospital = () => {
                                     }
                                 })}
                                 type="number" placeholder="Ex.2" />
-                            {errors.medicalDirectorExperience && <label style={{color:"red"}}>{errors.medicalDirectorExperience}</label>}
+                            {errors.medicalDirectorExperience && <label style={{ color: "red" }}>{errors.medicalDirectorExperience}</label>}
 
                         </label>
                     </div>
@@ -624,14 +622,14 @@ export const NewHospital = () => {
                                         email: e.target.value
                                     }
                                 })} type="text" placeholder="email@example.com" />
-                            {errors.medicalDirectorEmail && <label style={{color:"red"}}>{errors.medicalDirectorEmail}</label>}
+                            {errors.medicalDirectorEmail && <label style={{ color: "red" }}>{errors.medicalDirectorEmail}</label>}
 
                         </label>
                         <label style={{
                             width: '100%'
                         }} htmlFor="">Contact Number *
                             <input
-                            style={{cursor:"text"}}
+                                style={{ cursor: "text" }}
                                 value={hospitalData?.medicalDirector?.contact}
                                 onChange={(e) => setHospitalData({
                                     ...hospitalData, medicalDirector: {
@@ -640,7 +638,7 @@ export const NewHospital = () => {
                                     }
                                 })}
                                 type="number" placeholder="+91 7340479570" />
-                            {errors.medicalDirectorContact && <label style={{color:"red"}}>{errors.medicalDirectorContact}</label>}
+                            {errors.medicalDirectorContact && <label style={{ color: "red" }}>{errors.medicalDirectorContact}</label>}
 
                         </label>
                     </div>
@@ -679,7 +677,7 @@ export const NewHospital = () => {
                                     }
                                 })}
                             />
-                            {errors.medicalDirectorImage && <label style={{color:"red"}}>{errors.medicalDirectorImage}</label>}
+                            {errors.medicalDirectorImage && <label style={{ color: "red" }}>{errors.medicalDirectorImage}</label>}
 
                         </label>
                     </div>
@@ -691,10 +689,10 @@ export const NewHospital = () => {
                             disabled={isProcessing}
                             onClick={(e) => {
 
-                                 const val=checkfield();
+                                const val = checkfield();
                                 if (currentStep < 5 && val) {
                                     setCurrentStep(currentStep + 1);
-                                } else if(currentStep===3) {
+                                } else if (currentStep === 3) {
 
                                     handleSubmit(e);
                                 }
@@ -705,13 +703,13 @@ export const NewHospital = () => {
                     </div>
                 </div>
             )}
-            {console.log("error" , errors)
+            {console.log("error", errors)
             }
             {currentStep == 3 && (
                 <div className="steps">
                     <h3>Department Setup</h3>
 
-                    {errors.supportedDepartments && <label style={{color:"red"}}>{errors.supportedDepartments}</label>}
+                    {errors.supportedDepartments && <label style={{ color: "red" }}>{errors.supportedDepartments}</label>}
 
                     <hr />
 
@@ -759,8 +757,8 @@ export const NewHospital = () => {
                         justifyContent: 'space-between'
                     }}>
                         <h4> Selected Department </h4>
-                                             
-                    {errors.supportedDepartmentsdoctors && <label style={{color:"red"}}>{errors.supportedDepartmentsdoctors}</label>}
+
+                        {errors.supportedDepartmentsdoctors && <label style={{ color: "red" }}>{errors.supportedDepartmentsdoctors}</label>}
                         {/* {errors.medicalDirectorName && <label style={{color:"red"}}>{errors.medicalDirectorName}</label>} */}
 
                         {/* <button className="card hover" style={{
@@ -839,6 +837,8 @@ export const NewHospital = () => {
                                                 padding: '10px',
                                                 borderRadius: '10px'
                                             }}><i class="ri-group-line"></i>+ Doctor</button>
+
+                                        
                                     </div>
 
 
@@ -853,10 +853,10 @@ export const NewHospital = () => {
                             disabled={isProcessing}
                             onClick={(e) => {
                                 e.preventDefault();
-                                  const val=checkfield()
+                                const val = checkfield()
                                 if (currentStep < 5 && val) {
                                     setCurrentStep(currentStep + 1);
-                                } else if(currentStep === 4) {
+                                } else if (currentStep === 4) {
 
                                     handleSubmit(e);
                                 }
@@ -1039,54 +1039,6 @@ export const NewHospital = () => {
 
                         }
                     </div>
-                    {/* <div
-                        style={{
-                            backgroundColor: 'white',
-                            border: '1px solid lightgray',
-                            padding: '15px 15px 15px 30px',
-                            borderRadius: '10px',
-                            margin: '0 0 10px 10px',
-                            boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-                            cursor: 'pointer',
-                            minHeight: '150px',
-
-                        }}
-                    >
-                        <div
-                            className="review-strategy"
-                        >
-                            <h3>Letterhead Details</h3>
-                            <span><i onClick={() => setCurrentStep(4)} class="ri-edit-box-line"></i></span>
-
-                        </div>
-                        <div style={{
-                            display: 'flex',
-                            flexWrap: 'wrap',  // line break agar space kam ho toh
-                            gap: '15px',
-                            justifyContent: 'space-between',
-                        }}>
-                            <p className="reviewtag">
-                                Name: <span>{hospitalData.customLetterPad.headerName}</span>
-                            </p>
-
-                            <p className="reviewtag">
-                                Email: <span >{hospitalData.customLetterPad.headerEmail}</span>
-                            </p>
-
-                            <p className="reviewtag">
-                                Phone: <span >{hospitalData.customLetterPad.headerPhone}</span>
-                            </p>
-
-                            <p className="reviewtag">
-                                Tagline1: <span >{hospitalData.customLetterPad.tagline1}</span>
-                            </p>
-
-                            <p className="reviewtag">
-                                Tagline2: <span >{hospitalData.customLetterPad.tagline2}</span>
-                            </p>
-                        </div>
-
-                    </div> */}
                     <hr />
 
                     <div className="saveHospital" >
@@ -1146,7 +1098,7 @@ export const NewHospital = () => {
                             display: 'flex',
                             justifyContent: 'space-between',
                             alignItems: 'center'
-                         }}>
+                        }}>
                             <h3>
                                 {`Add Doctor for ${hospitalData?.supportedDepartments[assinDoctor].departmentName}`}
                             </h3>
@@ -1158,11 +1110,11 @@ export const NewHospital = () => {
                         </div>
                         <hr />
                         {/*Doctor Data Form */}
-                        <div style={{ 
+                        <div style={{
                             marginTop: '10px',
                             display: 'flex',
                             columnGap: '80px'
-                         }}>
+                        }}>
                             <label style={{ width: '100%' }}>
                                 Name *
                                 <input
@@ -1171,7 +1123,7 @@ export const NewHospital = () => {
                                     value={doctorData.doctorName}
                                     onChange={(e) => setDoctorData({ ...doctorData, doctorName: e.target.value })}
                                 />
-                    {/* {errors.doctorName && <label style={{color:"red"}}>{errors.doctorName}</label>} */}
+                                {/* {errors.doctorName && <label style={{color:"red"}}>{errors.doctorName}</label>} */}
                             </label>
 
                             <label style={{ width: '100%' }}>
@@ -1182,7 +1134,7 @@ export const NewHospital = () => {
                                     value={doctorData.email}
                                     onChange={(e) => setDoctorData({ ...doctorData, email: e.target.value })}
                                 />
-                     {/* {errors.doctorEmail && <label style={{color:"red"}}>{errors.doctorEmail}</label>} */}
+                                {/* {errors.doctorEmail && <label style={{color:"red"}}>{errors.doctorEmail}</label>} */}
 
                             </label>
                         </div>
@@ -1196,25 +1148,25 @@ export const NewHospital = () => {
                                 Contact Number *
                                 <input
                                     type="Number"
-                                    style={{cursor:"text"}}
+                                    style={{ cursor: "text" }}
                                     placeholder="Contact Number"
                                     value={doctorData.contact}
                                     onChange={(e) => setDoctorData({ ...doctorData, contact: e.target.value })}
                                 />
-                    {/* {errors.doctorContact && <label style={{color:"red"}}>{errors.doctorContact}</label>} */}
+                                {/* {errors.doctorContact && <label style={{color:"red"}}>{errors.doctorContact}</label>} */}
 
                             </label>
 
                             <label style={{ width: '100%' }}>
                                 Experience (years) *
                                 <input
-                                    style={{cursor:"text"}}
+                                    style={{ cursor: "text" }}
                                     type="number"
                                     placeholder="ex.2"
                                     value={doctorData.experience}
                                     onChange={(e) => setDoctorData({ ...doctorData, experience: e.target.value })}
                                 />
-                    {/* {errors.doctorExperience && <label style={{color:"red"}}>{errors.doctorExperience}</label>} */}
+                                {/* {errors.doctorExperience && <label style={{color:"red"}}>{errors.doctorExperience}</label>} */}
 
                             </label>
                         </div>
@@ -1223,44 +1175,44 @@ export const NewHospital = () => {
                             marginTop: '10px',
                             display: 'flex',
                             columnGap: '80px',
-                            display:"flex",
-                            justifyContent:"center"
+                            display: "flex",
+                            justifyContent: "center"
                         }}>
-                           <label style={{
+                            <label style={{
                                 width: '100%',
                                 display: 'flex',
                                 flexDirection: 'column',
                                 // marginTop: '10px'
                             }}>
                                 Gender
-                                    <select 
+                                <select
                                     style={{
-                                    width: "100%",
-                                    padding: '8px',
-                                    borderRadius: '7px',
-                                    color: 'black',
-                                    fontsize: "12.5px",
-                                    border: "1px solid lightgray",
-                                }}
+                                        width: "100%",
+                                        padding: '8px',
+                                        borderRadius: '7px',
+                                        color: 'black',
+                                        fontsize: "12.5px",
+                                        border: "1px solid lightgray",
+                                    }}
                                     value={doctorData.gender}
                                     onChange={(e) => setDoctorData({ ...doctorData, gender: e.target.value })}
-                                    >
-                                        <option>Select Gender</option>
-                                        <option>Male</option>
-                                        <option>Female</option>
-                                        <option>other</option>
-                                    </select>
+                                >
+                                    <option>Select Gender</option>
+                                    <option>Male</option>
+                                    <option>Female</option>
+                                    <option>other</option>
+                                </select>
                             </label>
                             <label style={{ width: '100%' }}>
                                 Appointment Fees *
                                 <input
-                                    style={{cursor:"text"}}
+                                    style={{ cursor: "text" }}
                                     type="number"
                                     placeholder="ex.500"
                                     value={doctorData?.appointmentFees}
                                     onChange={(e) => setDoctorData({ ...doctorData, appointmentFees: e.target.value })}
                                 />
-                    {/* {errors.doctorAppointmentFees && <label style={{color:"red"}}>{errors.doctorAppointmentFees}</label>} */}
+                                {/* {errors.doctorAppointmentFees && <label style={{color:"red"}}>{errors.doctorAppointmentFees}</label>} */}
 
                             </label>
                         </div>
@@ -1269,7 +1221,7 @@ export const NewHospital = () => {
                             display: 'flex',
                             columnGap: '80px'
                         }}>
-                             <label style={{
+                            <label style={{
                                 width: '100%',
                                 display: 'flex',
                                 flexDirection: 'column',
@@ -1277,14 +1229,14 @@ export const NewHospital = () => {
                             }}>
                                 Qualification *
                                 <select
-                                style={{
-                                    width: "100%",
-                                    padding: '8px',
-                                    borderRadius: '7px',
-                                    color: 'black',
-                                    fontsize: "12.5px",
-                                    border: "1px solid lightgray",
-                                }}
+                                    style={{
+                                        width: "100%",
+                                        padding: '8px',
+                                        borderRadius: '7px',
+                                        color: 'black',
+                                        fontsize: "12.5px",
+                                        border: "1px solid lightgray",
+                                    }}
                                     value={doctorData.qualification}
                                     onChange={(e) => setDoctorData({ ...doctorData, qualification: e.target.value })}
                                 >
@@ -1292,7 +1244,7 @@ export const NewHospital = () => {
                                     <option value="Graduation">Graduation</option>
                                     <option value="Post-Graduation">Post-Graduation</option>
                                 </select>
-                    {/* {errors.doctorQualification && <label style={{color:"red"}}>{errors.doctorQualification}</label>} */}
+                                {/* {errors.doctorQualification && <label style={{color:"red"}}>{errors.doctorQualification}</label>} */}
 
                             </label>
                         </div>
@@ -1309,9 +1261,9 @@ export const NewHospital = () => {
                         }}>
                             <button className="regular-btn" onClick={() => setAssignDoctor(null)}>Cancel</button>
                             <button className="common-btn"
-                             onClick={()=>{
-                                // checkfield()
-                                handleAddDoctor();
+                                onClick={() => {
+                                    // checkfield()
+                                    handleAddDoctor();
                                 }}>Add Doctor</button>
                         </div>
                     </div>

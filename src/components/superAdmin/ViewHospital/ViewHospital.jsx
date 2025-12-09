@@ -8,6 +8,18 @@ import { toast } from "react-toastify";
 import { Patient_Hisotry } from "../../Utility/PatientHistory__Labtest";
 import userDefaultImage from "../../../assets/defualtUserImage.jpg"
 
+const dummyDepartments = [
+    { image: new URL("../../../assets/DepartmentsImages/cardiology.png", import.meta.url).href, name: "Cardiology" },
+    { image: new URL("../../../assets/DepartmentsImages/audiologist.png", import.meta.url).href, name: "ENT" },
+    { image: new URL("../../../assets/DepartmentsImages/medical.png", import.meta.url).href, name: "Radiology" },
+    { image: new URL("../../../assets/DepartmentsImages/neurology.png", import.meta.url).href, name: "Neurology" },
+    { image: new URL("../../../assets/DepartmentsImages/arthritis.png", import.meta.url).href, name: "Orthopedics" },
+    { image: new URL("../../../assets/DepartmentsImages/pediatrics.png", import.meta.url).href, name: "Pediatrics" },
+    { image: new URL("../../../assets/DepartmentsImages/anesthesia.png", import.meta.url).href, name: "General Surgery" },
+    { image: new URL("../../../assets/DepartmentsImages/skin.png", import.meta.url).href, name: "Dermatology" }
+];
+
+
 const ViewHospital = () => {
     const [data, setData] = useState([]);
     const [isProcessing, setIsProcessing] = useState(false);
@@ -17,10 +29,13 @@ const ViewHospital = () => {
     const [filterPatient, setFilterPatient] = useState([]);
     const [assinDoctor, setAssignDoctor] = useState(null)
     const [hospital, sethospital] = useState(null)
+    const [temphospital, setemphospital] = useState(null)
     const location = useLocation()
     const [addCustomDep, setCustomDepartment] = useState(null)
     const [categoryName, setCategoryName] = useState("")
     const [edit, setEdit] = useState(null)
+    const [departments, setDepartments] = useState([])
+    const [addDoc, setAddDoc] = useState(null);
     const [doctorData, setDoctorData] = useState({
         doctorName: "",
         email: "",
@@ -35,8 +50,51 @@ const ViewHospital = () => {
 
     const navigate = useNavigate()
 
+
+    const handlefilter = (e) => {
+        const value = e.target.value;
+        setSearchTerm(value);
+        if (value.trim() === "") {
+            setFilteredIllness([]);
+            return;
+        }
+
+        // Filter illness (case-insensitive startsWith)
+        const filtered = illnessData.filter((ill) =>
+            ill.illnessName.toLowerCase().startsWith(value.toLowerCase())
+        );
+        setFilteredIllness(filtered);
+    };
+
+
+    const handleAddDoctor = (index) => {
+        if (!doctorData.doctorName || !doctorData.email || !doctorData.contact || !doctorData.experience || !doctorData.qualification || !doctorData.appointmentFees) {
+            toast.error("Please fill all required fields!");
+            return;
+        }
+
+        const updatedDepartments = [...departments];
+        const selectedDept = updatedDepartments[index];
+
+        selectedDept.doctors = [...(selectedDept.doctors || []), doctorData];
+        updatedDepartments[index] = selectedDept;
+
+        setDepartments(updatedDepartments);
+        toast.success("Doctor added successfully!");
+        setAddDoc(null)
+        setDoctorData({
+            doctorName: "",
+            email: "",
+            contact: "",
+            experience: "",
+            qualification: "",
+            appointmentFees: null
+        });
+
+
+    };
     const handleChange = (key, value) => {
-        sethospital((prev) => ({
+        setemphospital((prev) => ({
             ...prev,
             [key]: value
         }))
@@ -75,6 +133,15 @@ const ViewHospital = () => {
         fetchHospital();
     }, [refresh]);
 
+
+    useEffect(() => {
+        if (edit === "hospitalEdit" && hospital) {
+            setemphospital(JSON.parse(JSON.stringify(hospital)));
+            // deep copy to avoid reference mutation
+        }
+    }, [edit, hospital]);
+
+
     useEffect(() => {
         const fetchPatient = async () => {
             setIsProcessing(true);
@@ -101,6 +168,9 @@ const ViewHospital = () => {
 
     const handleRemovePa = async (id) => {
         try {
+
+            const isConfirm = confirm(`Are You Sure You Want To Delete Pa !`)
+            if (!isConfirm) return
             setIsProcessing(true);
             const res = await superAdminApi.removePa(id);
             if (res.status === 200 || (await res).data.status === 200) {
@@ -142,13 +212,13 @@ const ViewHospital = () => {
 
         try {
             const formdata = new FormData();
-            formdata.append("hospitalId", hospital?._id);
-            formdata.append("name", hospital?.name);
-            formdata.append("state", hospital?.state);
-            formdata.append("city", hospital?.city);
-            formdata.append("pinCode", hospital?.pinCode);
-            formdata.append("address", hospital?.address);
-            formdata.append("patientCategories", hospital?.patientCategories);
+            formdata.append("hospitalId", temphospital?._id);
+            formdata.append("name", temphospital?.name);
+            formdata.append("state", temphospital?.state);
+            formdata.append("city", temphospital?.city);
+            formdata.append("pinCode", temphospital?.pinCode);
+            formdata.append("address", temphospital?.address);
+            formdata.append("patientCategories", temphospital?.patientCategories);
             const res = await commonApi.editHospital(formdata);
             if (res.status === 200) {
                 toast.success("Hospital Updated Successfully")
@@ -371,11 +441,14 @@ const ViewHospital = () => {
                         fontSize: '13px',
                         fontWeight: 'bold'
                     }}>Schemes:
-                        <span style={{
-                            fontWeight: 'normal',
-                            color: 'blue'
+                        <span
+                            onClick={() => setEdit("hospitalEdit")}
+                            style={{
+                                fontWeight: 'normal',
+                                color: 'blue',
+                                cursor: 'pointer'
 
-                        }}>  {hospital?.patientCategories.join(",")}</span></span>
+                            }}>  {hospital?.patientCategories.join(",")}</span></span>
 
                 </div>
             )}
@@ -782,63 +855,352 @@ const ViewHospital = () => {
                 }}>
                     <div style={{
                         backgroundColor: 'white',
-                        minHeight: '400px',
-                        width: '600px',
+                        minHeight: '500px',
+                        width: '800px',
                         padding: '20px',
                         borderRadius: '10px',
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'space-between'
                     }}>
+
                         <div style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center'
-                        }}>
-                            <h3>
-                                {`New Department`}
-                            </h3>
-                            <i
-                                onClick={() => setCustomDepartment(null)}
-                                className="ri-close-large-line"
-                                style={{ cursor: 'pointer', fontSize: '20px' }}
-                            ></i>
-                        </div>
 
-                        <label style={{ width: '100%' }}>
-                            Name *
-                            <input
-                                type="text"
-                                placeholder="Name"
-                                value={addCustomDep?.name}
-                                onChange={(e) => setCustomDepartment({ ...addCustomDep, name: e.target.value })}
-                            />
-                        </label>
-
-                        <label style={{
-                            width: '100%',
                             display: 'flex',
                             flexDirection: 'column',
-                            marginTop: '10px'
+                            justifyContent: 'space-between',
                         }}>
-                            Department Image *
-                            <input
-                                value={addCustomDep?.image}
-                                onChange={(e) => setCustomDepartment({ ...addCustomDep, image: e.target.value })}
-                                style={{
-                                    border: '0.5px solid black'
-                                }} type="file"></input>
-                        </label>
+
+                            <div style={{
+
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center'
+                            }}>
+                                <h3>
+                                    {`New Department`}
+                                </h3>
+                                <i
+                                    onClick={() => { setCustomDepartment(null); setDepartments(null) }}
+                                    className="ri-close-large-line"
+                                    style={{ cursor: 'pointer', fontSize: '20px' }}
+                                ></i>
+                            </div>
+                            <div className="select_department">
+                                <select
+                                    onChange={(e) => {
+                                        const selected = e.target.value;
+
+                                        if (!selected) return;
+
+                                        const dep = dummyDepartments.find((d) => d.name === selected);
+                                        if (!dep) return;
+
+                                        const isSelected = departments?.some(
+                                            (d) => d.departmentName === dep.name
+                                        );
+
+                                        if (isSelected) return;
+                                        console.log("Deparmt", departments)
+                                        setDepartments((prev) => [
+                                            ...prev,
+                                            {
+                                                departmentName: dep.name,
+                                                image: dep.image,
+                                                doctors: []
+                                            }
+                                        ]);
+                                    }}
+                                >
+                                    <option value="">__Select__Department</option>
+
+                                    {dummyDepartments.map((item, index) => (
+                                        <option key={index} value={item.name}>
+                                            {item.name}
+                                        </option>
+                                    ))}
+                                </select>
+
+
+                            </div>
+
+                            {
+                                departments?.length > 0 && (
+                                    <div
+                                        style={{
+                                            display: "flex",
+                                            flexWrap: "wrap",
+                                            marginTop: "10px",
+                                            height: "100%",
+                                            overflowY: "scroll",
+                                        }}
+                                    >
+                                        {departments.map((dep, i) => {
+                                            return (
+                                                <div
+                                                    key={i}
+                                                    style={{
+                                                        width: "100%",
+                                                        backgroundColor: "white",
+                                                        border: "1px solid lightgray",
+                                                        padding: "15px 15px 15px 30px",
+                                                        borderRadius: "10px",
+                                                        margin: "0 0 10px 10px",
+                                                        boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+                                                        cursor: "pointer",
+                                                        position: "relative",
+                                                    }}
+                                                >
+                                                    {/* HEADER */}
+                                                    <div
+                                                        style={{
+                                                            display: "flex",
+                                                            justifyContent: "space-between",
+                                                            alignItems: "center",
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                padding: "10px",
+                                                                display: "flex",
+                                                                alignItems: "center",
+                                                                gap: "20px",
+                                                            }}
+                                                        >
+                                                            <span style={{ fontSize: "15px", fontFamily: "cursive" }}>
+                                                                {i + 1}.
+                                                            </span>
+                                                            <div>
+                                                                <h4 style={{ fontSize: "12px" }}>
+                                                                    {dep.departmentName || "Unnamed"}
+                                                                </h4>
+                                                                <p style={{ fontSize: "10px" }} className="reviewtag">
+                                                                    {dep.doctors?.length || "0"}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+
+                                                        <div style={{ display: "flex", gap: "10px" }}>
+
+                                                            {dep.doctors?.length > 0 && (
+                                                                <i
+                                                                    className="ri-edit-box-line"
+                                                                    onClick={() => setAddDoc({ type: "edit", depIndex: i })}
+                                                                ></i>
+                                                            )}
+
+                                                            {
+                                                                addDoc && addDoc.depIndex === i ? (
+                                                                    // When a modal is open for this department
+                                                                    <i
+                                                                        className="ri-close-large-line"
+                                                                        onClick={() => setAddDoc(null)}
+                                                                    ></i>
+                                                                ) : (
+                                                                    // Normal controls when no modal is open
+                                                                    <>
+                                                                        <i
+                                                                            className="ri-add-large-line"
+                                                                            onClick={() => setAddDoc({ type: "new", depIndex: i })}
+                                                                        ></i>
+
+                                                                        {dep.doctors?.length > 0 && (
+                                                                            <i
+                                                                                className="ri-edit-box-line"
+                                                                                onClick={() => setAddDoc({ type: "edit", depIndex: i })}
+                                                                            ></i>
+                                                                        )}
+
+                                                                        <i
+                                                                            className="ri-close-large-line"
+                                                                            onClick={() => {
+                                                                                const updated = departments.filter((_, index) => index !== i);
+                                                                                setDepartments(updated);
+                                                                            }}
+                                                                        ></i>
+                                                                    </>
+                                                                )
+                                                            }
+
+
+
+                                                        </div>
+                                                    </div>
+
+
+                                                    {addDoc &&
+
+                                                        addDoc.type === "new" &&
+                                                        addDoc.depIndex === i && (
+
+                                                            <div>
+                                                                <div style={{
+                                                                    marginTop: '10px',
+                                                                    display: 'flex',
+                                                                    columnGap: '80px'
+                                                                }}>
+                                                                    <label style={{ width: '100%' }}>
+                                                                        Name *
+                                                                        <input
+                                                                            type="text"
+                                                                            placeholder="Name"
+                                                                            value={doctorData.doctorName}
+                                                                            onChange={(e) => setDoctorData({ ...doctorData, doctorName: e.target.value })}
+                                                                        />
+                                                                        {/* {errors.doctorName && <label style={{color:"red"}}>{errors.doctorName}</label>} */}
+                                                                    </label>
+
+                                                                    <label style={{ width: '100%' }}>
+                                                                        Email *
+                                                                        <input
+                                                                            type="email"
+                                                                            placeholder="Email"
+                                                                            value={doctorData.email}
+                                                                            onChange={(e) => setDoctorData({ ...doctorData, email: e.target.value })}
+                                                                        />
+                                                                        {/* {errors.doctorEmail && <label style={{color:"red"}}>{errors.doctorEmail}</label>} */}
+
+                                                                    </label>
+                                                                </div>
+
+                                                                <div style={{
+                                                                    marginTop: '10px',
+                                                                    display: 'flex',
+                                                                    columnGap: '80px'
+                                                                }}>
+                                                                    <label style={{ width: '100%' }}>
+                                                                        Contact Number *
+                                                                        <input
+                                                                            type="Number"
+                                                                            style={{ cursor: "text" }}
+                                                                            placeholder="Contact Number"
+                                                                            value={doctorData.contact}
+                                                                            onChange={(e) => setDoctorData({ ...doctorData, contact: e.target.value })}
+                                                                        />
+                                                                        {/* {errors.doctorContact && <label style={{color:"red"}}>{errors.doctorContact}</label>} */}
+
+                                                                    </label>
+
+                                                                    <label style={{ width: '100%' }}>
+                                                                        Experience (years) *
+                                                                        <input
+                                                                            style={{ cursor: "text" }}
+                                                                            type="number"
+                                                                            placeholder="ex.2"
+                                                                            value={doctorData.experience}
+                                                                            onChange={(e) => setDoctorData({ ...doctorData, experience: e.target.value })}
+                                                                        />
+                                                                        {/* {errors.doctorExperience && <label style={{color:"red"}}>{errors.doctorExperience}</label>} */}
+
+                                                                    </label>
+                                                                </div>
+
+                                                                <div style={{
+                                                                    marginTop: '10px',
+                                                                    display: 'flex',
+                                                                    columnGap: '80px',
+                                                                    display: "flex",
+                                                                    justifyContent: "center"
+                                                                }}>
+                                                                    <label style={{
+                                                                        width: '100%',
+                                                                        display: 'flex',
+                                                                        flexDirection: 'column',
+                                                                        // marginTop: '10px'
+                                                                    }}>
+                                                                        Gender
+                                                                        <select
+                                                                            style={{
+                                                                                width: "100%",
+                                                                                padding: '8px',
+                                                                                borderRadius: '7px',
+                                                                                color: 'black',
+                                                                                fontsize: "12.5px",
+                                                                                border: "1px solid lightgray",
+                                                                            }}
+                                                                            value={doctorData.gender}
+                                                                            onChange={(e) => setDoctorData({ ...doctorData, gender: e.target.value })}
+                                                                        >
+                                                                            <option>Select Gender</option>
+                                                                            <option>Male</option>
+                                                                            <option>Female</option>
+                                                                            <option>other</option>
+                                                                        </select>
+                                                                    </label>
+                                                                    <label style={{ width: '100%' }}>
+                                                                        Appointment Fees *
+                                                                        <input
+                                                                            style={{ cursor: "text" }}
+                                                                            type="number"
+                                                                            placeholder="ex.500"
+                                                                            value={doctorData?.appointmentFees}
+                                                                            onChange={(e) => setDoctorData({ ...doctorData, appointmentFees: e.target.value })}
+                                                                        />
+                                                                        {/* {errors.doctorAppointmentFees && <label style={{color:"red"}}>{errors.doctorAppointmentFees}</label>} */}
+
+                                                                    </label>
+                                                                </div>
+                                                                <div style={{
+                                                                    marginTop: '10px',
+                                                                    display: 'flex',
+                                                                    columnGap: '80px'
+                                                                }}>
+                                                                    <label style={{
+                                                                        width: '100%',
+                                                                        display: 'flex',
+                                                                        flexDirection: 'column',
+                                                                        // marginTop: '10px'
+                                                                    }}>
+                                                                        Qualification *
+                                                                        <select
+                                                                            style={{
+                                                                                width: "100%",
+                                                                                padding: '8px',
+                                                                                borderRadius: '7px',
+                                                                                color: 'black',
+                                                                                fontsize: "12.5px",
+                                                                                border: "1px solid lightgray",
+                                                                            }}
+                                                                            value={doctorData.qualification}
+                                                                            onChange={(e) => setDoctorData({ ...doctorData, qualification: e.target.value })}
+                                                                        >
+                                                                            <option value="">Select_Degree</option>
+                                                                            <option value="Graduation">Graduation</option>
+                                                                            <option value="Post-Graduation">Post-Graduation</option>
+                                                                        </select>
+                                                                        {/* {errors.doctorQualification && <label style={{color:"red"}}>{errors.doctorQualification}</label>} */}
+
+                                                                    </label>
+                                                                </div>
+
+                                                            </div>
+
+                                                        )
+
+                                                    }
+
+
+
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                )
+                            }
+
+                        </div>
+
 
                         {/*Action Buttons */}
-                        <div style={{
-                            marginTop: '30px',
-                            display: 'flex',
-                            justifyContent: 'end',
-                            gap: '10px'
-                        }}>
-                            <button onClick={() => setCustomDepartment(null)}>Cancel</button>
-                            <button >Add Department</button>
+                        <div className="actionbtn">
+                            <button className="regular-btn" onClick={() => {
+                                setCustomDepartment(null);
+                                setDepartments(null)
+                            }}
+                            >Cancel</button>
+                            <button className="regular-btn" onClick={() => {
+
+                            }}>Add Department</button>
                         </div>
                     </div>
                 </div>
@@ -883,19 +1245,19 @@ const ViewHospital = () => {
                     <div className="edit-scroll">
                         <div className="edit-detail">
                             <label htmlFor="">Hospital Name
-                                <input value={hospital?.name} type="text" onChange={(e) => handleChange("name", e.target.value)} />
+                                <input value={temphospital?.name} type="text" onChange={(e) => handleChange("name", e.target.value)} />
                             </label>
                             <label htmlFor="">State
-                                <input value={hospital?.state} type="text" onChange={(e) => handleChange("state", e.target.value)} />
+                                <input value={temphospital?.state} type="text" onChange={(e) => handleChange("state", e.target.value)} />
                             </label>
                         </div>
 
                         <div className="edit-detail">
                             <label htmlFor="">City
-                                <input value={hospital?.city} type="text" onChange={(e) => handleChange("city", e.target.value)} />
+                                <input value={temphospital?.city} type="text" onChange={(e) => handleChange("city", e.target.value)} />
                             </label>
                             <label htmlFor="">PinCode
-                                <input value={hospital?.pinCode} type="text" onChange={(e) => handleChange("pinCode", e.target.value)} />
+                                <input value={temphospital?.pinCode} type="text" onChange={(e) => handleChange("pinCode", e.target.value)} />
                             </label>
                         </div>
 
@@ -910,7 +1272,7 @@ const ViewHospital = () => {
                                     <br />
                                     <textarea
                                         type="text"
-                                        value={hospital?.address}
+                                        value={temphospital?.address}
                                         onChange={(e) => handleChange("address", e.target.value)}
                                         placeholder="address"
                                         style={{
