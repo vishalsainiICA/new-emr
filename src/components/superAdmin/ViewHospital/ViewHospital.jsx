@@ -46,6 +46,22 @@ const ViewHospital = () => {
         hosId: null
     });
 
+    const [editPaDetail, seteditPaDetail] = useState(false);
+    const [showPaDetail, setshowPaDetail] = useState(true);
+
+    const editPA = () => {
+        seteditPaDetail(!editPaDetail);
+        setshowPaDetail(!showPaDetail);
+    }
+    const cancelPAdetail = ()=>
+    {
+          
+    }
+    // const savePAdetail = ()=>
+    // {
+
+    // }
+
     const hos = location.state?.hospital || undefined
 
     const navigate = useNavigate()
@@ -525,7 +541,6 @@ const ViewHospital = () => {
                             return <div
 
                                 key={i} className="patient-card"
-
                             >
                                 <div
 
@@ -1380,20 +1395,23 @@ const ViewHospital = () => {
                 alignItems: 'center',
                 backdropFilter: 'blur(10px)',
                 backgroundColor: 'rgba(19, 5, 5, 0.6)',
-            }}>
+             }}>
                 <div className="editcards">
 
                     <div style={{
                         display: 'flex',
                         justifyContent: 'space-between',
                         marginBottom: '20px',
-                        borderRadius: '7px'
+                        borderRadius: '50%',
+                        // backgroundColor:'red',
+                        padding:"10px",
                     }}>
                         <h4>{edit?.name} Profile</h4>
                         <i class="ri-close-large-line" style={{
                             cursor: "pointer"
                         }} onClick={() => {
                             setEdit(null)
+                            
                         }}></i>
                     </div>
                     <div className="docProfile">
@@ -1425,22 +1443,89 @@ const ViewHospital = () => {
                                     }}>
 
 
-                                        <button className="regular-btn" disabled={isProcessing}> <i class="ri-edit-box-line" onClick={() => setEdit(edit)}></i>Edit</button>
-                                        <button className="regular-btn" disabled={isProcessing}><i class="ri-delete-bin-7-line" onClick={() => handleRemovePa(edit?.personalAssitantId?._id)} ></i>{`${isProcessing ? "removing..." : "Remove"}`} </button>
+                                        <button className="regular-btn" onClick={editPA} disabled={isProcessing}> <i class="ri-edit-box-line" ></i>Edit</button>
+                                        <button onClick={() => handleRemovePa(edit?.personalAssitantId?._id)} className="regular-btn" disabled={isProcessing}><i class="ri-delete-bin-7-line"  ></i>{`${isProcessing ? "removing..." : "Remove"}`} </button>
                                     </div>
                                 </div>
-                                <div className="pawithImage">
-                                    <div className="paImage">
-                                        <img src={userDefaultImage} alt="" />
+                                {showPaDetail &&
+                                    <div className="pawithImage">
+                                        <div className="paImage">
+                                            <img src={userDefaultImage} alt="" />
+                                        </div>
+                                        <div className="paBasicDetails">
+                                            <label htmlFor="">Name  <p>{edit?.personalAssitantId?.name}</p></label>
+                                            <label htmlFor="">Gender <p>{edit?.personalAssitantId?.gender || "N/A"}</p></label>
+                                            <label htmlFor="">Email <p>{edit?.personalAssitantId?.email}</p></label>
+                                            <label htmlFor="">Experience <p>{edit?.personalAssitantId?.experience}</p></label>
+                                            <label htmlFor="">Qualification <p>{edit?.personalAssitantId?.qualification}</p></label>
+                                        </div>
                                     </div>
-                                    <div className="paBasicDetails">
-                                        <label htmlFor="">Name <p>{edit?.name}</p></label>
-                                        <label htmlFor="">Gender <p>{edit?.gender || "N/A"}</p></label>
-                                        <label htmlFor="">Email <p>{edit?.email}</p></label>
-                                        <label htmlFor="">Experience <p>{edit?.experience}</p></label>
-                                        <label htmlFor="">Qualification <p>{edit?.qualification}</p></label>
+                                }
+                                {editPaDetail &&
+                                    <div className="pawithImage">
+                                        <div className="paImage">
+                                            <img src={userDefaultImage} alt="" />
+                                        </div>
+                                        <div className="paBasicDetails">
+                                           <div className="PaEditdetail">
+                                            <div>
+                                            <label htmlFor="">Name</label>
+                                            <input type="text" value={edit?.personalAssitantId?.name} onChange={(e) => setEdit({
+                                                ...edit, personalAssitantId: {
+                                                    ...edit.personalAssitantId,
+                                                    name: e.target.value
+                                                }
+                                            })} />
+                                            </div>
+                                             <div>
+
+                                            <label htmlFor="">Email</label>
+                                            <input type="email" value={edit?.personalAssitantId?.email} onChange={(e)=>{setEdit({...edit,personalAssitantId:{
+                                                ...edit.personalAssitantId,email:e.target.value
+                                            }})}}/>
+                                            </div>
+
+
+                                        </div>
+                                           <div className="PaEditdetail">
+                                            <div>
+
+                                            <label htmlFor="">Gender</label>
+                                            <select name="" style={{height:"33px",border :"0.2px solid lightgray",borderRadius:"7px"}} value={edit?.personalAssitantId?.gender || "N/A"}
+                                            onChange={(e)=>{setEdit({...edit,personalAssitantId:{
+                                                ...edit.personalAssitantId,gender:e.target.value
+                                            }})}}>
+                                                <option >Select Gender</option>
+                                                <option >Male</option>
+                                                <option >Female</option>
+                                                <option >Other</option>
+                                            </select>
+                                            </div>
+                                            <div>
+
+                                            <label htmlFor="">Experience</label>
+                                            <input type="number" value={edit?.personalAssitantId?.experience}onChange={(e)=>{setEdit({...edit,personalAssitantId:{
+                                                ...edit.personalAssitantId,experience:e.target.value
+                                            }})}} />
+                                            </div>
+                                         </div
+                                         >
+                                            <div style={{display:"flex",flexDirection:"column",}}>
+
+                                            <label htmlFor="">Qualification</label>
+                                            <select style={{height:"33px",border :"0.2px solid lightgray",borderRadius:"7px"}} value={edit?.personalAssitantId?.qualification}onChange={(e)=>{setEdit({...edit,personalAssitantId:{
+                                                ...edit.personalAssitantId,qualification:e.target.value
+                                            }})}}>
+                                                <option >Post-graduation</option>
+                                                <option >Graduation</option>
+                                            </select>
+                                            </div>
+
+                                        </div>
+                                            {/* <button onClick={ cancelPAdetail}>Cancel</button> */}
+                                            <button onClick={ editPA}>Save</button>
                                     </div>
-                                </div>
+                                }
                             </div>
 
                         ) : (
