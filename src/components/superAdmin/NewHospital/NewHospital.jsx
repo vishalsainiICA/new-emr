@@ -145,7 +145,7 @@ export const NewHospital = () => {
 
     // Director
     const directorNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
-    const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    const gmailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const contactRegex = /^[6-9][0-9]{9}$/;
     const experienceRegex = /^(?:[1-9]|[1-9][0-9])$/;
 

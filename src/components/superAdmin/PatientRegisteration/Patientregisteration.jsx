@@ -87,7 +87,8 @@ const Patientregisteration = () => {
   // ============== COMMON REGEX (Global Use) =================
    const NAME_REGEX = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
    const NUMBER_REGEX = /^[0-9]+$/;
-   const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+   const PHONE_REGEX = /^[0-9]{10}$/;
+   const gmailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
    const pinCodeRegex = /^[1-9][0-9]{5}$/;
    const addressRegex = /^[A-Za-z0-9\s,./#-]+$/;
 
@@ -107,10 +108,13 @@ const Patientregisteration = () => {
       if (!patientData.city) errors.city = "Patien.city is Required"
       if (patientData.city && !NAME_REGEX.test(patientData.city.trim())) {errors.city = "Invalid city name";}
       if (!patientData.gender) errors.gender = "Patient gender is Required"
+
       if (!patientData.phone) errors.phone = "Patient phone is Required"
-      if (patientData.phone && patientData.phone.length !== 10) errors.phone = "contact   Number must be 10 digit "
+      // if (patientData.phone && patientData.phone.length !== 10) errors.phone = "contact   Number must be 10 digit "
+      if (patientData.phone && !PHONE_REGEX.test(patientData.phone)) {errors.phone = "Enter valid 10 digit phone number";}
+      
       if (patientData.whatsApp && patientData.whatsApp.length !==10) errors.whatsApp ="Whatapp Number Must be 10 digits"
-      if(patientData.email  &&!gmailRegex.test(patientData.email)) { errors.email = "Invalid Gmail Address"; }
+      if(patientData.email  &&!gmailRegex.test(patientData.email)) { errors.email = "Invalid Mail Address"; }
       if (!patientData.pinCode) errors.pinCode = "pincode is required"
       if (patientData.pinCode && !pinCodeRegex.test(patientData.pinCode)) {errors.pinCode = "Invalid Pincode (6 digits)";}
      
