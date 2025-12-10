@@ -130,6 +130,7 @@ const DashBoard = () => {
             } catch (err) {
                 console.log(err);
                 setError(err.response?.data?.message || "Internal Server Error");
+                navigate("/login")
             } finally {
                 setIsProcessing(false);
             }
