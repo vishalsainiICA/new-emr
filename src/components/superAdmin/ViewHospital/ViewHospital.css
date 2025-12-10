@@ -222,3 +222,27 @@
         color: black;
     }
 }
+
+.select_department {
+    margin-top: 10px;
+    height: 100%;
+
+    select {
+        width: 100%;
+        padding: 10px;
+        border: 0.5px solid lightgray;
+        border-radius: 10px;
+    }
+}
+
+.actionbtn {
+
+    display: flex;
+    justify-content: end;
+    align-content: end;
+    align-items: end;
+    gap: 10px;
+
+
+
+}

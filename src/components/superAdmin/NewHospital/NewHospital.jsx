@@ -136,23 +136,23 @@ export const NewHospital = () => {
         contact: "",
         experience: "",
         qualification: "",
-        gender:"",
+        gender: "",
         appointmentFees: null
     });
 
 
-    const [errors,setErrors]=useState({
-         name: '',
+    const [errors, setErrors] = useState({
+        name: '',
         state: null,
         pinCode: '',
         city: '',
         address: '',
         patientCategories: [],
-         medicalDirectorName:'',
-         medicalDirectorContact:'',
-         medicalDirectorEmail:'',
-         medicalDirectorExperience:'',
-         medicalDirectorImage:'',
+        medicalDirectorName: '',
+        medicalDirectorContact: '',
+        medicalDirectorEmail: '',
+        medicalDirectorExperience: '',
+        medicalDirectorImage: '',
         customLetterPad: {
             headerName: '',
             disclaimer: '',
@@ -214,7 +214,7 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
         //    if (!categoryRegex.test(cat)) {errors.patientCategories = "Invalid category name";}
       }
 
-       // step 2 Validation
+        // step 2 Validation
 
        if( currentStep==2)
         {
@@ -255,7 +255,7 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
 
 
         setErrors(errors);
-        
+
         return Object.keys(errors).length === 0;
     }
 
@@ -420,20 +420,21 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                                 // onWheel={(e) => e.preventDefault()}
                                 onChange={(e) => handelChange("name", e.target.value)}
                             />
-                            {errors.name && <label style={{color:"red"}}>{errors.name}</label>}
+                            {errors.name && <label style={{ color: "red" }}>{errors.name}</label>}
 
                         </label>
                         <label style={{
                             width: '100%'
                         }} htmlFor="">PinCode
-                            <input type="number" 
-                            style={{cursor:"text",
-                                //   pointerEvents: "none"
+                            <input type="number"
+                                style={{
+                                    cursor: "text",
+                                    //   pointerEvents: "none"
 
-                            }}
-                            value={hospitalData?.pinCode}
+                                }}
+                                value={hospitalData?.pinCode}
                                 onChange={(e) => handelChange("pinCode", e.target.value)} placeholder="PinCode" />
-                            {errors.pinCode && <label style={{color:"red"}}>{errors.pinCode}</label>}
+                            {errors.pinCode && <label style={{ color: "red" }}>{errors.pinCode}</label>}
 
                         </label>
                     </div>
@@ -443,20 +444,20 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                         gap: '100px',
                         // marginTop: '10px',
 
-                     }}>
+                    }}>
                         <label style={{
                             width: '100%'
                         }} htmlFor="">City
                             <input type="text" value={hospitalData?.city}
                                 onChange={(e) => handelChange("city", e.target.value)} placeholder="Enter City" />
-                            {errors.city && <label style={{color:"red"}}>{errors.city}</label>}
+                            {errors.city && <label style={{ color: "red" }}>{errors.city}</label>}
                         </label>
                         <label style={{
                             width: '100%',
                             display: 'flex',
                             flexDirection: 'column'
 
-                         }} htmlFor="">State*
+                        }} htmlFor="">State*
                             <select
                                 type="text"
                                 value={hospitalData?.state}
@@ -475,7 +476,7 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                                     return <option key={i} value={s}>{s}</option>
                                 })}
                             </select>
-                            {errors.state && <label style={{color:"red"}}>{errors.state}</label>}
+                            {errors.state && <label style={{ color: "red" }}>{errors.state}</label>}
                         </label>
                     </div>
 
@@ -496,7 +497,7 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                                 fontsize: "12.5px",
                                 border: "1px solid lightgray",
                             }} name="" id="" rows="3"></textarea>
-                            {errors.address && <label style={{color:"red"}}>{errors.address}</label>}
+                        {errors.address && <label style={{ color: "red" }}>{errors.address}</label>}
                     </label>
 
 
@@ -510,11 +511,11 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                         <label style={{
                             width: '42%'
                         }} htmlFor="">Patient Category
-                            <input value={categoryName} type="text"placeholder="patientCategory"
-                             onChange={(e) => {
-                                return setCategoryName(e.target.value)
-                            }} />
-                            {errors.patientCategories && <label style={{color:"red"}}>{errors.patientCategories}</label>}
+                            <input value={categoryName} type="text" placeholder="patientCategory"
+                                onChange={(e) => {
+                                    return setCategoryName(e.target.value)
+                                }} />
+                            {errors.patientCategories && <label style={{ color: "red" }}>{errors.patientCategories}</label>}
                         </label>
                         <div className="add-button" style={{ display: "flex", alignItems: "end" }}>
                             <button
@@ -546,11 +547,11 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                             disabled={isProcessing}
                             onClick={(e) => {
                                 e.preventDefault();
-                                const val=checkfield();
+                                const val = checkfield();
 
                                 if (currentStep < 5 && val) {
                                     setCurrentStep(currentStep + 1);
-                                } else if(currentStep === 2)  {
+                                } else if (currentStep === 2) {
 
                                     handleSubmit(e);
                                 }
@@ -624,14 +625,14 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                                     }
                                 })}
                                 type="text" placeholder="Enter Full Name" />
-                            {errors.medicalDirectorName && <label style={{color:"red"}}>{errors.medicalDirectorName}</label>}
+                            {errors.medicalDirectorName && <label style={{ color: "red" }}>{errors.medicalDirectorName}</label>}
                         </label>
                         <label style={{
                             width: '100%'
                         }} htmlFor="">Experience
-                            <input 
-                            style={{cursor:"text"}}
-                            value={hospitalData?.medicalDirector?.experience}
+                            <input
+                                style={{ cursor: "text" }}
+                                value={hospitalData?.medicalDirector?.experience}
                                 onChange={(e) => setHospitalData({
                                     ...hospitalData, medicalDirector: {
                                         ...hospitalData.medicalDirector,
@@ -639,7 +640,7 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                                     }
                                 })}
                                 type="number" placeholder="Ex.2" />
-                            {errors.medicalDirectorExperience && <label style={{color:"red"}}>{errors.medicalDirectorExperience}</label>}
+                            {errors.medicalDirectorExperience && <label style={{ color: "red" }}>{errors.medicalDirectorExperience}</label>}
 
                         </label>
                     </div>
@@ -660,14 +661,14 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                                         email: e.target.value
                                     }
                                 })} type="text" placeholder="email@example.com" />
-                            {errors.medicalDirectorEmail && <label style={{color:"red"}}>{errors.medicalDirectorEmail}</label>}
+                            {errors.medicalDirectorEmail && <label style={{ color: "red" }}>{errors.medicalDirectorEmail}</label>}
 
                         </label>
                         <label style={{
                             width: '100%'
                         }} htmlFor="">Contact Number *
                             <input
-                            style={{cursor:"text"}}
+                                style={{ cursor: "text" }}
                                 value={hospitalData?.medicalDirector?.contact}
                                 onChange={(e) => setHospitalData({
                                     ...hospitalData, medicalDirector: {
@@ -676,7 +677,7 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                                     }
                                 })}
                                 type="number" placeholder="+91 7340479570" />
-                            {errors.medicalDirectorContact && <label style={{color:"red"}}>{errors.medicalDirectorContact}</label>}
+                            {errors.medicalDirectorContact && <label style={{ color: "red" }}>{errors.medicalDirectorContact}</label>}
 
                         </label>
                     </div>
@@ -715,7 +716,7 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                                     }
                                 })}
                             />
-                            {errors.medicalDirectorImage && <label style={{color:"red"}}>{errors.medicalDirectorImage}</label>}
+                            {errors.medicalDirectorImage && <label style={{ color: "red" }}>{errors.medicalDirectorImage}</label>}
 
                         </label>
                     </div>
@@ -727,10 +728,10 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                             disabled={isProcessing}
                             onClick={(e) => {
 
-                                 const val=checkfield();
+                                const val = checkfield();
                                 if (currentStep < 5 && val) {
                                     setCurrentStep(currentStep + 1);
-                                } else if(currentStep===3) {
+                                } else if (currentStep === 3) {
 
                                     handleSubmit(e);
                                 }
@@ -741,13 +742,13 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                     </div>
                 </div>
             )}
-            {console.log("error" , errors)
+            {console.log("error", errors)
             }
             {currentStep == 3 && (
                 <div className="steps">
                     <h3>Department Setup</h3>
 
-                    {errors.supportedDepartments && <label style={{color:"red"}}>{errors.supportedDepartments}</label>}
+                    {errors.supportedDepartments && <label style={{ color: "red" }}>{errors.supportedDepartments}</label>}
 
                     <hr />
 
@@ -795,8 +796,8 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                         justifyContent: 'space-between'
                     }}>
                         <h4> Selected Department </h4>
-                                             
-                    {errors.supportedDepartmentsdoctors && <label style={{color:"red"}}>{errors.supportedDepartmentsdoctors}</label>}
+
+                        {errors.supportedDepartmentsdoctors && <label style={{ color: "red" }}>{errors.supportedDepartmentsdoctors}</label>}
                         {/* {errors.medicalDirectorName && <label style={{color:"red"}}>{errors.medicalDirectorName}</label>} */}
 
                         {/* <button className="card hover" style={{
@@ -875,6 +876,8 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                                                 padding: '10px',
                                                 borderRadius: '10px'
                                             }}><i class="ri-group-line"></i>+ Doctor</button>
+
+                                        
                                     </div>
 
 
@@ -889,10 +892,10 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                             disabled={isProcessing}
                             onClick={(e) => {
                                 e.preventDefault();
-                                  const val=checkfield()
+                                const val = checkfield()
                                 if (currentStep < 5 && val) {
                                     setCurrentStep(currentStep + 1);
-                                } else if(currentStep === 4) {
+                                } else if (currentStep === 4) {
 
                                     handleSubmit(e);
                                 }
@@ -1075,54 +1078,6 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
 
                         }
                     </div>
-                    {/* <div
-                        style={{
-                            backgroundColor: 'white',
-                            border: '1px solid lightgray',
-                            padding: '15px 15px 15px 30px',
-                            borderRadius: '10px',
-                            margin: '0 0 10px 10px',
-                            boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-                            cursor: 'pointer',
-                            minHeight: '150px',
-
-                        }}
-                    >
-                        <div
-                            className="review-strategy"
-                        >
-                            <h3>Letterhead Details</h3>
-                            <span><i onClick={() => setCurrentStep(4)} class="ri-edit-box-line"></i></span>
-
-                        </div>
-                        <div style={{
-                            display: 'flex',
-                            flexWrap: 'wrap',  // line break agar space kam ho toh
-                            gap: '15px',
-                            justifyContent: 'space-between',
-                        }}>
-                            <p className="reviewtag">
-                                Name: <span>{hospitalData.customLetterPad.headerName}</span>
-                            </p>
-
-                            <p className="reviewtag">
-                                Email: <span >{hospitalData.customLetterPad.headerEmail}</span>
-                            </p>
-
-                            <p className="reviewtag">
-                                Phone: <span >{hospitalData.customLetterPad.headerPhone}</span>
-                            </p>
-
-                            <p className="reviewtag">
-                                Tagline1: <span >{hospitalData.customLetterPad.tagline1}</span>
-                            </p>
-
-                            <p className="reviewtag">
-                                Tagline2: <span >{hospitalData.customLetterPad.tagline2}</span>
-                            </p>
-                        </div>
-
-                    </div> */}
                     <hr />
 
                     <div className="saveHospital" >
@@ -1182,7 +1137,7 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                             display: 'flex',
                             justifyContent: 'space-between',
                             alignItems: 'center'
-                         }}>
+                        }}>
                             <h3>
                                 {`Add Doctor for ${hospitalData?.supportedDepartments[assinDoctor].departmentName}`}
                             </h3>
@@ -1195,11 +1150,11 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                         </div>
                         <hr />
                         {/*Doctor Data Form */}
-                        <div style={{ 
+                        <div style={{
                             marginTop: '10px',
                             display: 'flex',
                             columnGap: '80px'
-                         }}>
+                        }}>
                             <label style={{ width: '100%' }}>
                                 Name *
                                 <input
@@ -1233,7 +1188,7 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                                 Contact Number *
                                 <input
                                     type="Number"
-                                    style={{cursor:"text"}}
+                                    style={{ cursor: "text" }}
                                     placeholder="Contact Number"
                                     value={doctorData.contact}
                                     onChange={(e) => setDoctorData({ ...doctorData, contact: e.target.value })}
@@ -1245,7 +1200,7 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                             <label style={{ width: '100%' }}>
                                 Experience (years) *
                                 <input
-                                    style={{cursor:"text"}}
+                                    style={{ cursor: "text" }}
                                     type="number"
                                     placeholder="ex.2"
                                     value={doctorData.experience}
@@ -1260,38 +1215,38 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                             marginTop: '10px',
                             display: 'flex',
                             columnGap: '80px',
-                            display:"flex",
-                            justifyContent:"center"
+                            display: "flex",
+                            justifyContent: "center"
                         }}>
-                           <label style={{
+                            <label style={{
                                 width: '100%',
                                 display: 'flex',
                                 flexDirection: 'column',
                                 // marginTop: '10px'
                             }}>
                                 Gender
-                                    <select 
+                                <select
                                     style={{
-                                    width: "100%",
-                                    padding: '8px',
-                                    borderRadius: '7px',
-                                    color: 'black',
-                                    fontsize: "12.5px",
-                                    border: "1px solid lightgray",
-                                }}
+                                        width: "100%",
+                                        padding: '8px',
+                                        borderRadius: '7px',
+                                        color: 'black',
+                                        fontsize: "12.5px",
+                                        border: "1px solid lightgray",
+                                    }}
                                     value={doctorData.gender}
                                     onChange={(e) => setDoctorData({ ...doctorData, gender: e.target.value })}
-                                    >
-                                        <option>Select Gender</option>
-                                        <option>Male</option>
-                                        <option>Female</option>
-                                        <option>other</option>
-                                    </select>
+                                >
+                                    <option>Select Gender</option>
+                                    <option>Male</option>
+                                    <option>Female</option>
+                                    <option>other</option>
+                                </select>
                             </label>
                             <label style={{ width: '100%' }}>
                                 Appointment Fees *
                                 <input
-                                    style={{cursor:"text"}}
+                                    style={{ cursor: "text" }}
                                     type="number"
                                     placeholder="ex.500"
                                     value={doctorData?.appointmentFees}
@@ -1306,7 +1261,7 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                             display: 'flex',
                             columnGap: '80px'
                         }}>
-                             <label style={{
+                            <label style={{
                                 width: '100%',
                                 display: 'flex',
                                 flexDirection: 'column',
@@ -1314,14 +1269,14 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                             }}>
                                 Qualification *
                                 <select
-                                style={{
-                                    width: "100%",
-                                    padding: '8px',
-                                    borderRadius: '7px',
-                                    color: 'black',
-                                    fontsize: "12.5px",
-                                    border: "1px solid lightgray",
-                                }}
+                                    style={{
+                                        width: "100%",
+                                        padding: '8px',
+                                        borderRadius: '7px',
+                                        color: 'black',
+                                        fontsize: "12.5px",
+                                        border: "1px solid lightgray",
+                                    }}
                                     value={doctorData.qualification}
                                     onChange={(e) => setDoctorData({ ...doctorData, qualification: e.target.value })}
                                 >
