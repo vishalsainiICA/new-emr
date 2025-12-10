@@ -433,22 +433,39 @@ const DashBoard = () => {
                                                     /* ----------------------------------------
                                                        CASE: ONLY SCHEDULED → Buttons ENABLE
                                                     ---------------------------------------- */
-                                                    <div>
+                                                    <div style={{
+                                                        display: 'flex',
+                                                    }}>
                                                         <button
                                                             onClick={() =>
                                                                 navigate("/intial-assement", { state: { patient: hos } })
                                                             }
                                                             style={{
+                                                                display: 'flex',
                                                                 backgroundColor: 'rgba(219, 219, 252)',
-                                                                marginRight: "10px"
+                                                                marginRight: "10px",
+                                                                fontSize: '15px',
+                                                                textAlign: 'center',
+
+                                                                justifyContent: 'center',
+                                                                alignItems: 'center'
                                                             }}
                                                         >
-                                                            👁️ Ini
+                                                            👁️ IA
                                                         </button>
 
                                                         <button
                                                             onClick={() => setEdit(edit === hos._id ? null : hos)}
-                                                            style={{ backgroundColor: "rgba(235, 254, 246)" }}
+                                                            style={{
+                                                                display: 'flex',
+
+                                                                fontSize: '12px',
+                                                                textAlign: 'center',
+
+                                                                justifyContent: 'center',
+                                                                alignItems: 'center'
+
+                                                            }}
                                                         >
                                                             ✏️ Edit
                                                         </button>

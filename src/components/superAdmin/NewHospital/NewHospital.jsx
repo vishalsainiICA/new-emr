@@ -6,6 +6,8 @@ import { FaArrowLeft } from "react-icons/fa";
 import './NewHospital.css'
 
 import testimg from "../../../assets/download.jpg"
+import { BiAlignRight, BiBorderRight, BiCheck, BiDockRight, BiEdit, BiRightArrow } from "react-icons/bi";
+import { IndianStates } from "../../Utility/PatientHistory__Labtest";
 
 
 const CurrentStep = ({ currentStep, totalSteps }) => {
@@ -40,44 +42,6 @@ const CurrentStep = ({ currentStep, totalSteps }) => {
         </div>
     );
 };
-const indianStates = [
-    "Andhra Pradesh",
-    "Arunachal Pradesh",
-    "Assam",
-    "Bihar",
-    "Chhattisgarh",
-    "Goa",
-    "Gujarat",
-    "Haryana",
-    "Himachal Pradesh",
-    "Jharkhand",
-    "Karnataka",
-    "Kerala",
-    "Madhya Pradesh",
-    "Maharashtra",
-    "Manipur",
-    "Meghalaya",
-    "Mizoram",
-    "Nagaland",
-    "Odisha",
-    "Punjab",
-    "Rajasthan",
-    "Sikkim",
-    "Tamil Nadu",
-    "Telangana",
-    "Tripura",
-    "Uttar Pradesh",
-    "Uttarakhand",
-    "West Bengal",
-    "Andaman and Nicobar Islands",
-    "Chandigarh",
-    "Dadra and Nagar Haveli and Daman and Diu",
-    "Delhi",
-    "Jammu and Kashmir",
-    "Ladakh",
-    "Lakshadweep",
-    "Puducherry"
-];
 
 
 const dummyDepartments = [
@@ -472,7 +436,7 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                                 }}
                                 name="" id="">
                                 <option value="">Select_State</option>
-                                {indianStates.map((s, i) => {
+                                {IndianStates.map((s, i) => {
                                     return <option key={i} value={s}>{s}</option>
                                 })}
                             </select>
@@ -854,7 +818,8 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                                                 gap: '10px'
                                             }}>
                                                 {dep.doctors?.length !== 0 && (
-                                                    <i class="ri-edit-box-line" onClick={() => setEdit(i)}></i>
+                                                    <BiEdit onClick={() => setEdit(i)}></BiEdit>
+
                                                 )}
 
                                                 <i class="ri-close-large-line" onClick={() => {
@@ -877,7 +842,7 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                                                 borderRadius: '10px'
                                             }}><i class="ri-group-line"></i>+ Doctor</button>
 
-                                        
+
                                     </div>
 
 
@@ -907,209 +872,211 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
 
                 </div>
             )}
-            {currentStep == 4 && (
-                <div className="steps" >
-                    <h3>Review & Submit</h3>
-                    <hr />
-                    <div
-                        style={{
-                            backgroundColor: 'white',
-                            border: '1px solid lightgray',
-                            padding: '15px 15px 15px 30px',
-                            borderRadius: '10px',
-                            margin: '0 0 10px 10px',
-                            boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-                            cursor: 'pointer',
-                            minHeight: '150px',
-
-                        }}
-                    >
-                        <div className="review-strategy" >
-                            <h3>Hospital Details</h3>
-                            <span><i onClick={() => setCurrentStep(1)} class="ri-edit-box-line"></i></span>
-
-                        </div>
-                        <div style={{
-                            display: 'flex',
-                            flexWrap: 'wrap',  // line break agar space kam ho toh
-                            gap: '15px',
-                            justifyContent: 'space-between',
-                        }}>
-                            <p className="reviewtag">
-                                Name: <span >{hospitalData.name}</span>
-                            </p>
-
-                            <p className="reviewtag">
-                                State: <span >{hospitalData.state}</span>
-                            </p>
-
-                            <p className="reviewtag">
-                                City: <span >{hospitalData.city}</span>
-                            </p>
-
-                            <p className="reviewtag">
-                                Pincode: <span >{hospitalData.pinCode}</span>
-                            </p>
-
-                            <p className="reviewtag">
-                                Address: <span >{hospitalData.address}</span>
-                            </p>
-
-                            <p className="reviewtag">
-                                Patient Categories: <span >
-                                    {hospitalData.patientCategories.join(', ')}
-                                </span>
-                            </p>
-                        </div>
-
-
-
-                    </div>
-                    <div
-                        style={{
-                            backgroundColor: 'white',
-                            border: '1px solid lightgray',
-                            padding: '15px 15px 15px 30px',
-                            borderRadius: '10px',
-                            margin: '0 0 10px 10px',
-                            boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-                            cursor: 'pointer',
-                            minHeight: '150px',
-
-                        }}
-                    >
+            {
+                currentStep == 4 && (
+                    <div className="steps" >
+                        <h3>Review & Submit</h3>
+                        <hr />
                         <div
-                            className="review-strategy"
-                        >
-                            <h3>Medical Director</h3>
-                            <span><i onClick={() => setCurrentStep(2)} class="ri-edit-box-line"></i></span>
+                            style={{
+                                backgroundColor: 'white',
+                                border: '1px solid lightgray',
+                                padding: '15px 15px 15px 30px',
+                                borderRadius: '10px',
+                                margin: '0 0 10px 10px',
+                                boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
+                                cursor: 'pointer',
+                                minHeight: '150px',
 
-                        </div>
-
-                        <div style={{
-                            display: 'flex',
-                            // line break agar space kam ho toh
-                            gap: '15px',
-
-                        }}>
-                            <div style={{
-                                width: '80px'
-                            }}>
-                                {hospitalData?.medicalDirector?.image && (
-                                    <img style={{
-                                        width: "60px",
-                                        height: "60px"
-                                    }}
-                                        // src={testimg}
-                                        src={URL.createObjectURL(hospitalData?.medicalDirector?.image)}
-                                        alt="image" />
-                                )
-                                }
-
-                            </div>
-
-                            <div style={{
-                                width: '100%',
-                                display: 'flex',
-                                justifyContent: "space-between",
-
-                            }}>
-                                <p className="reviewtag">
-                                    Name: <span >{hospitalData.medicalDirector.name}</span>
-                                </p>
-
-                                <p className="reviewtag">
-                                    Email: <span >{hospitalData.medicalDirector.email}</span>
-                                </p>
-
-                                <p className="reviewtag">
-                                    Experience: <span >{hospitalData.medicalDirector.experience}</span>
-                                </p>
-
-                                <p className="reviewtag">
-                                    Contact: <span >{hospitalData.medicalDirector.contact}</span>
-                                </p>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div
-                        style={{
-                            backgroundColor: 'white',
-                            border: '1px solid lightgray',
-                            padding: '15px 15px 15px 30px',
-                            borderRadius: '10px',
-                            margin: '0 0 10px 10px',
-                            boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-                            cursor: 'pointer',
-                            minHeight: '150px',
-
-                        }}
-                    >
-                        <div
-                            className="review-strategy"
-                        >
-                            <h3>Departments & Doctors</h3>
-                            <span><i onClick={() => setCurrentStep(3)} class="ri-edit-box-line"></i></span>
-
-                        </div>
-                        {
-
-                            <div style={{
-                                display: 'flex',
-                                flexWrap: 'wrap',
-                                gap: '10px'
-                            }}>
-                                {hospitalData.supportedDepartments.length > 0 && hospitalData.supportedDepartments.map((dep, i) => {
-                                    return <div style={{
-                                        backgroundColor: 'lightgray',
-                                        borderLeft: '7px solid green',
-                                        padding: '10px',
-                                        width: '170px',
-                                        borderRadius: '10px'
-
-
-                                    }}>
-                                        <p>{dep?.departmentName}</p>
-                                        <p>{dep?.doctors?.length}</p>
-                                    </div>
-                                })}
-                            </div>
-
-                        }
-                    </div>
-                    <hr />
-
-                    <div className="saveHospital" >
-                        <button style={{
-                            padding: "7px",
-                            color: "white",
-                            backgroundColor: "black",
-                            borderRadius: "10px",
-                            outline: "none",
-                            cursor: "pointer"
-                        }}
-                            onClick={() => setCurrentStep(currentStep - 1)} disabled={currentStep == 1}> ← Back</button>
-                        <button
-                            disabled={isProcessing}
-                            onClick={(e) => {
-                                e.preventDefault();
-
-                                if (currentStep < 4) {
-                                    setCurrentStep(currentStep + 1);
-                                } else {
-
-                                    handleSubmit(e);
-                                }
                             }}
                         >
-                            {currentStep < 4 ? " Next →" : `${isProcessing ? "saving...." : "Save Hospital"}`}
-                        </button>
-                    </div>
-                </div>
+                            <div className="review-strategy" >
+                                <h3>Hospital Details</h3>
+                                <span><i onClick={() => setCurrentStep(1)} class="ri-edit-box-line"></i></span>
 
-            )}
-        </div>
+                            </div>
+                            <div style={{
+                                display: 'flex',
+                                flexWrap: 'wrap',  // line break agar space kam ho toh
+                                gap: '15px',
+                                justifyContent: 'space-between',
+                            }}>
+                                <p className="reviewtag">
+                                    Name: <span >{hospitalData.name}</span>
+                                </p>
+
+                                <p className="reviewtag">
+                                    State: <span >{hospitalData.state}</span>
+                                </p>
+
+                                <p className="reviewtag">
+                                    City: <span >{hospitalData.city}</span>
+                                </p>
+
+                                <p className="reviewtag">
+                                    Pincode: <span >{hospitalData.pinCode}</span>
+                                </p>
+
+                                <p className="reviewtag">
+                                    Address: <span >{hospitalData.address}</span>
+                                </p>
+
+                                <p className="reviewtag">
+                                    Patient Categories: <span >
+                                        {hospitalData.patientCategories.join(', ')}
+                                    </span>
+                                </p>
+                            </div>
+
+
+
+                        </div>
+                        <div
+                            style={{
+                                backgroundColor: 'white',
+                                border: '1px solid lightgray',
+                                padding: '15px 15px 15px 30px',
+                                borderRadius: '10px',
+                                margin: '0 0 10px 10px',
+                                boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
+                                cursor: 'pointer',
+                                minHeight: '150px',
+
+                            }}
+                        >
+                            <div
+                                className="review-strategy"
+                            >
+                                <h3>Medical Director</h3>
+                                <span><i onClick={() => setCurrentStep(2)} class="ri-edit-box-line"></i></span>
+
+                            </div>
+
+                            <div style={{
+                                display: 'flex',
+                                // line break agar space kam ho toh
+                                gap: '15px',
+
+                            }}>
+                                <div style={{
+                                    width: '80px'
+                                }}>
+                                    {hospitalData?.medicalDirector?.image && (
+                                        <img style={{
+                                            width: "60px",
+                                            height: "60px"
+                                        }}
+                                            // src={testimg}
+                                            src={URL.createObjectURL(hospitalData?.medicalDirector?.image)}
+                                            alt="image" />
+                                    )
+                                    }
+
+                                </div>
+
+                                <div style={{
+                                    width: '100%',
+                                    display: 'flex',
+                                    justifyContent: "space-between",
+
+                                }}>
+                                    <p className="reviewtag">
+                                        Name: <span >{hospitalData.medicalDirector.name}</span>
+                                    </p>
+
+                                    <p className="reviewtag">
+                                        Email: <span >{hospitalData.medicalDirector.email}</span>
+                                    </p>
+
+                                    <p className="reviewtag">
+                                        Experience: <span >{hospitalData.medicalDirector.experience}</span>
+                                    </p>
+
+                                    <p className="reviewtag">
+                                        Contact: <span >{hospitalData.medicalDirector.contact}</span>
+                                    </p>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div
+                            style={{
+                                backgroundColor: 'white',
+                                border: '1px solid lightgray',
+                                padding: '15px 15px 15px 30px',
+                                borderRadius: '10px',
+                                margin: '0 0 10px 10px',
+                                boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
+                                cursor: 'pointer',
+                                minHeight: '150px',
+
+                            }}
+                        >
+                            <div
+                                className="review-strategy"
+                            >
+                                <h3>Departments & Doctors</h3>
+                                <span><i onClick={() => setCurrentStep(3)} class="ri-edit-box-line"></i></span>
+
+                            </div>
+                            {
+
+                                <div style={{
+                                    display: 'flex',
+                                    flexWrap: 'wrap',
+                                    gap: '10px'
+                                }}>
+                                    {hospitalData.supportedDepartments.length > 0 && hospitalData.supportedDepartments.map((dep, i) => {
+                                        return <div style={{
+                                            backgroundColor: 'lightgray',
+                                            borderLeft: '7px solid green',
+                                            padding: '10px',
+                                            width: '170px',
+                                            borderRadius: '10px'
+
+
+                                        }}>
+                                            <p>{dep?.departmentName}</p>
+                                            <p>{dep?.doctors?.length}</p>
+                                        </div>
+                                    })}
+                                </div>
+
+                            }
+                        </div>
+                        <hr />
+
+                        <div className="saveHospital" >
+                            <button style={{
+                                padding: "7px",
+                                color: "white",
+                                backgroundColor: "black",
+                                borderRadius: "10px",
+                                outline: "none",
+                                cursor: "pointer"
+                            }}
+                                onClick={() => setCurrentStep(currentStep - 1)} disabled={currentStep == 1}> ← Back</button>
+                            <button
+                                disabled={isProcessing}
+                                onClick={(e) => {
+                                    e.preventDefault();
+
+                                    if (currentStep < 4) {
+                                        setCurrentStep(currentStep + 1);
+                                    } else {
+
+                                        handleSubmit(e);
+                                    }
+                                }}
+                            >
+                                {currentStep < 4 ? " Next →" : `${isProcessing ? "saving...." : "Save Hospital"}`}
+                            </button>
+                        </div>
+                    </div>
+
+                )
+            }
+        </div >
 
         {
             assinDoctor !== null && (
@@ -1388,72 +1355,95 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
             )
         }
 
-        {edit !== null && (
-            <div style={{
-                position: 'absolute',
-                inset: 0,
-                zIndex: 9999,
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                backdropFilter: 'blur(10px)',
-                backgroundColor: 'rgba(19, 5, 5, 0.6)',
-            }}>
+        {
+            edit !== null && (
+                <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    zIndex: 9999,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backdropFilter: 'blur(10px)',
+                    backgroundColor: 'rgba(19, 5, 5, 0.6)',
+                }}>
 
-                <div className="editcard">
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        marginBottom: '20px',
-                        borderRadius: '7px'
-                    }}>
-                        <h4>{hospitalData.supportedDepartments[edit]?.departmentName}</h4>
-                        <i class="ri-close-large-line" style={{
-                            cursor: "pointer"
-                        }} onClick={() => {
-                            setEdit(null)
-                        }}></i>
+                    <div className="editcard">
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            marginBottom: '20px',
+                            borderRadius: '7px'
+                        }}>
+                            <h4>{hospitalData.supportedDepartments[edit]?.departmentName}</h4>
+
+                            <i class="ri-close-large-line" style={{
+                                cursor: "pointer"
+                            }} onClick={() => {
+                                setEdit(null)
+                            }}></i>
+                        </div>
+
+                        {
+                            hospitalData.supportedDepartments[edit]?.doctors?.map((doc, i) => {
+                                return <div key={i} className="editdep">
+                                    <div style={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        marginBottom: '10px'
+                                    }}>
+                                        <h5>doctor:{i + 1}</h5>
+
+                                        <div style={{
+                                            display: 'flex',
+                                            gap: '10px',
+                                            justifyContent: 'center',
+                                            alignItems: 'center'
+                                        }}>
+                                            <BiEdit ></BiEdit>
+                                            <span>✔</span>
+
+                                            <i class="ri-delete-bin-7-line"
+                                                onClick={() => {
+                                                    const updatedDoctors = hospitalData.supportedDepartments[edit]?.doctors?.filter((_, idx) => idx !== i)
+                                                    const updatedDepartments = [...hospitalData.supportedDepartments]
+                                                    updatedDepartments[edit].doctors = updatedDoctors
+
+                                                    setHospitalData((prev) => ({
+                                                        ...prev,
+                                                        supportedDepartments: updatedDepartments
+                                                    }))
+
+                                                }}></i>
+                                        </div>
+
+
+                                    </div>
+                                    <div className="docbasicDetails">
+                                        <label htmlFor="">Name
+                                            <p>{doc?.doctorName}</p>
+                                        </label>
+                                    </div>
+                                    <div style={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        gap: '10px'
+                                    }}>
+                                        <input type="text" onChange={(e) => handelDoctorChange(edit, i, "doctorName", e.target.value)} value={doc?.doctorName} />
+                                        <input type="text" onChange={(e) => handelDoctorChange(edit, i, "email", e.target.value)} value={doc?.email} />
+                                        <input type="text" onChange={(e) => handelDoctorChange(edit, i, "contact", e.target.value)} value={doc?.contact} />
+                                        <input type="text" onChange={(e) => handelDoctorChange(edit, i, "experience", e.target.value)} value={doc?.experience} />
+                                        <input type="text" onChange={(e) => handelDoctorChange(edit, i, "qualification", e.target.value)} value={doc?.qualification} />
+                                    </div>
+
+                                </div>
+                            })
+                        }
                     </div>
 
-                    {
-                        hospitalData.supportedDepartments[edit]?.doctors?.map((doc, i) => {
-                            return <div key={i} className="editdep">
-                                <div style={{
-                                    display: 'flex',
-                                    justifyContent: 'space-between'
-                                }}>
-                                    <h5>doctor:{i + 1}</h5>
-                                    <i class="ri-delete-bin-7-line" onClick={() => {
-                                        const updatedDoctors = hospitalData.supportedDepartments[edit]?.doctors?.filter((_, idx) => idx !== i)
-                                        const updatedDepartments = [...hospitalData.supportedDepartments]
-                                        updatedDepartments[edit].doctors = updatedDoctors
-
-                                        setHospitalData((prev) => ({
-                                            ...prev,
-                                            supportedDepartments: updatedDepartments
-                                        }))
-
-                                    }}></i>
-                                </div>
-                                <div style={{
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    gap: '10px'
-                                }}>
-                                    <input type="text" onChange={(e) => handelDoctorChange(edit, i, "doctorName", e.target.value)} value={doc?.doctorName} />
-                                    <input type="text" onChange={(e) => handelDoctorChange(edit, i, "email", e.target.value)} value={doc?.email} />
-                                    <input type="text" onChange={(e) => handelDoctorChange(edit, i, "contact", e.target.value)} value={doc?.contact} />
-                                    <input type="text" onChange={(e) => handelDoctorChange(edit, i, "experience", e.target.value)} value={doc?.experience} />
-                                    <input type="text" onChange={(e) => handelDoctorChange(edit, i, "qualification", e.target.value)} value={doc?.qualification} />
-                                </div>
-
-                            </div>
-                        })
-                    }
                 </div>
-
-            </div>
-        )}
+            )
+        }
 
     </div >
 

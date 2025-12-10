@@ -9,6 +9,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { CurrentStep, dummyDepartments, extractTextFromImage, parseAadhaarText } from "../../Utility/CicularAvatar";
 import { commonApi, perosnalAssistantAPI } from "../../../auth";
 import { BsArrowLeft } from "react-icons/bs";
+import { IndianStates } from "../../Utility/PatientHistory__Labtest";
 const calculateAge = (dob) => {
   if (!dob) return null;
 
@@ -62,60 +63,59 @@ const Patientregisteration = () => {
   );
 
   const [errors, setErrors] = useState({
-      name: '',
-      age: null,
-      gender: '',
-      pinCode: '',
-      phone: null,
-      email: '',
-      permanentAddress: '',
-      whatsApp: null,
-      DOB: '',
-      city: '',
-      state: '',
-      nationality: '',
-      patienCategory: null,
-      attendeeName: '',
-      attendeePhone: null,
-      attendeeRelation: '',
-      addharNo: '',
+    name: '',
+    age: null,
+    gender: '',
+    pinCode: '',
+    phone: null,
+    email: '',
+    permanentAddress: '',
+    whatsApp: null,
+    DOB: '',
+    city: '',
+    state: '',
+    nationality: '',
+    patienCategory: null,
+    attendeeName: '',
+    attendeePhone: null,
+    attendeeRelation: '',
+    addharNo: '',
   });
 
 
-   function cheakfield()
-  {
+  function cheakfield() {
 
-     const errors={};
+    const errors = {};
 
-     // Step 1
-     if(currentStep == 1){
-       if(!patientData.name) errors.name ="Patient Name is Required"
-       if(!patientData.DOB) errors.DOB ="Patient DOB is Required"
-       if(!patientData.age) errors.age ="Patient age is Required"
-       if(!patientData.city) errors.city ="Patien.city is Required"
-       if(!patientData.gender) errors.gender ="Patient gender is Required"
-       if(!patientData.phone) errors.phone ="Patient phone is Required"
-       if(patientData.phone && patientData.phone.length !== 10) errors.phone ="Patient Contact Number must be 10 digit "
-       if(!patientData.pinCode) errors.pinCode ="Patient Name is Required"
-       if(!patientData.permanentAddress) errors.permanentAddress ="Patient Address is Required"
-       if(!patientData.nationality) errors.nationality ="Patient Nationality is Required"
-       if(!patientData.state) errors.state ="Patient Name is Required"
-       if(!patientData.addharNo) errors.addharNo = "Patient Aadhar Number is required"
-       if(patientData.addharNo && patientData.addharNo.length !== 12) errors.addharNo = "Patient Aadhar Number must be 12 digit"
-       if(!aadhaarFront) errors.aadhaarFront ="Patient Aadhar Front Image is required"
-       if(!aadhaarBack) errors.aadhaarBack ="Patient Aadhar Back Image is required"
-     }
+    // Step 1
+    if (currentStep == 1) {
+      if (!patientData.name) errors.name = "Patient Name is Required"
+      if (!patientData.DOB) errors.DOB = "Patient DOB is Required"
+      if (!patientData.age) errors.age = "Patient age is Required"
+      if (!patientData.city) errors.city = "Patien.city is Required"
+      if (!patientData.gender) errors.gender = "Patient gender is Required"
+      if (!patientData.phone) errors.phone = "Patient phone is Required"
+      if (patientData.phone && patientData.phone.length !== 10) errors.phone = "Patient Contact Number must be 10 digit "
+      if (!patientData.pinCode) errors.pinCode = "Patient Name is Required"
+      if (!patientData.permanentAddress) errors.permanentAddress = "Patient Address is Required"
+      if (!patientData.nationality) errors.nationality = "Patient Nationality is Required"
+      if (!patientData.state) errors.state = "Patient Name is Required"
+      if (!patientData.addharNo) errors.addharNo = "Patient Aadhar Number is required"
+      if (patientData.addharNo && patientData.addharNo.length !== 12) errors.addharNo = "Patient Aadhar Number must be 12 digit"
+      if (!aadhaarFront) errors.aadhaarFront = "Patient Aadhar Front Image is required"
+      if (!aadhaarBack) errors.aadhaarBack = "Patient Aadhar Back Image is required"
+    }
 
-     if( currentStep == 2){
-      if(!patientData.attendeeName) errors.attendeeName ="Aattendee Name is required "
-      if(!patientData.attendeePhone) errors.attendeePhone ="Aattendee Contact Number  is required "
-      if(patientData.attendeePhone && patientData.attendeePhone.length !== 10) errors.attendeePhone ="Aattendee Contact Number must be 10 digit "
-      if(!patientData.attendeeRelation) errors.attendeeRelation ="Aattendee Relation is required "
-     }
+    if (currentStep == 2) {
+      if (!patientData.attendeeName) errors.attendeeName = "Aattendee Name is required "
+      if (!patientData.attendeePhone) errors.attendeePhone = "Aattendee Contact Number  is required "
+      if (patientData.attendeePhone && patientData.attendeePhone.length !== 10) errors.attendeePhone = "Aattendee Contact Number must be 10 digit "
+      if (!patientData.attendeeRelation) errors.attendeeRelation = "Aattendee Relation is required "
+    }
 
-     setErrors(errors)
+    setErrors(errors)
 
-     return Object.keys(errors).length == 0;
+    return Object.keys(errors).length == 0;
 
   }
 
@@ -481,14 +481,17 @@ const Patientregisteration = () => {
 
                   <div>
                     <label>Nationality</label>
-                    <input
-                      type="text"
-                      value={patientData.nationality}
-                      onChange={(e) => setPatientData({
-                        ...patientData,
-                        nationality: e.target.value
-                      })}
-                    />
+                    <select value={patientData.nationality} onChange={(e) => setPatientData({
+                      ...patientData,
+                      nationality: e.target.value
+                    })}>
+                      <option value="">Select_Nationality</option>
+                      <option value="Indian">Indian</option>
+                      <option value="NRI">NRI (Non-Resident Indian)</option>
+                      <option value="Foreign National">Foreign National</option>
+                      <option value="OCI">OCI (Overseas Citizen of India)</option>
+                      <option value="PIO">PIO (Person of Indian Origin)</option>
+                    </select>
                     {errors.nationality && <label style={{ color: "red", marginTop: "5px" }}>{errors.nationality}</label>}
 
                   </div>
@@ -529,14 +532,28 @@ const Patientregisteration = () => {
                 <div className="distance">
                   <div>
                     <label>State *</label>
-                    <input
+                    <select
                       type="text"
                       value={patientData.state}
                       onChange={(e) => setPatientData({
                         ...patientData,
                         state: e.target.value
                       })}
-                    />
+                      style={{
+
+                        width: "100%",
+                        padding: '7px',
+                        borderRadius: '7px',
+                        color: 'black',
+                        fontsize: "12.5px",
+                        border: "1px solid lightgray",
+                      }}
+                      name="" id="">
+                      <option value="">Select_State</option>
+                      {IndianStates.map((s, i) => {
+                        return <option key={i} value={s}>{s}</option>
+                      })}
+                    </select>
                     {errors.state && <label style={{ color: "red", marginTop: "5px" }}>{errors.state}</label>}
 
                   </div>
@@ -564,7 +581,7 @@ const Patientregisteration = () => {
                         type="file"
                         onChange={(e) => setAadhaarFront(e.target.files[0])}
                       />
-                    {errors.aadhaarFront && <label style={{ color: "red", marginTop: "5px" }}>{errors.aadhaarFront}</label>}
+                      {errors.aadhaarFront && <label style={{ color: "red", marginTop: "5px" }}>{errors.aadhaarFront}</label>}
 
                     </div>
 
@@ -574,7 +591,7 @@ const Patientregisteration = () => {
                         type="file"
                         onChange={(e) => setAadhaarBack(e.target.files[0])}
                       />
-                    {errors.aadhaarBack && <label style={{ color: "red", marginTop: "5px" }}>{errors.aadhaarBack}</label>}
+                      {errors.aadhaarBack && <label style={{ color: "red", marginTop: "5px" }}>{errors.aadhaarBack}</label>}
 
                     </div>
                   </div>
@@ -604,7 +621,7 @@ const Patientregisteration = () => {
 
 
           {/* Step 2 — Basic Details */}
-           {currentStep == 2 && (
+          {currentStep == 2 && (
             <div className="patient-step-2">
               <h4>Attendee Details</h4>
               <form>
@@ -612,11 +629,11 @@ const Patientregisteration = () => {
                   <div >
                     <label htmlFor="">Name *</label>
                     <input type="text"
-                    value={patientData?.attendeeName} placeholder="Attendee Name"
-                     onChange={(e) => setPatientData({
-                      ...patientData,
-                      attendeeName: e.target.value
-                   })} />
+                      value={patientData?.attendeeName} placeholder="Attendee Name"
+                      onChange={(e) => setPatientData({
+                        ...patientData,
+                        attendeeName: e.target.value
+                      })} />
                     {errors.attendeeName && <label style={{ color: "red", marginTop: "5px" }}>{errors.attendeeName}</label>}
 
                   </div>
@@ -632,11 +649,35 @@ const Patientregisteration = () => {
                 </div>
                 <div >
                   <label htmlFor="">Relation with Patient</label>
-                  <input onChange={(e) => setPatientData({
+                  <select style={{
+
+                    width: "100%",
+                    padding: '7px',
+                    borderRadius: '7px',
+                    color: 'black',
+                    fontsize: "12.5px",
+                    border: "1px solid lightgray",
+                  }} value={patientData?.attendeeRelation} name="relationWithPatient" onChange={(e) => setPatientData({
                     ...patientData,
                     attendeeRelation: e.target.value
-                  })} type="text" value={patientData?.attendeeRelation} placeholder="Father/Mother/Gurdian/etc." />
-                    {errors.attendeeRelation && <label style={{ color: "red", marginTop: "5px" }}>{errors.attendeeRelation}</label>}
+                  })}>
+                    <option value="">Select Relation</option>
+                    <option value="Father">Father</option>
+                    <option value="Mother">Mother</option>
+                    <option value="Husband">Husband</option>
+                    <option value="Wife">Wife</option>
+                    <option value="Son">Son</option>
+                    <option value="Daughter">Daughter</option>
+                    <option value="Brother">Brother</option>
+                    <option value="Sister">Sister</option>
+                    <option value="Grandfather">Grandfather</option>
+                    <option value="Grandmother">Grandmother</option>
+                    <option value="Uncle">Uncle</option>
+                    <option value="Aunt">Aunt</option>
+                    <option value="Guardian">Guardian</option>
+                    <option value="Other">Other</option>
+                  </select>
+                  {errors.attendeeRelation && <label style={{ color: "red", marginTop: "5px" }}>{errors.attendeeRelation}</label>}
 
                 </div>
               </form>
@@ -757,7 +798,7 @@ const Patientregisteration = () => {
                   const val = cheakfield()
                   if (currentStep < 3 && val) {
                     setCurrentStep(currentStep + 1);
-                  } else if( currentStep ===3) {
+                  } else if (currentStep === 3) {
 
                     handleSubmit(e);
                   }

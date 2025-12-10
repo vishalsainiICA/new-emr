@@ -75,7 +75,6 @@ option,
 textarea,
 input {
     outline: none;
-    cursor: pointer;
     background-color: white;
 }
 

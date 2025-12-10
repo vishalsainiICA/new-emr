@@ -54,9 +54,8 @@ const ViewHospital = () => {
         seteditPaDetail(!editPaDetail);
         setshowPaDetail(!showPaDetail);
     }
-    const cancelPAdetail = ()=>
-    {
-          
+    const cancelPAdetail = () => {
+
     }
     // const savePAdetail = ()=>
     // {
@@ -998,20 +997,15 @@ const ViewHospital = () => {
 
                                                         <div style={{ display: "flex", gap: "10px" }}>
 
-                                                            {dep.doctors?.length > 0 && (
-                                                                <i
-                                                                    className="ri-edit-box-line"
-                                                                    onClick={() => setAddDoc({ type: "edit", depIndex: i })}
-                                                                ></i>
-                                                            )}
-
                                                             {
                                                                 addDoc && addDoc.depIndex === i ? (
                                                                     // When a modal is open for this department
-                                                                    <i
-                                                                        className="ri-close-large-line"
-                                                                        onClick={() => setAddDoc(null)}
-                                                                    ></i>
+                                                                    <>
+                                                                        <button className="common-btn" onClick={() => handleAddDoctor(i)}>Save</button>
+                                                                        <i
+                                                                            className="ri-close-large-line"
+                                                                            onClick={() => setAddDoc(null)}
+                                                                        ></i> </>
                                                                 ) : (
                                                                     // Normal controls when no modal is open
                                                                     <>
@@ -1189,6 +1183,54 @@ const ViewHospital = () => {
                                                                     </label>
                                                                 </div>
 
+                                                            </div>
+
+                                                        )
+
+                                                    }
+
+
+                                                    {addDoc &&
+                                                        addDoc.type === "edit" &&
+                                                        addDoc.depIndex === i && (
+
+                                                            <div className="editcard">
+
+                                                                {
+                                                                    departments[i]?.doctors?.map((doc, i) => {
+                                                                        return <div key={i} className="editdep">
+                                                                            <div style={{
+                                                                                display: 'flex',
+                                                                                justifyContent: 'space-between'
+                                                                            }}>
+                                                                                <h5>doctor:{i + 1}</h5>
+                                                                                <i class="ri-delete-bin-7-line" onClick={() => {
+                                                                                    // const updatedDoctors = hospitalData.supportedDepartments[edit]?.doctors?.filter((_, idx) => idx !== i)
+                                                                                    // const updatedDepartments = [...hospitalData.supportedDepartments]
+                                                                                    // updatedDepartments[edit].doctors = updatedDoctors
+
+                                                                                    // setHospitalData((prev) => ({
+                                                                                    //     ...prev,
+                                                                                    //     supportedDepartments: updatedDepartments
+                                                                                    // }))
+
+                                                                                }}></i>
+                                                                            </div>
+                                                                            <div style={{
+                                                                                display: 'flex',
+                                                                                justifyContent: 'space-between',
+                                                                                gap: '10px'
+                                                                            }}>
+                                                                                <input type="text" onChange={(e) => handelDoctorChange(edit, i, "doctorName", e.target.value)} value={doc?.doctorName} />
+                                                                                <input type="text" onChange={(e) => handelDoctorChange(edit, i, "email", e.target.value)} value={doc?.email} />
+                                                                                <input type="text" onChange={(e) => handelDoctorChange(edit, i, "contact", e.target.value)} value={doc?.contact} />
+                                                                                <input type="text" onChange={(e) => handelDoctorChange(edit, i, "experience", e.target.value)} value={doc?.experience} />
+                                                                                <input type="text" onChange={(e) => handelDoctorChange(edit, i, "qualification", e.target.value)} value={doc?.qualification} />
+                                                                            </div>
+
+                                                                        </div>
+                                                                    })
+                                                                }
                                                             </div>
 
                                                         )
@@ -1396,7 +1438,7 @@ const ViewHospital = () => {
                 alignItems: 'center',
                 backdropFilter: 'blur(10px)',
                 backgroundColor: 'rgba(19, 5, 5, 0.6)',
-             }}>
+            }}>
                 <div className="editcards">
 
                     <div style={{
@@ -1405,7 +1447,7 @@ const ViewHospital = () => {
                         marginBottom: '20px',
                         borderRadius: '50%',
                         // backgroundColor:'red',
-                        padding:"10px",
+                        padding: "10px",
                     }}>
                         <h4>{edit?.name} Profile</h4>
                         <i class="ri-close-large-line" style={{
@@ -1497,9 +1539,9 @@ const ViewHospital = () => {
                                             </div>
 
 
-                                        </div>
-                                           <div className="PaEditdetail">
-                                            <div>
+                                            </div>
+                                            <div className="PaEditdetail">
+                                                <div>
 
                                             <label htmlFor="">Gender</label>
                                             <select name="" style={{height:"33px",border :"0.2px solid lightgray",borderRadius:"7px"}} value={editTemp?.gender || "N/A"}
