@@ -195,7 +195,9 @@ const HospitalManagement = () => {
                     )}
 
                     {!isProcessing && !error && Array.isArray(filterHospital) && filterHospital.length > 0 && filterHospital.map((hos, i) => (
-                        <div key={i}
+                        <div
+                            onDoubleClick={() => navigate("/super-admin/view-hospital", { state: { hospital: hos } })}
+                            key={i}
                             className="customCard hover "
                             style={{
                                 maxHeight: '290px'

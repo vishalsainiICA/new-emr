@@ -213,6 +213,15 @@ const ViewHospital = () => {
                 toast.success(`PA Added for ${assinDoctor?.name}`);
                 setAssignDoctor(null);
                 setRefresh(prev => !prev);
+                setDoctorData({
+                    doctorName: "",
+                    email: "",
+                    contact: "",
+                    experience: "",
+                    qualification: "",
+                    docId: null,
+                    hosId: null
+                })
             }
         } catch (err) {
             console.log(err);
@@ -342,12 +351,12 @@ const ViewHospital = () => {
                     justifyContent: 'space-between',
                     width: '100%'
                 }}>
-                    <h4>Revenue</h4>
+                    <h4>Total Revenue</h4>
                     <p style={{
                         fontSize: '12px'
-                    }}>👨‍⚕️</p>
+                    }}>💰</p>
                 </div>
-                <h2>{hospital?.totalRevenue || "0"}</h2>
+                <h2>₹ {hospital?.totalRevenue || "0"}</h2>
 
             </div>
 
@@ -553,8 +562,8 @@ const ViewHospital = () => {
                                     }}
                                 >
                                     <span className="logo">{doc?.name.slice(0, 1).toUpperCase()}</span>
-                                    <div onClick={() =>{setEdit(doc); setEditTemp(doc?.personalAssitantId)}}>
-                                        <p style={{ margin: 0 }}>{doc?.name}</p>
+                                    <div onClick={() => { setEdit(doc); setEditTemp(doc?.personalAssitantId) }}>
+                                        <p style={{ margin: 0 }}>Dr. {doc?.name}</p>
                                         <h5 style={{ color: 'blue' }}>{`${doc.email || "N/A"}`}</h5>
                                     </div>
 
@@ -1449,7 +1458,7 @@ const ViewHospital = () => {
                         // backgroundColor:'red',
                         padding: "10px",
                     }}>
-                        <h4>{edit?.name} Profile</h4>
+                        <h4>Dr. {edit?.name} Profile</h4>
                         <i class="ri-close-large-line" style={{
                             cursor: "pointer"
                         }} onClick={() => {
@@ -1463,8 +1472,8 @@ const ViewHospital = () => {
                                 <img src={userDefaultImage} alt="" />
                             </div>
                             <div className="docbasicdetails">
-                                <label htmlFor="">Name <p>{edit?.name}</p></label>
-                                <label htmlFor="">Gender <p>{edit?.gender || "N/A"}</p></label>
+                                <label htmlFor="">Name <p>Dr. {edit?.name}</p></label>
+                                <label htmlFor="">Gender <p>{edit?.gender || "Male"}</p></label>
                                 <label htmlFor="">Email <p>{edit?.email}</p></label>
                                 <label htmlFor="">Experience <p>{edit?.experience}</p></label>
                                 <label htmlFor="">Qualification <p>{edit?.qualification}</p></label>
@@ -1485,20 +1494,20 @@ const ViewHospital = () => {
                                         gap: '10px'
                                     }}>
 
-                                         { showPaDetail &&
-                                           <>
-                                             <button className="regular-btn" onClick={editPA} disabled={isProcessing}> <i class="ri-edit-box-line" ></i>Edit</button>
-                                             <button onClick={() => handleRemovePa(edit?.personalAssitantId?._id)} className="regular-btn" disabled={isProcessing}><i class="ri-delete-bin-7-line"  ></i>{`${isProcessing ? "removing..." : "Remove"}`} </button>
-                                           </>
-                                         }
-                                         { editPaDetail &&
-                                           <>
-                                             <button className="regular-btn" onClick={()=>{editPA();setEditTemp(edit?.personalAssitantId)}} >Cancel</button>
-                                             {/* <button  className="regular-btn" onClick={()=>{editPA();setEdit((prev)=>( {...prev ,{prev.personalAssitantId:editTemp} }))}}>Save </button>   */}
-                                             <button className="regular-btn"onClick={() => { editPA(); setEdit(prev => ({...prev,    personalAssitantId: editTemp }));}}> Save</button>
+                                        {showPaDetail &&
+                                            <>
+                                                <button className="regular-btn" onClick={editPA} disabled={isProcessing}> <i class="ri-edit-box-line" ></i>Edit</button>
+                                                <button onClick={() => handleRemovePa(edit?.personalAssitantId?._id)} className="regular-btn" disabled={isProcessing}><i class="ri-delete-bin-7-line"  ></i>{`${isProcessing ? "removing..." : "Remove"}`} </button>
+                                            </>
+                                        }
+                                        {editPaDetail &&
+                                            <>
+                                                <button className="regular-btn" onClick={() => { editPA(); setEditTemp(edit?.personalAssitantId) }} >Cancel</button>
+                                                {/* <button  className="regular-btn" onClick={()=>{editPA();setEdit((prev)=>( {...prev ,{prev.personalAssitantId:editTemp} }))}}>Save </button>   */}
+                                                <button className="regular-btn" onClick={() => { editPA(); setEdit(prev => ({ ...prev, personalAssitantId: editTemp })); }}> Save</button>
 
-                                           </>
-                                         }
+                                            </>
+                                        }
                                     </div>
                                 </div>
                                 {showPaDetail &&
@@ -1507,77 +1516,86 @@ const ViewHospital = () => {
                                             <img src={userDefaultImage} alt="" />
                                         </div>
                                         <div className="paBasicDetails">
-                                            <label htmlFor="">Name  <p>{edit?.personalAssitantId?.name}</p></label>
-                                            <label htmlFor="">Gender <p>{edit?.personalAssitantId?.gender || "N/A"}</p></label>
+                                            <label htmlFor="">Name  <p>Dr. {edit?.personalAssitantId?.name}</p></label>
+                                            <label htmlFor="">Gender <p>{edit?.personalAssitantId?.gender || "Male"}</p></label>
                                             <label htmlFor="">Email <p>{edit?.personalAssitantId?.email}</p></label>
                                             <label htmlFor="">Experience <p>{edit?.personalAssitantId?.experience}</p></label>
                                             <label htmlFor="">Qualification <p>{edit?.personalAssitantId?.qualification}</p></label>
                                         </div>
                                     </div>
                                 }
-                                {}
+                                { }
                                 {editPaDetail &&
-                               
+
                                     <div className="pawithImage">
                                         <div className="paImage">
                                             <img src={userDefaultImage} alt="" />
                                         </div>
                                         <div className="paBasicDetails">
-                                           <div className="PaEditdetail">
-                                            <div>
-                                            <label htmlFor="">Name</label>
-                                            <input type="text" value={editTemp?.name} onChange={(e) => setEditTemp({
-                                                ...editTemp,name: e.target.value
-                                                                                            })} />
-                                            </div>
-                                             <div>
+                                            <div className="PaEditdetail">
+                                                <div>
+                                                    <label htmlFor="">Name</label>
+                                                    <input type="text" value={editTemp?.name} onChange={(e) => setEditTemp({
+                                                        ...editTemp, name: e.target.value
+                                                    })} />
+                                                </div>
+                                                <div>
 
-                                            <label htmlFor="">Email</label>
-                                            <input type="email" value={editTemp?.email} onChange={(e)=>{setEditTemp({...editTemp
-                                                ,email:e.target.value
-                                            })}}/>
-                                            </div>
+                                                    <label htmlFor="">Email</label>
+                                                    <input type="email" value={editTemp?.email} onChange={(e) => {
+                                                        setEditTemp({
+                                                            ...editTemp
+                                                            , email: e.target.value
+                                                        })
+                                                    }} />
+                                                </div>
 
 
                                             </div>
                                             <div className="PaEditdetail">
                                                 <div>
 
-                                            <label htmlFor="">Gender</label>
-                                            <select name="" style={{height:"33px",border :"0.2px solid lightgray",borderRadius:"7px"}} value={editTemp?.gender || "N/A"}
-                                            onChange={(e)=>{setEditTemp({
-                                                ...editTemp,gender:e.target.value
-                                            })}}>
-                                                <option >Select Gender</option>
-                                                <option >Male</option>
-                                                <option >Female</option>
-                                                <option >Other</option>
-                                            </select>
-                                            </div>
-                                            <div>
+                                                    <label htmlFor="">Gender</label>
+                                                    <select name="" style={{ height: "33px", border: "0.2px solid lightgray", borderRadius: "7px" }} value={editTemp?.gender || "N/A"}
+                                                        onChange={(e) => {
+                                                            setEditTemp({
+                                                                ...editTemp, gender: e.target.value
+                                                            })
+                                                        }}>
+                                                        <option >Select Gender</option>
+                                                        <option >Male</option>
+                                                        <option >Female</option>
+                                                        <option >Other</option>
+                                                    </select>
+                                                </div>
+                                                <div>
 
-                                            <label htmlFor="">Experience</label>
-                                            <input type="number" value={editTemp?.experience}onChange={(e)=>{setEditTemp({
-                                                ...editTemp,experience:e.target.value
-                                            })}} />
-                                            </div>
-                                         </div
-                                         >
-                                            <div style={{display:"flex",flexDirection:"column",}}>
+                                                    <label htmlFor="">Experience</label>
+                                                    <input type="number" value={editTemp?.experience} onChange={(e) => {
+                                                        setEditTemp({
+                                                            ...editTemp, experience: e.target.value
+                                                        })
+                                                    }} />
+                                                </div>
+                                            </div
+                                            >
+                                            <div style={{ display: "flex", flexDirection: "column", }}>
 
-                                            <label htmlFor="">Qualification</label>
-                                            <select style={{height:"33px",border :"0.2px solid lightgray",borderRadius:"7px"}} value={editTemp?.qualification}onChange={(e)=>{setEditTemp({
-                                                ...editTemp,qualification:e.target.value
-                                            })}}>
-                                                <option >Select-Qulification</option>
-                                                <option >Post-graduation</option>
-                                                <option >Graduation</option>
-                                            </select>
+                                                <label htmlFor="">Qualification</label>
+                                                <select style={{ height: "33px", border: "0.2px solid lightgray", borderRadius: "7px" }} value={editTemp?.qualification} onChange={(e) => {
+                                                    setEditTemp({
+                                                        ...editTemp, qualification: e.target.value
+                                                    })
+                                                }}>
+                                                    <option >Select-Qulification</option>
+                                                    <option >Post-graduation</option>
+                                                    <option >Graduation</option>
+                                                </select>
                                             </div>
 
                                         </div>
-                                            {/* <button onClick={ cancelPAdetail}>Cancel</button> */}
-                                            {/* <button onClick={ editPA}>Save</button> */}
+                                        {/* <button onClick={ cancelPAdetail}>Cancel</button> */}
+                                        {/* <button onClick={ editPA}>Save</button> */}
                                     </div>
                                 }
                             </div>
@@ -1602,6 +1620,6 @@ const ViewHospital = () => {
     </div >
 
 
-}
+    }
 
 export default ViewHospital

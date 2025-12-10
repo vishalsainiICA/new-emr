@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import { FaCableCar } from "react-icons/fa6";
 import { commonApi, doctorAPi } from "../../../auth";
-import { ActivityTimeline } from "../../Utility/PatientHistory__Labtest";
+import { ActivityTimeline, Patient_Hisotry } from "../../Utility/PatientHistory__Labtest";
 import { toast } from "react-toastify";
 
 
@@ -31,6 +31,7 @@ const DashBoard = () => {
     const [refresh, setrefresh] = useState(false)
     const [changePassword, setChangePassword] = useState(false)
     const [timeline, setimeline] = useState([]);
+    const [open, setClose] = useState(false)
     const [password, setpassword] = useState({
         old: "",
         new: ""
@@ -399,7 +400,7 @@ const DashBoard = () => {
                                                         borderRadius: "10px",
                                                     }}
                                                 >
-                                                    {hos?.status}
+                                                    {hos?.prescribtionId ? "Rxdone" : hos?.status}
                                                 </p>
                                             </div>
                                             <p style={{}}>{`${hos?.gender?.toLowerCase() || "N/A"} , ${hos?.age || "N/A"} `}</p>
@@ -424,18 +425,17 @@ const DashBoard = () => {
                                         }}>
                                             {hos?.prescribtionId ? (
 
-                                                <p
-                                                    style={{
-                                                        color: 'green',
-                                                        backgroundColor: 'lightgreen',
-                                                        padding: "5px",
-                                                        borderRadius: "10px",
-                                                        width: "150px",
-                                                        textAlign: "center"
-                                                    }}
-                                                >
-                                                    Prescbrtion Done
-                                                </p>
+                                                <>
+                                                    <button
+                                                        onClick={() => setClose(hos)}
+                                                        style={{
+                                                            backgroundColor: 'rgba(219, 219, 252)',
+                                                            marginRight: '20px'
+                                                        }}> 👁️ View</button>
+
+                                                </>
+
+
                                             ) : hos.status === "Cancel" ? (
                                                 /* ----------------------------------------
                                                    CASE: CANCELLED → No actions
@@ -477,7 +477,7 @@ const DashBoard = () => {
                                                             onClick={() => navigate('/medication', { state: { patient: hos } })}
                                                             style={{
                                                                 backgroundColor: 'rgba(219, 219, 252)',
-                                                            }}> 👁️ View</button>
+                                                            }}>Medication</button>
 
                                                         <button
                                                             onClick={() => setEdit(edit === hos._id ? null : hos._id)}
@@ -687,63 +687,77 @@ const DashBoard = () => {
             </div>
 
         </div>
-        {showPostponeModal && (
-            <div className="modal">
-                <div className="modal-box">
-                    <h3>Postpone Appointment of {showPostponeModal?.name}</h3>
+        {
+            showPostponeModal && (
+                <div className="modal">
+                    <div className="modal-box">
+                        <h3>Postpone Appointment of {showPostponeModal?.name}</h3>
 
-                    <label>New Date & Time:</label>
-                    <input
-                        type="datetime-local"
-                        value={newDate}
-                        onChange={(e) => setNewDate(e.target.value)}
-                    />
+                        <label>New Date & Time:</label>
+                        <input
+                            type="datetime-local"
+                            value={newDate}
+                            onChange={(e) => setNewDate(e.target.value)}
+                        />
 
-                    <div className="modal-actions">
-                        <button className="regular-btn" onClick={() => setShowPostponeModal(null)}>Close</button>
-                        <button
-                            className="common-btn"
-                            onClick={() => {
-                                changePatientStatus(showPostponeModal?._id)
-                                setShowPostponeModal(null);
-                            }}
-                        >
-                            Save
-                        </button>
+                        <div className="modal-actions">
+                            <button className="regular-btn" onClick={() => setShowPostponeModal(null)}>Close</button>
+                            <button
+                                className="common-btn"
+                                onClick={() => {
+                                    changePatientStatus(showPostponeModal?._id)
+                                    setShowPostponeModal(null);
+                                }}
+                            >
+                                Save
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        )}
-        {showCancelModal && (
-            <div className="modal">
-                <div className="modal-box">
-                    <h3>Cancel Appointment of {showCancelModal?.name}</h3>
+            )
+        }
+        {
+            showCancelModal && (
+                <div className="modal">
+                    <div className="modal-box">
+                        <h3>Cancel Appointment of {showCancelModal?.name}</h3>
 
-                    <label>Reason for cancellation:</label>
-                    <br />
-                    <br />
-                    <textarea
-                        placeholder="Enter reason..."
-                        value={cancelReason}
-                        onChange={(e) => setCancelReason(e.target.value)}
-                    ></textarea>
+                        <label>Reason for cancellation:</label>
+                        <br />
+                        <br />
+                        <textarea
+                            placeholder="Enter reason..."
+                            value={cancelReason}
+                            onChange={(e) => setCancelReason(e.target.value)}
+                        ></textarea>
 
-                    <div className="modal-actions">
-                        <button className="regular-btn" onClick={() => setShowCancelModal(null)}>Close</button>
-                        <button
-                            className="common-btn"
-                            onClick={() => {
+                        <div className="modal-actions">
+                            <button className="regular-btn" onClick={() => setShowCancelModal(null)}>Close</button>
+                            <button
+                                className="common-btn"
+                                onClick={() => {
 
-                                changePatientStatus(showCancelModal?._id)
-                                setShowCancelModal(null)
-                            }}
-                        >
-                            Confirm Cancel
-                        </button>
+                                    changePatientStatus(showCancelModal?._id)
+                                    setShowCancelModal(null)
+                                }}
+                            >
+                                Confirm Cancel
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        )}
+            )
+        }
+
+
+        {
+            open && (
+                <div className="patientHistory">
+                    <Patient_Hisotry patient={open} onclose={() => setClose(false)} ></Patient_Hisotry>
+                    {/* <LabTest selectedLabTest={selectedLabTest} setselectedLabTest={setselectedLabTest} labTest={labtestResult} labTestError={labTestError} labTestloading={labTestloading} onclose={() => setClose(false)} ></LabTest> */}
+                </div>
+            )
+        }
 
 
     </div >

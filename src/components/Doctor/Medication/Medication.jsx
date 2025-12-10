@@ -629,9 +629,10 @@ const Medication = () => {
                     <div style={{
                         display: 'flex',
                         gap: '10px',
-                        alignItems: 'center',
+                        height: '250px',
+
                     }}>
-                        <div>
+                        <div >
                             <h5>Illness/Daignosis</h5>
                             <input type="search" onChange={handleChange} placeholder="type illness" value={searchTerm} />
                             {filteredIllness.length > 0 && searchTerm.trim() !== "" && (

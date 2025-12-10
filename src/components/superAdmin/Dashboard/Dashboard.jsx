@@ -269,10 +269,14 @@ const Dashboard = () => {
                                                     fontSize: "12px"
                                                 }}>ID: H-00{i + 1} • Schemes: <a style={{
                                                     color: "blue"
-                                                }}>{hos?.patientCategories?.join(",")}</a>  • Md: {hos?.medicalDirector?.name}</span>
+                                                }}>{hos?.patientCategories?.join(",")}</a>  • Md: Dr.{hos?.medicalDirector?.name}</span>
                                             </div>
                                         </div>
-                                        <p>Revenue:{hos?.totalRevenue}</p>
+                                        <p style={{
+                                            width: '120px',
+                                            fontSize: '14px',
+                                            fontWeight: 'bold'
+                                        }} >Revenue: ₹{hos?.totalRevenue}</p>
                                     </div>
                                 ))}
                             </div>
@@ -301,14 +305,14 @@ const Dashboard = () => {
                     {/* Patient Load */}
                     <div className="Network-card">
                         <span>Patient Load</span>
-                        <h4>{getMetricValue("Total Patient")} Total</h4>
+                        <h4>{Number(getMetricValue("Total MalePatient")) + Number(getMetricValue("Total FemalePatient"))} Total</h4>
                         <p>15% increase this quarter</p>
                     </div>
 
                     {/* Revenue Stream */}
                     <div className="Network-card">
-                        <span>Revenue Stream</span>
-                        <h4>₹{getMetricValue("Total Revenue")} Monthly</h4>
+                        <span>Today Revenue</span>
+                        <h4>₹{getMetricValue("Total Revenue")}</h4>
                         {/* <p>22% growth rate</p>  <-- If you want to hide growth line */}
                     </div>
 
@@ -435,7 +439,7 @@ const Dashboard = () => {
                     </div>
                     <br />
                     {changePassword == false && (
-                        
+
                         <label htmlFor="">
                             <button className="main-button" onClick={() => setChangePassword(true)}>Change Password</button>
                         </label>
@@ -446,7 +450,7 @@ const Dashboard = () => {
 
                         changePassword == true && (
                             <>
-                            
+
                                 <label htmlFor="oldpassword">Old Password  <input value={password?.old} type="password" onChange={(e) =>
                                     setpassword(prev => ({
                                         ...prev,

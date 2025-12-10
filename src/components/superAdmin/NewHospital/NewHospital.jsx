@@ -130,94 +130,91 @@ export const NewHospital = () => {
     });
 
 
-  const [doctorDetail,setDoctordetail]=useState(null)
+    const [doctorDetail, setDoctordetail] = useState(null)
 
     // ================= REGEX ==================
 
-// Hospital
-// const nameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;?
+    // Hospital
+    // const nameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;?
 
-const hospitalNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
-const cityRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
-const pinCodeRegex = /^[1-9][0-9]{5}$/;
-const addressRegex = /^[A-Za-z0-9\s,./#-]+$/;
-const categoryRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
+    const hospitalNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
+    const cityRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
+    const pinCodeRegex = /^[1-9][0-9]{5}$/;
+    const addressRegex = /^[A-Za-z0-9\s,./#-]+$/;
+    const categoryRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
 
-// Director
-const directorNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
-const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
-const contactRegex = /^[6-9][0-9]{9}$/;
-const experienceRegex = /^(?:[1-9]|[1-9][0-9])$/;
+    // Director
+    const directorNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
+    const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    const contactRegex = /^[6-9][0-9]{9}$/;
+    const experienceRegex = /^(?:[1-9]|[1-9][0-9])$/;
 
-// Doctor
-const doctorNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
-const doctorEmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
-const doctorContactRegex = /^[6-9][0-9]{9}$/;
-const qualificationRegex = /^[A-Za-z.\s]+$/;
-const feesRegex = /^[1-9][0-9]{2,4}$/;
+    // Doctor
+    const doctorNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
+    const doctorEmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    const doctorContactRegex = /^[6-9][0-9]{9}$/;
+    const qualificationRegex = /^[A-Za-z.\s]+$/;
+    const feesRegex = /^[1-9][0-9]{2,4}$/;
 
-// Department
-const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
+    // Department
+    const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
 
 
 
-    const checkfield=()=>{
+    const checkfield = () => {
 
-        const errors ={}
+        const errors = {}
         // step 1 Validation
-      if( currentStep==1)
-      {
-          if (!hospitalData.name) errors.name ="Hospital Name is required"
-          if (hospitalData.name && !hospitalNameRegex.test(hospitalData.name)){errors.name = "Only alphabets allowed";}
-          if (!hospitalData.state) errors.state =" state is required"
-          if (!hospitalData.city) errors.city ="City is required"
-          if (hospitalData.city && !cityRegex.test(hospitalData.city)) {errors.city = "Only alphabets";}
-          if (!hospitalData.pinCode) errors.pinCode =" pinCode is required"
-          if (hospitalData.pinCode && !pinCodeRegex.test(hospitalData.pinCode)) {errors.pinCode = "Invalid Pincode (6 digits)";}
-          if (!hospitalData.address) errors.address =" address is required"
-        //   if (!addressRegex.test(hospitalData.address)) {errors.address = "Invalid address format";}
-          if (hospitalData.patientCategories?.length === 0) errors.patientCategories =" Patient Category  is required"
-        //    if (!categoryRegex.test(cat)) {errors.patientCategories = "Invalid category name";}
-      }
+        if (currentStep == 1) {
+            if (!hospitalData.name) errors.name = "Hospital Name is required"
+            if (hospitalData.name && !hospitalNameRegex.test(hospitalData.name)) { errors.name = "Only alphabets allowed"; }
+            if (!hospitalData.state) errors.state = " state is required"
+            if (!hospitalData.city) errors.city = "City is required"
+            if (hospitalData.city && !cityRegex.test(hospitalData.city)) { errors.city = "Only alphabets"; }
+            if (!hospitalData.pinCode) errors.pinCode = " pinCode is required"
+            if (hospitalData.pinCode && !pinCodeRegex.test(hospitalData.pinCode)) { errors.pinCode = "Invalid Pincode (6 digits)"; }
+            if (!hospitalData.address) errors.address = " address is required"
+            //   if (!addressRegex.test(hospitalData.address)) {errors.address = "Invalid address format";}
+            if (hospitalData.patientCategories?.length === 0) errors.patientCategories = " Patient Category  is required"
+            //    if (!categoryRegex.test(cat)) {errors.patientCategories = "Invalid category name";}
+        }
 
         // step 2 Validation
 
-       if( currentStep==2)
-        {
-          if(!hospitalData.medicalDirector?.name) errors.medicalDirectorName="Medical director Name is required"
-          if(hospitalData.medicalDirector?.name && !directorNameRegex.test(hospitalData.medicalDirector.name)) {errors.medicalDirectorName = "Only alphabets Allowed";}
-          if(!hospitalData.medicalDirector?.experience) errors.medicalDirectorExperience="Medical director Experience is required"
-          if(hospitalData.medicalDirector?.experience && !experienceRegex.test(hospitalData.medicalDirector.experience)) {errors.medicalDirectorExperience = "Invalid experience (1-99)";}
-          if(!hospitalData.medicalDirector?.contact) errors.medicalDirectorContact="Medical director contact is required"
-          if(hospitalData.medicalDirector?.contact && hospitalData.medicalDirector?.contact.length !==10) errors.medicalDirectorContact="Medical director Number Must be 10 digits"
-          if(!hospitalData.medicalDirector?.email) errors.medicalDirectorEmail="Medical director email is required"
-          if(hospitalData.medicalDirector?.email &&!gmailRegex.test(hospitalData.medicalDirector?.email)) { errors.medicalDirectorEmail = "Only Gmail address allowed"; }
-          // medical director Image Optional
-        //   if(!hospitalData.medicalDirector?.image) errors.medicalDirectorImage="Medical director Document  is required"
-     }
-       
-       if( currentStep ===3)
-       {
-         if(hospitalData.supportedDepartments.length === 0) errors.supportedDepartments="Please Select Department is Required"
-        //  if(hospitalData.supportedDepartments?.doctors?.length=== 0) errors.supportedDepartmentsdoctors="Please Add  One doctor  is Required"
-         
-        const hasDoctor = hospitalData.supportedDepartments.every(
-         (dep) => dep.doctors && dep.doctors.length > 0);
+        if (currentStep == 2) {
+            if (!hospitalData.medicalDirector?.name) errors.medicalDirectorName = "Medical director Name is required"
+            if (hospitalData.medicalDirector?.name && !directorNameRegex.test(hospitalData.medicalDirector.name)) { errors.medicalDirectorName = "Only alphabets Allowed"; }
+            if (!hospitalData.medicalDirector?.experience) errors.medicalDirectorExperience = "Medical director Experience is required"
+            if (hospitalData.medicalDirector?.experience && !experienceRegex.test(hospitalData.medicalDirector.experience)) { errors.medicalDirectorExperience = "Invalid experience (1-99)"; }
+            if (!hospitalData.medicalDirector?.contact) errors.medicalDirectorContact = "Medical director contact is required"
+            if (hospitalData.medicalDirector?.contact && hospitalData.medicalDirector?.contact.length !== 10) errors.medicalDirectorContact = "Medical director Number Must be 10 digits"
+            if (!hospitalData.medicalDirector?.email) errors.medicalDirectorEmail = "Medical director email is required"
+            if (hospitalData.medicalDirector?.email && !gmailRegex.test(hospitalData.medicalDirector?.email)) { errors.medicalDirectorEmail = "Only Gmail address allowed"; }
+            // medical director Image Optional
+            //   if(!hospitalData.medicalDirector?.image) errors.medicalDirectorImage="Medical director Document  is required"
+        }
 
-        if(!hasDoctor)errors.supportedDepartmentsdoctors = "Each department must have at least one doctor";  
-        
-    }
-    //    if( doctorDetail===3 && hospitalData.supportedDepartments.length !==0)
-    //      {
-    //       if(doctorDetail==1)
-    //       {if(!doctorData.doctorName) errors.doctorName ="Doctor name is required"
-    //       if(!doctorData.email) errors.doctorEmail ="Doctor Email is required"
-    //       if(!doctorData.experience) errors.doctorExperience ="Doctor Experience is required"
-    //       if(!doctorData.qualification) errors.doctorQualification ="Doctor Qualification is required"
-    //       if(!doctorData.contact) errors.doctorContact ="Doctor Contact Number is required"
-    //       if(!doctorData.appointmentFees) errors.doctorAppointmentFees ="Doctor Appointment Fee is required"  
-    //       const isTrue = hospitalData.supportedDepartments.some((item)=> item?.doctors?.length===0)
-    //      }}
+        if (currentStep === 3) {
+            if (hospitalData.supportedDepartments.length === 0) errors.supportedDepartments = "Please Select Department is Required"
+            //  if(hospitalData.supportedDepartments?.doctors?.length=== 0) errors.supportedDepartmentsdoctors="Please Add  One doctor  is Required"
+
+            const hasDoctor = hospitalData.supportedDepartments.every(
+                (dep) => dep.doctors && dep.doctors.length > 0);
+
+            if (!hasDoctor) errors.supportedDepartmentsdoctors = "Each department must have at least one doctor";
+
+        }
+        //    if( doctorDetail===3 && hospitalData.supportedDepartments.length !==0)
+        //      {
+        //       if(doctorDetail==1)
+        //       {if(!doctorData.doctorName) errors.doctorName ="Doctor name is required"
+        //       if(!doctorData.email) errors.doctorEmail ="Doctor Email is required"
+        //       if(!doctorData.experience) errors.doctorExperience ="Doctor Experience is required"
+        //       if(!doctorData.qualification) errors.doctorQualification ="Doctor Qualification is required"
+        //       if(!doctorData.contact) errors.doctorContact ="Doctor Contact Number is required"
+        //       if(!doctorData.appointmentFees) errors.doctorAppointmentFees ="Doctor Appointment Fee is required"  
+        //       const isTrue = hospitalData.supportedDepartments.some((item)=> item?.doctors?.length===0)
+        //      }}
 
 
         setErrors(errors);
@@ -583,6 +580,7 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                             width: '100%'
                         }} htmlFor="">Name *
                             <input
+                                prefix="Dr."
                                 value={hospitalData?.medicalDirector?.name}
                                 onChange={(e) => setHospitalData({
                                     ...hospitalData, medicalDirector: {
@@ -1112,7 +1110,7 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                             </h3>
                             <i
                                 // onClick={() => {{setDoctordetail(0); checkfield();} setAssignDoctor(null)}}
-                                onClick={() => { setAssignDoctor(null)}}
+                                onClick={() => { setAssignDoctor(null) }}
                                 className="ri-close-large-line"
                                 style={{ cursor: 'pointer', fontSize: '20px' }}
                             ></i>
@@ -1132,7 +1130,7 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                                     value={doctorData.doctorName}
                                     onChange={(e) => setDoctorData({ ...doctorData, doctorName: e.target.value })}
                                 />
-                    {errors.doctorName && <label style={{color:"red"}}>{errors.doctorName}</label>}
+                                {errors.doctorName && <label style={{ color: "red" }}>{errors.doctorName}</label>}
                             </label>
 
                             <label style={{ width: '100%' }}>
@@ -1143,7 +1141,7 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                                     value={doctorData.email}
                                     onChange={(e) => setDoctorData({ ...doctorData, email: e.target.value })}
                                 />
-                     {errors.doctorEmail && <label style={{color:"red"}}>{errors.doctorEmail}</label>}
+                                {errors.doctorEmail && <label style={{ color: "red" }}>{errors.doctorEmail}</label>}
 
                             </label>
                         </div>
@@ -1162,7 +1160,7 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                                     value={doctorData.contact}
                                     onChange={(e) => setDoctorData({ ...doctorData, contact: e.target.value })}
                                 />
-                    {errors.doctorContact && <label style={{color:"red"}}>{errors.doctorContact}</label>}
+                                {errors.doctorContact && <label style={{ color: "red" }}>{errors.doctorContact}</label>}
 
                             </label>
 
@@ -1175,7 +1173,7 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                                     value={doctorData.experience}
                                     onChange={(e) => setDoctorData({ ...doctorData, experience: e.target.value })}
                                 />
-                    {errors.doctorExperience && <label style={{color:"red"}}>{errors.doctorExperience}</label>}
+                                {errors.doctorExperience && <label style={{ color: "red" }}>{errors.doctorExperience}</label>}
 
                             </label>
                         </div>
@@ -1221,7 +1219,7 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                                     value={doctorData?.appointmentFees}
                                     onChange={(e) => setDoctorData({ ...doctorData, appointmentFees: e.target.value })}
                                 />
-                    {errors.doctorAppointmentFees && <label style={{color:"red"}}>{errors.doctorAppointmentFees}</label>}
+                                {errors.doctorAppointmentFees && <label style={{ color: "red" }}>{errors.doctorAppointmentFees}</label>}
 
                             </label>
                         </div>
@@ -1253,7 +1251,7 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                                     <option value="Graduation">Graduation</option>
                                     <option value="Post-Graduation">Post-Graduation</option>
                                 </select>
-                    {errors.doctorQualification && <label style={{color:"red"}}>{errors.doctorQualification}</label>}
+                                {errors.doctorQualification && <label style={{ color: "red" }}>{errors.doctorQualification}</label>}
 
                             </label>
                         </div>
@@ -1270,10 +1268,10 @@ const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
                         }}>
                             <button className="regular-btn" onClick={() => setAssignDoctor(null)}>Cancel</button>
                             <button className="common-btn"
-                             onClick={()=>{
-                                //  setDoctordetail(1);
-                                //  checkfield();
-                                     handleAddDoctor();
+                                onClick={() => {
+                                    //  setDoctordetail(1);
+                                    //  checkfield();
+                                    handleAddDoctor();
                                 }}>Add Doctor</button>
                         </div>
                     </div>

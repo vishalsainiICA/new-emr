@@ -917,7 +917,7 @@ const Patientregisteration = () => {
                   const val = cheakfield()
                   if (currentStep < 4 && val) {
                     setCurrentStep(currentStep + 1);
-                  } else {
+                  } else if (currentStep === 4) {
 
                     handleSubmit(e);
                   }
