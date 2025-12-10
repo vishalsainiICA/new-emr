@@ -21,7 +21,7 @@ const ViewHospital = () => {
     const [addCustomDep, setCustomDepartment] = useState(null)
     const [categoryName, setCategoryName] = useState("")
     const [edit, setEdit] = useState(null)
-    const [paNewdetail, setpaNewdetail] = useState(null);
+    const [editTemp, setEditTemp] = useState(null);
     const [doctorData, setDoctorData] = useState({
         doctorName: "",
         email: "",
@@ -481,7 +481,7 @@ const ViewHospital = () => {
                                     }}
                                 >
                                     <span className="logo">{doc?.name.slice(0, 1).toUpperCase()}</span>
-                                    <div onClick={() => setEdit(doc)}>
+                                    <div onClick={() =>{setEdit(doc); setEditTemp(doc?.personalAssitantId)}}>
                                         <p style={{ margin: 0 }}>{doc?.name}</p>
                                         <h5 style={{ color: 'blue' }}>{`${doc.email || "N/A"}`}</h5>
                                     </div>
@@ -1050,7 +1050,7 @@ const ViewHospital = () => {
                             cursor: "pointer"
                         }} onClick={() => {
                             setEdit(null)
-                            
+
                         }}></i>
                     </div>
                     <div className="docProfile">
@@ -1081,9 +1081,20 @@ const ViewHospital = () => {
                                         gap: '10px'
                                     }}>
 
+                                         { showPaDetail &&
+                                           <>
+                                             <button className="regular-btn" onClick={editPA} disabled={isProcessing}> <i class="ri-edit-box-line" ></i>Edit</button>
+                                             <button onClick={() => handleRemovePa(edit?.personalAssitantId?._id)} className="regular-btn" disabled={isProcessing}><i class="ri-delete-bin-7-line"  ></i>{`${isProcessing ? "removing..." : "Remove"}`} </button>
+                                           </>
+                                         }
+                                         { editPaDetail &&
+                                           <>
+                                             <button className="regular-btn" onClick={()=>{editPA();setEditTemp(edit?.personalAssitantId)}} >Cancel</button>
+                                             {/* <button  className="regular-btn" onClick={()=>{editPA();setEdit((prev)=>( {...prev ,{prev.personalAssitantId:editTemp} }))}}>Save </button>   */}
+                                             <button className="regular-btn"onClick={() => { editPA(); setEdit(prev => ({...prev,    personalAssitantId: editTemp }));}}> Save</button>
 
-                                        <button className="regular-btn" onClick={editPA} disabled={isProcessing}> <i class="ri-edit-box-line" ></i>Edit</button>
-                                        <button onClick={() => handleRemovePa(edit?.personalAssitantId?._id)} className="regular-btn" disabled={isProcessing}><i class="ri-delete-bin-7-line"  ></i>{`${isProcessing ? "removing..." : "Remove"}`} </button>
+                                           </>
+                                         }
                                     </div>
                                 </div>
                                 {showPaDetail &&
@@ -1100,7 +1111,9 @@ const ViewHospital = () => {
                                         </div>
                                     </div>
                                 }
+                                {}
                                 {editPaDetail &&
+                               
                                     <div className="pawithImage">
                                         <div className="paImage">
                                             <img src={userDefaultImage} alt="" />
@@ -1109,19 +1122,16 @@ const ViewHospital = () => {
                                            <div className="PaEditdetail">
                                             <div>
                                             <label htmlFor="">Name</label>
-                                            <input type="text" value={edit?.personalAssitantId?.name} onChange={(e) => setEdit({
-                                                ...edit, personalAssitantId: {
-                                                    ...edit.personalAssitantId,
-                                                    name: e.target.value
-                                                }
-                                            })} />
+                                            <input type="text" value={editTemp?.name} onChange={(e) => setEditTemp({
+                                                ...editTemp,name: e.target.value
+                                                                                            })} />
                                             </div>
                                              <div>
 
                                             <label htmlFor="">Email</label>
-                                            <input type="email" value={edit?.personalAssitantId?.email} onChange={(e)=>{setEdit({...edit,personalAssitantId:{
-                                                ...edit.personalAssitantId,email:e.target.value
-                                            }})}}/>
+                                            <input type="email" value={editTemp?.email} onChange={(e)=>{setEditTemp({...editTemp
+                                                ,email:e.target.value
+                                            })}}/>
                                             </div>
 
 
@@ -1130,10 +1140,10 @@ const ViewHospital = () => {
                                             <div>
 
                                             <label htmlFor="">Gender</label>
-                                            <select name="" style={{height:"33px",border :"0.2px solid lightgray",borderRadius:"7px"}} value={edit?.personalAssitantId?.gender || "N/A"}
-                                            onChange={(e)=>{setEdit({...edit,personalAssitantId:{
-                                                ...edit.personalAssitantId,gender:e.target.value
-                                            }})}}>
+                                            <select name="" style={{height:"33px",border :"0.2px solid lightgray",borderRadius:"7px"}} value={editTemp?.gender || "N/A"}
+                                            onChange={(e)=>{setEditTemp({
+                                                ...editTemp,gender:e.target.value
+                                            })}}>
                                                 <option >Select Gender</option>
                                                 <option >Male</option>
                                                 <option >Female</option>
@@ -1143,18 +1153,19 @@ const ViewHospital = () => {
                                             <div>
 
                                             <label htmlFor="">Experience</label>
-                                            <input type="number" value={edit?.personalAssitantId?.experience}onChange={(e)=>{setEdit({...edit,personalAssitantId:{
-                                                ...edit.personalAssitantId,experience:e.target.value
-                                            }})}} />
+                                            <input type="number" value={editTemp?.experience}onChange={(e)=>{setEditTemp({
+                                                ...editTemp,experience:e.target.value
+                                            })}} />
                                             </div>
                                          </div
                                          >
                                             <div style={{display:"flex",flexDirection:"column",}}>
 
                                             <label htmlFor="">Qualification</label>
-                                            <select style={{height:"33px",border :"0.2px solid lightgray",borderRadius:"7px"}} value={edit?.personalAssitantId?.qualification}onChange={(e)=>{setEdit({...edit,personalAssitantId:{
-                                                ...edit.personalAssitantId,qualification:e.target.value
-                                            }})}}>
+                                            <select style={{height:"33px",border :"0.2px solid lightgray",borderRadius:"7px"}} value={editTemp?.qualification}onChange={(e)=>{setEditTemp({
+                                                ...editTemp,qualification:e.target.value
+                                            })}}>
+                                                <option >Select-Qulification</option>
                                                 <option >Post-graduation</option>
                                                 <option >Graduation</option>
                                             </select>
@@ -1162,7 +1173,7 @@ const ViewHospital = () => {
 
                                         </div>
                                             {/* <button onClick={ cancelPAdetail}>Cancel</button> */}
-                                            <button onClick={ editPA}>Save</button>
+                                            {/* <button onClick={ editPA}>Save</button> */}
                                     </div>
                                 }
                             </div>
