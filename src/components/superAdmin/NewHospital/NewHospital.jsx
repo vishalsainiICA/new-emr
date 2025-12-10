@@ -135,6 +135,8 @@ export const NewHospital = () => {
     // ================= REGEX ==================
 
 // Hospital
+// const nameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;?
+
 const hospitalNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
 const cityRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
 const pinCodeRegex = /^[1-9][0-9]{5}$/;
