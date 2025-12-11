@@ -51,7 +51,7 @@ const HospitalManagement = () => {
 
     const handledelete = async (id) => {
         try {
-            const isCheck = confirmPa("Are you Sure you Want to Delete this Hospital !")
+            const isCheck = confirm("Are you Sure you Want to Delete this Hospital !")
             if (!isCheck) return
             setIsProcessing(true);
             const res = await superAdminApi.delethospital(id);

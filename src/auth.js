@@ -27,6 +27,10 @@ export const commonApi = {
         return await commonInstance.delete(`/common/doctor/remove-doc?docId=${id}`)
     },
 
+    updateProfile: async (data) => {
+        return await superAdminInstance.put(`/common/hospital/update-profile`, data)
+    }
+
 }
 // superAdmin API
 export const superAdminApi = {
@@ -71,12 +75,6 @@ export const superAdminApi = {
     newDoctor: async (hospitalId, data) => {
         return await superAdminInstance.post('/common/hospital/new-doctor', data)
     },
-    editDoctor: async (hospitalId, depId, data) => {
-        return await superAdminInstance.put(`/common/hospital/update-doctor?depId=${depId}&docId=${depId}&hospitalId=${hospitalId}`, data)
-    }
-
-    // admin
-    ,
     addAdmin: async (data) => {
         return await superAdminInstance.post('/super-admin/admin/add-admin', data)
     },
