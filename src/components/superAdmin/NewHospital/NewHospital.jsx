@@ -468,39 +468,46 @@ export const NewHospital = () => {
                     <div style={{
                         display: 'flex',
                         width: '100%',
-                        gap: '120px',
+                        alignContent: 'center',
+                        alignItems: 'center',
+                        gap: '10px'
 
                     }}>
                         <label style={{
                             width: '42%'
                         }} htmlFor="">Patient Category
-                            <input value={categoryName} type="text" placeholder="patientCategory"
+                            <input value={categoryName} type="text" placeholder="ex. Jan Addhar"
                                 onChange={(e) => {
                                     return setCategoryName(e.target.value)
                                 }} />
                             {errors.patientCategories && <label style={{ color: "red" }}>{errors.patientCategories}</label>}
                         </label>
-                        <div className="add-button" style={{ display: "flex", alignItems: "end" }}>
-                            <button
-                                className="main-button"
-                                style={{
-                                    width: '80px'
-                                }}
-                                onClick={() => {
-                                    if (!categoryName || categoryName === '') {
-                                        toast.error('Please Enter Scheme Name')
-                                        return
-                                    }
+                        <button
 
-                                    setHospitalData({ ...hospitalData, patientCategories: [...hospitalData.patientCategories, categoryName] })
-                                    setCategoryName("")
+                            style={{
+                                marginTop: '10px',
+                                width: '60px',
+                                height: '30px',
+                                cursor: 'pointer',
+                                backgroundColor: 'lavender',
+                                outline: 'none',
+                                border: '0.5px solid lightgrey',
+                                borderRadius: '10px'
+                            }}
+                            onClick={() => {
+                                if (!categoryName || categoryName === '') {
+                                    toast.error('Please Enter Scheme Name')
                                     return
-
-                                }
                                 }
 
-                            >+ Add</button>
-                        </div>
+                                setHospitalData({ ...hospitalData, patientCategories: [...hospitalData.patientCategories, categoryName] })
+                                setCategoryName("")
+                                return
+
+                            }
+                            }
+
+                        >+ Add</button>
                     </div>
                     <hr />
 

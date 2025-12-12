@@ -14,6 +14,7 @@
     max-height: 200px;
     overflow-y: scroll;
     border-radius: 20px;
+    z-index: 9999;
 
     h5 {
         font-size: 12px;
