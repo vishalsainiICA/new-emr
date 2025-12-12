@@ -647,9 +647,16 @@ const Patientregisteration = () => {
 
                   </div>
                 </div>
-                <div >
-                  <label htmlFor="">Relation with Patient</label>
-                  <select style={{
+                <div style={{
+                  display: 'flex',
+                  width: "100%",
+                  gap: '20px'
+                }}>
+                  <label htmlFor="" style={{
+
+                    width: "100%",
+
+                  }}>Relation with Patient         <select style={{
 
                     width: "100%",
                     padding: '7px',
@@ -661,23 +668,33 @@ const Patientregisteration = () => {
                     ...patientData,
                     attendeeRelation: e.target.value
                   })}>
-                    <option value="">Select Relation</option>
-                    <option value="Father">Father</option>
-                    <option value="Mother">Mother</option>
-                    <option value="Husband">Husband</option>
-                    <option value="Wife">Wife</option>
-                    <option value="Son">Son</option>
-                    <option value="Daughter">Daughter</option>
-                    <option value="Brother">Brother</option>
-                    <option value="Sister">Sister</option>
-                    <option value="Grandfather">Grandfather</option>
-                    <option value="Grandmother">Grandmother</option>
-                    <option value="Uncle">Uncle</option>
-                    <option value="Aunt">Aunt</option>
-                    <option value="Guardian">Guardian</option>
-                    <option value="Other">Other</option>
-                  </select>
-                  {errors.attendeeRelation && <label style={{ color: "red", marginTop: "5px" }}>{errors.attendeeRelation}</label>}
+                      <option value="">Select Relation</option>
+                      <option value="Father">Father</option>
+                      <option value="Mother">Mother</option>
+                      <option value="Husband">Husband</option>
+                      <option value="Wife">Wife</option>
+                      <option value="Son">Son</option>
+                      <option value="Daughter">Daughter</option>
+                      <option value="Brother">Brother</option>
+                      <option value="Sister">Sister</option>
+                      <option value="Grandfather">Grandfather</option>
+                      <option value="Grandmother">Grandmother</option>
+                      <option value="Uncle">Uncle</option>
+                      <option value="Aunt">Aunt</option>
+                      <option value="Guardian">Guardian</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </label>
+
+                  {patientData?.attendeeRelation === "Other" && (
+                    <label htmlFor="" style={{
+                      width: '100%'
+                    }}>Name *          <input type="text" placeholder="ex. anil" />
+                      {errors.attendeeRelation && <label style={{ color: "red", marginTop: "5px" }}>{errors.attendeeRelation}</label>}</label>
+                  )}
+
+
+
 
                 </div>
               </form>

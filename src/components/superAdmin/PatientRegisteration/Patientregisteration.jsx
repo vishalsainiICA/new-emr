@@ -85,12 +85,12 @@ const Patientregisteration = () => {
   });
 
   // ============== COMMON REGEX (Global Use) =================
-   const NAME_REGEX = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
-   const NUMBER_REGEX = /^[0-9]+$/;
-   const PHONE_REGEX = /^[0-9]{10}$/;
-   const gmailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-   const pinCodeRegex = /^[1-9][0-9]{5}$/;
-   const addressRegex = /^[A-Za-z0-9\s,./#-]+$/;
+  const NAME_REGEX = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
+  const NUMBER_REGEX = /^[0-9]+$/;
+  const PHONE_REGEX = /^[0-9]{10}$/;
+  const gmailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const pinCodeRegex = /^[1-9][0-9]{5}$/;
+  const addressRegex = /^[A-Za-z0-9\s,./#-]+$/;
 
 
   function cheakfield() {
@@ -100,26 +100,26 @@ const Patientregisteration = () => {
     // Step 1
     if (currentStep == 1) {
       if (!patientData.name) errors.name = "Patient Name is Required"
-      if (patientData.name && !NAME_REGEX.test(patientData.name.trim())) {errors.name = "Only alphabets";}
+      if (patientData.name && !NAME_REGEX.test(patientData.name.trim())) { errors.name = "Only alphabets"; }
       if (!patientData.DOB) errors.DOB = "Patient DOB is Required"
       if (!patientData.age) errors.age = "Patient age is Required"
-      if (patientData.age && !NUMBER_REGEX.test(patientData.age)) {errors.age = "Only numbers allowed";}
-      if (patientData.age < 0 || patientData.age > 120) {errors.age = "Enter valid age";}
+      if (patientData.age && !NUMBER_REGEX.test(patientData.age)) { errors.age = "Only numbers allowed"; }
+      if (patientData.age < 0 || patientData.age > 120) { errors.age = "Enter valid age"; }
       if (!patientData.city) errors.city = "Patien.city is Required"
-      if (patientData.city && !NAME_REGEX.test(patientData.city.trim())) {errors.city = "Invalid city name";}
+      if (patientData.city && !NAME_REGEX.test(patientData.city.trim())) { errors.city = "Invalid city name"; }
       if (!patientData.gender) errors.gender = "Patient gender is Required"
 
       if (!patientData.phone) errors.phone = "Patient phone is Required"
       // if (patientData.phone && patientData.phone.length !== 10) errors.phone = "contact   Number must be 10 digit "
-      if (patientData.phone && !PHONE_REGEX.test(patientData.phone)) {errors.phone = "Enter valid 10 digit phone number";}
-      
-      if (patientData.whatsApp && patientData.whatsApp.length !==10) errors.whatsApp ="Whatapp Number Must be 10 digits"
-      if(patientData.email  &&!gmailRegex.test(patientData.email)) { errors.email = "Invalid Mail Address"; }
+      if (patientData.phone && !PHONE_REGEX.test(patientData.phone)) { errors.phone = "Enter valid 10 digit phone number"; }
+
+      if (patientData.whatsApp && patientData.whatsApp.length !== 10) errors.whatsApp = "Whatapp Number Must be 10 digits"
+      if (patientData.email && !gmailRegex.test(patientData.email)) { errors.email = "Invalid Mail Address"; }
       if (!patientData.pinCode) errors.pinCode = "pincode is required"
-      if (patientData.pinCode && !pinCodeRegex.test(patientData.pinCode)) {errors.pinCode = "Invalid Pincode (6 digits)";}
-     
+      if (patientData.pinCode && !pinCodeRegex.test(patientData.pinCode)) { errors.pinCode = "Invalid Pincode (6 digits)"; }
+
       if (!patientData.permanentAddress) errors.permanentAddress = "Patient Address is Required"
-      
+
       if (!patientData.nationality) errors.nationality = "Patient Nationality is Required"
       if (!patientData.state) errors.state = "Patient Name is Required"
       if (!patientData.addharNo) errors.addharNo = "Patient Aadhar Number is required"
@@ -130,11 +130,11 @@ const Patientregisteration = () => {
 
     if (currentStep == 2) {
       if (!patientData.attendeeName) errors.attendeeName = "Aattendee Name is required "
-      if (patientData.attendeeName && !NAME_REGEX.test(patientData.attendeeName.trim())) {errors.attendeeName = "Only alphabets";}
+      if (patientData.attendeeName && !NAME_REGEX.test(patientData.attendeeName.trim())) { errors.attendeeName = "Only alphabets"; }
       if (!patientData.attendeePhone) errors.attendeePhone = "Aattendee Contact Number  is required "
       if (patientData.attendeePhone && patientData.attendeePhone.length !== 10) errors.attendeePhone = "Aattendee Contact Number must be 10 digit "
       if (!patientData.attendeeRelation) errors.attendeeRelation = "Aattendee Relation is required "
-      if (patientData.attendeeRelation && !NAME_REGEX.test(patientData.attendeeRelation.trim())) {errors.attendeeRelation = "Only alphabets";}
+      if (patientData.attendeeRelation && !NAME_REGEX.test(patientData.attendeeRelation.trim())) { errors.attendeeRelation = "Only alphabets"; }
     }
 
     if (currentStep == 3) {
@@ -685,9 +685,16 @@ const Patientregisteration = () => {
 
                   </div>
                 </div>
-                <div >
-                  <label htmlFor="">Relation with Patient</label>
-                  <select style={{
+                <div style={{
+                  display: 'flex',
+                  width: "100%",
+                  gap: '20px'
+                }}>
+                  <label htmlFor="" style={{
+
+                    width: "100%",
+
+                  }}>Relation with Patient         <select style={{
 
                     width: "100%",
                     padding: '7px',
@@ -699,23 +706,33 @@ const Patientregisteration = () => {
                     ...patientData,
                     attendeeRelation: e.target.value
                   })}>
-                    <option value="">Select Relation</option>
-                    <option value="Father">Father</option>
-                    <option value="Mother">Mother</option>
-                    <option value="Husband">Husband</option>
-                    <option value="Wife">Wife</option>
-                    <option value="Son">Son</option>
-                    <option value="Daughter">Daughter</option>
-                    <option value="Brother">Brother</option>
-                    <option value="Sister">Sister</option>
-                    <option value="Grandfather">Grandfather</option>
-                    <option value="Grandmother">Grandmother</option>
-                    <option value="Uncle">Uncle</option>
-                    <option value="Aunt">Aunt</option>
-                    <option value="Guardian">Guardian</option>
-                    <option value="Other">Other</option>
-                  </select>
-                  {errors.attendeeRelation && <label style={{ color: "red", marginTop: "5px" }}>{errors.attendeeRelation}</label>}
+                      <option value="">Select Relation</option>
+                      <option value="Father">Father</option>
+                      <option value="Mother">Mother</option>
+                      <option value="Husband">Husband</option>
+                      <option value="Wife">Wife</option>
+                      <option value="Son">Son</option>
+                      <option value="Daughter">Daughter</option>
+                      <option value="Brother">Brother</option>
+                      <option value="Sister">Sister</option>
+                      <option value="Grandfather">Grandfather</option>
+                      <option value="Grandmother">Grandmother</option>
+                      <option value="Uncle">Uncle</option>
+                      <option value="Aunt">Aunt</option>
+                      <option value="Guardian">Guardian</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </label>
+
+                  {patientData?.attendeeRelation === "Other" && (
+                    <label htmlFor="" style={{
+                      width: '100%'
+                    }}>Name *          <input type="text" placeholder="ex. anil" />
+                      {errors.attendeeRelation && <label style={{ color: "red", marginTop: "5px" }}>{errors.attendeeRelation}</label>}</label>
+                  )}
+
+
+
 
                 </div>
               </form>
@@ -868,8 +885,8 @@ const Patientregisteration = () => {
                       <p style={{
                         fontSize: '12px',
                         color: 'orange',
-                        boxShadow:"1px"
-                        
+                        boxShadow: "1px"
+
                       }}>Pleae Select Cateogry First</p>
                     )}
                   </form>
