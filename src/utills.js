@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const commonInstance = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL_API,
-  timeout: 100000,
+  timeout: 10000,
   withCredentials: true,
 })
 commonInstance.interceptors.request.use((config) => {
