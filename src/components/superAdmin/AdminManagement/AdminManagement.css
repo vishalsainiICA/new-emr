@@ -80,8 +80,8 @@
 .patientBody:hover {
     background-color: rgb(252, 247, 247);
 
-    p {
-        color: black
+     i {
+        color: red
     }
 
     ;

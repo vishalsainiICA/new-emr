@@ -13,6 +13,7 @@ export default function AdminManagement() {
     const [error, setError] = useState(null);
     const [assinAdmin, setAssignAdmin] = useState(null)
     const [filterPatient, setFilterPatient] = useState([]);
+
     const [doctorData, setadminData] = useState({
         name: "",
         email: "",
@@ -59,11 +60,71 @@ export default function AdminManagement() {
     }, [refresh]);
 
     const handleAddAdmin = async () => {
+
+        // Required field check
+        if (
+            !doctorData.name ||
+            !doctorData.email ||
+            !doctorData.contact ||
+            !doctorData.experience ||
+            !doctorData.creationfor
+        ) {
+            toast.error("Please fill all required fields!");
+            return;
+        }
+
+        // Regex patterns
+        const nameRegex = /^[A-Za-z ]+$/;
+        const contactRegex = /^[0-9]{10}$/;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        // Name validation
+        if (!nameRegex.test(doctorData.name)) {
+            toast.error("Name must contain only alphabets!");
+            return;
+        }
+
+        // Contact number validation
+        if (!contactRegex.test(doctorData.contact)) {
+            toast.error("Contact must be a valid 10-digit number!");
+            return;
+        }
+
+        // Experience validation
+        if (Number(doctorData.experience) > 100) {
+            toast.error("Experience must be less than 100 years!");
+            return;
+        }
+
+        // Email validation
+        if (!emailRegex.test(doctorData.email)) {
+            toast.error("Invalid email!");
+            return;
+        }
         try {
             setIsProcessing(true)
             const res = await superAdminApi.addAdmin(doctorData)
             if (res.status === 200) {
                 toast.success(`Admin Added Successfully`)
+                setAssignAdmin(null)
+                setadminData(null)
+                setrefresh((prev) => !prev)
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error(error.response?.data?.message || "Internal Server Error");
+        }
+        finally {
+            setIsProcessing(false)
+        }
+    }
+
+    const handleeditAdmin = async (id) => {
+        try {
+            setIsProcessing(true)
+            const res = await superAdminApi.editAdmin(id, doctorData)
+            if (res.status === 200) {
+                toast.success(`Admin Updated Successfully`)
                 setAssignAdmin(null)
                 setadminData(null)
                 setrefresh((prev) => !prev)
@@ -94,79 +155,30 @@ export default function AdminManagement() {
         }
     }
 
+
+    const handledeleteadmin = async (doc) => {
+        try {
+            const isConfirm = confirm(`Are You Sure You Want To Delete Dr.${doc?.name}`)
+            if (!isConfirm) return
+            setIsProcessing(true);
+            const res = await superAdminApi.deleteAdmin(doc?._id);
+            if (res.status === 200 || (await res).data.status === 200) {
+                toast.success("Admin remove successfully");
+                setrefresh(prev => !prev);
+            } else {
+                toast.error("Failed to remove Admin")
+            }
+        } catch (err) {
+            console.error("Error:", err);
+            toast.error(err.response?.data?.message || "Something went wrong");
+        } finally {
+            setIsProcessing(false);
+        }
+    }
+
     return (
         <div >
-            {/* <div className="cardList">
-                <div className="customCard hover" style={{
 
-                }}>
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        width: '100%'
-                    }}>
-                        <h4>Total Hospitals</h4>
-                        <p>🏥</p>
-                    </div>
-                    <h2>6</h2>
-                    <p style={{
-                        color: 'rgba(125, 200, 176)',
-                        fontWeight: "bold"
-                    }}>08%</p>
-                </div>
-                <div className="customCard hover" style={{
-
-                }}>
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        width: '100%'
-                    }}>
-                        <h4>Total Capacity</h4>
-                        <p>🛏️</p>
-                    </div>
-                    <h2>6</h2>
-                    <p style={{
-                        color: 'rgba(125, 200, 176)',
-                        fontWeight: "bold"
-                    }}>08%</p>
-                </div>
-                <div className="customCard hover" style={{
-
-                }}>
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        width: '100%'
-                    }}>
-                        <h4>Current Occupancy</h4>
-                        <p>👥</p>
-                    </div>
-                    <h2>6</h2>
-                    <p style={{
-                        color: 'rgba(125, 200, 176)',
-                        fontWeight: "bold"
-                    }}>08%</p>
-                </div>
-                <div className="customCard hover" style={{
-
-                }}>
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        width: '100%'
-                    }}>
-                        <h4>Total Staff</h4>
-                        <p>👨‍⚕️</p>
-                    </div>
-                    <h2>6</h2>
-                    <p style={{
-                        color: 'rgba(125, 200, 176)',
-                        fontWeight: "bold"
-                    }}>08%</p>
-                </div>
-
-            </div> */}
 
             <div className="customCard" style={{
                 display: 'flex',
@@ -179,7 +191,7 @@ export default function AdminManagement() {
                     }}>Manage and monitor all healthcare facilities in the network</p>
                 </div>
                 <button
-                    onClick={() => setAssignAdmin("NewAdmin")}
+                    onClick={() => setAssignAdmin({ type: "new" })}
                     style={{
 
                     }} className="common-btn">+ New Admin</button>
@@ -224,6 +236,7 @@ export default function AdminManagement() {
                     <p>Email</p>
                     <p>Date</p>
                     <p>Status</p>
+                    <p>Control</p>
 
                 </div>
 
@@ -268,6 +281,18 @@ export default function AdminManagement() {
                                     </button>
                                     {/* <i class="ri-delete-bin-6-line"></i> */}
                                 </span>
+                                <div style={{
+                                    display: "flex",
+                                    gap: '10px',
+                                    marginRight: '10px',
+                                }}>
+                                    <i class="ri-edit-box-line" onClick={() => {
+                                        setadminData(patient)
+                                        setAssignAdmin({ type: "edit", admin: patient })
+                                    }
+                                    }></i>
+                                    <i class="ri-delete-bin-7-line" onClick={() => handledeleteadmin(patient)} ></i>
+                                </div>
 
 
                             </div>
@@ -282,7 +307,7 @@ export default function AdminManagement() {
                 )}
             </div>
             {
-                assinAdmin !== null && (
+                assinAdmin !== null && assinAdmin?.type === "new" && (
                     <div style={{
                         position: 'absolute',
                         inset: 0,
@@ -326,7 +351,131 @@ export default function AdminManagement() {
                                     <input
                                         type="text"
                                         placeholder="Name"
-                                        value={doctorData.name}
+                                        value={doctorData?.name}
+                                        onChange={(e) => setadminData({ ...doctorData, name: e.target.value })}
+                                    />
+                                </label>
+
+                                <label style={{ width: '100%' }}>
+                                    Email *
+                                    <input
+                                        type="email"
+                                        placeholder="Email"
+                                        value={doctorData?.email}
+                                        onChange={(e) => setadminData({ ...doctorData, email: e.target.value })}
+                                    />
+                                </label>
+                            </div>
+
+                            <div style={{
+                                marginTop: '10px',
+                                display: 'flex',
+                                columnGap: '10px'
+                            }}>
+                                <label style={{ width: '100%' }}>
+                                    Contact Number *
+                                    <input
+                                        type="text"
+                                        placeholder="Contact Number"
+                                        value={doctorData.contact}
+                                        onChange={(e) => setadminData({ ...doctorData, contact: e.target.value })}
+                                    />
+                                </label>
+
+                                <label style={{ width: '100%' }}>
+                                    Experience (years) *
+                                    <input
+                                        type="number"
+                                        placeholder="ex.2"
+                                        value={doctorData.experience}
+                                        onChange={(e) => setadminData({ ...doctorData, experience: e.target.value })}
+                                    />
+                                </label>
+                            </div>
+
+                            <label style={{
+                                width: '100%',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                marginTop: '10px'
+                            }}>
+                                Creationfor *
+                                <select
+                                    style={{ padding: '10px', borderRadius: '7px' }}
+                                    value={doctorData.creationfor}
+                                    onChange={(e) => setadminData({ ...doctorData, creationfor: e.target.value })}
+                                >
+                                    <option value="">Select</option>
+                                    <option value="For Analyst">For Analyst</option>
+                                    <option value="Hospital Creation">Hospital Creation</option>
+                                </select>
+                            </label>
+
+                            {/*Action Buttons */}
+                            <div style={{
+                                marginTop: '30px',
+                                display: 'flex',
+                                justifyContent: 'end',
+                                gap: '10px'
+                            }}>
+                                <button className="regular-btn" onClick={() => setAssignAdmin(null)}>Cancel</button>
+                                <button className="common-btn"
+                                    disabled={isProcessing}
+                                    onClick={() => {
+                                        handleAddAdmin()
+                                    }} >{isProcessing ? "adding..." : "Add Admin"}</button>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+
+            {
+                assinAdmin !== null && assinAdmin?.type === "edit" && (
+                    <div style={{
+                        position: 'absolute',
+                        inset: 0,
+                        zIndex: 9999,
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backdropFilter: 'blur(10px)',
+                        backgroundColor: 'rgba(19, 5, 5, 0.6)',
+                    }}>
+                        <div style={{
+                            backgroundColor: 'white',
+                            minHeight: '400px',
+                            width: '600px',
+                            padding: '20px',
+                            borderRadius: '10px'
+                        }}>
+                            <div style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center'
+                            }}>
+                                <h3>
+                                    {`Update Profile`}
+                                </h3>
+                                <i
+                                    onClick={() => setAssignAdmin(null)}
+                                    className="ri-close-large-line"
+                                    style={{ cursor: 'pointer', fontSize: '20px' }}
+                                ></i>
+                            </div>
+
+                            {/*Doctor Data Form */}
+                            <div style={{
+                                marginTop: '10px',
+                                display: 'flex',
+                                columnGap: '10px'
+                            }}>
+                                <label style={{ width: '100%' }}>
+                                    Name *
+                                    <input
+                                        type="text"
+                                        placeholder="Name"
+                                        value={doctorData?.name}
                                         onChange={(e) => setadminData({ ...doctorData, name: e.target.value })}
                                     />
                                 </label>
@@ -393,17 +542,12 @@ export default function AdminManagement() {
                                 justifyContent: 'end',
                                 gap: '10px'
                             }}>
-                                <button className="regular-btn" onClick={() => setAssignAdmin(null)}>Cancel</button>
+                                <button className="regular-btn" disabled={isProcessing} onClick={() => setAssignAdmin(null)}>Cancel</button>
                                 <button className="common-btn"
                                     disabled={isProcessing}
                                     onClick={() => {
-
-                                        setadminData({ ...doctorData, docId: assinAdmin._id })
-                                        // console.log("dodo", doctorData);
-                                        // console.log("assinAdmin", assinAdmin._id);
-
-                                        handleAddAdmin()
-                                    }} >{isProcessing ? "adding..." : "Add Admin"}</button>
+                                        handleeditAdmin(assinAdmin?.admin?._id)
+                                    }} >{isProcessing ? "saving..." : "Update Admin"}</button>
                             </div>
                         </div>
                     </div>

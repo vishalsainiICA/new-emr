@@ -45,7 +45,7 @@ const Patientregisteration = () => {
       age: null,
       gender: '',
       pinCode: '',
-      phone: null,
+      phone: '',
       email: '',
       permanentAddress: '',
       whatsApp: null,
@@ -67,7 +67,7 @@ const Patientregisteration = () => {
     age: null,
     gender: '',
     pinCode: '',
-    phone: null,
+    phone: '',
     email: '',
     permanentAddress: '',
     whatsApp: null,
@@ -212,27 +212,6 @@ const Patientregisteration = () => {
     processBothSides();
   }, [aadhaarFront, aadhaarBack]);
 
-  const validationRules = {
-    name: "Name is required",
-    age: "Age is required",
-    phone: "Phone is required",
-    email: "Email is required",
-    city: "City required",
-    state: "State required",
-    attendeeName: "Attendee required",
-  };
-  const validateForm = () => {
-    let errors = {};
-
-    Object.keys(validationRules).forEach((key) => {
-      if (!patientData[key] || patientData[key] === "") {
-        errors[key] = validationRules[key];
-      }
-    });
-
-    return errors;
-  };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -315,6 +294,24 @@ const Patientregisteration = () => {
     setErrors(newErrors);
 
   }
+
+    useEffect(() => {
+      if (!patientData.phone || patientData.phone.length !== 10) return;
+  
+      const timer = setTimeout(async () => {
+        setIsProcessing(true);
+        try {
+          await commonApi.validateMobile(patientData.phone);
+        } catch (err) {
+          console.log(err);
+          toast.error(err.response?.data?.message || "Something went wrong");
+        } finally {
+          setIsProcessing(false);
+        }
+      }, 500);
+  
+      return () => clearTimeout(timer);
+    }, [patientData.phone]);
 
   return (
     <div className="Patientregiteration-main">
@@ -438,8 +435,8 @@ const Patientregisteration = () => {
                   <div>
                     <label>Phone *</label>
                     <input
-                      type="number"
-                      value={patientData.phone}
+                      type="tel"
+                      value={patientData?.phone}
                       onChange={(e) => setPatientData({
                         ...patientData,
                         phone: e.target.value

@@ -42,11 +42,11 @@ const Patientregisteration = () => {
       age: null,
       gender: '',
       pinCode: '',
-      phone: null,
+      phone: "",
       email: '',
       permanentAddress: '',
       whatsApp: null,
-      DOB: '',
+      DOB: null,
       city: '',
       state: '',
       nationality: '',
@@ -56,7 +56,7 @@ const Patientregisteration = () => {
       attendeeRelation: '',
       departmentId: '',
       doctorId: null,
-      addharNo: '',
+      aadhaarNumber: null,
       addharDocuments: [],
     }
   );
@@ -67,11 +67,11 @@ const Patientregisteration = () => {
     age: null,
     gender: '',
     pinCode: '',
-    phone: null,
+    phone: "",
     email: '',
     permanentAddress: '',
     whatsApp: null,
-    DOB: '',
+    DOB: null,
     city: '',
     state: '',
     nationality: '',
@@ -81,7 +81,7 @@ const Patientregisteration = () => {
     attendeeRelation: '',
     departmentId: '',
     doctorId: null,
-    addharNo: '',
+    aadhaarNumber: null,
   });
 
   // ============== COMMON REGEX (Global Use) =================
@@ -90,7 +90,6 @@ const Patientregisteration = () => {
   const PHONE_REGEX = /^[0-9]{10}$/;
   const gmailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const pinCodeRegex = /^[1-9][0-9]{5}$/;
-  const addressRegex = /^[A-Za-z0-9\s,./#-]+$/;
 
 
   function cheakfield() {
@@ -101,7 +100,7 @@ const Patientregisteration = () => {
     if (currentStep == 1) {
       if (!patientData.name) errors.name = "Patient Name is Required"
       if (patientData.name && !NAME_REGEX.test(patientData.name.trim())) { errors.name = "Only alphabets"; }
-      if (!patientData.DOB) errors.DOB = "Patient DOB is Required"
+      if (!patientData?.DOB) errors.DOB = "Patient DOB is Required"
       if (!patientData.age) errors.age = "Patient age is Required"
       if (patientData.age && !NUMBER_REGEX.test(patientData.age)) { errors.age = "Only numbers allowed"; }
       if (patientData.age < 0 || patientData.age > 120) { errors.age = "Enter valid age"; }
@@ -122,8 +121,8 @@ const Patientregisteration = () => {
 
       if (!patientData.nationality) errors.nationality = "Patient Nationality is Required"
       if (!patientData.state) errors.state = "Patient Name is Required"
-      if (!patientData.addharNo) errors.addharNo = "Patient Aadhar Number is required"
-      if (patientData.addharNo && patientData.addharNo.length !== 12) errors.addharNo = "Patient Aadhar Number must be 12 digit"
+      if (!patientData.aadhaarNumber) errors.aadhaarNumber = "Patient Aadhar Number is required"
+      if (patientData.aadhaarNumber && patientData.aadhaarNumber.length !== 12) errors.aadhaarNumber = "Patient Aadhar Number must be 12 digit"
       if (!aadhaarFront) errors.aadhaarFront = "Patient Aadhar Front Image is required"
       if (!aadhaarBack) errors.aadhaarBack = "Patient Aadhar Back Image is required"
     }
@@ -157,7 +156,6 @@ const Patientregisteration = () => {
   const query = new URLSearchParams(location.search)
   const hospitalId = query.get("id");
 
-  console.log("Hospital ID:", hospitalId)
   useEffect(() => {
     const fetch = async () => {
       try {
@@ -222,137 +220,36 @@ const Patientregisteration = () => {
         gender: parsed.gender || prev.gender,
         permanentAddress: parsed.address || prev.permanentAddress,
         addharDocuments: [aadhaarFront, aadhaarBack],
-        addharNo: parsed.aadhaarNumber ? parsed.aadhaarNumber.trim() : prev.addharNo,
+        aadhaarNumber: parsed?.aadhaarNumber ? parsed?.aadhaarNumber : parsed?.aadhaarNumber,
         city: parsed.city,
         state: parsed.state,
         pinCode: parsed.pinCode,
       }));
 
-      setPatientData((prev) => ({
-        ...prev,
-        addharNo: parsed.aadhaarNumber ? parsed.aadhaarNumber.trim() : prev.addharNo
-
-      }))
-
       toast.success("Aadhaar details extracted successfully ");
-      console.log(patientData);
-
       setCurrentStep(currentStep + 1)
     };
 
     processBothSides();
   }, [aadhaarFront, aadhaarBack]);
 
+  useEffect(() => {
+    if (!patientData.phone || patientData.phone.length !== 10) return;
 
-
-
-  const validationRules = {
-    name: "Name is required",
-    age: "Age is required",
-    phone: "Phone is required",
-    email: "Email is required",
-    city: "City required",
-    state: "State required",
-    attendeeName: "Attendee required",
-  };
-  const validateForm = () => {
-    let errors = {};
-
-    Object.keys(validationRules).forEach((key) => {
-      if (!patientData[key] || patientData[key] === "") {
-        errors[key] = validationRules[key];
+    const timer = setTimeout(async () => {
+      setIsProcessing(true);
+      try {
+        await commonApi.validateMobile(patientData.phone);
+      } catch (err) {
+        console.log(err);
+        toast.error(err.response?.data?.message || "Something went wrong");
+      } finally {
+        setIsProcessing(false);
       }
-    });
+    }, 500);
 
-    return errors;
-  };
-
-
-
-  const handleSubmit = async (e) => {
-    console.log("call");
-
-    e.preventDefault();
-    setIsProcessing(true);
-
-    try {
-      const formdata = new FormData();
-      // multiple d
-
-      uploadedDocuments.forEach((doc, index) => {
-        formdata.append(`categories[${index}]`, doc.category);
-        formdata.append(`fileCount[${index}]`, doc.files.length);
-        doc.files.forEach((file) => {
-          formdata.append("documents", file);
-        });
-      });
-
-      formdata.append("addharfront", aadhaarFront)
-      formdata.append("addharback", aadhaarBack)
-      // patient details append
-      Object.keys(patientData).forEach((key) => {
-
-        let value = patientData[key]
-
-        if (typeof value === "object" && value !== null && !(value instanceof File)) {
-          value = JSON.stringify(value);
-        }
-        formdata.append(key, value ?? "");
-      });
-
-      formdata.append("hospitalId", hospitalId)
-
-      const res = await commonApi.registerPatient(formdata);
-      toast.success(res?.data?.message || "Patient registered successfully");
-
-      // reset
-      setPatientData({
-        name: '',
-        age: null,
-        gender: '',
-        phone: null,
-        email: '',
-        permanentAddress: '',
-        currentAddress: '',
-        whatsApp: null,
-        DOB: '',
-        city: '',
-        state: '',
-        nationality: '',
-        patienCategory: null,
-        attendeeName: '',
-        attendeePhone: null,
-        attendeeRelation: '',
-        departmentId: '',
-        doctorId: null,
-        addharDocuments: [],
-        hospitalId: null,
-        pastDocumnents: []
-      });
-      setUploadedDocuments([]);
-      navigate("/super-admin/dashboard");
-    } catch (err) {
-      console.log(err);
-      toast.error(err.response?.data?.message || "Something went wrong");
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
-
-
-  const handleValidation = (e) => {
-    e.preventDefault();
-
-    let newErrors = {};
-
-    if (!patientData.name.trim()) {
-      newErrors.name = "Name is required";
-    }
-
-    setErrors(newErrors);
-
-  }
+    return () => clearTimeout(timer);
+  }, [patientData.phone]);
 
   return (
     <div className="Patientregiteration-main">
@@ -422,7 +319,7 @@ const Patientregisteration = () => {
                     <label>Date of Birth *</label>
                     <input
                       type="date"
-                      value={patientData.DOB}
+                      value={patientData?.DOB}
                       onChange={(e) => {
                         const dob = e.target.value;
                         const age = calculateAge(dob);
@@ -476,13 +373,17 @@ const Patientregisteration = () => {
                   <div>
                     <label>Phone *</label>
                     <input
-                      type="number"
-                      value={patientData.phone}
-                      onChange={(e) => setPatientData({
-                        ...patientData,
-                        phone: e.target.value
-                      })}
+                      type="tel"
+                      maxLength={10}
+                      value={patientData.phone || ""}
+                      onChange={(e) =>
+                        setPatientData({
+                          ...patientData,
+                          phone: e.target.value.replace(/\D/g, ""), // digits only
+                        })
+                      }
                     />
+
                     {errors.phone && <label style={{ color: "red", marginTop: "5px" }}>{errors.phone}</label>}
                   </div>
 
@@ -600,13 +501,13 @@ const Patientregisteration = () => {
                     <label>Aadhaar No *</label>
                     <input
                       type="number"
-                      value={patientData.addharNo}
+                      value={patientData?.aadhaarNumber}
                       onChange={(e) => setPatientData({
                         ...patientData,
-                        addharNo: e.target.value
+                        aadhaarNumber: e.target.value
                       })}
                     />
-                    {errors.addharNo && <label style={{ color: "red", marginTop: "5px" }}>{errors.addharNo}</label>}
+                    {errors.aadhaarNumber && <label style={{ color: "red", marginTop: "5px" }}>{errors.aadhaarNumber}</label>}
 
                   </div>
                 </div>
@@ -927,7 +828,7 @@ const Patientregisteration = () => {
                   <span>Name:{patientData.name}</span>
                   <span>Age:{patientData.age}</span>
                   <span>Gender:{patientData.gender}</span>
-                  <span>Phone:{patientData.phone}</span>
+                  <span>Phone:{patientData?.phone}</span>
                   <span>Email:{patientData.email}</span>
                   <span>Address: {patientData.permanentAddress}</span>
                 </div>

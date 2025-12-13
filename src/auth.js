@@ -8,6 +8,9 @@ export const commonApi = {
     registerPatient: async (data) => {
         return await commonInstance.post(`/common/patient/register-patient`, data)
     },
+    validateMobile: async (phone) => {
+        return await commonInstance.post(`/common/patient/validate-mobile`, { "phone": phone })
+    },
     patientsByHospitalId: async (id) => {
         return await superAdminInstance.get(`/common/hospital/all-patients?hospitalId=${id}`)
     },
@@ -30,7 +33,7 @@ export const commonApi = {
     updateProfile: async (data) => {
         return await commonInstance.put(`/common/hospital/update-profile`, data)
     },
-        newDepartment: async (data) => {
+    newDepartment: async (data) => {
         return await commonInstance.post(`/common/hospital/new-department`, data)
     },
 

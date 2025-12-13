@@ -173,13 +173,11 @@ export function LabTest({ labTest = [], labTestError, labTestloading, onclose, s
 
 export function Patient_Hisotry({ patient, onclose }) {
     const [patientDetails, setpatientDetails] = useState(false)
-    const [patientHistory, setpatientHistory] = useState(false)
     const [patientprescbrition, setpatientprescbrition] = useState(false)
     const [openImage, setopenImage] = useState(null)
     const [active, setactive] = useState(null)
 
-
-    const VITE_BASE_URL_API = "https://emr-backend-5p2j.onrender.com"
+    const VITE_BASE_URL_API = import.meta.env.VITE_BASE_URL || "http://localhost:8000"
     // const VITE_BASE_URL_API = "http://localhost:8000"
 
     return <div className='labtest'>

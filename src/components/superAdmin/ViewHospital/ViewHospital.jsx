@@ -946,6 +946,7 @@ const ViewHospital = () => {
                     backdropFilter: 'blur(10px)',
                     backgroundColor: 'rgba(19, 5, 5, 0.6)',
                 }}>
+                  
                     <div style={{
                         backgroundColor: 'white',
                         minHeight: '500px',

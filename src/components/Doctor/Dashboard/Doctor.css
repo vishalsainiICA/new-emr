@@ -275,7 +275,7 @@ hr {
 
 /* logout-page */
 .logout-page {
-    position: absolute;
+    position: relative;
     bottom: 200px;
     left: 430px;
     background-color: rgba(254, 254, 255);
@@ -286,6 +286,8 @@ hr {
     display: grid;
     gap: 30px;
     box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+
     /* opacity: 0.4; */
 
 }

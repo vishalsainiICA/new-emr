@@ -482,6 +482,7 @@ const Dashboard = () => {
             </div>
 
             {/* Logout page */}
+
             <div className={logOut ? 'logout-page' : 'active'}>
 
                 <div className="profile">
