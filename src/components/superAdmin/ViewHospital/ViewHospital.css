@@ -174,12 +174,27 @@
         color: gray;
     }
 
-    ;
-
     p {
         color: black;
     }
+    input 
+    {
+        width: 200px;
+        height: 30px;
+    }
+    select 
+    {
+        width: 200px;
+        height: 30px;
+    }
+    
 }
+
+.docbasicdetails :focus
+{
+  border-bottom: 2px solid #007bff; /* blue line */
+}
+
 
 .docImage {
     border-radius: 20px;
