@@ -28,6 +28,7 @@ const ViewHospital = () => {
     const [isProcessing, setIsProcessing] = useState(false);
     const [refresh, setRefresh] = useState(false);
     const [open, setClose] = useState(null)
+    const [editMDdata,setEditMDdata]=useState(null)
     const [error, setError] = useState(null);
     const [filterPatient, setFilterPatient] = useState([]);
     const [assinDoctor, setAssignDoctor] = useState(null)
@@ -53,6 +54,15 @@ const ViewHospital = () => {
     });
     const [editPaDetail, seteditPaDetail] = useState(false);
     const [showPaDetail, setshowPaDetail] = useState(true);
+
+    const [showMD,setshowMD]=useState(true);
+    const [editMD,setEditMD]=useState(false);
+
+    function changeMD_data()
+   {
+      setEditMD(!editMD);
+      setshowMD(!showMD);
+   }
 
     const resetDocForm = () => {
         setDoctorData({
@@ -519,7 +529,8 @@ const ViewHospital = () => {
                     fontSize: '13px',
                     fontWeight: 'bold'
                 }}>Director: <span
-                    onClick={() => setClose({ type: 'md', md: hospital?.medicalDirector })}
+                    onClick={() => {setClose({ type: 'md', md: hospital?.medicalDirector });
+                                    setEditMDdata(hospital?.medicalDirector)}}
                     style={{
                         fontWeight: 'normal',
                         color: 'blue',
@@ -2003,6 +2014,8 @@ const ViewHospital = () => {
                                 cursor: "pointer"
                             }} onClick={() => {
                                 setClose(null)
+                                setEditMD(false);
+                                setshowMD(true);
 
                             }}></i>
                         </div>
@@ -2012,13 +2025,59 @@ const ViewHospital = () => {
                                     <img src={userDefaultImage} alt="" />
                                 </div>
                                 <div className="docbasicdetails">
-                                    <label htmlFor="">Name <p>Dr. {open.md?.name}</p></label>
-                                    <label htmlFor="">Gender <p>{open.md?.gender || "Male"}</p></label>
-                                    <label htmlFor="">Email <p>{open.md?.email}</p></label>
-                                    <label htmlFor="">Experience <p>{open.md?.experience || "5"}</p></label>
-                                    <label htmlFor="">Qualification <p>{open.md?.qualification || "Graduation"}</p></label>
+                                    {showMD && 
+                                     <>
+                                        <label htmlFor="">Name <p>Dr. {open.md?.name}</p></label>
+                                        <label htmlFor="">Gender <p>{open.md?.gender || "Male"}</p></label>
+                                        <label htmlFor="">Email <p>{open.md?.email}</p></label>
+                                        <label htmlFor="">Experience <p>{open.md?.experience || "5"}</p></label>
+                                        <label htmlFor="">Qualification <p>{open.md?.qualification || "Graduation"}</p></label>
+                                         </>
+                                       }
+                                    {editMD && <div style={{display:"grid",justifyContent:""}}>
+                                        <div style={{display:"flex",width:"400px",gap:"20px",justifyContent:"start"}}>
+                                    <div>
+                                          <label htmlFor="">Name</label>
+                                          <input type="text" value={editMDdata?.name} onChange={(e)=>{setEditMDdata({...editMDdata,name: e.target.value})}} />
+                                    </div>
+                                    <div>
+                                        <label htmlFor="">Gender</label>
+                                        <input type="text" value={editMDdata?.gender || "Male"} onChange={(e)=>{setEditMDdata({...editMDdata,gender: e.target.value})}} />
+                                    </div>  
+                                </div>
+                                   <div style={{display:"flex",width:"400px",gap:"20px",justifyContent:"start"}}>
+
+                                    <div>
+                                       <label htmlFor="">Email</label>
+                                       <input type="text" value={editMDdata?.email} onChange={(e)=>{setEditMDdata({...editMDdata,email: e.target.value})}} />
+                                    </div>
+                                    <div>
+                                       <label htmlFor="">Experience</label>
+                                       <input type="text" value={editMDdata?.experience || "5"} onChange={(e)=>{setEditMDdata({...editMDdata,experience: e.target.value})}} />
+                                    </div>
+                                   </div>
+                                   <div style={{display:"flex",width:"400px",gap:"",justifyContent:"start"}}>
+
+                                    <div style={{display:"grid",}}>
+                                       <label htmlFor="">Qualification</label>
+                                       <input type="text" value={editMDdata?.qualification ||"Graduation"} onChange={(e)=>{setEditMDdata({...editMDdata,qualification: e.target.value})}} />
+                                    </div>
+                                   </div>
+                                 </div>}
                                 </div>
                             </div>
+                            {showMD && 
+                            <div style={{display:"flex",justifyContent:"end"}}>
+                             <button style={{width:"60px",height:"25px",margin:"20px",borderRadius:"5px",backgroundColor:"black",color:"white"}} onClick={changeMD_data} >Edit</button>
+                             {/* <button style={{width:"60px",height:"25px",margin:"20px",borderRadius:"5px",backgroundColor:"black",color:"white"}}></button> */}
+                            </div>
+                            }
+                             {editMD && 
+                            <div style={{display:"flex",justifyContent:"end"}}>
+                             <button style={{width:"60px",height:"25px",margin:"20px",borderRadius:"5px",backgroundColor:"black",color:"white"}} onClick={()=>{changeMD_data();}} >Save</button>
+                             <button style={{width:"60px",height:"25px",margin:"20px",borderRadius:"5px",backgroundColor:"black",color:"white"}} onClick={()=>{changeMD_data();setEditMDdata(hospital?.medicalDirector)}} >Cancel</button>
+                            </div>
+                            }
                         </div>
                     </div>
 

@@ -174,11 +174,20 @@
         color: gray;
     }
 
-    ;
-
     p {
         color: black;
     }
+    input 
+    {
+        width: 200px;
+        height: 30px;
+    }
+    select 
+    {
+        width: 200px;
+        height: 30px;
+    }
+    
 }
 
 .docImage {
