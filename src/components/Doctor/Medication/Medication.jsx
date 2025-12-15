@@ -273,18 +273,6 @@ const data = {
     ]
 }
 
-const patientData = {
-    name: "Vishal Singh",
-    age: 28,
-    gender: "Male",
-    phone: "+91 9876543210",
-    bloodGroup: "B+",
-    height: "175 cm",
-    weight: "70 kg",
-    temperature: "98.6°F",
-    pulse: "78 bpm"
-};
-
 const Medication = () => {
     const navigate = useNavigate()
     const location = useLocation()
@@ -365,31 +353,7 @@ const Medication = () => {
         setfilteredsymtomps(filtered);
     };
 
-    // Fetch Hospitals
-    useEffect(() => {
-        const fetchHospital = async () => {
-            setPartialState({ loadingHospital: true, error: null });
-            try {
-                const res = await superAdminApi.getHosptialMetrices();
-                const hospitalData = res?.data?.data || [];
-                setPartialState({
-                    hospitalData,
-                    filterHospital: hospitalData?.TopPerformanceHospital || [],
-                });
-            } catch (err) {
-                setPartialState({
-                    error:
-                        err.response?.data?.message ||
-                        err.message ||
-                        "Error fetching hospitals",
-                });
-            } finally {
-                setPartialState({ loadingHospital: false });
-            }
-        };
 
-        fetchHospital();
-    }, []);
 
     // Fetch Illnesses (independent)
     useEffect(() => {
@@ -555,26 +519,78 @@ const Medication = () => {
                     </div>
                     <div className={`medication-heading ${patientDetails ? "open" : "closed"}`}>
                         <div className="patient-vitals">
+
                             <div className="patient-vitals-item">
-                                <p>Name: <h5>{patientData.name}</h5></p>
-                                <p>Age: <h5>{patientData.age}</h5></p>
+                                <div>
+                                    <p>Name</p>
+                                    <h5>{patient?.name || "-"}</h5>
+                                </div>
+
+                                <div>
+                                    <p>Age</p>
+                                    <h5>{patient?.age ? `${patient.age} yrs` : "-"}</h5>
+                                </div>
                             </div>
 
                             <div className="patient-vitals-item">
-                                <p>Gender: <h5>{patientData.gender}</h5></p>
-                                <p>Phone: <h5>{patientData.phone}</h5></p>
+                                <div>
+                                    <p>Gender</p>
+                                    <h5>{patient?.gender || "-"}</h5>
+                                </div>
+
+                                <div>
+                                    <p>Phone</p>
+                                    <h5>{patient?.phone || "-"}</h5>
+                                </div>
                             </div>
 
                             <div className="patient-vitals-item">
-                                <p>Blood Group: <h5>{patientData.bloodGroup}</h5></p>
-                                <p>Height: <h5>{patientData.height}</h5></p>
+                                <div>
+                                    <p>Blood Group</p>
+                                    <h5>{patient?.initialAssementId?.bloodGroup || "-"}</h5>
+                                </div>
+
+                                <div>
+                                    <p>Height</p>
+                                    <h5>
+                                        {patient?.initialAssementId?.height
+                                            ? `${patient.initialAssementId.height} cm`
+                                            : "-"}
+                                    </h5>
+                                </div>
                             </div>
 
                             <div className="patient-vitals-item">
-                                <p>Weight: <h5>{patientData.weight}</h5></p>
-                                <p>Pulse: <h5>{patientData.pulse}</h5></p>
+                                <div>
+                                    <p>Weight</p>
+                                    <h5>
+                                        {patient?.initialAssementId?.weight
+                                            ? `${patient.initialAssementId.weight} kg`
+                                            : "-"}
+                                    </h5>
+                                </div>
+
+                                <div>
+                                    <p>Pulse</p>
+                                    <h5>
+                                        {patient?.initialAssementId?.heartRate
+                                            ? `${patient.initialAssementId.heartRate} bpm`
+                                            : "-"}
+                                    </h5>
+                                </div>
                             </div>
+
+                            {patient?.initialAssementId?.selectedSym?.length > 0 && (
+                                <div className="patient-vitals-item">
+                                    <div>
+                                        <p>Symptoms</p>
+                                        <h5>{patient.initialAssementId.selectedSym.join(", ")}</h5>
+                                    </div>
+                                </div>
+                            )}
+
                         </div>
+
 
                         <hr style={{
                             width: '2px'
@@ -629,7 +645,7 @@ const Medication = () => {
                     <div style={{
                         display: 'flex',
                         gap: '10px',
-                     
+
 
                     }}>
                         <div >
@@ -730,7 +746,7 @@ const Medication = () => {
                                 <>
                                     <div className="illnessSuggenstion">
                                         {filteredsymtomps?.map((ill, i) => {
-                                            return ill.symptoms?.map((sym) => {
+                                            return ill.symptoms?.map((sym, index) => {
                                                 const isSelected = symtomps.some((item) => item === sym)
                                                 return <div
                                                     onClick={() => {
@@ -741,7 +757,7 @@ const Medication = () => {
                                                         setfilteredsymtomps([]);
                                                     }}
 
-                                                    key={i} className="illCard">
+                                                    key={index} className="illCard">
                                                     <div>
                                                         <h5>{sym}</h5>
                                                         <p style={{
@@ -845,7 +861,7 @@ const Medication = () => {
                         {!loadingHospital && !error && Array.isArray(filterHospital) && filterHospital.length === 0 && (
                             <p
                                 style={{ textAlign: 'center', padding: '50px 0' }}
-                            >No hospitals found</p>
+                            >No Mediciene found</p>
                         )}
                     </div>
                 </div>

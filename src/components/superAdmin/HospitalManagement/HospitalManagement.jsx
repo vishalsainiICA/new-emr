@@ -229,7 +229,9 @@ const HospitalManagement = () => {
                                 }}>
                                     <div>
                                         <h4>{hos?.name}</h4>
-                                        <p>📍{hos?.state}</p>
+                                        <p style={{
+                                            fontSize: '12px'
+                                        }}>📍{hos?.state}</p>
                                     </div>
                                     <p style={{
                                         padding: '10px',

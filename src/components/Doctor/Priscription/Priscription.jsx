@@ -4,7 +4,7 @@ import scanmer from "../../../assets/Screenshot 2025-11-12 122020.png"
 import nabh from "../../../assets/nabh-accreditated-inodaya-hospital.png"
 import nabl from "../../../assets/nabl-logo-png_seeklogo-398757.png"
 import { useLocation, useNavigate } from "react-router-dom"
-import { useEffect, useState } from "react"
+import { use, useEffect, useState } from "react"
 import jsPDF from "jspdf"
 import html2canvas from "html2canvas"
 import { useRef } from "react"
@@ -14,8 +14,11 @@ import moment from "moment"
 
 const Pricription = () => {
     const navigate = useNavigate()
+    const [tpindigit, setpindigit] = useState(Array(6).fill(""))
+    const inputRef = useRef([])
     const [state, setState] = useState(null);
     const [isProcessing, setIsProcessing] = useState(false)
+    const [tpin, setpin] = useState(null)
     const location = useLocation();
     const pdfRef = useRef();
     const downloadPDF = () => {
@@ -31,6 +34,9 @@ const Pricription = () => {
             pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
             pdf.save("prescription.pdf");
         });
+
+        setpindigit(Array(6).fill(""));
+        setpin(null)
     };
 
     const generatePDFBlob = () => {
@@ -61,12 +67,30 @@ const Pricription = () => {
             navigate("/doctor");
             return;
         }
-        console.log("Received Data:", data);
         setState(data);
     }, [location.state, navigate]);
+    const handleChangeTpin = (value, index) => {
+        if (!/^\d?$/.test(value)) return;
 
+        const newTpin = [...tpindigit]
+        newTpin[index] = value
+        setpindigit(newTpin)
+
+        if (value && index < 5) {
+            inputRef.current[index + 1].focus();
+        }
+    }
+    const handleKeyDown = (e, index) => {
+        if (e.key === "Backspace" && !tpindigit[index] && index > 0) {
+            inputRef.current[index - 1].focus();
+        }
+
+    }
+
+    const finalTpin = tpindigit.join("")
 
     const handleSubmit = async (e) => {
+
         e.preventDefault();
         setIsProcessing(true);
         try {
@@ -84,16 +108,54 @@ const Pricription = () => {
             form.append("illness", JSON.stringify(state?.illnessData))
             form.append("symptoms", JSON.stringify(state?.symtomps))
             form.append("labTest", JSON.stringify(state?.selectedLabTest));
-
-
             const res = await doctorAPi.savePrescribtion(form);
-            toast.success(res?.data?.message || "successfully");
-            navigate("/doctor")
+            if (res.status === 200) {
+                toast.success(res?.data?.message || "successfully");
+                setpindigit(Array(6).fill(""));
+                setpin(null)
+                navigate("/doctor")
+            }
+            else {
+                toast.error(res?.data?.message);
+            }
+
         } catch (err) {
             console.log(err);
             toast.error(err.response?.data?.message || "Something went wrong");
         } finally {
             setIsProcessing(false);
+        }
+    };
+
+    const verifyPin = async (e) => {
+        e.preventDefault();
+        setIsProcessing(true);
+        try {
+            const res = await doctorAPi.verfiyPin(finalTpin);
+            if (res.status === 200) {
+                return true
+            }
+
+            return false
+        } catch (err) {
+            console.log(err);
+            toast.error(err.response?.data?.message || "Something went wrong");
+            return false
+        } finally {
+            setIsProcessing(false);
+        }
+    };
+
+    const handleAction = async (e) => {
+        const isVerify = await verifyPin(e);
+        if (!isVerify) return;
+
+        console.log("tpinf", tpin);
+
+        if (tpin === "save") {
+            handleSubmit(e);
+        } else if (tpin === "download") {
+            downloadPDF();
         }
     };
 
@@ -340,10 +402,124 @@ const Pricription = () => {
 
             </div>
             <div style={{ display: "flex", gap: "10px" }}>
-                <button onClick={downloadPDF} style={{ display: "flex", gap: "8px", width: '150px', cursor: 'pointer' }}><i class="ri-chat-download-line"></i>Download(.pdf)</button>
+                <button disabled={isProcessing} onClick={() => {
+                    setpin("download")
+                }} style={{ display: "flex", gap: "8px", width: '150px', cursor: 'pointer' }}><i class="ri-chat-download-line"></i>Download(.pdf)</button>
                 <br />
-                <button disabled={isProcessing} onClick={(e) => handleSubmit(e)} style={{ display: "flex", gap: "8px", width: '150px', cursor: 'pointer' }}>{` ${isProcessing ? "Saving...." : "Save And Continue`"}`}</button>
+                <button disabled={isProcessing} onClick={(e) => {
+
+                    setpin("save")
+                    // handleSubmit(e)
+                }
+                } style={{ display: "flex", gap: "8px", width: '150px', cursor: 'pointer' }}>{` ${isProcessing ? "Saving...." : "Save And Continue`"}`}</button>
             </div>
+            {console.log("t[pin", tpin)
+            }
+            {
+                tpin !== null && (
+                    <div style={{
+                        position: 'absolute',
+                        inset: 0,
+                        zIndex: 9999,
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backdropFilter: 'blur(10px)',
+                        backgroundColor: 'rgba(19, 5, 5, 0.6)',
+                    }}>
+
+                        <div style={{
+                            backgroundColor: 'white',
+                            minHeight: '200px',
+                            width: '700px',
+                            padding: '20px',
+                            borderRadius: '10px'
+                        }}>
+
+                            <div style={{
+                                display: 'flex',
+                                justifyContent: "space-between",
+                                alignItems: 'center',
+
+                            }}>
+                                <h3>Enter PIN for Proceeding</h3>
+                                <i
+                                    onClick={() => {
+                                        setpin(null)
+                                        setpindigit(Array(6).fill(""));
+
+                                    }}
+                                    className="ri-close-large-line"
+                                    style={{ cursor: 'pointer', fontSize: '20px' }}
+                                ></i>
+                            </div>
+                            <div
+                                style={{
+                                    height: '120px',
+                                    marginTop: "10px",
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    justifyContent: "space-between"
+                                }}>
+
+                                <div style={{
+                                    marginTop: "10px",
+                                    display: "flex",
+                                    justifyContent: "space-between"
+                                }}>
+                                    {tpindigit.map((digit, index) => {
+                                        return <input
+                                            type="tel"
+                                            maxLength="1"
+                                            value={digit}
+                                            ref={(el) => (inputRef.current[index] = el)}
+                                            onChange={(e) => handleChangeTpin(e.target.value, index)}
+                                            onKeyDown={(e) => handleKeyDown(e, index)}
+                                            style={{
+                                                width: '20px',
+                                                height: '30px',
+                                                borderRadius: "8px",
+                                                border: "1px solid #ccc",
+                                                fontSize: '20px',
+                                                textAlign: 'center'
+                                            }}
+
+                                        />
+                                    })}
+                                </div>
+                                <div style={{
+                                    display: "flex",
+                                    justifyContent: "center"
+                                }}> <button
+                                    onClick={handleAction}
+                                    disabled={finalTpin.length !== 6 || isProcessing}
+                                    style={{
+                                        margin: '10px',
+                                        width: '60%',
+                                        padding: '10px',
+                                        backgroundColor:
+                                            finalTpin.length === 6 && !isProcessing ? "#1976d2" : "#ccc",
+                                        color: 'white',
+                                        outline: "none",
+                                        border: "none",
+                                        cursor:
+                                            finalTpin.length === 6 && !isProcessing ? "pointer" : "not-allowed",
+                                        opacity: isProcessing ? 0.7 : 1
+                                    }}>
+                                        {`${isProcessing ? "saving..." : "Save And Continue"}`}
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                )
+            }
         </div>
     );
 }

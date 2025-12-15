@@ -153,6 +153,9 @@ export const doctorAPi = {
     fetchProfile: async () => {
         return await doctorInstance.get('/doctor/auth/profile')
     },
+    verfiyPin: async (tpin) => {
+        return await doctorInstance.post('/doctor/auth/verfiyPin', { "tpin": tpin })
+    },
     patientRegistration: async (formData) => {
         return await doctorInstance.post('/patient/patient-registration', formData)
 

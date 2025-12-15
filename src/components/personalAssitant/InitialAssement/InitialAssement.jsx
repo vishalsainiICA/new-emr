@@ -62,22 +62,55 @@ const InitialAssesment = () => {
         hemoglobin: null,
         bodyTempreture: null,
         respiratoryRate: null,
+        selectedSym: []
     });
     const [isProcessing, setIsProcessing] = useState(false);
+    const [open, setOpen] = useState(null)
+    const [symtomps, setSymptopms] = useState([])
+    const [filteredsymtomps, setfilteredsymtomps] = useState([]);
+    const [searchTermforsymtoms, setsearchTermforsymtoms] = useState("");
     const location = useLocation();
     const navigate = useNavigate();
 
     const data = location.state?.patient || undefined;
 
-    // useEffect(() => {
+    useEffect(() => {
+        const fetchIllness = async () => {
+            setIsProcessing(true)
+            try {
+                const res = await doctorAPi.getAllIllness();
+                const illnessData = res?.data?.data || [];
+                setfilteredsymtomps(illnessData)
+                setSymptopms(illnessData)
+            } catch (err) {
+                toast.error("Internal Server Error")
 
-    //     // if (!data) {
-    //     //     navigate("/pa/dashboard");
-    //     //     return;
-    //     // }
-    //     console.log("Received Data:", data);
+            } finally {
+                setIsProcessing(false)
+            }
+        };
 
-    // }, [location.state, navigate]);
+        fetchIllness();
+    }, []);
+
+    const handleChangeSymtomps = (e) => {
+        const value = e.target.value;
+        setsearchTermforsymtoms(value);
+
+        if (value.trim() === "") {
+            setfilteredsymtomps([]);
+            return;
+        }
+
+        // Corrected filter logic
+        const filtered = symtomps.filter((ill) =>
+            ill.symptoms.some((sym) =>
+                sym.toLowerCase().startsWith(value.toLowerCase())
+            )
+        );
+
+        setfilteredsymtomps(filtered);
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -270,18 +303,133 @@ const InitialAssesment = () => {
                         </label>
                     </div>
                 </div>
+                {open === null && (
+                    <p style={{
+                        fontSize: '14px',
+                        cursor: 'pointer',
+                        color: 'blue'
+                    }} onClick={() => setOpen({ type: "sym" })}>You Want Add Any Symtoms?</p>
+                )}
+                {console.log("filte", filteredsymtomps)
+                }
+                {open !== null && open.type === "sym" && (
+                    <div className="symtompsSuggestion">
+                        <h5>Symptoms</h5>
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'space-between'
+                        }}>
+                            <input type="search" placeholder="add more symtomps...." onChange={handleChangeSymtomps} value={searchTermforsymtoms} />
+                        </div>
+
+                        {filteredsymtomps.length > 0 && searchTermforsymtoms.trim() !== "" && (
+                            <>
+                                <div className="illnessSuggenstion">
+                                    {filteredsymtomps.length > 0 && searchTermforsymtoms.trim() !== "" && (
+                                        <>
+                                            <div className="illnessSuggenstion">
+                                                {filteredsymtomps?.map((ill, i) => {
+                                                    return ill.symptoms?.map((sym, index) => {
+                                                        const isSelected = patient.selectedSym.some((item) => item === sym)
+                                                        return <div
+                                                            onClick={() => {
+                                                                if (!patient.selectedSym.includes(sym)) {
+                                                                    setPatient((prev) => ({
+                                                                        ...prev,
+                                                                        selectedSym: [...prev.selectedSym, sym]
+                                                                    }));
+                                                                }
+                                                                setsearchTermforsymtoms("");
+                                                                setfilteredsymtomps([]);
+                                                            }}
+
+                                                            key={index} className="illCard">
+                                                            <div>
+                                                                <h5>{sym}</h5>
+                                                                <p style={{
+                                                                }}>{ill?.illnessName}</p>
+                                                            </div>
+                                                            {isSelected && (
+                                                                <i
+                                                                    className="ri-check-line"
+                                                                    style={{
+                                                                        fontSize: "24px",
+                                                                        color: "green",
+                                                                        marginLeft: "10px",
+                                                                    }}
+                                                                ></i>
+                                                            )}
+
+
+                                                        </div>
+
+                                                    })
+
+                                                })}
+                                            </div>
+
+                                        </>
+
+                                    )}
+                                </div>
+
+                            </>
+
+                        )}
+
+
+                    </div>
+                )}
+
+
                 <hr />
-                <div style={{
-                    marginTop: '10px',
-                    width: " 60vw",
-                    minWidth: '400px',
-                    display: 'flex',
-                    justifyContent: 'end'
-                }}>
+                <div className='intialAssement-action'>
+                    <div className="selected-symtomps">
+                        {open !== null && (
+                            <h5>Selected Symptoms:</h5>
+                        )}
+                        {patient.selectedSym.length > 0 && (
+                            <div
+                                style={{
+                                    display: "flex",
+                                    margin: "20px",
+                                    gap: "10px",
+                                    flexWrap: "wrap",
+                                    backgroundColor: "white",
+                                }}
+                            >
+                                {patient.selectedSym.map((sym, i) => (
+                                    <p key={i} className="patient">
+                                        {sym}
+                                        <i
+                                            onClick={() =>
+                                                setPatient((prev) => ({
+                                                    ...prev,
+                                                    selectedSym: prev.selectedSym.filter((st) => st !== sym),
+                                                }))
+                                            }
+
+                                            className="ri-close-line"
+                                            style={{
+                                                cursor: "pointer",
+                                                color: "#555",
+                                                transition: "0.2s",
+                                            }}
+                                            onMouseOver={(e) => (e.target.style.color = "red")}
+                                            onMouseOut={(e) => (e.target.style.color = "#555")}
+                                        ></i>
+                                    </p>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
                     <button
 
                         disabled={isProcessing}
                         style={{
+                            width: '90px',
+                            height: '40px',
                             border: '1px solid black',
                             cursor: "pointer"
                         }}
@@ -293,6 +441,7 @@ const InitialAssesment = () => {
                         {isProcessing ? "saving...." : "Save Vitals"}
                     </button>
                 </div>
+
             </div>
         </div>
 

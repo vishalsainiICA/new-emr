@@ -1,41 +1,99 @@
-*
-{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-.Patien-initial-form
-{
-  width: 100vw;
-  height: 100vh;
-  padding: 20px;
-  display: flex;
-  justify-content: center;
+.Patien-initial-form {
+    width: 100vw;
+    height: 100vh;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
     background-color: rgba(233, 233, 253, 1);
 }
 
-.initial-main-form
-{
+.initial-main-form {
     /* width: 60%; */
     background-color: rgba(254, 254, 255);
     padding: 20px;
     border-radius: 20px;
+    overflow-y: scroll;
+    scrollbar-width: none;
     /* background-color: ; */
 }
-.initial-main-form button
-{
+
+.initial-main-form button {
     background-color: black;
     color: white;
     padding: 10px;
     border-radius: 10px;
 }
 
-.patient-detail
-{
+.patient-detail {
     margin: 20px 0px;
     width: 100%;
     display: flex;
-    flex-direction: column ;
+    flex-direction: column;
     gap: 10px;
+}
+
+.intialAssement-action {
+    margin-Top: 10px;
+    width: 60vw;
+    min-Width: 400px;
+    display: flex;
+    justify-Content: space-between;
+
+    p {
+        color: blue;
+        font-size: 14px;
+        cursor: pointer;
+    }
+}
+
+
+
+.illnessSuggenstion {
+    display: flex;
+    padding: 10px;
+    flex-direction: column;
+    max-height: 200px;
+    overflow-y: scroll;
+    border-radius: 20px;
+    z-index: 9999;
+
+    h5 {
+        font-size: 12px;
+    }
+
+    p {
+        font-size: 10px;
+    }
+}
+
+.illCard {
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+}
+
+.illCard:hover {
+    border: 1px solid;
+    background-color: rgb(219, 237, 243);
+    border-radius: 10px;
+}
+
+
+.selected-symtomps {
+
+    margin-Top: 20px;
+
+    p {
+        padding: 5px;
+        font-size: 12px;
+        color: rgb(65, 61, 61);
+        border: 0.5px solid lightgray;
+    }
 }
