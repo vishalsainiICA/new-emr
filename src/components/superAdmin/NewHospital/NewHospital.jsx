@@ -395,6 +395,7 @@ export const NewHospital = () => {
                                     //   pointerEvents: "none"
 
                                 }}
+                                onWheel={(e)=>{e.target.blur()}}
                                 value={hospitalData?.pinCode}
                                 onChange={(e) => handelChange("pinCode", e.target.value)} placeholder="PinCode" />
                             {errors.pinCode && <label style={{ color: "red" }}>{errors.pinCode}</label>}

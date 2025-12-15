@@ -2034,7 +2034,7 @@ const ViewHospital = () => {
                                         <label htmlFor="">Qualification <p>{open.md?.qualification || "Graduation"}</p></label>
                                          </>
                                        }
-                                    {editMD && <div style={{display:"grid",justifyContent:""}}>
+                                    {editMD && <div style={{display:"grid",}}>
                                         <div style={{display:"flex",width:"400px",gap:"20px",justifyContent:"start"}}>
                                     <div>
                                           <label htmlFor="">Name</label>
@@ -2056,7 +2056,7 @@ const ViewHospital = () => {
                                        <input type="text" value={editMDdata?.experience || "5"} onChange={(e)=>{setEditMDdata({...editMDdata,experience: e.target.value})}} />
                                     </div>
                                    </div>
-                                   <div style={{display:"flex",width:"400px",gap:"",justifyContent:"start"}}>
+                                   <div style={{display:"flex",width:"400px",justifyContent:"start"}}>
 
                                     <div style={{display:"grid",}}>
                                        <label htmlFor="">Qualification</label>

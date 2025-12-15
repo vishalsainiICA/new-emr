@@ -190,6 +190,12 @@
     
 }
 
+.docbasicdetails :focus
+{
+  border-bottom: 2px solid #007bff; /* blue line */
+}
+
+
 .docImage {
     border-radius: 20px;
 }
