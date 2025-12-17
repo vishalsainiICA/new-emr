@@ -82,6 +82,13 @@ const Patientregisteration = () => {
     addharNo: '',
   });
 
+  // ============== COMMON REGEX (Global Use) =================
+  const NAME_REGEX = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
+  const NUMBER_REGEX = /^[0-9]+$/;
+  const PHONE_REGEX = /^[0-9]{10}$/;
+  const gmailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const pinCodeRegex = /^[1-9][0-9]{5}$/;
+
 
   function cheakfield() {
 
@@ -90,13 +97,22 @@ const Patientregisteration = () => {
     // Step 1
     if (currentStep == 1) {
       if (!patientData.name) errors.name = "Patient Name is Required"
+      if (patientData.name && !NAME_REGEX.test(patientData.name.trim())) { errors.name = "Only alphabets"; }
+
       if (!patientData.DOB) errors.DOB = "Patient DOB is Required"
       if (!patientData.age) errors.age = "Patient age is Required"
+      if (patientData.age && !NUMBER_REGEX.test(patientData.age)) { errors.age = "Only numbers allowed"; }
+
       if (!patientData.city) errors.city = "Patien.city is Required"
+      if (patientData.city && !NAME_REGEX.test(patientData.city.trim())) { errors.city = "Invalid city name"; }
+
       if (!patientData.gender) errors.gender = "Patient gender is Required"
       if (!patientData.phone) errors.phone = "Patient phone is Required"
       if (patientData.phone && patientData.phone.length !== 10) errors.phone = "Patient Contact Number must be 10 digit "
+      if (patientData.phone && !PHONE_REGEX.test(patientData.phone)) { errors.phone = "Enter valid 10 digit phone number";}
+      if (patientData.email && !gmailRegex.test(patientData.email)) errors.email = "Invalid Mail Address"      
       if (!patientData.pinCode) errors.pinCode = "Patient Name is Required"
+      if (patientData.pinCode && !pinCodeRegex.test(patientData.pinCode)) { errors.pinCode = "Invalid Pincode (6 digits)"; }
       if (!patientData.permanentAddress) errors.permanentAddress = "Patient Address is Required"
       if (!patientData.nationality) errors.nationality = "Patient Nationality is Required"
       if (!patientData.state) errors.state = "Patient Name is Required"
@@ -108,9 +124,14 @@ const Patientregisteration = () => {
 
     if (currentStep == 2) {
       if (!patientData.attendeeName) errors.attendeeName = "Aattendee Name is required "
+      if (patientData.attendeeName && !NAME_REGEX.test(patientData.attendeeName.trim())) { errors.attendeeName = "Only alphabets"; }
+
       if (!patientData.attendeePhone) errors.attendeePhone = "Aattendee Contact Number  is required "
       if (patientData.attendeePhone && patientData.attendeePhone.length !== 10) errors.attendeePhone = "Aattendee Contact Number must be 10 digit "
+
       if (!patientData.attendeeRelation) errors.attendeeRelation = "Aattendee Relation is required "
+      if (patientData.attendeeRelation && !NAME_REGEX.test(patientData.attendeeRelation.trim())) { errors.attendeeRelation = "Only alphabets"; }
+
     }
 
     setErrors(errors)
@@ -365,7 +386,7 @@ const Patientregisteration = () => {
 
                 <div className="distance">
                   <div>
-                    <label>Name *</label>
+                    <label>Name <p className="star">*</p></label>
                     <input
                       type="text"
                       value={patientData.name}
@@ -378,7 +399,7 @@ const Patientregisteration = () => {
                   </div>
 
                   <div>
-                    <label>Date of Birth *</label>
+                    <label>Date of Birth <p className="star">*</p></label>
                     <input
                       type="date"
                       value={patientData.DOB}
@@ -400,7 +421,7 @@ const Patientregisteration = () => {
 
                 <div className="distance">
                   <div>
-                    <label>Gender *</label>
+                    <label>Gender <p className="star">*</p></label>
                     <select value={patientData.gender}
                       onChange={(e) => setPatientData({
                         ...patientData,
@@ -416,13 +437,13 @@ const Patientregisteration = () => {
                   </div>
 
                   <div>
-                    <label>Age *</label>
+                    <label>Age <p className="star">*</p></label>
                     <input
                       type="number"
                       value={patientData.age}
                       onChange={(e) => setPatientData({
                         ...patientData,
-                        age: e.target.value
+                        age: e.target.value.replace(/\D/g, ""), // digits only
                       })}
 
                     />
@@ -433,13 +454,14 @@ const Patientregisteration = () => {
 
                 <div className="distance">
                   <div>
-                    <label>Phone *</label>
+                    <label>Phone <p className="star">*</p></label>
                     <input
                       type="tel"
+                      maxLength={10}
                       value={patientData?.phone}
                       onChange={(e) => setPatientData({
                         ...patientData,
-                        phone: e.target.value
+                        phone: e.target.value.replace(/\D/g, ""), // digits only
                       })}
                     />
                     {errors.phone && <label style={{ color: "red", marginTop: "5px" }}>{errors.phone}</label>}
@@ -448,11 +470,12 @@ const Patientregisteration = () => {
                   <div>
                     <label>WhatsApp Number</label>
                     <input
-                      type="number"
+                      type="tel"
+                      maxLength={10}
                       value={patientData.whatsApp}
                       onChange={(e) => setPatientData({
                         ...patientData,
-                        whatsApp: e.target.value
+                        whatsApp: e.target.value.replace(/\D/g, ""), // digits only
                       })}
                     />
                     {errors.whatsApp && <label style={{ color: "red", marginTop: "5px" }}>{errors.whatsApp}</label>}
@@ -477,7 +500,7 @@ const Patientregisteration = () => {
                   </div>
 
                   <div>
-                    <label>Nationality</label>
+                    <label>Nationality <p className="star">*</p></label>
                     <select value={patientData.nationality} onChange={(e) => setPatientData({
                       ...patientData,
                       nationality: e.target.value
@@ -497,13 +520,14 @@ const Patientregisteration = () => {
 
                 <div className="distance">
                   <div>
-                    <label>PinCode</label>
+                    <label>PinCode <p className="star">*</p></label>
                     <input
-                      type="number"
+                      type="tel"
+                      maxLength={6}
                       value={patientData.pinCode}
                       onChange={(e) => setPatientData({
                         ...patientData,
-                        pinCode: e.target.value
+                        pinCode: e.target.value.replace(/\D/g, ""), // digits only
                       })}
                     />
                     {errors.pinCode && <label style={{ color: "red", marginTop: "5px" }}>{errors.pinCode}</label>}
@@ -511,7 +535,7 @@ const Patientregisteration = () => {
                   </div>
 
                   <div>
-                    <label>City</label>
+                    <label>City <p className="star">*</p></label>
                     <input
                       type="text"
                       value={patientData.city}
@@ -528,7 +552,7 @@ const Patientregisteration = () => {
 
                 <div className="distance">
                   <div>
-                    <label>State *</label>
+                    <label>State <p className="star">*</p></label>
                     <select
                       type="text"
                       value={patientData.state}
@@ -556,13 +580,14 @@ const Patientregisteration = () => {
                   </div>
 
                   <div>
-                    <label>Aadhaar No *</label>
+                    <label>Aadhaar No <p className="star">*</p></label>
                     <input
-                      type="number"
+                      type="tel"
+                      maxLength={12}
                       value={patientData.addharNo}
                       onChange={(e) => setPatientData({
                         ...patientData,
-                        addharNo: e.target.value
+                        addharNo: e.target.value.replace(/\D/g, ""), // digits only
                       })}
                     />
                     {errors.addharNo && <label style={{ color: "red", marginTop: "5px" }}>{errors.addharNo}</label>}
@@ -573,7 +598,7 @@ const Patientregisteration = () => {
                 {(!aadhaarFront || !aadhaarBack) && (
                   <div className="distance">
                     <div>
-                      <label>Front Aadhaar *</label>
+                      <label>Front Aadhaar <p className="star">*</p></label>
                       <input
                         type="file"
                         onChange={(e) => setAadhaarFront(e.target.files[0])}
@@ -583,7 +608,7 @@ const Patientregisteration = () => {
                     </div>
 
                     <div>
-                      <label>Back Aadhaar *</label>
+                      <label>Back Aadhaar <p className="star">*</p></label>
                       <input
                         type="file"
                         onChange={(e) => setAadhaarBack(e.target.files[0])}
@@ -597,7 +622,7 @@ const Patientregisteration = () => {
 
                 <div className="distance">
                   <div>
-                    <label>Address</label>
+                    <label>Address <p className="star">*</p></label>
                     <textarea
                       style={{ width: "100%", padding: "10px", borderRadius: "7px" }}
                       value={patientData.permanentAddress}
@@ -624,7 +649,7 @@ const Patientregisteration = () => {
               <form>
                 <div className="hold-data-div">
                   <div >
-                    <label htmlFor="">Name *</label>
+                    <label htmlFor="">Name  <p className="star">*</p></label>
                     <input type="text"
                       value={patientData?.attendeeName} placeholder="Attendee Name"
                       onChange={(e) => setPatientData({
@@ -635,11 +660,13 @@ const Patientregisteration = () => {
 
                   </div>
                   <div >
-                    <label htmlFor="">Phone Number *</label>
+                    <label htmlFor="">Phone Number <p className="star">*</p></label>
                     <input onChange={(e) => setPatientData({
                       ...patientData,
-                      attendeePhone: e.target.value
-                    })} type="number" value={patientData?.attendeePhone} placeholder="+91 XXXX XXXX XX" />
+                      attendeePhone: e.target.value.replace(/\D/g, ""), // digits only
+                    })} type="tel"
+                        maxLength={10}
+                        value={patientData?.attendeePhone} placeholder="+91 XXXX XXXX XX" />
                     {errors.attendeePhone && <label style={{ color: "red", marginTop: "5px" }}>{errors.attendeePhone}</label>}
 
                   </div>
@@ -653,7 +680,7 @@ const Patientregisteration = () => {
 
                     width: "100%",
 
-                  }}>Relation with Patient         <select style={{
+                  }}>Relation with Patient <p className="star">*</p> <select style={{
 
                     width: "100%",
                     padding: '7px',
@@ -681,13 +708,14 @@ const Patientregisteration = () => {
                       <option value="Guardian">Guardian</option>
                       <option value="Other">Other</option>
                     </select>
+                    {errors.attendeeRelation && <label style={{ color: "red", marginTop: "5px" }}>{errors.attendeeRelation}</label>}
                   </label>
 
                   {patientData?.attendeeRelation === "Other" && (
                     <label htmlFor="" style={{
                       width: '100%'
                     }}>Name *          <input type="text" placeholder="ex. anil" />
-                      {errors.attendeeRelation && <label style={{ color: "red", marginTop: "5px" }}>{errors.attendeeRelation}</label>}</label>
+                      </label>
                   )}
 
 

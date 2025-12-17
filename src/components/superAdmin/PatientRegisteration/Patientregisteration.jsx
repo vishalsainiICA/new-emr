@@ -56,7 +56,7 @@ const Patientregisteration = () => {
       attendeeRelation: '',
       departmentId: '',
       doctorId: null,
-      aadhaarNumber: "",
+      aadhaarNumber: null,
       addharDocuments: [],
     }
   );
@@ -250,74 +250,6 @@ const Patientregisteration = () => {
 
     return () => clearTimeout(timer);
   }, [patientData.phone]);
-  const handleSubmit = async (e) => {
-  
-    e.preventDefault();
-    setIsProcessing(true);
-
-    try {
-      const formdata = new FormData();
-      // multiple d
-
-      uploadedDocuments.forEach((doc, index) => {
-        formdata.append(`categories[${index}]`, doc.category);
-        formdata.append(`fileCount[${index}]`, doc.files.length);
-        doc.files.forEach((file) => {
-          formdata.append("documents", file);
-        });
-      });
-
-      formdata.append("addharfront", aadhaarFront)
-      formdata.append("addharback", aadhaarBack)
-      // patient details append
-      Object.keys(patientData).forEach((key) => {
-
-        let value = patientData[key]
-
-        if (typeof value === "object" && value !== null && !(value instanceof File)) {
-          value = JSON.stringify(value);
-        }
-        formdata.append(key, value ?? "");
-      });
-
-      formdata.append("hospitalId", hospitalId)
-
-      const res = await commonApi.registerPatient(formdata);
-      toast.success(res?.data?.message || "Patient registered successfully");
-
-      // reset
-      setPatientData({
-        name: '',
-        age: null,
-        gender: '',
-        phone: null,
-        email: '',
-        permanentAddress: '',
-        currentAddress: '',
-        whatsApp: null,
-        DOB: '',
-        city: '',
-        state: '',
-        nationality: '',
-        patienCategory: null,
-        attendeeName: '',
-        attendeePhone: null,
-        attendeeRelation: '',
-        departmentId: '',
-        doctorId: null,
-        addharDocuments: [],
-        hospitalId: null,
-        pastDocumnents: []
-      });
-      setUploadedDocuments([]);
-      navigate("/super-admin/dashboard");
-    } catch (err) {
-      console.log(err);
-      toast.error(err.response?.data?.message || "Something went wrong");
-    } finally {
-      setIsProcessing(false);
-    }
-  };
 
   return (
     <div className="Patientregiteration-main">
@@ -371,7 +303,7 @@ const Patientregisteration = () => {
 
                 <div className="distance">
                   <div>
-                    <label>Name *</label>
+                    <label>Name <p className="star">*</p></label>
                     <input
                       type="text"
                       value={patientData.name}
@@ -384,7 +316,7 @@ const Patientregisteration = () => {
                   </div>
 
                   <div>
-                    <label>Date of Birth *</label>
+                    <label>Date of Birth <p className="star">*</p></label>
                     <input
                       type="date"
                       value={patientData?.DOB}
@@ -406,7 +338,7 @@ const Patientregisteration = () => {
 
                 <div className="distance">
                   <div>
-                    <label>Gender *</label>
+                    <label>Gender <p className="star">*</p></label>
                     <select value={patientData.gender}
                       onChange={(e) => setPatientData({
                         ...patientData,
@@ -422,7 +354,7 @@ const Patientregisteration = () => {
                   </div>
 
                   <div>
-                    <label>Age *</label>
+                    <label>Age <p className="star">*</p></label>
                     <input
                       type="number"
                       value={patientData.age}
@@ -439,7 +371,7 @@ const Patientregisteration = () => {
 
                 <div className="distance">
                   <div>
-                    <label>Phone *</label>
+                    <label>Phone <p className="star">*</p></label>
                     <input
                       type="tel"
                       maxLength={10}
@@ -458,12 +390,11 @@ const Patientregisteration = () => {
                   <div>
                     <label>WhatsApp Number</label>
                     <input
-                      type="tel"
-                      maxLength={10}
+                      type="number"
                       value={patientData.whatsApp}
                       onChange={(e) => setPatientData({
                         ...patientData,
-                        whatsApp: e.target.value.replace(/\D/g, ""), // digits only
+                        whatsApp: e.target.value
                       })}
                     />
                     {errors.whatsApp && <label style={{ color: "red", marginTop: "5px" }}>{errors.whatsApp}</label>}
@@ -488,7 +419,7 @@ const Patientregisteration = () => {
                   </div>
 
                   <div>
-                    <label>Nationality</label>
+                    <label>Nationality <p className="star">*</p></label>
                     <select value={patientData.nationality} onChange={(e) => setPatientData({
                       ...patientData,
                       nationality: e.target.value
@@ -508,7 +439,7 @@ const Patientregisteration = () => {
 
                 <div className="distance">
                   <div>
-                    <label>PinCode</label>
+                    <label>PinCode <p className="star">*</p></label>
                     <input
                       type="tel"
                       maxLength={6}
@@ -523,7 +454,7 @@ const Patientregisteration = () => {
                   </div>
 
                   <div>
-                    <label>City</label>
+                    <label>City <p className="star">*</p></label>
                     <input
                       type="text"
                       value={patientData.city}
@@ -540,7 +471,7 @@ const Patientregisteration = () => {
 
                 <div className="distance">
                   <div>
-                    <label>State *</label>
+                    <label>State <p className="star">*</p></label>
 
                     <select
                       type="text"
@@ -558,7 +489,7 @@ const Patientregisteration = () => {
                         border: "1px solid lightgray",
                       }}
                       name="" id="">
-                      <option value="">Select_State</option>
+                      <option value="">Select_State <p className="star">*</p></option>
                       {IndianStates.map((s, i) => {
                         return <option key={i} value={s}>{s}</option>
                       })}
@@ -568,7 +499,7 @@ const Patientregisteration = () => {
                   </div>
 
                   <div>
-                    <label>Aadhaar No *</label>
+                    <label>Aadhaar No <p className="star">*</p></label>
                     <input
                       type="tel"
                       maxLength={12}
@@ -586,7 +517,7 @@ const Patientregisteration = () => {
                 {(!aadhaarFront || !aadhaarBack) && (
                   <div className="distance">
                     <div>
-                      <label>Front Aadhaar *</label>
+                      <label>Front Aadhaar <p className="star">*</p></label>
                       <input
                         type="file"
                         onChange={(e) => setAadhaarFront(e.target.files[0])}
@@ -596,7 +527,7 @@ const Patientregisteration = () => {
                     </div>
 
                     <div>
-                      <label>Back Aadhaar *</label>
+                      <label>Back Aadhaar <p className="star">*</p></label>
                       <input
                         type="file"
                         onChange={(e) => setAadhaarBack(e.target.files[0])}
@@ -610,7 +541,7 @@ const Patientregisteration = () => {
 
                 <div className="distance">
                   <div>
-                    <label>Address</label>
+                    <label>Address <p className="star">*</p></label>
                     <textarea
                       style={{ width: "100%", padding: "10px", borderRadius: "7px" }}
                       value={patientData.permanentAddress}
@@ -637,7 +568,7 @@ const Patientregisteration = () => {
               <form>
                 <div className="hold-data-div">
                   <div >
-                    <label htmlFor="">Name *</label>
+                    <label htmlFor="">Name <p className="star">*</p></label>
                     <input type="text"
                       value={patientData?.attendeeName} placeholder="Attendee Name"
                       onChange={(e) => setPatientData({
@@ -648,13 +579,13 @@ const Patientregisteration = () => {
 
                   </div>
                   <div >
-                    <label htmlFor="">Phone Number *</label>
-                    <input onChange={(e) => setPatientData({
+                    <label htmlFor="">Phone Number <p className="star">*</p></label>
+                    <input
+                    maxLength={10}
+                    onChange={(e) => setPatientData({
                       ...patientData,
                       attendeePhone: e.target.value.replace(/\D/g, ""), // digits only
-                    })} type="tel"
-                        maxLength={10}
-                     value={patientData?.attendeePhone} placeholder="+91 XXXX XXXX XX" />
+                    })} type="tel" value={patientData?.attendeePhone} placeholder="+91 XXXX XXXX XX" />
                     {errors.attendeePhone && <label style={{ color: "red", marginTop: "5px" }}>{errors.attendeePhone}</label>}
 
                   </div>
@@ -668,7 +599,7 @@ const Patientregisteration = () => {
 
                     width: "100%",
 
-                  }}>Relation with Patient         <select style={{
+                  }}>Relation with Patient <p className="star">*</p><select style={{
 
                     width: "100%",
                     padding: '7px',
@@ -696,13 +627,14 @@ const Patientregisteration = () => {
                       <option value="Guardian">Guardian</option>
                       <option value="Other">Other</option>
                     </select>
+                    {errors.attendeeRelation && <label style={{ color: "red", marginTop: "5px" }}>{errors.attendeeRelation}</label>}
                   </label>
 
                   {patientData?.attendeeRelation === "Other" && (
                     <label htmlFor="" style={{
                       width: '100%'
                     }}>Name *          <input type="text" placeholder="ex. anil" />
-                      {errors.attendeeRelation && <label style={{ color: "red", marginTop: "5px" }}>{errors.attendeeRelation}</label>}</label>
+                      </label>
                   )}
 
 
@@ -717,7 +649,7 @@ const Patientregisteration = () => {
           {currentStep === 3 && (
             <div className="patient-step-3">
               <div>
-                <h4>Select Department:</h4>
+                <h4>Select Department <p className="star"> *</p> :</h4>
                 {errors.selectedDep && <label style={{ color: "red", marginTop: "5px" }}>{errors.selectedDep}</label>}
 
               </div>
@@ -761,7 +693,7 @@ const Patientregisteration = () => {
               <div style={{
                 marginTop: '10px',
               }}>
-                <h4> Doctors: </h4>
+                <h4> Doctors <p className="star">*</p> : </h4>
                 {errors.doctorId && <label style={{ color: "red", marginTop: "5px" }}>{errors.doctorId}</label>}
                 {
                   selectedDep && selectedDep?.doctorIds?.map((doc, i) => {
