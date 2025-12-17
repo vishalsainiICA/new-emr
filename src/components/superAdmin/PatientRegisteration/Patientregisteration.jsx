@@ -251,6 +251,76 @@ const Patientregisteration = () => {
     return () => clearTimeout(timer);
   }, [patientData.phone]);
 
+  const handleSubmit = async (e) => {
+    console.log("call");
+
+    e.preventDefault();
+    setIsProcessing(true);
+
+    try {
+      const formdata = new FormData();
+      // multiple d
+
+      uploadedDocuments.forEach((doc, index) => {
+        formdata.append(`categories[${index}]`, doc.category);
+        formdata.append(`fileCount[${index}]`, doc.files.length);
+        doc.files.forEach((file) => {
+          formdata.append("documents", file);
+        });
+      });
+
+      formdata.append("addharfront", aadhaarFront)
+      formdata.append("addharback", aadhaarBack)
+      // patient details append
+      Object.keys(patientData).forEach((key) => {
+
+        let value = patientData[key]
+
+        if (typeof value === "object" && value !== null && !(value instanceof File)) {
+          value = JSON.stringify(value);
+        }
+        formdata.append(key, value ?? "");
+      });
+
+      formdata.append("hospitalId", hospitalId)
+
+      const res = await commonApi.registerPatient(formdata);
+      toast.success(res?.data?.message || "Patient registered successfully");
+
+      // reset
+      setPatientData({
+        name: '',
+        age: null,
+        gender: '',
+        phone: null,
+        email: '',
+        permanentAddress: '',
+        currentAddress: '',
+        whatsApp: null,
+        DOB: '',
+        city: '',
+        state: '',
+        nationality: '',
+        patienCategory: null,
+        attendeeName: '',
+        attendeePhone: null,
+        attendeeRelation: '',
+        departmentId: '',
+        doctorId: null,
+        addharDocuments: [],
+        hospitalId: null,
+        pastDocumnents: []
+      });
+      setUploadedDocuments([]);
+      navigate("/super-admin/dashboard");
+    } catch (err) {
+      console.log(err);
+      toast.error(err.response?.data?.message || "Something went wrong");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   return (
     <div className="Patientregiteration-main">
 
@@ -390,11 +460,12 @@ const Patientregisteration = () => {
                   <div>
                     <label>WhatsApp Number</label>
                     <input
-                      type="number"
+                      type="tel"
+                      maxLength={10}
                       value={patientData.whatsApp}
                       onChange={(e) => setPatientData({
                         ...patientData,
-                        whatsApp: e.target.value
+                        whatsApp: e.target.value.replace(/\D/g, ""),
                       })}
                     />
                     {errors.whatsApp && <label style={{ color: "red", marginTop: "5px" }}>{errors.whatsApp}</label>}
@@ -581,11 +652,11 @@ const Patientregisteration = () => {
                   <div >
                     <label htmlFor="">Phone Number <p className="star">*</p></label>
                     <input
-                    maxLength={10}
-                    onChange={(e) => setPatientData({
-                      ...patientData,
-                      attendeePhone: e.target.value.replace(/\D/g, ""), // digits only
-                    })} type="tel" value={patientData?.attendeePhone} placeholder="+91 XXXX XXXX XX" />
+                      maxLength={10}
+                      onChange={(e) => setPatientData({
+                        ...patientData,
+                        attendeePhone: e.target.value.replace(/\D/g, ""), // digits only
+                      })} type="tel" value={patientData?.attendeePhone} placeholder="+91 XXXX XXXX XX" />
                     {errors.attendeePhone && <label style={{ color: "red", marginTop: "5px" }}>{errors.attendeePhone}</label>}
 
                   </div>
@@ -634,7 +705,7 @@ const Patientregisteration = () => {
                     <label htmlFor="" style={{
                       width: '100%'
                     }}>Name *          <input type="text" placeholder="ex. anil" />
-                      </label>
+                    </label>
                   )}
 
 

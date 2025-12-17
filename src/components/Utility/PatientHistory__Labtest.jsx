@@ -370,10 +370,16 @@ export function Patient_Hisotry({ patient, onclose }) {
                 </div>
 
                 <p>Prescribtion:</p>
-                <iframe src={`${VITE_BASE_URL_API}/${patient?.prescribtionId?.prescriptionImage}`}
+
+                <iframe
+                    src={`${VITE_BASE_URL_API}/${patient?.prescribtionId?.prescriptionImage}#toolbar=0&navpanes=0&scrollbar=0`}
                     width="100%"
                     height="500px"
-                    frameborder="0"></iframe>
+                    style={{
+                        border: "1px solid #ddd",
+                        borderRadius: "8px"
+                    }}
+                />
 
             </div>
 

@@ -49,6 +49,7 @@ const ViewHospital = () => {
         contact: "",
         experience: "",
         qualification: "",
+        gender: "",
         docId: null,
         hosId: null
     });
@@ -70,6 +71,7 @@ const ViewHospital = () => {
             contact: "",
             experience: "",
             qualification: "",
+            gender: "",
             appointmentFees: null
         });
     }
@@ -237,6 +239,41 @@ const ViewHospital = () => {
     }
     const handleAddPa = async (finalData) => {
         try {
+            console.log("finak", finalData);
+
+            if (
+                !finalData?.name ||
+                !finalData.email ||
+                !finalData.gender ||
+                !finalData.qualification
+            ) {
+                toast.error("Please fill all required fields!");
+                return;
+            }
+
+            // Regex patterns
+            const nameRegex = /^[A-Za-z ]+$/;
+            const contactRegex = /^[0-9]{10}$/;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            // Name validation
+            if (!nameRegex.test(finalData.name)) {
+                toast.error("Name must contain only alphabets!");
+                return;
+            }
+
+            // Experience validation
+            if (Number(finalData.experience) > 100) {
+                toast.error("Experience must be less than 100 years!");
+                return;
+            }
+
+            // Email validation
+            if (!emailRegex.test(finalData.email)) {
+                toast.error("Invalid email!");
+                return;
+            }
+
             setIsProcessing(true);
             const res = await superAdminApi.addPa(finalData);
 
@@ -579,7 +616,7 @@ const ViewHospital = () => {
                     justifyContent: "space-between"
                 }}>
                     <h4>{"Department Overview"}</h4>
-                    <button className="common-btn" onClick={() => setCustomDepartment("new Dep")}>+ New Dep</button>
+                    <button className="addButton" onClick={() => setCustomDepartment("new Dep")}>+ New Dep</button>
                 </div>
 
                 <div style={{
@@ -857,7 +894,7 @@ const ViewHospital = () => {
                             columnGap: '10px'
                         }}>
                             <label style={{ width: '100%' }}>
-                                Name *
+                                Name <p className="star">*</p>
                                 <input
                                     type="text"
                                     placeholder="Name"
@@ -867,7 +904,7 @@ const ViewHospital = () => {
                             </label>
 
                             <label style={{ width: '100%' }}>
-                                Email *
+                                Email <p className="star">*</p>
                                 <input
                                     type="email"
                                     placeholder="Email"
@@ -883,33 +920,42 @@ const ViewHospital = () => {
                             columnGap: '10px'
                         }}>
                             <label style={{ width: '100%' }}>
-                                Contact Number *
+                                Contact Number <p className="star">*</p>
                                 <input
-                                    type="text"
+                                    type="tel"
+                                    maxLength={10}
                                     placeholder="Contact Number"
                                     value={doctorData.contact}
-                                    onChange={(e) => setDoctorData({ ...doctorData, contact: e.target.value })}
+                                    onChange={(e) => setDoctorData({ ...doctorData, contact: e.target.value.replace(/\D/g, "") })}
                                 />
                             </label>
 
-                            <label style={{ width: '100%' }}>
-                                Experience (years) *
-                                <input
-                                    type="number"
-                                    placeholder="ex.2"
-                                    value={doctorData.experience}
-                                    onChange={(e) => setDoctorData({ ...doctorData, experience: e.target.value })}
-                                />
+
+
+                            <label style={{
+                                width: '100%',
+                            }}>
+                                Gender  <p className="star">*</p>
+                                <select
+                                    style={{
+                                        padding: '10px',
+                                        borderRadius: '7px'
+                                    }}
+                                    value={doctorData.gender}
+                                    onChange={(e) => setDoctorData({ ...doctorData, gender: e.target.value })}
+                                >
+                                    <option value="">Select_Gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
                             </label>
                         </div>
 
                         <label style={{
                             width: '100%',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            marginTop: '10px'
                         }}>
-                            Qualification *
+                            Qualification <p className="star">*</p>
                             <select
                                 style={{ padding: '10px', borderRadius: '7px' }}
                                 value={doctorData.qualification}
@@ -930,7 +976,7 @@ const ViewHospital = () => {
                         }}>
                             <button className="regular-btn" onClick={() => setAssignDoctor(null)}>Cancel</button>
                             <button
-                                className="common-btn"
+                                className="addButton"
                                 disabled={isProcessing}
                                 onClick={() => handleAddPa({
                                     ...doctorData,
@@ -1108,36 +1154,36 @@ const ViewHospital = () => {
                                                                                 resetDocForm()
                                                                             }}
                                                                         ></i> </>
-                                                                ) : 
-                                                                (addDoc && addDoc.depIndex === i && addDoc.type === "edit" ? (
+                                                                ) :
+                                                                    (addDoc && addDoc.depIndex === i && addDoc.type === "edit" ? (
 
-                                                                    <button className="common-btn" onClick={() => setAddDoc(null)}>Close</button>
+                                                                        <button className="common-btn" onClick={() => setAddDoc(null)}>Close</button>
 
-                                                                ) : ((
-                                                                    // Normal controls when no modal is open
-                                                                    <>
-                                                                        <i
-                                                                            className="ri-add-large-line"
-                                                                            onClick={() => setAddDoc({ type: "new", depIndex: i })}
-                                                                        ></i>
-
-                                                                        {dep.doctors?.length > 0 && (
+                                                                    ) : ((
+                                                                        // Normal controls when no modal is open
+                                                                        <>
                                                                             <i
-                                                                                className="ri-edit-box-line"
-                                                                                onClick={() => setAddDoc({ type: "edit", depIndex: i })}
+                                                                                className="ri-add-large-line"
+                                                                                onClick={() => setAddDoc({ type: "new", depIndex: i })}
                                                                             ></i>
-                                                                        )}
 
-                                                                        <i
-                                                                            className="ri-close-large-line"
-                                                                            onClick={() => {
-                                                                                const updated = departments.filter((_, index) => index !== i);
-                                                                                setDepartments(updated);
-                                                                            }}
-                                                                        ></i>
-                                                                    </>
-                                                                ))
-                                                                )
+                                                                            {dep.doctors?.length > 0 && (
+                                                                                <i
+                                                                                    className="ri-edit-box-line"
+                                                                                    onClick={() => setAddDoc({ type: "edit", depIndex: i })}
+                                                                                ></i>
+                                                                            )}
+
+                                                                            <i
+                                                                                className="ri-close-large-line"
+                                                                                onClick={() => {
+                                                                                    const updated = departments.filter((_, index) => index !== i);
+                                                                                    setDepartments(updated);
+                                                                                }}
+                                                                            ></i>
+                                                                        </>
+                                                                    ))
+                                                                    )
 
 
                                                             }
@@ -1677,6 +1723,7 @@ const ViewHospital = () => {
                                     <label htmlFor="">Name <p>Dr. {edit?.name}</p></label>
                                     <label htmlFor="">Gender <p>{edit?.gender || "Male"}</p></label>
                                     <label htmlFor="">Email <p>{edit?.email}</p></label>
+                                    <label htmlFor="">Contact <p>{edit?.contact}</p></label>
                                     <label htmlFor="">Experience <p>{edit?.experience || "Fresher"}</p></label>
                                     <label htmlFor="">Qualification <p>{edit?.qualification}</p></label>
                                     <label htmlFor="">Appointment Fees <p>₹ {edit?.appointmentFees}</p></label>
@@ -1722,7 +1769,7 @@ const ViewHospital = () => {
                                                 <label htmlFor="">Name  <p>Dr. {edit?.personalAssitantId?.name}</p></label>
                                                 <label htmlFor="">Gender <p>{edit?.personalAssitantId?.gender || "Male"}</p></label>
                                                 <label htmlFor="">Email <p>{edit?.personalAssitantId?.email}</p></label>
-                                                <label htmlFor="">Experience <p>{edit?.personalAssitantId?.experience}</p></label>
+                                                <label htmlFor="">Contact <p>{edit?.personalAssitantId?.contact}</p></label>
                                                 <label htmlFor="">Qualification <p>{edit?.personalAssitantId?.qualification}</p></label>
                                             </div>
                                         </div>

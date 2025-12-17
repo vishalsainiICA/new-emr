@@ -177,22 +177,22 @@
     p {
         color: black;
     }
-    input 
-    {
+
+    input {
         width: 200px;
         height: 30px;
     }
-    select 
-    {
+
+    select {
         width: 200px;
         height: 30px;
     }
-    
+
 }
 
-.docbasicdetails :focus
-{
-  border-bottom: 2px solid #007bff; /* blue line */
+.docbasicdetails :focus {
+    border-bottom: 2px solid #007bff;
+    /* blue line */
 }
 
 
@@ -291,4 +291,14 @@
     p {
         color: gray
     }
+}
+
+.addButton {
+    padding: 7px;
+    color: white;
+    border-radius: 10px;
+    outline: none;
+    cursor: pointer;
+    border: none;
+    background-color: #1976d2;
 }

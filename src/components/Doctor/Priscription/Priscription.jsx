@@ -181,7 +181,7 @@ const Pricription = () => {
 
                                 <div style={{ width: "100%", display: "grid", alignItems: "center", }}>
                                     <label htmlFor="">Reg.Date</label>
-                                    <div className="user-detail"><p>{state?.patientInfo?.DOB}</p></div>
+                                    <div className="user-detail"><p>{moment(state?.patientInfo?.createdAt).format("DD-MM-YYYY hh:mm A")}</p></div>
                                     <label htmlFor="">Attendee Relation :</label>
                                     <div className="user-detail"><p>{state?.patientInfo?.attendeeRelation}</p></div>
                                     <label htmlFor="">Mobile.No</label>

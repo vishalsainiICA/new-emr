@@ -21,32 +21,6 @@ const validationRules = {
 };
 
 
-const validateForm = (patient) => {
-    for (const key in validationRules) {
-        const rule = validationRules[key];
-        const value = patient[key];
-
-        // Empty check
-        if (value === "" || value === null) {
-            toast.error(`${rule.label} is required`);
-            return false;
-        }
-
-        // BP validation (simple format check)
-        if (key === "BP" && !/^\d{2,3}\/\d{2,3}$/.test(value)) {
-            toast.error("Blood Pressure should be in format e.g. 120/80");
-            return false;
-        }
-
-        // Range validation for numeric fields
-        if (rule.min && (value < rule.min || value > rule.max)) {
-            toast.error(`${rule.label} should be between ${rule.min} and ${rule.max}`);
-            return false;
-        }
-    }
-
-    return true;
-};
 
 const InitialAssesment = () => {
 
@@ -114,7 +88,8 @@ const InitialAssesment = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!validateForm(patient)) {
+        if (!patient.BP || !patient.height || !patient.weight) {
+            toast.error('BP ,Height, Weight Are Required')
             return
         }; // stop if validation fails
         setIsProcessing(true);
@@ -185,7 +160,7 @@ const InitialAssesment = () => {
                     )}
                     <div style={{ display: "flex", gap: "100px", marginTop: "10px" }}>
                         <label style={{ width: "100%" }}>
-                            Height (cm)
+                            Height (cm) <p className='star'>*</p>
                             <input
                                 type="number"
                                 value={patient.height || ""}
@@ -195,7 +170,7 @@ const InitialAssesment = () => {
                         </label>
 
                         <label style={{ width: "100%" }}>
-                            Weight (kg)
+                            Weight (kg)  <p className='star'>*</p>
                             <input
                                 type="number"
                                 value={patient.weight || ""}
@@ -207,7 +182,7 @@ const InitialAssesment = () => {
 
                     <div style={{ display: "flex", gap: "100px", marginTop: "10px" }}>
                         <label style={{ width: "100%" }}>
-                            Blood Pressure (mmHg)
+                            Blood Pressure (mmHg)  <p className='star'>*</p>
                             <input
                                 type="text"
                                 value={patient.BP || ""}
