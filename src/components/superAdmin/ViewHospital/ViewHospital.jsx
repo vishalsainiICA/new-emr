@@ -1108,7 +1108,8 @@ const ViewHospital = () => {
                                                                                 resetDocForm()
                                                                             }}
                                                                         ></i> </>
-                                                                ) : (addDoc && addDoc.depIndex === i && addDoc.type === "edit" ? (
+                                                                ) : 
+                                                                (addDoc && addDoc.depIndex === i && addDoc.type === "edit" ? (
 
                                                                     <button className="common-btn" onClick={() => setAddDoc(null)}>Close</button>
 

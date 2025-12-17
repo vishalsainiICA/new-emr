@@ -66,12 +66,15 @@ export const NewHospital = () => {
     const [categoryName, setCategoryName] = useState("")
     const [addCustomDep, setCustomDepartment] = useState(null)
     const [edit, setEdit] = useState(null)
+    const [editDep, seteditDep] = useState(null)
 
     const [hospitalData, setHospitalData] = useState({
         name: '',
         state: null,
         pinCode: '',
         city: '',
+        totalBeds: '',
+        hospitalCategory: '',
         address: '',
         patientCategories: [],
         medicalDirector: {
@@ -95,7 +98,7 @@ export const NewHospital = () => {
     });
 
     const [doctorData, setDoctorData] = useState({
-        doctorName: "",
+        name: "",
         email: "",
         contact: "",
         experience: "",
@@ -110,6 +113,8 @@ export const NewHospital = () => {
         state: null,
         pinCode: '',
         city: '',
+        totalBeds: '',
+        hospitalCategory: '',
         address: '',
         patientCategories: [],
         medicalDirectorName: '',
@@ -145,12 +150,12 @@ export const NewHospital = () => {
 
     // Director
     const directorNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
-    const gmailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
     const contactRegex = /^[6-9][0-9]{9}$/;
     const experienceRegex = /^(?:[1-9]|[1-9][0-9])$/;
 
     // Doctor
-    const doctorNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
+    const nameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
     const doctorEmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
     const doctorContactRegex = /^[6-9][0-9]{9}$/;
     const qualificationRegex = /^[A-Za-z.\s]+$/;
@@ -172,6 +177,8 @@ export const NewHospital = () => {
             if (!hospitalData.city) errors.city = "City is required"
             if (hospitalData.city && !cityRegex.test(hospitalData.city)) { errors.city = "Only alphabets"; }
             if (!hospitalData.pinCode) errors.pinCode = " pinCode is required"
+            if (!hospitalData.totalBeds) errors.totalBeds = " totalBeds is required"
+            if (!hospitalData.hospitalCategory) errors.hospitalCategory = " hospitalCategory is required"
             if (hospitalData.pinCode && !pinCodeRegex.test(hospitalData.pinCode)) { errors.pinCode = "Invalid Pincode (6 digits)"; }
             if (!hospitalData.address) errors.address = " address is required"
             //   if (!addressRegex.test(hospitalData.address)) {errors.address = "Invalid address format";}
@@ -204,17 +211,18 @@ export const NewHospital = () => {
             if (!hasDoctor) errors.supportedDepartmentsdoctors = "Each department must have at least one doctor";
 
         }
-        //    if( doctorDetail===3 && hospitalData.supportedDepartments.length !==0)
-        //      {
-        //       if(doctorDetail==1)
-        //       {if(!doctorData.doctorName) errors.doctorName ="Doctor name is required"
-        //       if(!doctorData.email) errors.doctorEmail ="Doctor Email is required"
-        //       if(!doctorData.experience) errors.doctorExperience ="Doctor Experience is required"
-        //       if(!doctorData.qualification) errors.doctorQualification ="Doctor Qualification is required"
-        //       if(!doctorData.contact) errors.doctorContact ="Doctor Contact Number is required"
-        //       if(!doctorData.appointmentFees) errors.doctorAppointmentFees ="Doctor Appointment Fee is required"  
-        //       const isTrue = hospitalData.supportedDepartments.some((item)=> item?.doctors?.length===0)
-        //      }}
+        if (doctorDetail === 3 && hospitalData.supportedDepartments.length !== 0) {
+            if (doctorDetail == 1) {
+                if (!doctorData.name) errors.name = "Doctor name is required"
+                if (!doctorData.email) errors.doctorEmail = "Doctor Email is required"
+                if (doctorData?.email && !gmailRegex.test(doctorData?.email)) { errors.doctorEmail = "Only Gmail address allowed"; }
+                if (!doctorData.experience) errors.doctorExperience = "Doctor Experience is required"
+                if (!doctorData.qualification) errors.doctorQualification = "Doctor Qualification is required"
+                if (!doctorData.contact) errors.doctorContact = "Doctor Contact Number is required"
+                if (!doctorData.appointmentFees) errors.doctorAppointmentFees = "Doctor Appointment Fee is required"
+                const isTrue = hospitalData.supportedDepartments.some((item) => item?.doctors?.length === 0)
+            }
+        }
 
 
         setErrors(errors);
@@ -223,6 +231,8 @@ export const NewHospital = () => {
     }
 
     const handelChange = (key, value) => {
+        console.log("key");
+
         setHospitalData((prev) => {
             const updated = { ...prev, [key]: value }
             return updated
@@ -239,11 +249,13 @@ export const NewHospital = () => {
             ...prev,
             supportedDepartments: updated
         }))
+
+
         return
     }
 
     const handleAddDoctor = () => {
-        if (!doctorData.doctorName || !doctorData.email || !doctorData.contact || !doctorData.experience || !doctorData.qualification || !doctorData.appointmentFees) {
+        if (!doctorData.name || !doctorData.email || !doctorData.contact || !doctorData.experience || !doctorData.qualification || !doctorData.appointmentFees) {
             toast.error("Please fill all required fields!");
             return;
         }
@@ -258,7 +270,7 @@ export const NewHospital = () => {
         toast.success("Doctor added successfully!");
         setAssignDoctor(null);
         setDoctorData({
-            doctorName: "",
+            name: "",
             email: "",
             contact: "",
             experience: "",
@@ -411,16 +423,13 @@ export const NewHospital = () => {
                     }}>
                         <label style={{
                             width: '100%'
-                        }} htmlFor="">City
+                        }} htmlFor="">City <p className="star">*</p>
                             <input type="text" value={hospitalData?.city}
                                 onChange={(e) => handelChange("city", e.target.value)} placeholder="Enter City" />
                             {errors.city && <label style={{ color: "red" }}>{errors.city}</label>}
                         </label>
                         <label style={{
                             width: '100%',
-                            display: 'flex',
-                            flexDirection: 'column'
-
                         }} htmlFor="">State <p className="star">*</p>
                             <select
                                 type="text"
@@ -463,6 +472,48 @@ export const NewHospital = () => {
                             }} name="" id="" rows="3"></textarea>
                         {errors.address && <label style={{ color: "red" }}>{errors.address}</label>}
                     </label>
+
+                    <div style={{
+                        display: 'flex',
+                        width: '100%',
+                        gap: '100px',
+                        // marginTop: '10px',
+
+                    }}>
+                        <label style={{
+                            width: '100%'
+                        }} htmlFor="">Total Beds <p className="star">*</p>
+                            <input type="tel" maxLength={4} value={hospitalData?.totalBeds}
+                                onChange={(e) => handelChange("totalBeds", e.target.value.replace(/\D/g, ""))} placeholder="ex.450 .beds " />
+                            {errors.totalBeds && <label style={{ color: "red" }}>{errors.totalBeds}</label>}
+                        </label>
+                        <label style={{
+                            width: '100%',
+                        }} htmlFor="">Hospital Category <p className="star">*</p>
+                            <select
+                                type="text"
+                                value={hospitalData?.hospitalCategory}
+                                onChange={(e) => handelChange("hospitalCategory", e.target.value)}
+                                style={{
+                                    width: "100%",
+                                    padding: '8px',
+                                    borderRadius: '7px',
+                                    color: 'black',
+                                    fontsize: "12.5px",
+                                    border: "1px solid lightgray",
+                                }}
+                                name="" id="">
+                                <option value="">Select Category</option>
+                                <option value="Government">Government Hospital</option>
+                                <option value="Semi Government">Semi Government Hospital</option>
+                                <option value="Multi-Speciality">Multispeciality Hospital</option>
+                                <option value="Super-Speciality">Super Speciality Hospital</option>
+                                <option value="Private">Private Hospital</option>
+
+                            </select>
+                            {errors.hospitalCategory && <label style={{ color: "red" }}>{errors.hospitalCategory}</label>}
+                        </label>
+                    </div>
 
 
                     {/* patient category */}
@@ -532,10 +583,6 @@ export const NewHospital = () => {
                         </button>
                     </div>
 
-
-
-
-
                     {hospitalData.patientCategories.length > 0 && (
 
 
@@ -604,14 +651,15 @@ export const NewHospital = () => {
                         }} htmlFor="">Experience <p className="star">*</p>
                             <input
                                 style={{ cursor: "text" }}
+                                maxLength={2}
                                 value={hospitalData?.medicalDirector?.experience}
                                 onChange={(e) => setHospitalData({
                                     ...hospitalData, medicalDirector: {
                                         ...hospitalData.medicalDirector,
-                                        experience: e.target.value
+                                        experience: e.target.value.replace(/\D/g, "")
                                     }
                                 })}
-                                type="number" placeholder="Ex.2" />
+                                type="tel" placeholder="Ex.2" />
                             {errors.medicalDirectorExperience && <label style={{ color: "red" }}>{errors.medicalDirectorExperience}</label>}
 
                         </label>
@@ -638,7 +686,7 @@ export const NewHospital = () => {
                         </label>
                         <label style={{
                             width: '100%'
-                        }} htmlFor="">Contact Number *
+                        }} htmlFor="">Contact Number <p className="star">*</p>
                             <input
                                 style={{ cursor: "text" }}
                                 maxLength={10}
@@ -843,13 +891,12 @@ export const NewHospital = () => {
                                         </div>
                                         <button
                                             onClick={() => setAssignDoctor(i)}
+                                            className="addButton"
                                             style={{
-                                                width: '100%',
-                                                backgroundColor: 'lightgrey',
-                                                border: 'none',
-                                                padding: '10px',
-                                                borderRadius: '10px'
-                                            }}><i class="ri-group-line"></i>+ Doctor</button>
+                                                width: '100%'
+                                            }}
+
+                                        ><i class="ri-group-line"></i>+ Doctor</button>
 
 
                                     </div>
@@ -1132,18 +1179,18 @@ export const NewHospital = () => {
                             columnGap: '80px'
                         }}>
                             <label style={{ width: '100%' }}>
-                                Name *
+                                Name <p className="star">*</p>
                                 <input
                                     type="text"
                                     placeholder="Name"
-                                    value={doctorData.doctorName}
-                                    onChange={(e) => setDoctorData({ ...doctorData, doctorName: e.target.value })}
+                                    value={doctorData.name}
+                                    onChange={(e) => setDoctorData({ ...doctorData, name: e.target.value })}
                                 />
-                                {errors.doctorName && <label style={{ color: "red" }}>{errors.doctorName}</label>}
+                                {errors.name && <label style={{ color: "red" }}>{errors.name}</label>}
                             </label>
 
                             <label style={{ width: '100%' }}>
-                                Email *
+                                Email <p className="star">*</p>
                                 <input
                                     type="email"
                                     placeholder="Email"
@@ -1161,26 +1208,28 @@ export const NewHospital = () => {
                             columnGap: '80px'
                         }}>
                             <label style={{ width: '100%' }}>
-                                Contact Number *
+                                Contact Number  <p className="star">*</p>
                                 <input
-                                    type="Number"
+                                    type="tel"
+                                    maxLength={10}
                                     style={{ cursor: "text" }}
                                     placeholder="Contact Number"
                                     value={doctorData.contact}
-                                    onChange={(e) => setDoctorData({ ...doctorData, contact: e.target.value })}
+                                    onChange={(e) => setDoctorData({ ...doctorData, contact: e.target.value.replace(/\D/g, "") })}
                                 />
                                 {errors.doctorContact && <label style={{ color: "red" }}>{errors.doctorContact}</label>}
 
                             </label>
 
                             <label style={{ width: '100%' }}>
-                                Experience (years) *
+                                Experience (years)  <p className="star">*</p>
                                 <input
                                     style={{ cursor: "text" }}
-                                    type="number"
+                                    type="tel"
+                                    maxLength={2}
                                     placeholder="ex.2"
                                     value={doctorData.experience}
-                                    onChange={(e) => setDoctorData({ ...doctorData, experience: e.target.value })}
+                                    onChange={(e) => setDoctorData({ ...doctorData, experience: e.target.value.replace(/\D/g, "") })}
                                 />
                                 {errors.doctorExperience && <label style={{ color: "red" }}>{errors.doctorExperience}</label>}
 
@@ -1196,11 +1245,9 @@ export const NewHospital = () => {
                         }}>
                             <label style={{
                                 width: '100%',
-                                display: 'flex',
-                                flexDirection: 'column',
                                 // marginTop: '10px'
                             }}>
-                                Gender
+                                Gender  <p className="star">*</p>
                                 <select
                                     style={{
                                         width: "100%",
@@ -1220,13 +1267,14 @@ export const NewHospital = () => {
                                 </select>
                             </label>
                             <label style={{ width: '100%' }}>
-                                Appointment Fees *
+                                Appointment Fees  <p className="star">*</p>
                                 <input
                                     style={{ cursor: "text" }}
-                                    type="number"
+                                    type="tel"
+                                    maxLength={4}
                                     placeholder="ex.500"
                                     value={doctorData?.appointmentFees}
-                                    onChange={(e) => setDoctorData({ ...doctorData, appointmentFees: e.target.value })}
+                                    onChange={(e) => setDoctorData({ ...doctorData, appointmentFees: e.target.value.replace(/\D/g, "") })}
                                 />
                                 {errors.doctorAppointmentFees && <label style={{ color: "red" }}>{errors.doctorAppointmentFees}</label>}
 
@@ -1239,11 +1287,9 @@ export const NewHospital = () => {
                         }}>
                             <label style={{
                                 width: '100%',
-                                display: 'flex',
-                                flexDirection: 'column',
                                 // marginTop: '10px'
                             }}>
-                                Qualification *
+                                Qualification  <p className="star">*</p>
                                 <select
                                     style={{
                                         width: "100%",
@@ -1276,7 +1322,7 @@ export const NewHospital = () => {
                             gap: '10px'
                         }}>
                             <button className="regular-btn" onClick={() => setAssignDoctor(null)}>Cancel</button>
-                            <button className="common-btn"
+                            <button className="addButton"
                                 onClick={() => {
                                     //  setDoctordetail(1);
                                     //  checkfield();
@@ -1390,31 +1436,34 @@ export const NewHospital = () => {
                                 cursor: "pointer"
                             }} onClick={() => {
                                 setEdit(null)
+                                { console.log("hh", hospitalData?.supportedDepartments?.length) }
                             }}></i>
                         </div>
 
                         {
-                            hospitalData.supportedDepartments[edit]?.doctors?.map((doc, i) => {
-                                return <div key={i} className="editdep">
-                                    <div style={{
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                        marginBottom: '10px'
-                                    }}>
-                                        <h5>doctor:{i + 1}</h5>
-
+                            hospitalData.supportedDepartments[edit]?.doctors?.map((doc, index) => {
+                                return (
+                                    <div key={index} className="editdepCard">
                                         <div style={{
                                             display: 'flex',
-                                            gap: '10px',
-                                            justifyContent: 'center',
-                                            alignItems: 'center'
+                                            justifyContent: 'space-between'
                                         }}>
-                                            <BiEdit ></BiEdit>
-                                            <span>✔</span>
+                                            <h5>doctor:{index + 1}</h5>
+                                            <div className="controller">
+                                                {console.log("hh", hospitalData?.supportedDepartments[edit].doctors?.length)}
+                                                {
+                                                    editDep !== null && editDep === index ? (<span onClick={() => {
+                                                        seteditDep(null)
+                                                    }}>✓</span>) : (<BiEdit className="editItems" onClick={() => {
+                                                        console.log("index", index)
+                                                        console.log("editdep", editDep)
+                                                        seteditDep(index)
+                                                    }}></BiEdit>)
+                                                }
 
-                                            <i class="ri-delete-bin-7-line"
-                                                onClick={() => {
-                                                    const updatedDoctors = hospitalData.supportedDepartments[edit]?.doctors?.filter((_, idx) => idx !== i)
+
+                                                <i class="ri-delete-bin-7-line editItems" onClick={() => {
+                                                    const updatedDoctors = hospitalData.supportedDepartments[edit]?.doctors?.filter((_, idx) => idx !== index)
                                                     const updatedDepartments = [...hospitalData.supportedDepartments]
                                                     updatedDepartments[edit].doctors = updatedDoctors
 
@@ -1423,29 +1472,145 @@ export const NewHospital = () => {
                                                         supportedDepartments: updatedDepartments
                                                     }))
 
+
+
+
+                                                    if (!hospitalData?.supportedDepartments[edit].doctors?.length === 0) {
+                                                        setEdit(null)
+                                                        console.log("hh", hospitalData?.supportedDepartments[edit].doctors?.length)
+                                                    }
+
+
                                                 }}></i>
+
+                                            </div>
+
                                         </div>
 
+                                        {
+                                            editDep != null && editDep === index ? (<div className="editdep">
+                                                <label htmlFor="">Name
+                                                    <input type="text" onChange={(e) => handelDoctorChange(i, index, "name", e.target.value)} value={doc?.name} />
+                                                </label>
+                                                <label htmlFor="
+                                                                                                                        ">Email
+                                                    <input type="text" onChange={(e) => handelDoctorChange(i, index, "email", e.target.value)} value={doc?.email} />
+
+                                                </label>
+                                                <label htmlFor="">Contact
+
+                                                    <input type="text" onChange={(e) => handelDoctorChange(i, index, "contact", e.target.value)} value={doc?.contact} />
+                                                </label>
+
+                                                <label htmlFor="">Experience
+
+                                                    <input type="text" onChange={(e) => handelDoctorChange(i, index, "experience", e.target.value)} value={doc?.experience} />
+
+                                                </label>
+
+                                                <label htmlFor="">Qualification
+                                                    <select
+                                                        style={{
+                                                            width: "100%",
+                                                            padding: '8px',
+                                                            borderRadius: '7px',
+                                                            color: 'black',
+                                                            fontsize: "12.5px",
+                                                            border: "1px solid lightgray",
+                                                        }}
+                                                        value={doc?.qualification}
+                                                        onChange={(e) => handelDoctorChange(editDep, i, "qualification", e.target.value)}
+                                                    >
+                                                        <option value="">Select_Degree</option>
+                                                        <option value="Graduation">Graduation</option>
+                                                        <option value="Post-Graduation">Post-Graduation</option>
+                                                    </select>
+                                                </label>
+
+
+                                            </div>) : (<div className="editdepshow">
+                                                <label htmlFor="">Name
+                                                    <p>{doc?.name}</p>
+
+                                                </label>
+                                                <label htmlFor="
+                                                                                                                        ">Email
+                                                    <p>{doc?.email}</p>
+
+                                                </label>
+                                                <label htmlFor="">Contact
+
+                                                    <p>{doc?.contact}</p>                                                                                    </label>
+
+                                                <label htmlFor="">Experience
+
+                                                    <p>{doc?.experience}</p>
+                                                </label>
+
+                                                <label htmlFor="">Qualification
+                                                    <p>{doc?.qualification}</p>
+                                                </label>
+
+
+                                            </div>)
+                                        }
+
+
+
 
                                     </div>
-                                    <div className="docbasicDetails">
-                                        <label htmlFor="">Name
-                                            <p>{doc?.doctorName}</p>
-                                        </label>
-                                    </div>
-                                    <div style={{
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                        gap: '10px'
-                                    }}>
-                                        <input type="text" onChange={(e) => handelDoctorChange(edit, i, "doctorName", e.target.value)} value={doc?.doctorName} />
-                                        <input type="text" onChange={(e) => handelDoctorChange(edit, i, "email", e.target.value)} value={doc?.email} />
-                                        <input type="text" onChange={(e) => handelDoctorChange(edit, i, "contact", e.target.value)} value={doc?.contact} />
-                                        <input type="text" onChange={(e) => handelDoctorChange(edit, i, "experience", e.target.value)} value={doc?.experience} />
-                                        <input type="text" onChange={(e) => handelDoctorChange(edit, i, "qualification", e.target.value)} value={doc?.qualification} />
-                                    </div>
+                                )
+                                // <div key={i} className="editdep">
+                                //     <div style={{
+                                //         display: 'flex',
+                                //         justifyContent: 'space-between',
+                                //         marginBottom: '10px'
+                                //     }}>
+                                //         <h5>doctor:{i + 1}</h5>
 
-                                </div>
+                                //         <div style={{
+                                //             display: 'flex',
+                                //             gap: '10px',
+                                //             justifyContent: 'center',
+                                //             alignItems: 'center'
+                                //         }}>
+                                //             <BiEdit ></BiEdit>
+                                //             <span>✔</span>
+
+                                //             <i class="ri-delete-bin-7-line"
+                                //                 onClick={() => {
+                                //                     const updatedDoctors = hospitalData.supportedDepartments[edit]?.doctors?.filter((_, idx) => idx !== i)
+                                //                     const updatedDepartments = [...hospitalData.supportedDepartments]
+                                //                     updatedDepartments[edit].doctors = updatedDoctors
+
+                                //                     setHospitalData((prev) => ({
+                                //                         ...prev,
+                                //                         supportedDepartments: updatedDepartments
+                                //                     }))
+
+                                //                 }}></i>
+                                //         </div>
+
+
+                                //     </div>
+                                //     <div className="docbasicDetails">
+                                //         <label htmlFor="">Name
+                                //             <p>{doc?.name}</p>
+                                //         </label>
+                                //     </div>
+                                //     <div style={{
+                                //         display: 'flex',
+                                //         justifyContent: 'space-between',
+                                //         gap: '10px'
+                                //     }}>
+                                //         <input type="text" onChange={(e) => handelDoctorChange(edit, i, "name", e.target.value)} value={doc?.name} />
+                                //         <input type="text" onChange={(e) => handelDoctorChange(edit, i, "email", e.target.value)} value={doc?.email} />
+                                //         <input type="text" onChange={(e) => handelDoctorChange(edit, i, "contact", e.target.value)} value={doc?.contact} />
+                                //         <input type="text" onChange={(e) => handelDoctorChange(edit, i, "experience", e.target.value)} value={doc?.experience} />
+                                //         <input type="text" onChange={(e) => handelDoctorChange(edit, i, "qualification", e.target.value)} value={doc?.qualification} />
+                                //     </div>
+
+                                // </div>
                             })
                         }
                     </div>

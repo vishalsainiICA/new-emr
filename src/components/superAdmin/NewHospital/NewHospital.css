@@ -195,5 +195,26 @@ button:active {
     cursor: pointer;
 }
 
+.controller {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
 
+    span {
+        cursor: pointer;
+    }
+}
 
+.addButton {
+    padding: 7px;
+    color: white;
+    border-radius: 10px;
+    outline: none;
+    cursor: pointer;
+    border: none;
+    background-color: #1976d2;
+}
+
+.editItems {
+    cursor: pointer;
+}
