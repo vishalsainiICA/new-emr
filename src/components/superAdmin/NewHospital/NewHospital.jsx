@@ -403,8 +403,10 @@ export const NewHospital = () => {
                         </label>
                         <label style={{
                             width: '100%'
-                        }} htmlFor="">PinCode <p className="star">*</p>
-                            <input type="number"
+                        }} htmlFor="">PinCode  <p className="star">*</p>
+                            <input
+                            type="tel"
+                            maxLength={6}
                                 style={{
                                     cursor: "text",
                                     //   pointerEvents: "none"
@@ -412,7 +414,8 @@ export const NewHospital = () => {
                                 }}
                                 onWheel={(e) => { e.target.blur() }}
                                 value={hospitalData?.pinCode}
-                                onChange={(e) => handelChange("pinCode", e.target.value)} placeholder="PinCode" />
+                                onChange={(e) => {handelChange("pinCode", e.target.value.replace(/\D/g, ""))}}
+                                 placeholder="PinCode" />
                             {errors.pinCode && <label style={{ color: "red" }}>{errors.pinCode}</label>}
 
                         </label>
