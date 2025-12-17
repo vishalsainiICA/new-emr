@@ -56,7 +56,7 @@ const Patientregisteration = () => {
       attendeeRelation: '',
       departmentId: '',
       doctorId: null,
-      aadhaarNumber: null,
+      aadhaarNumber: "",
       addharDocuments: [],
     }
   );
@@ -458,11 +458,12 @@ const Patientregisteration = () => {
                   <div>
                     <label>WhatsApp Number</label>
                     <input
-                      type="number"
+                      type="tel"
+                      maxLength={10}
                       value={patientData.whatsApp}
                       onChange={(e) => setPatientData({
                         ...patientData,
-                        whatsApp: e.target.value
+                        whatsApp: e.target.value.replace(/\D/g, ""), // digits only
                       })}
                     />
                     {errors.whatsApp && <label style={{ color: "red", marginTop: "5px" }}>{errors.whatsApp}</label>}
@@ -509,11 +510,12 @@ const Patientregisteration = () => {
                   <div>
                     <label>PinCode</label>
                     <input
-                      type="number"
+                      type="tel"
+                      maxLength={6}
                       value={patientData.pinCode}
                       onChange={(e) => setPatientData({
                         ...patientData,
-                        pinCode: e.target.value
+                        pinCode: e.target.value.replace(/\D/g, ""), // digits only
                       })}
                     />
                     {errors.pinCode && <label style={{ color: "red", marginTop: "5px" }}>{errors.pinCode}</label>}
@@ -568,11 +570,12 @@ const Patientregisteration = () => {
                   <div>
                     <label>Aadhaar No *</label>
                     <input
-                      type="number"
+                      type="tel"
+                      maxLength={12}
                       value={patientData?.aadhaarNumber}
                       onChange={(e) => setPatientData({
                         ...patientData,
-                        aadhaarNumber: e.target.value
+                        aadhaarNumber: e.target.value.replace(/\D/g, ""), // digits only
                       })}
                     />
                     {errors.aadhaarNumber && <label style={{ color: "red", marginTop: "5px" }}>{errors.aadhaarNumber}</label>}
@@ -648,8 +651,10 @@ const Patientregisteration = () => {
                     <label htmlFor="">Phone Number *</label>
                     <input onChange={(e) => setPatientData({
                       ...patientData,
-                      attendeePhone: e.target.value
-                    })} type="number" value={patientData?.attendeePhone} placeholder="+91 XXXX XXXX XX" />
+                      attendeePhone: e.target.value.replace(/\D/g, ""), // digits only
+                    })} type="tel"
+                        maxLength={10}
+                     value={patientData?.attendeePhone} placeholder="+91 XXXX XXXX XX" />
                     {errors.attendeePhone && <label style={{ color: "red", marginTop: "5px" }}>{errors.attendeePhone}</label>}
 
                   </div>
