@@ -374,7 +374,7 @@ export const NewHospital = () => {
                     }}>
                         <label style={{
                             width: '100%'
-                        }} htmlFor="">Hospital Name
+                        }} htmlFor="">Hospital Name <p className="star">*</p>
                             <input
                                 // pattern="^[A-Za-z\s]+$"
                                 type="text"
@@ -388,14 +388,14 @@ export const NewHospital = () => {
                         </label>
                         <label style={{
                             width: '100%'
-                        }} htmlFor="">PinCode
+                        }} htmlFor="">PinCode <p className="star">*</p>
                             <input type="number"
                                 style={{
                                     cursor: "text",
                                     //   pointerEvents: "none"
 
                                 }}
-                                onWheel={(e)=>{e.target.blur()}}
+                                onWheel={(e) => { e.target.blur() }}
                                 value={hospitalData?.pinCode}
                                 onChange={(e) => handelChange("pinCode", e.target.value)} placeholder="PinCode" />
                             {errors.pinCode && <label style={{ color: "red" }}>{errors.pinCode}</label>}
@@ -421,7 +421,7 @@ export const NewHospital = () => {
                             display: 'flex',
                             flexDirection: 'column'
 
-                        }} htmlFor="">State*
+                        }} htmlFor="">State <p className="star">*</p>
                             <select
                                 type="text"
                                 value={hospitalData?.state}
@@ -446,7 +446,7 @@ export const NewHospital = () => {
 
                     <label style={{
                         width: '100%'
-                    }} htmlFor="">Address
+                    }} htmlFor="">Address <p className="star">*</p>
                         <br />
                         <textarea
                             type="text"
@@ -476,7 +476,7 @@ export const NewHospital = () => {
                     }}>
                         <label style={{
                             width: '42%'
-                        }} htmlFor="">Patient Category
+                        }} htmlFor="">Patient Category <p className="star">*</p>
                             <input value={categoryName} type="text" placeholder="ex. Jan Addhar"
                                 onChange={(e) => {
                                     return setCategoryName(e.target.value)
@@ -586,7 +586,7 @@ export const NewHospital = () => {
                     }}>
                         <label style={{
                             width: '100%'
-                        }} htmlFor="">Name *
+                        }} htmlFor="">Name <p className="star">*</p>
                             <input
                                 prefix="Dr."
                                 value={hospitalData?.medicalDirector?.name}
@@ -601,7 +601,7 @@ export const NewHospital = () => {
                         </label>
                         <label style={{
                             width: '100%'
-                        }} htmlFor="">Experience
+                        }} htmlFor="">Experience <p className="star">*</p>
                             <input
                                 style={{ cursor: "text" }}
                                 value={hospitalData?.medicalDirector?.experience}
@@ -625,7 +625,7 @@ export const NewHospital = () => {
                     }}>
                         <label style={{
                             width: '100%'
-                        }} htmlFor="">Email
+                        }} htmlFor="">Email <p className="star">*</p>
                             <input value={hospitalData?.medicalDirector?.email}
                                 onChange={(e) => setHospitalData({
                                     ...hospitalData, medicalDirector: {
@@ -641,14 +641,15 @@ export const NewHospital = () => {
                         }} htmlFor="">Contact Number *
                             <input
                                 style={{ cursor: "text" }}
+                                maxLength={10}
                                 value={hospitalData?.medicalDirector?.contact}
                                 onChange={(e) => setHospitalData({
                                     ...hospitalData, medicalDirector: {
                                         ...hospitalData.medicalDirector,
-                                        contact: e.target.value
+                                        contact: e.target.value.replace(/\D/g, "")
                                     }
                                 })}
-                                type="number" placeholder="+91 7340479570" />
+                                type="tel" placeholder="+91 7340479570" />
                             {errors.medicalDirectorContact && <label style={{ color: "red" }}>{errors.medicalDirectorContact}</label>}
 
                         </label>

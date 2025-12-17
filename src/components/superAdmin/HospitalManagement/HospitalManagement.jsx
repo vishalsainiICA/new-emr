@@ -207,20 +207,7 @@ const HospitalManagement = () => {
                             <div style={{
                                 display: 'flex'
                             }}>
-                                <div style={{
-                                    width: '40px',
-                                    height: '35px',
-                                    backgroundColor: 'rgba(141, 129, 244)',
-                                    display: 'flex',
-                                    justifyContent: "center",
-                                    alignItems: 'center',
-                                    borderRadius: '10px'
-
-                                }}>
-                                    <h2 style={{
-                                        color: 'white'
-                                    }}>E</h2>
-                                </div>
+                                <span className="logo">{hos?.name?.slice(0, 2).toUpperCase()}</span>
                                 <div style={{
                                     marginLeft: '10px',
                                     display: 'flex',

@@ -250,6 +250,74 @@ const Patientregisteration = () => {
 
     return () => clearTimeout(timer);
   }, [patientData.phone]);
+  const handleSubmit = async (e) => {
+  
+    e.preventDefault();
+    setIsProcessing(true);
+
+    try {
+      const formdata = new FormData();
+      // multiple d
+
+      uploadedDocuments.forEach((doc, index) => {
+        formdata.append(`categories[${index}]`, doc.category);
+        formdata.append(`fileCount[${index}]`, doc.files.length);
+        doc.files.forEach((file) => {
+          formdata.append("documents", file);
+        });
+      });
+
+      formdata.append("addharfront", aadhaarFront)
+      formdata.append("addharback", aadhaarBack)
+      // patient details append
+      Object.keys(patientData).forEach((key) => {
+
+        let value = patientData[key]
+
+        if (typeof value === "object" && value !== null && !(value instanceof File)) {
+          value = JSON.stringify(value);
+        }
+        formdata.append(key, value ?? "");
+      });
+
+      formdata.append("hospitalId", hospitalId)
+
+      const res = await commonApi.registerPatient(formdata);
+      toast.success(res?.data?.message || "Patient registered successfully");
+
+      // reset
+      setPatientData({
+        name: '',
+        age: null,
+        gender: '',
+        phone: null,
+        email: '',
+        permanentAddress: '',
+        currentAddress: '',
+        whatsApp: null,
+        DOB: '',
+        city: '',
+        state: '',
+        nationality: '',
+        patienCategory: null,
+        attendeeName: '',
+        attendeePhone: null,
+        attendeeRelation: '',
+        departmentId: '',
+        doctorId: null,
+        addharDocuments: [],
+        hospitalId: null,
+        pastDocumnents: []
+      });
+      setUploadedDocuments([]);
+      navigate("/super-admin/dashboard");
+    } catch (err) {
+      console.log(err);
+      toast.error(err.response?.data?.message || "Something went wrong");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   return (
     <div className="Patientregiteration-main">
