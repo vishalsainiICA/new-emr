@@ -82,7 +82,8 @@ export const NewHospital = () => {
             email: '',
             contact: '',
             experience: '',
-            image: null
+            image: null,
+            gender: ''
         },
         supportedDepartments: [],
         customLetterPad: {
@@ -122,6 +123,7 @@ export const NewHospital = () => {
         medicalDirectorEmail: '',
         medicalDirectorExperience: '',
         medicalDirectorImage: '',
+        medicalDirectorgender: '',
         customLetterPad: {
             headerName: '',
             disclaimer: '',
@@ -192,6 +194,7 @@ export const NewHospital = () => {
             if (!hospitalData.medicalDirector?.name) errors.medicalDirectorName = "Medical director Name is required"
             if (hospitalData.medicalDirector?.name && !directorNameRegex.test(hospitalData.medicalDirector.name)) { errors.medicalDirectorName = "Only alphabets Allowed"; }
             if (!hospitalData.medicalDirector?.experience) errors.medicalDirectorExperience = "Medical director Experience is required"
+            if (!hospitalData.medicalDirector?.gender) errors.medicalDirectorgender = "Medical director Gender is required"
             if (hospitalData.medicalDirector?.experience && !experienceRegex.test(hospitalData.medicalDirector.experience)) { errors.medicalDirectorExperience = "Invalid experience (1-99)"; }
             if (!hospitalData.medicalDirector?.contact) errors.medicalDirectorContact = "Medical director contact is required"
             if (hospitalData.medicalDirector?.contact && hospitalData.medicalDirector?.contact.length !== 10) errors.medicalDirectorContact = "Medical director Number Must be 10 digits"
@@ -702,24 +705,45 @@ export const NewHospital = () => {
 
                         </label>
                     </div>
-                    <div
-                        style={{
-                            width: "100%",
-
-                            padding: '20px',
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            border: "0.7px solid lightgray",
-                            marginTop: '10px',
-                            borderRadius: '7px'
-                        }}
-                    >
+                    <div style={{
+                        marginTop: '10px',
+                        display: 'flex',
+                        columnGap: '80px',
+                        display: "flex",
+                        justifyContent: "center"
+                    }}>
+                        <label style={{
+                            width: '100%',
+                            // marginTop: '10px'
+                        }}>
+                            Gender  <p className="star">*</p>
+                            <select
+                                style={{
+                                    width: "100%",
+                                    padding: '8px',
+                                    borderRadius: '7px',
+                                    color: 'black',
+                                    fontsize: "12.5px",
+                                    border: "1px solid lightgray",
+                                }}
+                                value={hospitalData.medicalDirector.gender}
+                                onChange={(e) => setHospitalData({
+                                    ...hospitalData, medicalDirector: {
+                                        ...hospitalData.medicalDirector,
+                                        gender: e.target.value
+                                    }
+                                })}
+                            >
+                                <option>Select Gender</option>
+                                <option>Male</option>
+                                <option>Female</option>
+                                <option>other</option>
+                            </select>
+                            {errors.medicalDirectorgender && <label style={{ color: "red" }}>{errors.medicalDirectorgender}</label>}
+                        </label>
                         <label
                             style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center",
+                                width: '100%',
                                 gap: "5px",
                             }}
                         >
@@ -741,6 +765,7 @@ export const NewHospital = () => {
 
                         </label>
                     </div>
+
                     <hr />
 
                     <div className="page-handler" >
@@ -1038,6 +1063,11 @@ export const NewHospital = () => {
                                 }}>
                                     <p className="reviewtag">
                                         Name: <span >{hospitalData.medicalDirector.name}</span>
+                                    </p>
+
+
+                                    <p className="reviewtag">
+                                        Gender: <span >{hospitalData.medicalDirector.gender}</span>
                                     </p>
 
                                     <p className="reviewtag">
