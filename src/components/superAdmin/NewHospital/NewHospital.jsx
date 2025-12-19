@@ -175,60 +175,60 @@ export const NewHospital = () => {
 
         const errors = {}
         // step 1 Validation
-        // if (currentStep === 1) {
-        //     if (!hospitalData.name) errors.name = "Hospital Name is required"
-        //     if (hospitalData.name && !hospitalNameRegex.test(hospitalData.name)) { errors.name = "Only alphabets allowed"; }
-        //     if (!hospitalData.state) errors.state = " state is required"
-        //     if (!hospitalData.city) errors.city = "City is required"
-        //     if (hospitalData.city && !cityRegex.test(hospitalData.city)) { errors.city = "Only alphabets"; }
-        //     if (!hospitalData.pinCode) errors.pinCode = " pinCode is required"
-        //     if (!hospitalData.totalBeds) errors.totalBeds = " totalBeds is required"
-        //     if (!hospitalData.hospitalCategory) errors.hospitalCategory = " hospitalCategory is required"
-        //     if (hospitalData.pinCode && !pinCodeRegex.test(hospitalData.pinCode)) { errors.pinCode = "Invalid Pincode (6 digits)"; }
-        //     if (!hospitalData.address) errors.address = " address is required"
-        //     //   if (!addressRegex.test(hospitalData.address)) {errors.address = "Invalid address format";}
-        //     if (hospitalData.patientCategories?.length === 0) errors.patientCategories = " Patient Category  is required"
-        //     //    if (!categoryRegex.test(cat)) {errors.patientCategories = "Invalid category name";}
-        // }
+        if (currentStep === 1) {
+            if (!hospitalData.name) errors.name = "Hospital Name is required"
+            if (hospitalData.name && !hospitalNameRegex.test(hospitalData.name)) { errors.name = "Only alphabets allowed"; }
+            if (!hospitalData.state) errors.state = " state is required"
+            if (!hospitalData.city) errors.city = "City is required"
+            if (hospitalData.city && !cityRegex.test(hospitalData.city)) { errors.city = "Only alphabets"; }
+            if (!hospitalData.pinCode) errors.pinCode = " pinCode is required"
+            if (!hospitalData.totalBeds) errors.totalBeds = " totalBeds is required"
+            if (!hospitalData.hospitalCategory) errors.hospitalCategory = " hospitalCategory is required"
+            if (hospitalData.pinCode && !pinCodeRegex.test(hospitalData.pinCode)) { errors.pinCode = "Invalid Pincode (6 digits)"; }
+            if (!hospitalData.address) errors.address = " address is required"
+            //   if (!addressRegex.test(hospitalData.address)) {errors.address = "Invalid address format";}
+            if (hospitalData.patientCategories?.length === 0) errors.patientCategories = " Patient Category  is required"
+            //    if (!categoryRegex.test(cat)) {errors.patientCategories = "Invalid category name";}
+        }
 
-        // // step 2 Validation
+        // step 2 Validation
 
-        // if (currentStep == 2) {
-        //     if (!hospitalData.medicalDirector?.name) errors.medicalDirectorName = "Medical director Name is required"
-        //     if (hospitalData.medicalDirector?.name && !directorNameRegex.test(hospitalData.medicalDirector.name)) { errors.medicalDirectorName = "Only alphabets Allowed"; }
-        //     if (!hospitalData.medicalDirector?.experience) errors.medicalDirectorExperience = "Medical director Experience is required"
-        //     if (!hospitalData.medicalDirector?.gender) errors.medicalDirectorgender = "Medical director Gender is required"
-        //     if (hospitalData.medicalDirector?.experience && !experienceRegex.test(hospitalData.medicalDirector.experience)) { errors.medicalDirectorExperience = "Invalid experience (1-99)"; }
-        //     if (!hospitalData.medicalDirector?.contact) errors.medicalDirectorContact = "Medical director contact is required"
-        //     if (hospitalData.medicalDirector?.contact && hospitalData.medicalDirector?.contact.length !== 10) errors.medicalDirectorContact = "Medical director Number Must be 10 digits"
-        //     if (!hospitalData.medicalDirector?.email) errors.medicalDirectorEmail = "Medical director email is required"
-        //     if (hospitalData.medicalDirector?.email && !gmailRegex.test(hospitalData.medicalDirector?.email)) { errors.medicalDirectorEmail = "Only Gmail address allowed"; }
-        //     // medical director Image Optional
-        //     //   if(!hospitalData.medicalDirector?.image) errors.medicalDirectorImage="Medical director Document  is required"
-        // }
+        if (currentStep == 2) {
+            if (!hospitalData.medicalDirector?.name) errors.medicalDirectorName = "Medical director Name is required"
+            if (hospitalData.medicalDirector?.name && !directorNameRegex.test(hospitalData.medicalDirector.name)) { errors.medicalDirectorName = "Only alphabets Allowed"; }
+            if (!hospitalData.medicalDirector?.experience) errors.medicalDirectorExperience = "Medical director Experience is required"
+            if (!hospitalData.medicalDirector?.gender) errors.medicalDirectorgender = "Medical director Gender is required"
+            if (hospitalData.medicalDirector?.experience && !experienceRegex.test(hospitalData.medicalDirector.experience)) { errors.medicalDirectorExperience = "Invalid experience (1-99)"; }
+            if (!hospitalData.medicalDirector?.contact) errors.medicalDirectorContact = "Medical director contact is required"
+            if (hospitalData.medicalDirector?.contact && hospitalData.medicalDirector?.contact.length !== 10) errors.medicalDirectorContact = "Medical director Number Must be 10 digits"
+            if (!hospitalData.medicalDirector?.email) errors.medicalDirectorEmail = "Medical director email is required"
+            if (hospitalData.medicalDirector?.email && !gmailRegex.test(hospitalData.medicalDirector?.email)) { errors.medicalDirectorEmail = "Only Gmail address allowed"; }
+            // medical director Image Optional
+            //   if(!hospitalData.medicalDirector?.image) errors.medicalDirectorImage="Medical director Document  is required"
+        }
 
-        // if (currentStep === 3) {
-        //     if (hospitalData.supportedDepartments.length === 0) errors.supportedDepartments = "Please Select Department is Required"
-        //     //  if(hospitalData.supportedDepartments?.doctors?.length=== 0) errors.supportedDepartmentsdoctors="Please Add  One doctor  is Required"
+        if (currentStep === 3) {
+            if (hospitalData.supportedDepartments.length === 0) errors.supportedDepartments = "Please Select Department is Required"
+            //  if(hospitalData.supportedDepartments?.doctors?.length=== 0) errors.supportedDepartmentsdoctors="Please Add  One doctor  is Required"
 
-        //     const hasDoctor = hospitalData.supportedDepartments.every(
-        //         (dep) => dep.doctors && dep.doctors.length > 0);
+            const hasDoctor = hospitalData.supportedDepartments.every(
+                (dep) => dep.doctors && dep.doctors.length > 0);
 
-        //     if (!hasDoctor) errors.supportedDepartmentsdoctors = "Each department must have at least one doctor";
+            if (!hasDoctor) errors.supportedDepartmentsdoctors = "Each department must have at least one doctor";
 
-        // }
-        // if (doctorDetail === 3 && hospitalData.supportedDepartments.length !== 0) {
-        //     if (doctorDetail == 1) {
-        //         if (!doctorData.name) errors.name = "Doctor name is required"
-        //         if (!doctorData.email) errors.doctorEmail = "Doctor Email is required"
-        //         if (doctorData?.email && !gmailRegex.test(doctorData?.email)) { errors.doctorEmail = "Only Gmail address allowed"; }
-        //         if (!doctorData.experience) errors.doctorExperience = "Doctor Experience is required"
-        //         if (!doctorData.qualification) errors.doctorQualification = "Doctor Qualification is required"
-        //         if (!doctorData.contact) errors.doctorContact = "Doctor Contact Number is required"
-        //         if (!doctorData.appointmentFees) errors.doctorAppointmentFees = "Doctor Appointment Fee is required"
-        //         const isTrue = hospitalData.supportedDepartments.some((item) => item?.doctors?.length === 0)
-        //     }
-        // }
+        }
+        if (doctorDetail === 3 && hospitalData.supportedDepartments.length !== 0) {
+            if (doctorDetail == 1) {
+                if (!doctorData.name) errors.name = "Doctor name is required"
+                if (!doctorData.email) errors.doctorEmail = "Doctor Email is required"
+                if (doctorData?.email && !gmailRegex.test(doctorData?.email)) { errors.doctorEmail = "Only Gmail address allowed"; }
+                if (!doctorData.experience) errors.doctorExperience = "Doctor Experience is required"
+                if (!doctorData.qualification) errors.doctorQualification = "Doctor Qualification is required"
+                if (!doctorData.contact) errors.doctorContact = "Doctor Contact Number is required"
+                if (!doctorData.appointmentFees) errors.doctorAppointmentFees = "Doctor Appointment Fee is required"
+                const isTrue = hospitalData.supportedDepartments.some((item) => item?.doctors?.length === 0)
+            }
+        }
 
         if (currentStep === 4) {
             // hospital data
