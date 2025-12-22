@@ -368,7 +368,7 @@ const Patientregisteration = () => {
           {currentStep == 1 && (
 
             <div className="patient-step-1">
-              <h4>Patient Detail</h4>
+              <h4>Patient Detail </h4>
               <form className="All-detail" action="">
 
                 <div className="distance">

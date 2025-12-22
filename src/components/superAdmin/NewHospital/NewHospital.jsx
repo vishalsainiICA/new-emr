@@ -98,6 +98,9 @@ export const NewHospital = () => {
         }
     });
 
+    const [hospitalDatacopy, setHospitalDatacopy] = useState({})
+    const [mdDatacopy, setMDdatacopy] = useState({})
+
     const [doctorData, setDoctorData] = useState({
         name: "",
         email: "",
@@ -144,27 +147,27 @@ export const NewHospital = () => {
     // Hospital
     // const nameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;?
 
-    const hospitalNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
-    const cityRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
+    const hospitalNameRegex = /^[A-Za-z\s]+$/;
+    const cityRegex = /^[A-Za-z\s]+$/;
     const pinCodeRegex = /^[1-9][0-9]{5}$/;
     const addressRegex = /^[A-Za-z0-9\s,./#-]+$/;
     const categoryRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
 
     // Director
-    const directorNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
+    const directorNameRegex = /^[A-Za-z\s]+$/;
     const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
     const contactRegex = /^[6-9][0-9]{9}$/;
     const experienceRegex = /^(?:[1-9]|[1-9][0-9])$/;
 
     // Doctor
-    const nameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
+    const nameRegex = /^[A-Za-z\s]+$/;
     const doctorEmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
     const doctorContactRegex = /^[6-9][0-9]{9}$/;
     const qualificationRegex = /^[A-Za-z.\s]+$/;
     const feesRegex = /^[1-9][0-9]{2,4}$/;
 
     // Department
-    const departmentNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
+    const departmentNameRegex = /^[A-Za-z\s]+$/;
 
 
 
@@ -172,7 +175,7 @@ export const NewHospital = () => {
 
         const errors = {}
         // step 1 Validation
-        if (currentStep == 1) {
+        if (currentStep === 1) {
             if (!hospitalData.name) errors.name = "Hospital Name is required"
             if (hospitalData.name && !hospitalNameRegex.test(hospitalData.name)) { errors.name = "Only alphabets allowed"; }
             if (!hospitalData.state) errors.state = " state is required"
@@ -225,6 +228,33 @@ export const NewHospital = () => {
                 if (!doctorData.appointmentFees) errors.doctorAppointmentFees = "Doctor Appointment Fee is required"
                 const isTrue = hospitalData.supportedDepartments.some((item) => item?.doctors?.length === 0)
             }
+        }
+
+        if (currentStep === 4) {
+            // hospital data
+            if (!hospitalDatacopy?.name) errors.name = "Hospital Name is required"
+            if (hospitalDatacopy.name && !hospitalNameRegex.test(hospitalDatacopy.name)) { errors.name = "Only alphabets allowed"; }
+            if (!hospitalDatacopy.state) errors.state = " state is required"
+            if (!hospitalDatacopy.city) errors.city = "City is required"
+            if (hospitalDatacopy.city && !cityRegex.test(hospitalDatacopy.city)) { errors.city = "Only alphabets"; }
+            if (!hospitalDatacopy.pinCode) errors.pinCode = " pinCode is required"
+            if (hospitalDatacopy.pinCode && !pinCodeRegex.test(hospitalDatacopy.pinCode)) { errors.pinCode = "Invalid Pincode (6 digits)"; }
+            if (!hospitalDatacopy.address) errors.address = " address is required"
+
+            // MD data
+
+            if (!hospitalDatacopy?.medicalDirector?.name) errors.medicalDirectorName = "Medical director Name is required"
+            if (hospitalDatacopy?.medicalDirector?.name && !directorNameRegex.test(hospitalDatacopy.medicalDirector.name)) { errors.medicalDirectorName = "Only alphabets Allowed"; }
+            if (!hospitalDatacopy?.medicalDirector?.gender) errors.medicalDirectorgender = "Medical director Gender is required"
+            if (!hospitalDatacopy?.medicalDirector?.experience) errors.medicalDirectorExperience = "Medical director Experience is required"
+            if (hospitalDatacopy?.medicalDirector?.experience && !experienceRegex.test(hospitalDatacopy?.medicalDirector.experience)) { errors.medicalDirectorExperience = "Invalid experience (1-99)"; }
+            if (!hospitalDatacopy?.medicalDirector?.contact) errors.medicalDirectorContact = "Medical director contact is required"
+            if (hospitalDatacopy?.medicalDirector?.contact && hospitalDatacopy?.medicalDirector?.contact.length !== 10) errors.medicalDirectorContact = "Medical director Number Must be 10 digits"
+            if (!hospitalDatacopy?.medicalDirector?.email) errors.medicalDirectorEmail = "Medical director email is required"
+            if (hospitalDatacopy?.medicalDirector?.email && !gmailRegex.test(hospitalDatacopy?.medicalDirector?.email)) { errors.medicalDirectorEmail = "Only Gmail address allowed"; }
+
+
+
         }
 
 
@@ -354,6 +384,23 @@ export const NewHospital = () => {
             setIsProcessing(false);
         }
     };
+
+    const [editHospital, setEditHospital] = useState(false)
+    const [showHospital, setShowHospital] = useState(true)
+    const [showMD, setShowMD] = useState(true)
+    const [editMD, setEditMD] = useState(false)
+
+
+    function Edithospitadata() {
+        setShowHospital(!showHospital)
+        setEditHospital(!editHospital)
+    }
+
+    function EditMDdata() {
+        setShowMD(!showMD)
+        setEditMD(!editMD)
+    }
+
     return <div className="New-hospital">
 
         <div className="customCard" style={{
@@ -405,8 +452,8 @@ export const NewHospital = () => {
                             width: '100%'
                         }} htmlFor="">PinCode  <p className="star">*</p>
                             <input
-                            type="tel"
-                            maxLength={6}
+                                type="tel"
+                                maxLength={6}
                                 style={{
                                     cursor: "text",
                                     //   pointerEvents: "none"
@@ -414,8 +461,8 @@ export const NewHospital = () => {
                                 }}
                                 onWheel={(e) => { e.target.blur() }}
                                 value={hospitalData?.pinCode}
-                                onChange={(e) => {handelChange("pinCode", e.target.value.replace(/\D/g, ""))}}
-                                 placeholder="PinCode" />
+                                onChange={(e) => { handelChange("pinCode", e.target.value.replace(/\D/g, "")) }}
+                                placeholder="PinCode" />
                             {errors.pinCode && <label style={{ color: "red" }}>{errors.pinCode}</label>}
 
                         </label>
@@ -533,7 +580,7 @@ export const NewHospital = () => {
                     }}>
                         <label style={{
                             width: '42%'
-                        }} htmlFor="">Patient Category <p className="star">*</p>
+                        }} htmlFor="">Patient Category  <p className="star">*</p>
                             <input value={categoryName} type="text" placeholder="ex. Jan Addhar"
                                 onChange={(e) => {
                                     return setCategoryName(e.target.value)
@@ -735,8 +782,7 @@ export const NewHospital = () => {
                                         ...hospitalData.medicalDirector,
                                         gender: e.target.value
                                     }
-                                })}
-                            >
+                                })}>
                                 <option>Select Gender</option>
                                 <option>Male</option>
                                 <option>Female</option>
@@ -762,8 +808,7 @@ export const NewHospital = () => {
                                         ...hospitalData.medicalDirector,
                                         image: e.target.files[0]
                                     }
-                                })}
-                            />
+                                })} />
                             {errors.medicalDirectorImage && <label style={{ color: "red" }}>{errors.medicalDirectorImage}</label>}
 
                         </label>
@@ -791,8 +836,6 @@ export const NewHospital = () => {
                     </div>
                 </div>
             )}
-            {console.log("error", errors)
-            }
             {currentStep == 3 && (
                 <div className="steps">
                     <h3>Department Setup</h3>
@@ -940,6 +983,8 @@ export const NewHospital = () => {
                         <button
                             disabled={isProcessing}
                             onClick={(e) => {
+                                setHospitalDatacopy(hospitalData);
+                                // setMDdatacopy()
                                 e.preventDefault();
                                 const val = checkfield()
                                 if (currentStep < 5 && val) {
@@ -976,40 +1021,168 @@ export const NewHospital = () => {
                         >
                             <div className="review-strategy" >
                                 <h3>Hospital Details</h3>
-                                <span><i onClick={() => setCurrentStep(1)} class="ri-edit-box-line"></i></span>
+                                {showHospital &&
+                                    <span><i onClick={Edithospitadata} class="ri-edit-box-line"></i></span>
+                                }
+                                {editHospital &&
+                                    <div style={{ display: "flex", gap: "30px", }}>
+                                        <button style={{ width: "55px", backgroundColor: "black", color: "white", borderRadius: "5px" }}
+                                            onClick={() => {
+                                                Edithospitadata();
+                                                setHospitalDatacopy(hospitalData);
+                                            }}
+                                        >Cancel</button>
+                                        <button style={{ width: "55px", backgroundColor: "black", color: "white", borderRadius: "5px" }}
+                                            onClick={() => {
+                                                const val = checkfield();
 
+                                                if (val) {
+                                                    setHospitalData(hospitalDatacopy);
+                                                    Edithospitadata();
+                                                }
+                                            }}>Save</button>
+                                    </div>
+                                }
                             </div>
                             <div style={{
                                 display: 'flex',
+                                flexDirection: "column",
                                 flexWrap: 'wrap',  // line break agar space kam ho toh
                                 gap: '15px',
-                                justifyContent: 'space-between',
+                                padding: "10px"
+                                // justifyContent: 'space-between',
                             }}>
-                                <p className="reviewtag">
-                                    Name: <span >{hospitalData.name}</span>
-                                </p>
+                                {console.log("aa", showHospital)
 
-                                <p className="reviewtag">
-                                    State: <span >{hospitalData.state}</span>
-                                </p>
+                                }
+                                {console.log("wwa", editHospital)
 
-                                <p className="reviewtag">
-                                    City: <span >{hospitalData.city}</span>
-                                </p>
+                                }
 
-                                <p className="reviewtag">
-                                    Pincode: <span >{hospitalData.pinCode}</span>
-                                </p>
+                                {showHospital &&
+                                    <div style={{ width: "100%", display: "flex", justifyContent: "space-between", }}>
+                                        <div className="HospitaldataEdit">
+                                            <div>
+                                                <p className="reviewtag">Name: </p>
+                                                <span >{hospitalData.name}</span>
+                                            </div>
+                                            <div>
+                                                <p className="reviewtag">State:</p>
+                                                <span >{hospitalData.state}</span>
+                                            </div>
+                                        </div>
+                                        <div className="HospitaldataEdit">
 
-                                <p className="reviewtag">
-                                    Address: <span >{hospitalData.address}</span>
-                                </p>
+                                            <div>
+                                                <p className="reviewtag">City:</p>
+                                                <span >{hospitalData.city}</span>
+                                            </div>
+                                            <div>
+                                                <p className="reviewtag"> Pincode: </p>
+                                                <span >{hospitalData.pinCode}</span>
+                                            </div>
+                                        </div>
+                                        <div className="HospitaldataEdit">
 
-                                <p className="reviewtag">
-                                    Patient Categories: <span >
-                                        {hospitalData.patientCategories.join(', ')}
-                                    </span>
-                                </p>
+                                            <div>
+                                                <p className="reviewtag">Address:</p>
+                                                <span >{hospitalData.address}</span>
+                                            </div>
+                                            <div>
+                                                <p className="reviewtag">Patient Categories:</p>
+                                                <span >{hospitalData.patientCategories.join(', ')}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+
+
+
+                                {editHospital &&
+
+                                    <div style={{ width: "100%", display: "flex", justifyContent: "space-between", }}>
+                                        <div className="HospitaldataEdit">
+                                            <div>
+                                                <p className="reviewtag">Name: </p>
+                                                {/* <span >{hospitalData.name}</span> */}
+                                                <input
+                                                    type="text"
+                                                    value={hospitalDatacopy?.name}
+                                                    onChange={(e) => setHospitalDatacopy({ ...hospitalDatacopy, name: e.target.value })} />
+                                                <div>
+                                                    {errors.name && <label style={{ color: "red" }}>{errors.name}</label>}
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <p className="reviewtag">State:</p>
+                                                {/* <span >{hospitalData.state}</span> */}
+                                                {/* <input type="text" value={hospitalDatacopy?.state}
+                                                    onChange={(e) => { setHospitalDatacopy({ ...hospitalDatacopy, state: e.target.value }) }} /> */}
+                                                <select
+                                                    type="text"
+                                                    value={hospitalDatacopy?.state}
+                                                    onChange={(e) => handelChange("state", e.target.value)}
+                                                    style={{
+                                                        width: "182px",
+                                                        padding: '8px',
+                                                        borderRadius: '7px',
+                                                        color: 'black',
+                                                        fontsize: "12.5px",
+                                                        border: "1px solid lightgray",
+                                                    }}
+                                                    name="" id="">
+                                                    <option value="">Select_State</option>
+                                                    {IndianStates.map((s, i) => {
+                                                        return <option key={i} value={s}>{s}</option>
+                                                    })}
+                                                </select>
+                                                <div>
+                                                    {errors.state && <label style={{ color: "red" }}>{errors.state}</label>}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="HospitaldataEdit">
+
+                                            <div>
+                                                <p className="reviewtag">City:</p>
+                                                {/* <span >{hospitalData.city}</span> */}
+                                                <input type="text" value={hospitalDatacopy?.city}
+                                                    onChange={(e) => { setHospitalDatacopy({ ...hospitalDatacopy, city: e.target.value }) }} />
+                                                <div>
+                                                    {errors.city && <label style={{ color: "red" }}>{errors.city}</label>}
+                                                </div>
+
+                                            </div>
+                                            <div>
+                                                <p className="reviewtag"> Pincode: </p>
+                                                {/* <span >{hospitalData.pinCode}</span> */}
+                                                <input type="tel"
+                                                    maxLength={6}
+                                                    minLength={6}
+                                                    value={hospitalDatacopy?.pinCode}
+                                                    onChange={(e) => { setHospitalDatacopy({ ...hospitalDatacopy, pinCode: e.target.value.replace(/\D/g, "") }) }} />
+                                                <div>
+                                                    {errors.pinCode && <label style={{ color: "red" }}>{errors.pinCode}</label>}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="HospitaldataEdit">
+
+                                            <div>
+                                                <p className="reviewtag">Address:</p>
+                                                {/* <span >{hospitalData.address}</span> */}
+                                                <input type="text" value={hospitalDatacopy?.address}
+                                                    onChange={(e) => { setHospitalDatacopy({ ...hospitalDatacopy, address: e.target.value }) }} />
+
+                                                <div>
+                                                    {errors.address && <label style={{ color: "red" }}>{errors.address}</label>}
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                }
                             </div>
 
 
@@ -1032,7 +1205,28 @@ export const NewHospital = () => {
                                 className="review-strategy"
                             >
                                 <h3>Medical Director</h3>
-                                <span><i onClick={() => setCurrentStep(2)} class="ri-edit-box-line"></i></span>
+                                {showMD &&
+                                    <span><i onClick={EditMDdata} class="ri-edit-box-line"></i></span>
+                                }
+                                {editMD &&
+                                    <div style={{ display: "flex", gap: "30px", }}>
+                                        <button style={{ width: "55px", backgroundColor: "black", color: "white", borderRadius: "5px" }}
+                                            onClick={() => {
+                                                EditMDdata();
+                                                setHospitalDatacopy(hospitalData);
+                                            }}>Cancel</button>
+                                        <button style={{ width: "55px", backgroundColor: "black", color: "white", borderRadius: "5px" }}
+                                            onClick={() => {
+                                                const val = checkfield();
+
+                                                if (val) {
+                                                    setHospitalData(hospitalDatacopy);
+                                                    EditMDdata();
+                                                }
+                                            }} >Save</button>
+                                        <br />
+                                    </div>
+                                }
 
                             </div>
 
@@ -1048,7 +1242,10 @@ export const NewHospital = () => {
                                     {hospitalData?.medicalDirector?.image && (
                                         <img style={{
                                             width: "60px",
-                                            height: "60px"
+                                            height: "60px",
+                                            border: "2px solid lightgray",
+                                            borderRadius: "10px",
+                                            // backgroundColor:"gray"
                                         }}
                                             // src={testimg}
                                             src={URL.createObjectURL(hospitalData?.medicalDirector?.image)}
@@ -1057,34 +1254,120 @@ export const NewHospital = () => {
                                     }
 
                                 </div>
+                                {showMD &&
+                                    <div style={{ width: "100%", display: "flex", justifyContent: "space-between", }}>
+                                        <div className="HospitaldataEdit2">
+                                            <div>
+                                                <p className="reviewtag">Name: </p>
+                                                <span >{hospitalData.medicalDirector.name}</span>
+                                            </div>
+                                            <div>
+                                                <p className="reviewtag">Gender:</p>
+                                                <span >{hospitalData.medicalDirector.gender}</span>
+                                            </div>
+                                        </div>
+                                        <div className="HospitaldataEdit2">
 
-                                <div style={{
-                                    width: '100%',
-                                    display: 'flex',
-                                    justifyContent: "space-between",
+                                            <div>
+                                                <p className="reviewtag">Email:</p>
+                                                <span >{hospitalData.medicalDirector.email}</span>
+                                            </div>
+                                            <div>
+                                                <p className="reviewtag"> Experience: </p>
+                                                <span >{hospitalData.medicalDirector.experience}</span>
+                                            </div>
+                                        </div>
+                                        <div className="HospitaldataEdit2">
 
-                                }}>
-                                    <p className="reviewtag">
-                                        Name: <span >{hospitalData.medicalDirector.name}</span>
-                                    </p>
+                                            <div>
+                                                <p className="reviewtag">Contact:</p>
+                                                <span >{hospitalData.medicalDirector.contact}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
 
 
-                                    <p className="reviewtag">
-                                        Gender: <span >{hospitalData.medicalDirector.gender}</span>
-                                    </p>
+                                {editMD &&
+                                    <div style={{ width: "100%", display: "flex", justifyContent: "space-between", }}>
+                                        <div className="HospitaldataEdit2">
+                                            <div>
+                                                <p className="reviewtag">Name:</p>
+                                                {/* <span >{hospitalData.medicalDirector.name}</span> */}
+                                                <input type="text" value={hospitalDatacopy?.medicalDirector?.name}
+                                                    onChange={(e) => setHospitalDatacopy((prev) => ({ ...prev, medicalDirector: { ...prev.medicalDirector, name: e.target.value, }, }))} />
+                                                <div>
+                                                    {errors.medicalDirectorName && <label style={{ color: "red" }}>{errors.medicalDirectorName}</label>}
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <p className="reviewtag">Gender:</p>
+                                                {/* <span >{hospitalData.medicalDirector.gender}</span> */}
+                                                <select
+                                                    style={{
+                                                        width: "150px",
+                                                        padding: '8px',
+                                                        borderRadius: '7px',
+                                                        color: 'black',
+                                                        fontsize: "12.5px",
+                                                        border: "1px solid lightgray",
+                                                    }}
+                                                    value={hospitalDatacopy?.medicalDirector?.gender}
+                                                    onChange={(e) => setHospitalData({
+                                                        ...hospitalDatacopy, medicalDirector: {
+                                                            ...hospitalDatacopy.medicalDirector,
+                                                            gender: e.target.value
+                                                        }
+                                                    })}>
+                                                    <option>Select Gender</option>
+                                                    <option>Male</option>
+                                                    <option>Female</option>
+                                                    <option>other</option>
+                                                </select>
+                                                <div>
+                                                    {errors.medicalDirectorgender && <label style={{ color: "red" }}>{errors.medicalDirectorgender}</label>}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="HospitaldataEdit2">
 
-                                    <p className="reviewtag">
-                                        Email: <span >{hospitalData.medicalDirector.email}</span>
-                                    </p>
+                                            <div>
+                                                <p className="reviewtag">Email:</p>
+                                                {/* <span >{hospitalData.medicalDirector.email}</span> */}
+                                                <input type="text" value={hospitalDatacopy?.medicalDirector?.email}
+                                                    onChange={(e) => setHospitalDatacopy((prev) => ({ ...prev, medicalDirector: { ...prev.medicalDirector, email: e.target.value, }, }))} />
+                                                <div>
+                                                    {errors.medicalDirectorEmail && <label style={{ color: "red" }}>{errors.medicalDirectorEmail}</label>}
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <p className="reviewtag"> Experience: </p>
+                                                {/* <span >{hospitalData.medicalDirector.experience}</span> */}
+                                                <input type="text" value={hospitalDatacopy?.medicalDirector?.experience}
+                                                    onChange={(e) => setHospitalDatacopy((prev) => ({ ...prev, medicalDirector: { ...prev.medicalDirector, experience: e.target.value, }, }))} />
+                                                <div>
+                                                    {errors.medicalDirectorExperience && <label style={{ color: "red" }}>{errors.medicalDirectorExperience}</label>}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="HospitaldataEdit2">
 
-                                    <p className="reviewtag">
-                                        Experience: <span >{hospitalData.medicalDirector.experience}</span>
-                                    </p>
+                                            <div>
+                                                <p className="reviewtag">Contact:</p>
+                                                {/* <span >{hospitalData.medicalDirector.contact}</span> */}
+                                                <input type="tel"
+                                                    maxLength={10}
+                                                    value={hospitalDatacopy?.medicalDirector?.contact}
+                                                    onChange={(e) => setHospitalDatacopy((prev) => ({ ...prev, medicalDirector: { ...prev.medicalDirector, contact: e.target.value.replace(/\D/g, "") }, }))} />
+                                                <div>
+                                                    {errors.medicalDirectorContact && <label style={{ color: "red" }}>{errors.medicalDirectorContact}</label>}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
 
-                                    <p className="reviewtag">
-                                        Contact: <span >{hospitalData.medicalDirector.contact}</span>
-                                    </p>
-                                </div>
+
 
                             </div>
                         </div>
@@ -1144,15 +1427,16 @@ export const NewHospital = () => {
                                 outline: "none",
                                 cursor: "pointer"
                             }}
-                                onClick={() => setCurrentStep(currentStep - 1)} disabled={currentStep == 1}> ← Back</button>
+                                onClick={() => { setCurrentStep(currentStep - 1); EditMDdata(); Edithospitadata(); }} disabled={currentStep == 1}> ← Back</button>
                             <button
                                 disabled={isProcessing}
                                 onClick={(e) => {
                                     e.preventDefault();
-
+                                    const val = checkfield();
+                                    // Edithospitadata();
                                     if (currentStep < 4) {
                                         setCurrentStep(currentStep + 1);
-                                    } else {
+                                    } else if (val) {
 
                                         handleSubmit(e);
                                     }
