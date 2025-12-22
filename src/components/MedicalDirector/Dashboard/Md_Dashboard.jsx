@@ -230,9 +230,11 @@ const Md_Dashboard = () => {
                     {!isProcessing && !error?.error && Array.isArray(filterPatient) && filterPatient?.length > 0 && (
                         <div>
                             {
-                                filterPatient.map((pat, index) => {
+                                filterPatient.map((patient, index) => {
                                     return <div className="patientCard">
-                                        <p></p>
+                                        <p>
+                                            {patient?.name}
+                                        </p>
 
                                     </div>
 
