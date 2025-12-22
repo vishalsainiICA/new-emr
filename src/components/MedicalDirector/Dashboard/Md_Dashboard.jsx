@@ -227,7 +227,7 @@ const Md_Dashboard = () => {
                         }}>{error?.error}</h4>
                     )}
 
-                    {!isProcessing && !error.error && Array.isArray(filterPatient) && filterPatient.length > 0 && (
+                    {!isProcessing && !error?.error && Array.isArray(filterPatient) && filterPatient?.length > 0 && (
                         <div>
                             {
                                 filterPatient.map((pat, index) => {
