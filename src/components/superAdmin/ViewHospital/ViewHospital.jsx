@@ -5,7 +5,7 @@ import { Circles } from "react-loader-spinner";
 import moment from "moment";
 import './ViewHospital.css'
 import { toast } from "react-toastify";
-import { Patient_Hisotry } from "../../Utility/PatientHistory__Labtest";
+import { IndianStates, Patient_Hisotry } from "../../Utility/PatientHistory__Labtest";
 import userDefaultImage from "../../../assets/defualtUserImage.jpg"
 import { BiEdit } from "react-icons/bi";
 
@@ -1554,7 +1554,25 @@ const ViewHospital = () => {
                                     <input value={temphospital?.name} type="text" onChange={(e) => handleChange("name", e.target.value)} />
                                 </label>
                                 <label htmlFor="">State
-                                    <input value={temphospital?.state} type="text" onChange={(e) => handleChange("state", e.target.value)} />
+
+                                    <select
+                                        type="text"
+                                        value={temphospital?.state}
+                                        onChange={(e) => handleChange("state", e.target.value)}
+                                        style={{
+                                            width: "100%",
+                                            padding: '8px',
+                                            borderRadius: '7px',
+                                            color: 'black',
+                                            fontsize: "12.5px",
+                                            border: "1px solid lightgray",
+                                        }}
+                                        name="" id="">
+                                        <option value="">Select_State</option>
+                                        {IndianStates.map((s, i) => {
+                                            return <option key={i} value={s}>{s}</option>
+                                        })}
+                                    </select>
                                 </label>
                             </div>
 
@@ -1563,7 +1581,7 @@ const ViewHospital = () => {
                                     <input value={temphospital?.city} type="text" onChange={(e) => handleChange("city", e.target.value)} />
                                 </label>
                                 <label htmlFor="">PinCode
-                                    <input value={temphospital?.pinCode} type="text" onChange={(e) => handleChange("pinCode", e.target.value)} />
+                                    <input value={temphospital?.pinCode} type="tel" maxLength={6} onChange={(e) => handleChange("pinCode", e.target.value.replace(/\D/g, ""))} />
                                 </label>
                             </div>
 
@@ -2114,8 +2132,12 @@ const ViewHospital = () => {
                                                 <input type="text" value={editMDdata?.experience || "5"} onChange={(e) => { setEditMDdata({ ...editMDdata, experience: e.target.value }) }} />
                                             </div>
                                         </div>
-                                        <div style={{ display: "flex", width: "400px", justifyContent: "start" }}>
+                                        <div style={{ display: "flex", width: "400px", justifyContent: "start", gap: "20px", }}>
 
+                                            <div style={{ display: "grid", }}>
+                                                <label htmlFor="">Contact</label>
+                                                <input type="tel" maxLength={10} value={editMDdata?.contact} onChange={(e) => { setEditMDdata({ ...editMDdata, contact: e.target.value.replace(/\D/g, "") }) }} />
+                                            </div>
                                             <div style={{ display: "grid", }}>
                                                 <label htmlFor="">Qualification</label>
                                                 <input type="text" value={editMDdata?.qualification || "Graduation"} onChange={(e) => { setEditMDdata({ ...editMDdata, qualification: e.target.value }) }} />

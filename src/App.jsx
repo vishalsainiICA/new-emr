@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import "./App.css"
+import Md_Dashboard from './components/MedicalDirector/Dashboard/Md_Dashboard.jsx';
 import Doc_Dashboard from "./components/Doctor/Dashboard/Dashboard"
 import Su_Dashboard from "./components/superAdmin/Dashboard/Dashboard"
 import HospitalManagement from './components/superAdmin/HospitalManagement/HospitalManagement';
@@ -21,12 +22,14 @@ import Pa_PatientRegistertaion from "./components/personalAssitant/PatientRegist
 
 
 
+
+
 function App() {
 
   return <BrowserRouter>
     <Routes>
       <Route path="/" element={<RedirectToDashboard></RedirectToDashboard>} />
-      <Route path="/login" element={<Loginpage/>} />
+      <Route path="/login" element={<Loginpage />} />
       <Route path="/register-patient" element={<Patientregisteration />} />
 
       <Route path="/super-admin" element={<ControlPannel></ControlPannel>}>
@@ -37,6 +40,8 @@ function App() {
         <Route path="admin-management" element={<AdminManagement />} />
         <Route path="new-hospital" element={<NewHospital />} />
       </Route>
+
+      <Route path="/md-dashboard" element={<Md_Dashboard></Md_Dashboard>}> </Route>
 
       <Route path="/doctor" element={<Doc_Dashboard></Doc_Dashboard>}> </Route>
       <Route path="/medication" element={<Medication></Medication>} />

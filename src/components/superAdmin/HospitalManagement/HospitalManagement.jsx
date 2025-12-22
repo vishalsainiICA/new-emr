@@ -86,7 +86,7 @@ const HospitalManagement = () => {
                     onClick={() => navigate('/super-admin/new-hospital')}
                     style={{
 
-                    }} className="common-btn">+ Add New Hospital</button>
+                    }} className="addButton">+ Add New Hospital</button>
             </div>
             {/* 
             <div className="cardList">

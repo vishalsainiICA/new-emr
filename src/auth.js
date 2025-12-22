@@ -19,8 +19,8 @@ export const commonApi = {
         return await commonInstance.post(`/login`, data)
     },
 
-    changePatientStatus: async (id, newDate = null, cancelReason = null) => {
-        return await commonInstance.put(`/common/change-status`, { id, newDate, cancelReason })
+    changePatientStatus: async (id, newDate = null, cancelReason = null, type = null) => {
+        return await commonInstance.put(`/common/change-status`, { id, newDate, cancelReason, type })
     },
     editHospital: async (data) => {
         return await commonInstance.put('/common/hospital/edit-hospital', data)

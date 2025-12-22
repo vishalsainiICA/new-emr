@@ -45,10 +45,10 @@ const DashBoard = () => {
     }
 
 
-    const changePatientStatus = async (id) => {
+    const changePatientStatus = async (id, newDate, type = null) => {
         setIsProcessing(true);
         try {
-            const res = await commonApi.changePatientStatus(id, newDate, cancelReason);
+            const res = await commonApi.changePatientStatus(id, newDate, cancelReason, type);
             if (res.status === 200) {
                 toast.success("Status Updated")
                 setrefresh((prev) => !prev)
@@ -115,7 +115,7 @@ const DashBoard = () => {
         };
 
         fetchPatient();
-    }, [cancelReason, newDate, refresh,])
+    }, [cancelReason, showPostponeModal, refresh,])
     useEffect(() => {
         const fetchProfile = async () => {
             setIsProcessing(true);
@@ -383,15 +383,16 @@ const DashBoard = () => {
                                                CASE: ASSESSMENT DONE (disable button)
                                             ---------------------------------------- */
                                             <button
-                                                disabled={true}
+                                                onClick={() => setShowPostponeModal({ data: hos, type: "setTime" })}
                                                 style={{
                                                     backgroundColor: 'rgba(219, 219, 252)',
                                                     margin: '10px',
                                                     padding: '10px',
-                                                    width: '150px'
+                                                    width: '170px',
+                                                    fontSize: '12px'
                                                 }}
                                             >
-                                                Assessment Done
+                                                <i class="ri-time-line"></i> Set Appointment Time
                                             </button>
 
                                         )
@@ -488,7 +489,7 @@ const DashBoard = () => {
                                                 }}
                                             >
                                                 <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
-                                                    <li onClick={() => setShowPostponeModal(edit)} style={{ padding: "8px 12px", fontSize: "12px", cursor: "pointer" }}>
+                                                    <li onClick={() => setShowPostponeModal({ data: edit, type: "postpond" })} style={{ padding: "8px 12px", fontSize: "12px", cursor: "pointer" }}>
                                                         Postpond
                                                     </li>
                                                     <li onClick={() => setShowCancelModal(edit)} style={{ padding: "8px 12px", fontSize: "12px", cursor: "pointer" }}>
@@ -669,63 +670,137 @@ const DashBoard = () => {
             </div>
 
         </div>
-        {showPostponeModal && (
-            <div className="modal">
+        {showPostponeModal && showPostponeModal.type === "postpond" && (
+            <div className="modal-overlay">
                 <div className="modal-box">
-                    <h3>Postpone Appointment of {showPostponeModal?.name}</h3>
+                    <h3>
+                        Reschedule Appointment
+                    </h3>
+                    {console.log(showPostponeModal)
+                    }
 
-                    <label>New Date & Time:</label>
+                    <p className="patient-name">
+                        Patient: <strong>{showPostponeModal?.data?.name}</strong>
+                    </p>
+
+                    <label className="modal-label">
+                        Select New Date & Time
+                    </label>
+
                     <input
                         type="datetime-local"
                         value={newDate}
+                        min={new Date().toISOString().slice(0, 16)}
                         onChange={(e) => setNewDate(e.target.value)}
+                        className="modal-input"
                     />
 
                     <div className="modal-actions">
-                        <button className="regular-btn" onClick={() => setShowPostponeModal(null)}>Close</button>
                         <button
-                            className="common-btn"
+                            className="btn-secondary"
+                            onClick={() => setShowPostponeModal(null)}
+                        >
+                            Cancel
+                        </button>
+
+                        <button
+                            className="btn-primary"
                             onClick={() => {
-                                changePatientStatus(showPostponeModal?._id)
+                                changePatientStatus(
+                                    showPostponeModal?.data?._id,
+                                    newDate
+                                );
                                 setShowPostponeModal(null);
                             }}
+                            disabled={!newDate}
                         >
-                            Save
+                            Confirm Reschedule
                         </button>
                     </div>
                 </div>
             </div>
         )}
-        {showCancelModal && (
-            <div className="modal">
+        {showPostponeModal && showPostponeModal.type === "setTime" && (
+            <div className="modal-overlay">
                 <div className="modal-box">
-                    <h3>Cancel Appointment of {showCancelModal?.name}</h3>
+                    <h3>
+                        Schedule Appointment
+                    </h3>
+                    <p className="patient-name">
+                        Patient: <strong>{showPostponeModal?.data?.name}</strong>
+                    </p>
 
-                    <label>Reason for cancellation:</label>
-                    <br />
-                    <br />
-                    <textarea
-                        placeholder="Enter reason..."
-                        value={cancelReason}
-                        onChange={(e) => setCancelReason(e.target.value)}
-                    ></textarea>
+                    <label className="modal-label">
+                        Select New Date & Time
+                    </label>
+
+                    <input
+                        type="datetime-local"
+                        value={newDate}
+                        min={new Date().toISOString().slice(0, 16)}
+                        onChange={(e) => setNewDate(e.target.value)}
+                        className="modal-input"
+                    />
 
                     <div className="modal-actions">
-                        <button className="regular-btn" onClick={() => setShowCancelModal(null)}>Close</button>
                         <button
-                            className="common-btn"
-                            onClick={() => {
-
-                                changePatientStatus(showCancelModal?._id)
-                                setShowCancelModal(null)
-                            }}
+                            className="btn-secondary"
+                            onClick={() => setShowPostponeModal(null)}
                         >
-                            Confirm Cancel
+                            Cancel
+                        </button>
+
+                        <button
+                            className="btn-primary"
+                            onClick={() => {
+                                changePatientStatus(
+                                    showPostponeModal?.data?._id,
+                                    newDate,
+                                    type = "setTime"
+                                );
+                                setShowPostponeModal(null);
+                            }}
+                            disabled={!newDate}
+                        >
+                            Confirm Reschedule
                         </button>
                     </div>
                 </div>
             </div>
         )}
+
+        {
+            showCancelModal && (
+                <div className="modal">
+                    <div className="modal-box">
+                        <h3>Cancel Appointment of {showCancelModal?.name}</h3>
+
+                        <label>Reason for cancellation:</label>
+                        <br />
+                        <br />
+                        <textarea
+                            placeholder="Enter reason..."
+                            value={cancelReason}
+                            onChange={(e) => setCancelReason(e.target.value)}
+                        ></textarea>
+
+                        <div className="modal-actions">
+                            <button className="regular-btn" onClick={() => setShowCancelModal(null)}>Close</button>
+                            <button
+                                className="common-btn"
+                                onClick={() => {
+
+                                    changePatientStatus(showCancelModal?._id)
+                                    setShowCancelModal(null)
+                                }}
+                            >
+                                Confirm Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )
+        }
 
     </div >
 
