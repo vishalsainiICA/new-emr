@@ -19,6 +19,7 @@ import InitialAssesment from './components/personalAssitant/InitialAssement/Init
 import RedirectToDashboard from './components/Handler.jsx';
 import Loginpage from './components/Utility/Loginpage/LoginPage.jsx';
 import Pa_PatientRegistertaion from "./components/personalAssitant/PatientRegisteration/Patientregisteration.jsx"
+import ControlPannel_Md from './components/MedicalDirector/ControlPannel/ControlPannel.jsx';
 
 
 
@@ -28,7 +29,7 @@ function App() {
 
   return <BrowserRouter>
     <Routes>
-      <Route path="/" element={<RedirectToDashboard></RedirectToDashboard>} />
+      {/* <Route path="/" element={<RedirectToDashboard></RedirectToDashboard>} /> */}
       <Route path="/login" element={<Loginpage />} />
       <Route path="/register-patient" element={<Patientregisteration />} />
 
@@ -41,7 +42,10 @@ function App() {
         <Route path="new-hospital" element={<NewHospital />} />
       </Route>
 
-      <Route path="/md-dashboard" element={<Md_Dashboard></Md_Dashboard>}> </Route>
+      <Route path="/md" element={<ControlPannel_Md />}>
+        {/* <Route path="departments" element={<departmenNewHospital />} /> */}
+
+      </Route>
 
       <Route path="/doctor" element={<Doc_Dashboard></Doc_Dashboard>}> </Route>
       <Route path="/medication" element={<Medication></Medication>} />

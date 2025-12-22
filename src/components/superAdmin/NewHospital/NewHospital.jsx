@@ -757,7 +757,6 @@ export const NewHospital = () => {
                     </div>
                     <div style={{
                         marginTop: '10px',
-                        display: 'flex',
                         columnGap: '80px',
                         display: "flex",
                         justifyContent: "center"
@@ -1052,13 +1051,6 @@ export const NewHospital = () => {
                                 padding: "10px"
                                 // justifyContent: 'space-between',
                             }}>
-                                {console.log("aa", showHospital)
-
-                                }
-                                {console.log("wwa", editHospital)
-
-                                }
-
                                 {showHospital &&
                                     <div style={{ width: "100%", display: "flex", justifyContent: "space-between", }}>
                                         <div className="HospitaldataEdit">
@@ -1557,7 +1549,6 @@ export const NewHospital = () => {
                             marginTop: '10px',
                             display: 'flex',
                             columnGap: '80px',
-                            display: "flex",
                             justifyContent: "center"
                         }}>
                             <label style={{
@@ -1877,57 +1868,6 @@ export const NewHospital = () => {
 
                                     </div>
                                 )
-                                // <div key={i} className="editdep">
-                                //     <div style={{
-                                //         display: 'flex',
-                                //         justifyContent: 'space-between',
-                                //         marginBottom: '10px'
-                                //     }}>
-                                //         <h5>doctor:{i + 1}</h5>
-
-                                //         <div style={{
-                                //             display: 'flex',
-                                //             gap: '10px',
-                                //             justifyContent: 'center',
-                                //             alignItems: 'center'
-                                //         }}>
-                                //             <BiEdit ></BiEdit>
-                                //             <span>✔</span>
-
-                                //             <i class="ri-delete-bin-7-line"
-                                //                 onClick={() => {
-                                //                     const updatedDoctors = hospitalData.supportedDepartments[edit]?.doctors?.filter((_, idx) => idx !== i)
-                                //                     const updatedDepartments = [...hospitalData.supportedDepartments]
-                                //                     updatedDepartments[edit].doctors = updatedDoctors
-
-                                //                     setHospitalData((prev) => ({
-                                //                         ...prev,
-                                //                         supportedDepartments: updatedDepartments
-                                //                     }))
-
-                                //                 }}></i>
-                                //         </div>
-
-
-                                //     </div>
-                                //     <div className="docbasicDetails">
-                                //         <label htmlFor="">Name
-                                //             <p>{doc?.name}</p>
-                                //         </label>
-                                //     </div>
-                                //     <div style={{
-                                //         display: 'flex',
-                                //         justifyContent: 'space-between',
-                                //         gap: '10px'
-                                //     }}>
-                                //         <input type="text" onChange={(e) => handelDoctorChange(edit, i, "name", e.target.value)} value={doc?.name} />
-                                //         <input type="text" onChange={(e) => handelDoctorChange(edit, i, "email", e.target.value)} value={doc?.email} />
-                                //         <input type="text" onChange={(e) => handelDoctorChange(edit, i, "contact", e.target.value)} value={doc?.contact} />
-                                //         <input type="text" onChange={(e) => handelDoctorChange(edit, i, "experience", e.target.value)} value={doc?.experience} />
-                                //         <input type="text" onChange={(e) => handelDoctorChange(edit, i, "qualification", e.target.value)} value={doc?.qualification} />
-                                //     </div>
-
-                                // </div>
                             })
                         }
                     </div>
