@@ -36,6 +36,9 @@ const Loginpage = () => {
           else if (res.data?.role === "doctor") {
             navigate("/doctor", { replace: true });
           }
+          else if (res.data?.role === "medicalDirector") {
+            navigate("/md/dashboard", { replace: true });
+          }
           else if (res.data?.role === "personalAssitant") {
             navigate("/pa", { replace: true });
           }

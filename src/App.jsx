@@ -29,7 +29,7 @@ function App() {
 
   return <BrowserRouter>
     <Routes>
-      {/* <Route path="/" element={<RedirectToDashboard></RedirectToDashboard>} /> */}
+      <Route path="/" element={<RedirectToDashboard></RedirectToDashboard>} />
       <Route path="/login" element={<Loginpage />} />
       <Route path="/register-patient" element={<Patientregisteration />} />
 

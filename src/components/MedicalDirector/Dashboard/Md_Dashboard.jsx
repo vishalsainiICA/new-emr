@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import Chart from "chart.js/auto";
 import "./Md_dashboard.css"; // <-- tumhara existing CSS
-import { superAdminApi } from "../../../auth";
+import { medicalDirectorApi, superAdminApi } from "../../../auth";
 import RevenueChart from "../../Utility/RevenueChart";
 import { Circles } from "react-loader-spinner";
+import { useNavigate } from "react-router-dom";
 
 
 const Md_Dashboard = () => {
@@ -29,54 +30,55 @@ const Md_Dashboard = () => {
         return metrices?.find((m) => m.key === name)?.value ?? 0;
     };
 
-    useEffect(() => {
-        const fetchHospital = async () => {
-            setIsProcessing(true);
-            setError(null);
-            try {
-                const res = await superAdminApi.getHosptialMetrices();
-                if (res.status === 200) {
-                    setData(res.data.data?.TopPerformanceHospital || []);
-                    setmetrices(res.data?.data?.metrices)
-                    setFilterHospital(res.data.data?.TopPerformanceHospital || []);
-                }
-                else {
-                    setError({ error: res.data?.message || "Something went wrong" });
-                }
-            } catch (err) {
-                console.log(err);
-                setError({ error: err.response?.data?.message || "Internal Server Error" });
-            } finally {
-                setIsProcessing(false);
-            }
-        };
-        const fetchProfile = async () => {
-            setIsProcessing(true);
-            setError(null);
-            try {
-                const res = await superAdminApi.fetchProfile();
-                if (res.status === 200) {
-                    setSuperAdmin(res.data?.data)
-                } else {
-                    setError({ error: res.data?.message || "Something went wrong" });
-                }
-            } catch (err) {
-                console.log(err);
-                setError({ error: err.response?.data?.message || "Internal Server Error" });
-                navigate("/login")
-            } finally {
-                setIsProcessing(false);
-            }
-        };
-        fetchProfile()
-        fetchHospital();
-    }, [refresh]);
+    const navigate = useNavigate()
+
+    // useEffect(() => {
+    //     const fetchHospital = async () => {
+    //         setIsProcessing(true);
+    //         setError(null);
+    //         try {
+    //             const res = await superAdminApi.getHosptialMetrices();
+    //             if (res.status === 200) {
+    //                 setData(res.data.data?.TopPerformanceHospital || []);
+    //                 setmetrices(res.data?.data?.metrices)
+    //                 setFilterHospital(res.data.data?.TopPerformanceHospital || []);
+    //             }
+    //             else {
+    //                 setError({ error: res.data?.message || "Something went wrong" });
+    //             }
+    //         } catch (err) {
+    //             console.log(err);
+    //             setError({ error: err.response?.data?.message || "Internal Server Error" });
+    //         } finally {
+    //             setIsProcessing(false);
+    //         }
+    //     };
+    //     const fetchProfile = async () => {
+    //         setIsProcessing(true);
+    //         setError(null);
+    //         try {
+    //             const res = await medicalDirectorApi.fetchProfile();
+    //             if (res.status === 200) {
+    //                 setSuperAdmin(res.data?.data)
+    //             } else {
+    //                 setError({ error: res.data?.message || "Something went wrong" });
+    //             }
+    //         } catch (err) {
+    //             console.log(err);
+    //             setError({ error: err.response?.data?.message || "Internal Server Error" });
+    //             navigate("/login")
+    //         } finally {
+    //             setIsProcessing(false);
+    //         }
+    //     };
+    //     fetchProfile()
+    //     fetchHospital();
+    // }, [refresh]);
     useEffect(() => {
         const fetchPatient = async () => {
             setIsProcessing(true);
             try {
-
-                const res = await superAdminApi.hospitalAllPaitent("693bee3d26d881f5bf859905");
+                const res = await medicalDirectorApi.hospitalAllPaitent();
                 if (res.status === 200) {
                     setData(res.data.data || []);
                     setFilterPatient(res.data.data || []); // initialize filter
@@ -202,7 +204,11 @@ const Md_Dashboard = () => {
                 </div>
 
                 <div className="today-visits">
-                    <p>Today's Visits</p>
+                    <div className="today-visits-heading">
+                        <p>Today's Visits</p>
+                        <span className="viewAll">View All</span>
+                    </div>
+
 
                     {isProcessing && (
                         <span style={{
@@ -231,10 +237,56 @@ const Md_Dashboard = () => {
                         <div>
                             {
                                 filterPatient.map((patient, index) => {
-                                    return <div className="patientCard">
-                                        <p>
-                                            {patient?.name}
-                                        </p>
+                                    return <div key={index} className="patientCard">
+                                        <div>
+                                            <p>
+                                                {patient?.name}
+                                            </p>
+                                            <span>{patient?.doctorId?.departmentName}.Dr {patient?.doctorId?.name}</span>
+                                        </div>
+
+                                        <div>
+                                            {patient?.prescribtionId ? (
+                                                <p
+                                                    style={{
+                                                        width: '70px',
+                                                        fontSize: "12px",
+                                                        color: "gray",
+                                                        backgroundColor: "lightgrey",
+                                                        padding: "5px",
+                                                        borderRadius: "10px",
+                                                    }}
+                                                >
+                                                    {"Rx Done"}
+                                                </p>
+                                            ) : (
+                                                <p
+                                                    style={{
+                                                        width: '70px',
+                                                        fontSize: "12px",
+                                                        color:
+                                                            patient?.status === "Cancel"
+                                                                ? "red"
+                                                                : patient?.status === "Postponed"
+                                                                    ? "#b8860b"          // dark yellow
+                                                                    : "green",
+
+                                                        backgroundColor:
+                                                            patient?.status === "Cancel"
+                                                                ? "#ffb3b3"          // light red
+                                                                : patient?.status === "Postponed"
+                                                                    ? "#fff2a8"          // light yellow
+                                                                    : "lightgreen",
+
+                                                        padding: "5px",
+                                                        borderRadius: "10px",
+                                                    }}
+                                                >
+                                                    {patient?.status}
+                                                </p>
+                                            )}
+                                        </div>
+
 
                                     </div>
 

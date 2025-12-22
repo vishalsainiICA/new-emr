@@ -2,13 +2,28 @@ import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import emrimg from '../../../../public/emr.png'
 import "./ControlPannel.css"
+import { medicalDirectorApi } from "../../../auth";
 
 const ControlPannel_Md = () => {
-    const [activeTab, setActiveTab] = useState('Dashboard')
+
     const [collapsed, setcollapsed] = useState(false)
+
+    const [isProcessing, setIsProcessing] = useState(false);
     const [isCollapse, setCollapse] = useState(false);
-    const [logOut, setlogOut] = useState(false);
+    // const [isEditprofile, setEditprofile] = useState(false);
+    // const [changePassword, setChangePassword] = useState(false)
     const [blur, setblur] = useState(false);
+    const [logOut, setlogOut] = useState(false);
+    // const [isCollapse, setCollapse] = useState(false);
+    // const [refresh, setrefresh] = useState(false);
+    const [error, setError] = useState(null);
+    // const [filterPatient, setFilterPatient] = useState([]);
+    const [superAdmin, setSuperAdmin] = useState(null);
+    // const [password, setpassword] = useState({
+    //     old: "",
+    //     new: ""
+    // })
+
     const navigate = useNavigate()
 
     const navLinks = [
@@ -22,10 +37,33 @@ const ControlPannel_Md = () => {
 
     useEffect(() => {
         if (window.location.pathname == "/md") {
-            // navigate("/md/dashboard")
-            // setActiveTab("DashBoard")
+            navigate("/md/dashboard")
+            setActiveTab("DashBoard")
         }
     })
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            setIsProcessing(true);
+            setError(null);
+            try {
+                const res = await medicalDirectorApi.fetchProfile();
+                if (res.status === 200) {
+                    setSuperAdmin(res.data?.data)
+                } else {
+                    setError({ error: res.data?.message || "Something went wrong" });
+                }
+            } catch (err) {
+                console.log(err);
+                setError({ error: err.response?.data?.message || "Internal Server Error" });
+                navigate("/login")
+            } finally {
+                setIsProcessing(false);
+            }
+        };
+        fetchProfile()
+    }, [])
+
 
 
 
@@ -95,10 +133,12 @@ const ControlPannel_Md = () => {
                     <div className="super-name" onClick={() => setCollapse(!isCollapse)}>
                         <span className="logo">SA</span>
                         <div>
-                            <h4>{"superAdmin?.name"}</h4>
+                            {console.log("super", superAdmin)
+                            }
+                            <h4>{superAdmin?.name}</h4>
                             <span style={{
                                 fontSize: "12px"
-                            }}>System Administrator</span>
+                            }}>Medical Director</span>
                         </div>
                     </div>
                 </div>

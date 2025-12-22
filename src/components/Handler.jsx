@@ -19,12 +19,16 @@ const RedirectToDashboard = () => {
         if (role === "superadmin") {
             navigate("/super-admin/dashboard", { replace: true });
         }
+        else if (role === "medicalDirector") {
+            navigate("/md/dashboard", { replace: true });
+        }
         else if (role === "doctor") {
             navigate("/doctor", { replace: true });
         }
         else if (role === "perosnalAssistant") {
             navigate("/pa", { replace: true });
         }
+
         else {
             navigate("/login", { replace: true }); // unknown role
         }

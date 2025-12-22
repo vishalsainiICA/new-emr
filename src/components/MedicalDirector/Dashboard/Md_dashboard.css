@@ -38,3 +38,47 @@
     /* gap: 5px; */
     padding: 15px;
 }
+
+.patientCard {
+    border: 0.5px solid lightgrey;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+
+    p {
+        font-size: 12px;
+    }
+
+    ;
+
+    span {
+
+        font-weight: normal;
+        font-size: 12px;
+        color: rgb(99, 95, 95);
+        letter-spacing: 1px;
+
+    }
+}
+
+.today-visits-heading {
+    display: flex;
+    justify-content: space-between;
+
+    span {
+
+        font-weight: normal;
+        font-size: 12px;
+        color: rgb(99, 95, 95);
+        letter-spacing: 1px;
+        cursor: pointer;
+
+    }
+
+}
+
+.viewAll:hover {
+    color: blue;
+}

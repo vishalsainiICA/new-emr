@@ -59,7 +59,7 @@ export const medicalDirectorInstance = axios.create({
 })
 
 medicalDirectorInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem("MedicalDirector");
+  const token = localStorage.getItem("token");
   console.log('tokem', token);
 
   if (token) {
