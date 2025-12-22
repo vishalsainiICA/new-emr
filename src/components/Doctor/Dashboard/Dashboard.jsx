@@ -221,7 +221,7 @@ const DashBoard = () => {
                 }}
             >
                 <div>
-                    <h4 style={{ margin: 0 }}>{`Welcome back,Dr.${pa?.name}`}</h4>
+                    <h4 style={{ margin: 0 }}>{`Dr.${pa?.name}`}</h4>
                     <p style={{ margin: 0, textAlign: "right" }}>{"Doctor Management"}</p>
                 </div>
                 <span style={{

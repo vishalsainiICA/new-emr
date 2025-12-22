@@ -155,7 +155,7 @@ const Dashboard = () => {
                 <div className="super-name" onClick={() => setCollapse(!isCollapse)}>
                     <span className="logo">SA</span>
                     <div>
-                        <h4>Welcome back,{superAdmin?.name}</h4>
+                        <h4>{superAdmin?.name}</h4>
                         <span style={{
                             fontSize: "12px"
                         }}>System Administrator</span>
@@ -504,6 +504,8 @@ const Dashboard = () => {
                 </div>
 
             </div>
+
+            
 
         </div >
         //  </div>

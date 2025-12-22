@@ -43,6 +43,7 @@ function App() {
       </Route>
 
       <Route path="/md" element={<ControlPannel_Md />}>
+        <Route path="dashboard" element={< Md_Dashboard />} />
         {/* <Route path="departments" element={<departmenNewHospital />} /> */}
 
       </Route>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import emrimg from '../../../../public/emr.png'
-
+import "./ControlPannel.css"
 
 const ControlPannel_Md = () => {
     const [activeTab, setActiveTab] = useState('Dashboard')
@@ -87,6 +87,21 @@ const ControlPannel_Md = () => {
 
 
             <div className="mainContent">
+                <div className="super-admin-logo">
+                    <div className="super-admin">
+                        <h3> Dashboard</h3>
+                        <p>Helthcare and Network</p>
+                    </div>
+                    <div className="super-name" onClick={() => setCollapse(!isCollapse)}>
+                        <span className="logo">SA</span>
+                        <div>
+                            <h4>{"superAdmin?.name"}</h4>
+                            <span style={{
+                                fontSize: "12px"
+                            }}>System Administrator</span>
+                        </div>
+                    </div>
+                </div>
                 <Outlet></Outlet>
             </div>
 
@@ -99,7 +114,7 @@ const ControlPannel_Md = () => {
                 <div className="Logout-information">
                     <span>🚪Confirm Logout</span>
                     <br /> <br />
-                    <p>Are you sure you want to logout from the Super Admin Dashboard?</p>
+                    <p>Are you sure you want to logout from the Dashboard?</p>
                 </div>
                 <div className="log-btn">
                     <button className="main-button " onClick={() => {

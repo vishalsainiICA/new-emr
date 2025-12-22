@@ -1,172 +1,255 @@
 import { useEffect, useState } from "react";
 import Chart from "chart.js/auto";
 import "./Md_dashboard.css"; // <-- tumhara existing CSS
+import { superAdminApi } from "../../../auth";
+import RevenueChart from "../../Utility/RevenueChart";
+import { Circles } from "react-loader-spinner";
+
 
 const Md_Dashboard = () => {
+    const [metrices, setmetrices] = useState(null);
+    const [data, setData] = useState([]);
+    const [isProcessing, setIsProcessing] = useState(false);
+    const [isCollapse, setCollapse] = useState(false);
+    const [isEditprofile, setEditprofile] = useState(false);
+    const [changePassword, setChangePassword] = useState(false)
+    const [blur, setblur] = useState(false);
+    const [logOut, setlogOut] = useState(false);
+    // const [isCollapse, setCollapse] = useState(false);
+    const [refresh, setrefresh] = useState(false);
+    const [error, setError] = useState(null);
+    const [filterPatient, setFilterPatient] = useState([]);
+    const [superAdmin, setSuperAdmin] = useState(null);
+    const [password, setpassword] = useState({
+        old: "",
+        new: ""
+    })
 
-    const [activeView, setActiveView] = useState("dashboard");
-    const [collapsed, setCollapsed] = useState(false);
-    const [toast, setToast] = useState("");
-
-    /* ================= TOAST ================= */
-    const showToast = (msg) => {
-        setToast(msg);
-        setTimeout(() => setToast(""), 3000);
+    const getMetricValue = (name) => {
+        return metrices?.find((m) => m.key === name)?.value ?? 0;
     };
 
-    /* ================= CHART ================= */
     useEffect(() => {
-        if (activeView !== "dashboard") return;
+        const fetchHospital = async () => {
+            setIsProcessing(true);
+            setError(null);
+            try {
+                const res = await superAdminApi.getHosptialMetrices();
+                if (res.status === 200) {
+                    setData(res.data.data?.TopPerformanceHospital || []);
+                    setmetrices(res.data?.data?.metrices)
+                    setFilterHospital(res.data.data?.TopPerformanceHospital || []);
+                }
+                else {
+                    setError({ error: res.data?.message || "Something went wrong" });
+                }
+            } catch (err) {
+                console.log(err);
+                setError({ error: err.response?.data?.message || "Internal Server Error" });
+            } finally {
+                setIsProcessing(false);
+            }
+        };
+        const fetchProfile = async () => {
+            setIsProcessing(true);
+            setError(null);
+            try {
+                const res = await superAdminApi.fetchProfile();
+                if (res.status === 200) {
+                    setSuperAdmin(res.data?.data)
+                } else {
+                    setError({ error: res.data?.message || "Something went wrong" });
+                }
+            } catch (err) {
+                console.log(err);
+                setError({ error: err.response?.data?.message || "Internal Server Error" });
+                navigate("/login")
+            } finally {
+                setIsProcessing(false);
+            }
+        };
+        fetchProfile()
+        fetchHospital();
+    }, [refresh]);
+    useEffect(() => {
+        const fetchPatient = async () => {
+            setIsProcessing(true);
+            try {
 
-        const canvas = document.getElementById("mainChart");
-        if (!canvas) return;
+                const res = await superAdminApi.hospitalAllPaitent("693bee3d26d881f5bf859905");
+                if (res.status === 200) {
+                    setData(res.data.data || []);
+                    setFilterPatient(res.data.data || []); // initialize filter
+                } else {
+                    setError({ error: res.data?.message || "Something went wrong" });
+                }
+            } catch (err) {
+                console.log(err);
 
-        const chart = new Chart(canvas, {
-            type: "line",
-            data: {
-                labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-                datasets: [
-                    {
-                        label: "Revenue (Lakhs)",
-                        data: [2.5, 3.2, 2.8, 4.1, 3.9, 4.5, 4.2],
-                        borderColor: "#2563eb",
-                        backgroundColor: "rgba(37,99,235,0.05)",
-                        fill: true,
-                        tension: 0.4,
-                    },
-                ],
-            },
-            options: {
-                responsive: true,
-                plugins: { legend: { display: false } },
-                maintainAspectRatio: false,
-            },
-        });
+                setError({ error: err.response?.data?.message || "Internal Server Error" });
+            } finally {
+                setIsProcessing(false);
+            }
+        };
+        fetchPatient();
+    }, []);
 
-        return () => chart.destroy();
-    }, [activeView]);
+    const handleeditProfile = async () => {
+        setIsProcessing(true);
+        setError(null);
+
+        try {
+            const formdata = new FormData();
+            formdata.append("name", superAdmin?.name);
+            formdata.append("email", superAdmin?.email);
+            formdata.append("contact", superAdmin?.contact);
+
+            //Only add password fields if user actually entered something
+            if (password.old.trim() !== "" && password.new.trim() !== "") {
+                formdata.append("oldPassword", password.old);
+                formdata.append("newPassword", password.new);
+            }
+
+            const res = await superAdminApi.ediProfile(formdata);
+
+            if (res.status === 200) {
+                setSuperAdmin(res.data?.data);
+                toast.success("Profile Updated");
+
+                // close edit section
+                setEditprofile(false);
+                setblur(false);
+                setCollapse(false);
+                setpassword({ old: '', new: '' });
+
+
+            } else {
+                setError({ profile: res.data?.message || "Something went wrong" });
+            }
+
+        } catch (err) {
+            console.log(err);
+            setError({ profile: err.response?.data?.message || "Internal Server Error" });
+        } finally {
+            setrefresh((prev) => !prev)
+            setIsProcessing(false);
+        }
+    };
 
     return (
-        <>
-            {/* ================= SIDEBAR ================= */}
-            <nav className={`sidebar ${collapsed ? "collapsed" : ""}`}>
-                <div className="brand-area">
-                    <i className="fa-solid fa-user-md brand-icon"></i>
-                    <span className="brand-text">Dr. Percha</span>
-                    <button
-                        className="sidebar-toggle"
-                        onClick={() => setCollapsed(!collapsed)}
-                    >
-                        <i className="fa-solid fa-bars"></i>
-                    </button>
-                </div>
-
-                <div className="nav-menu">
-                    <div className="nav-label">Main</div>
-
-                    <div
-                        className={`nav-item ${activeView === "dashboard" ? "active" : ""}`}
-                        onClick={() => setActiveView("dashboard")}
-                    >
-                        <i className="fa-solid fa-chart-pie"></i>
-                        <span>Dashboard</span>
+        <div>
+            <div className="hospital-card-list">
+                {/* Total Hospital */}
+                <div onClick={() => navigate("/super-admin/hospital-management")} id="total-hospital" className="card-list">
+                    <div className="card-name">
+                        <span>Total Hospital</span>
+                        <p style={{ fontSize: "20px" }}>🏥</p>
                     </div>
-
-                    <div
-                        className={`nav-item ${activeView === "patients" ? "active" : ""}`}
-                        onClick={() => setActiveView("patients")}
-                    >
-                        <i className="fa-solid fa-user-injured"></i>
-                        <span>Patients</span>
-                    </div>
-
-                    <div
-                        className={`nav-item ${activeView === "doctors" ? "active" : ""}`}
-                        onClick={() => setActiveView("doctors")}
-                    >
-                        <i className="fa-solid fa-user-doctor"></i>
-                        <span>Doctors</span>
+                    <div>
+                        <h2>{getMetricValue("Total Hospital")}</h2>
+                        {/* <p>↑ 8% from last quarter</p> */}
                     </div>
                 </div>
-            </nav>
 
-            {/* ================= MAIN ================= */}
-            <div className="main-wrapper">
-                <header className="top-header">
-                    <div className="page-title">
-                        {activeView === "dashboard" && "Dashboard Overview"}
-                        {activeView === "patients" && "Patient Management"}
-                        {activeView === "doctors" && "Medical Staff"}
+                {/* Total Patients */}
+                <div onClick={() => navigate("/super-admin/patient-management")} id="total-patient" className="card-list">
+                    <div className="card-name">
+                        <span>Total Patients</span>
+                        <p style={{ fontSize: "20px" }}>👥</p>
                     </div>
-                </header>
+                    <div>
+                        <h2>{Number(getMetricValue("Total MalePatient")) + Number(getMetricValue("Total FemalePatient"))}</h2>
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'space-between'
+                        }}> <p>Male:</p> <h4>{Number(getMetricValue("Total MalePatient"))}</h4> <p>Female:</p><h4> {Number(getMetricValue("Total FemalePatient"))}</h4>
+                        </div>
+                    </div>
+                </div>
 
-                <div className="content">
+                {/* Total Prescription */}
+                <div onClick={() => navigate("/super-admin/patient-management", { state: { status: "rx-done" } })} id="total-prescription" className="card-list">
+                    <div className="card-name">
+                        <span>Total Prescriptions</span>
+                        <p style={{ fontSize: "20px" }}>💊</p>
+                    </div>
+                    <div>
+                        <h2>{getMetricValue("Total Prescbrition")}</h2>
+                        {/* <p>↑ This month processed</p> */}
+                    </div>
+                </div>
 
-                    {/* ============ DASHBOARD ============ */}
-                    {activeView === "dashboard" && (
-                        <div className="view-section active">
-                            <div className="grid-kpi">
-                                <div className="kpi-card">
-                                    <div className="kpi-title">Total Revenue</div>
-                                    <div className="kpi-value">₹ 12.5M</div>
-                                </div>
-                                <div className="kpi-card">
-                                    <div className="kpi-title">Live Queue</div>
-                                    <div className="kpi-value">18</div>
-                                </div>
-                            </div>
+                {/* Total Revenue */}
+                <div id="total-revenue" className="card-list">
+                    <div className="card-name">
+                        <span>Total Revenue</span>
+                        <p style={{ fontSize: "20px" }}>💰</p>
+                    </div>
+                    <div>
+                        <h2>₹{getMetricValue("Total Revenue")}</h2>
+                        {/* <p>↑ 22% monthly revenue</p> */}
+                    </div>
+                </div>
 
-                            <div className="panel">
-                                <div className="panel-header">
-                                    <span>Revenue Performance</span>
-                                    <button
-                                        className="btn btn-ghost"
-                                        onClick={() => showToast("Exporting Report")}
-                                    >
-                                        <i className="fa-solid fa-download"></i>
-                                    </button>
-                                </div>
-                                <div style={{ height: 300 }}>
-                                    <canvas id="mainChart"></canvas>
-                                </div>
-                            </div>
+            </div>
+            {/*  chart*/}
+            <div className="performance-card">
+                <div className="revenue-performance">
+                    <p>Revenue Performance</p>
+                    <RevenueChart></RevenueChart>
+
+
+                </div>
+
+                <div className="today-visits">
+                    <p>Today's Visits</p>
+
+                    {isProcessing && (
+                        <span style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            flexDirection: 'column',
+                            padding: '50px 0'
+                        }}>
+                            <Circles height="40" width="40" color="#4f46e5" ariaLabel="loading" />
+                            <br />Loading...
+                        </span>
+                    )}
+
+                    {error?.error && (
+                        <h4 style={{
+                            color: 'red',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            padding: '50px 0'
+                        }}>{error?.error}</h4>
+                    )}
+
+                    {!isProcessing && !error.error && Array.isArray(filterPatient) && filterPatient.length > 0 && (
+                        <div>
+                            {
+                                filterPatient.map((pat, index) => {
+                                    return <div className="patientCard">
+                                        <p></p>
+
+                                    </div>
+
+                                })
+                            }
                         </div>
                     )}
 
-                    {/* ============ PATIENTS ============ */}
-                    {activeView === "patients" && (
-                        <div className="view-section active">
-                            <div className="panel">
-                                <div className="panel-header">
-                                    <span>Patient Directory</span>
-                                    <button
-                                        className="btn btn-primary"
-                                        onClick={() => showToast("Create Patient")}
-                                    >
-                                        + New Patient
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    )}
 
-                    {/* ============ DOCTORS ============ */}
-                    {activeView === "doctors" && (
-                        <div className="view-section active">
-                            <div className="panel">
-                                <div className="panel-header">
-                                    <span>Physician Directory</span>
-                                </div>
-                            </div>
-                        </div>
-                    )}
 
                 </div>
+
             </div>
 
-            {/* ================= TOAST ================= */}
-            {toast && <div id="toast" className="show">{toast}</div>}
-        </>
+
+
+        </div>
     );
 };
 
