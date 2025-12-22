@@ -1,0 +1,30 @@
+.main-Deparment
+{  
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+.Department-cards{
+    padding: 10px;   
+}
+.Cards
+{
+     width: 35%;
+     height: 150px;
+     display: flex;
+     flex-direction: column;
+     background-color: rgb(249, 253, 253);
+     border-radius: 10px;
+     padding: 20px;
+     gap: 20px;
+     transition: transform 0.3s ease,box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+.Cards:hover
+{
+    /* border: 0.1px solid blue; */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+}

@@ -28,9 +28,9 @@ const ControlPannel_Md = () => {
 
     const navLinks = [
         { name: 'Dashboard', icon: 'ri-dashboard-line', navigate: '/md/dashboard' },
-        { name: 'Patients Records', icon: 'ri-group-line', navigate: '/md/patient-management' },
-        { name: 'Departments', icon: 'ri-admin-line', navigate: '/md/admin-management' },
-        { name: 'Hospital Info', icon: 'ri-building-line', navigate: '/md/hospital-management' },
+        { name: 'Patients Records', icon: 'ri-group-line', navigate: '/md/department' },
+        { name: 'Departments', icon: 'ri-admin-line', navigate: '/md/department' },
+        { name: 'Hospital Info', icon: 'ri-building-line', navigate: '/md/department' },
 
     ]
 

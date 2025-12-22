@@ -20,6 +20,8 @@ import RedirectToDashboard from './components/Handler.jsx';
 import Loginpage from './components/Utility/Loginpage/LoginPage.jsx';
 import Pa_PatientRegistertaion from "./components/personalAssitant/PatientRegisteration/Patientregisteration.jsx"
 import ControlPannel_Md from './components/MedicalDirector/ControlPannel/ControlPannel.jsx';
+import Department from './components/MedicalDirector/Department/Department.jsx';
+import DepartmentCards from './components/MedicalDirector/Department-Cards/Department-Cards.jsx';
 
 
 
@@ -44,8 +46,8 @@ function App() {
 
       <Route path="/md" element={<ControlPannel_Md />}>
         <Route path="dashboard" element={< Md_Dashboard />} />
-        {/* <Route path="departments" element={<departmenNewHospital />} /> */}
-
+        <Route path='department' element={<Department/>}/>
+        <Route path='department-Cards' element={<DepartmentCards/>}/>
       </Route>
 
       <Route path="/doctor" element={<Doc_Dashboard></Doc_Dashboard>}> </Route>

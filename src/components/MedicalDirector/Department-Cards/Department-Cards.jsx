@@ -1,0 +1,60 @@
+import { useNavigate } from 'react-router-dom';
+import './Department-Cards.css'
+
+const DepartmentCards = () => {
+    const navigate = useNavigate()
+    return <div className='Deparment-Cards'>
+        <div>
+            <div onClick={()=> navigate("/md/department")}> Back Department</div>
+        </div>
+        <div className='Department-name'>
+            <div className='Department-name-section'>
+                <div style={{ display: "flex", gap: "20px",alignItems:"center" }}>
+                    <i style={{ color: "red",fontSize:"20px" }} class="fa-solid fa-heart-pulse"></i>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                        <h2>Cardiology Department</h2>
+                        <span>Head of Dept: Dr. Rajesh Koothrappali</span>
+                    </div>
+                </div>
+                <button >Edit Detail</button>
+            </div>
+            <hr />
+            <div className='Medical-Staf'>
+                <div>
+                    <span>Medical Staff (Cardiology)</span>
+                </div>
+                <div className='staff-Data'>
+
+                    <div className='data'>
+                        <span>Name</span>
+                        <div>
+                            <p>Dr. Rajesh Koothrappali</p>
+                        </div>
+                    </div>
+                    <div className='data'>
+                        <span>Role</span>
+                        <div>
+                            <p>Senior Cardiologist</p>
+                        </div>
+                    </div>
+                    <div className='data'>
+                        <span>Status</span>
+                        <div>
+                            <p>Available</p>
+                        </div>
+                    </div>
+                    <div className='data' >
+                        <span>Action</span>
+                        <div>
+                            <p>View Profile</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+}
+
+export default DepartmentCards;
