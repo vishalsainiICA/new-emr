@@ -19,6 +19,8 @@ const ControlPannel_Md = () => {
     const [error, setError] = useState(null);
     // const [filterPatient, setFilterPatient] = useState([]);
     const [superAdmin, setSuperAdmin] = useState(null);
+    const [acitvetab, setActiveTab] = useState("Dashboard");
+    
     // const [password, setpassword] = useState({
     //     old: "",
     //     new: ""
@@ -30,8 +32,8 @@ const ControlPannel_Md = () => {
         { name: 'Dashboard', icon: 'ri-dashboard-line', navigate: '/md/dashboard' },
         { name: 'Patients Records', icon: 'ri-group-line', navigate: '/md/patient-record' },
         { name: 'Departments', icon: 'ri-admin-line', navigate: '/md/department' },
-        { name: 'Hospital Info', icon: 'ri-building-line', navigate: '/md/department' },
-        { name: 'My Profile', icon: 'ri-building-line', navigate: '/md/department' },
+        { name: 'Hospital Info', icon: 'ri-building-line', navigate: '/md/hospital-info'},
+        { name: 'My Profile', icon: 'ri-building-line', navigate: '/md/md-profile' },
 
     ]
 
@@ -101,7 +103,10 @@ const ControlPannel_Md = () => {
                     {navLinks.map((item, i) => {
 
                         return <div key={i}
-                            onClick={() => navigate(item.navigate)}
+                            onClick={() => {
+                                setActiveTab(item.name)
+                                navigate(item.navigate)
+                            }}
                             className="side-bar-item">
                             <i className={item.icon}></i>
                             {!collapsed && (
@@ -128,7 +133,7 @@ const ControlPannel_Md = () => {
             <div className="mainContent">
                 <div className="super-admin-logo">
                     <div className="super-admin">
-                        <h3> Dashboard</h3>
+                        <h3>{acitvetab}</h3>
                         <p>Helthcare and Network</p>
                     </div>
                     <div className="super-name" onClick={() => setCollapse(!isCollapse)}>

@@ -1,0 +1,55 @@
+.my-profile-main
+{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.my-profile
+{
+    background-color: white;
+    padding: 20px;
+    margin: 20px;
+    width: 100%;
+    border-radius: 10px;
+}
+.name-logo
+{
+    background-color: #8b5cf6;;
+    border-radius: 30%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.md-Name
+{
+    display: flex;
+    padding: 10px 20px;
+    gap: 30px;
+    align-items: center;
+}
+
+.md-Name button
+{
+    padding: 10px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border: 0.5px solid lightgrey;
+    border-radius: 5px;
+}
+.md-data
+{
+    display: flex;
+    justify-content: space-between;
+    /* border-radius: 20px; */
+    /* background-color: #8b5cf6; */
+}
+
+.data{
+    display: flex;
+    flex-direction: column;
+}

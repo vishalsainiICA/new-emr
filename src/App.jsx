@@ -23,6 +23,8 @@ import Pa_PatientRegistertaion from "./components/personalAssitant/PatientRegist
 import ControlPannel_Md from './components/MedicalDirector/ControlPannel/ControlPannel.jsx';
 import Department from './components/MedicalDirector/Department/Department.jsx';
 import DepartmentCards from './components/MedicalDirector/Department-Cards/Department-Cards.jsx';
+import Myprofile from './components/MedicalDirector/my-profile/my-profile.jsx';
+import Hospital_info from './components/MedicalDirector/Hospital-info/Hosptai-info.jsx';
 
 
 
@@ -50,6 +52,8 @@ function App() {
         <Route path='department' element={<Department />} />
         <Route path='department-Cards' element={<DepartmentCards />} />
         <Route path='patient-record' element={<Md_PatientRecord />} />
+        <Route path='md-profile' element={<Myprofile/>}/>
+        <Route path='hospital-info' element={<Hospital_info/>}/>
       </Route>
 
       <Route path="/doctor" element={<Doc_Dashboard></Doc_Dashboard>}> </Route>

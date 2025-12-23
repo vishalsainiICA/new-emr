@@ -4,13 +4,13 @@ import './Department-Cards.css'
 const DepartmentCards = () => {
     const navigate = useNavigate()
     return <div className='Deparment-Cards'>
-        <div>
-            <div onClick={()=> navigate("/md/department")}> Back Department</div>
+        <div className='back-button'>
+            <div onClick={() => navigate("/md/department")}> Back Department</div>
         </div>
         <div className='Department-name'>
             <div className='Department-name-section'>
-                <div style={{ display: "flex", gap: "20px",alignItems:"center" }}>
-                    <i style={{ color: "red",fontSize:"20px" }} class="fa-solid fa-heart-pulse"></i>
+                <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
+                    <i style={{ color: "red", fontSize: "20px", backgroundColor:"lightgreen",width:"40px",height:"40px",borderRadius:"3px",display:"flex",justifyContent:"center",alignItems:"center" }} class="fa-solid fa-heart-pulse"></i>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <h2>Cardiology Department</h2>
                         <span>Head of Dept: Dr. Rajesh Koothrappali</span>
@@ -51,10 +51,33 @@ const DepartmentCards = () => {
                     </div>
 
                 </div>
-            </div>
-        </div>
 
-    </div>
+                {/* <table className="row-only-table">
+                    <tbody>
+                        <tr>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                        </tr>
+
+                        <tr>
+                            <td>Dr. Rajesh Koothrappali</td>
+                        </tr>
+
+                        <tr>
+                            <td>Senior Cardiologist</td>
+                        </tr> 
+                        <tr>
+
+                            <td>Available</td>
+                        </tr> 
+                    </tbody>
+                        </table> */}
+              
+                    </div>
+            </div>
+
+        </div>
 }
 
-export default DepartmentCards;
+        export default DepartmentCards;
