@@ -1,10 +1,10 @@
 import "./Hospital-info.css"
 
 const Hospital_info = () => {
-    return <div className="my-profile-main">
-        <div className="my-profile">
-            <div className="md-Name">
-                <div className="name-logo">
+    return <div className="Hospital-info-main">
+        <div className="hospital-profile">
+            <div className="hospital-Name">
+                <div className="hospital-logo">
                     <span><i style={{fontSize:"30px"}} class="fa-solid fa-hospital"></i></span>
                 </div>
                 <div>
@@ -16,22 +16,22 @@ const Hospital_info = () => {
             <hr />
             <div style={{display:"flex",flexDirection:"column"}}>
 
-                <div className="md-data">
-                    <div className="data">
+                <div className="hospital-data">
+                    <div className="data2">
                         <p>Address</p>
                         <span>Plot 42, Sector 5, Mumbai</span>
                     </div>
-                    <div className="data">
+                    <div className="data2">
                         <p>Helpline</p>
                         <span>1800-PERCHA-MED</span>
                     </div>
-                    <div className="data">
+                    <div className="data2">
                         <p>Capacity</p>
                         <span>500 Beds (85% Occupied)</span>
                     </div>
                 </div>
-                <div className="md-data">
-                    <div className="data">
+                <div className="hospital-data">
+                    <div className="data2">
                         <p>Ambulance</p>
                         <span>12 Active Units</span>
                     </div>
