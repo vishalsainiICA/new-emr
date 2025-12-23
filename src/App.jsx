@@ -3,6 +3,7 @@ import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import "./App.css"
 import Md_Dashboard from './components/MedicalDirector/Dashboard/Md_Dashboard.jsx';
+import Md_PatientRecord from './components/MedicalDirector/PatientRecord/PatientRecord.jsx'
 import Doc_Dashboard from "./components/Doctor/Dashboard/Dashboard"
 import Su_Dashboard from "./components/superAdmin/Dashboard/Dashboard"
 import HospitalManagement from './components/superAdmin/HospitalManagement/HospitalManagement';
@@ -46,8 +47,9 @@ function App() {
 
       <Route path="/md" element={<ControlPannel_Md />}>
         <Route path="dashboard" element={< Md_Dashboard />} />
-        <Route path='department' element={<Department/>}/>
-        <Route path='department-Cards' element={<DepartmentCards/>}/>
+        <Route path='department' element={<Department />} />
+        <Route path='department-Cards' element={<DepartmentCards />} />
+        <Route path='patient-record' element={<Md_PatientRecord />} />
       </Route>
 
       <Route path="/doctor" element={<Doc_Dashboard></Doc_Dashboard>}> </Route>

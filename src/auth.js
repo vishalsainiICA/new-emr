@@ -135,6 +135,9 @@ export const medicalDirectorApi = {
     hospitalAllPaitent: async () => {
         return await medicalDirectorInstance.get(`/medical-director/patients/hospitalAllPaitent`)
     },
+    allPatients: async (date = null, status = null) => {
+        return await superAdminInstance.get(`/medical-director/patients/allPatients?date=${date}&status=${status}`)
+    },
 
 
 }

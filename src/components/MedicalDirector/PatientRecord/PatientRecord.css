@@ -1,0 +1,67 @@
+.patientHeading {
+    display: grid;
+    font-size: 12px;
+    grid-template-columns: 1.5fr 1.5fr 1fr 1fr 1fr 1fr 1fr;
+    background-color: #f4f4f4;
+    padding: 15px;
+    border: 0 solid gray;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    font-weight: bold;
+}
+
+.customCard {
+    background-color: rgba(255, 255, 255);
+    border-radius: 10px;
+    padding: 20px;
+    transition: 1s ease;
+    margin: 10px;
+
+}
+
+.hover:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.patientBody {
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: 1.5fr 1.5fr 1fr 1fr 1fr 1fr 1fr;
+    border: 0 solid gray;
+    background-color: white;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    
+
+    p {
+        font-size: 12px;
+        color: black;
+    }
+}
+
+.patientBody:hover {
+
+    background-color: skyblue;
+
+    p {
+        color: black
+    }
+
+    ;
+}
+
+.patientHistory {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+}
