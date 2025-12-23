@@ -140,7 +140,7 @@ const Md_Dashboard = () => {
     };
 
     return (
-        <div>
+        <div className="md-dashboard">
             <div className="hospital-card-list">
                 {/* Total Hospital */}
                 <div onClick={() => navigate("/md/department")} id="total-hospital" className="card-list">
