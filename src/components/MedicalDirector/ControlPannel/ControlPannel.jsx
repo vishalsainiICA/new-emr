@@ -20,7 +20,7 @@ const ControlPannel_Md = () => {
     // const [filterPatient, setFilterPatient] = useState([]);
     const [superAdmin, setSuperAdmin] = useState(null);
     const [acitvetab, setActiveTab] = useState("Dashboard");
-    
+
     // const [password, setpassword] = useState({
     //     old: "",
     //     new: ""
@@ -32,7 +32,7 @@ const ControlPannel_Md = () => {
         { name: 'Dashboard', icon: 'ri-dashboard-line', navigate: '/md/dashboard' },
         { name: 'Patients Records', icon: 'ri-group-line', navigate: '/md/patient-record' },
         { name: 'Departments', icon: 'ri-admin-line', navigate: '/md/department' },
-        { name: 'Hospital Info', icon: 'ri-building-line', navigate: '/md/hospital-info'},
+        { name: 'Hospital Info', icon: 'ri-building-line', navigate: '/md/hospital-info' },
         { name: 'My Profile', icon: 'ri-building-line', navigate: '/md/md-profile' },
 
     ]
@@ -87,7 +87,7 @@ const ControlPannel_Md = () => {
                 {!collapsed && (
                     <div className="side-bar-logo"
 
-                        onClick={() => navigate("/super-admin/dashboard")}
+                        onClick={() => navigate("/md/dashboard")}
                     >
 
 

@@ -221,10 +221,10 @@ export default function PatientRecords() {
                                 onClick={() => setClose(patient)}
                                 key={i} className="patientBody" >
                                 <p>{patient.uid}</p>
-                                <p>{patient.name}</p>
+                                <p>{patient.name}. <p style={{ color: "gray", display: 'inline' }}>({patient.gender})</p></p>
                                 <p>{patient.age}</p>
                                 <p>{patient?.hospitalId?.name || "N/A"}</p>
-                                <p>{patient?.doctorId?.name || "N/A"}</p>
+                                <p>Dr. {patient?.doctorId?.name || "N/A"}</p>
                                 {patient?.prescribtionId ? (
                                     <p
                                         style={{
@@ -269,6 +269,7 @@ export default function PatientRecords() {
                         ))}
                     </>
                 )}
+
 
                 {!isProcessing && !error && Array.isArray(filterPatient) && filterPatient.length === 0 && (
                     <p style={{ textAlign: 'center', padding: '50px 0' }}>

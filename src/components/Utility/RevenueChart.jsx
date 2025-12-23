@@ -18,13 +18,13 @@ ChartJS.register(
     Legend
 );
 
-const RevenueChart = () => {
+const RevenueChart = ({revenueArray}) => {
     const data = {
-        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "July", "Aug", "Sep", "Oct", "Nov", "Dec"],
         datasets: [
             {
                 label: "Revenue ($)",
-                data: [1200, 1900, 3000, 2500, 3200, 4000],
+                data: revenueArray,
                 borderWidth: 2,
                 tension: 0.4,
             },

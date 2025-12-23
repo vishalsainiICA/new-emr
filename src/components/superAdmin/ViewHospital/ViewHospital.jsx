@@ -679,7 +679,7 @@ const ViewHospital = () => {
                                         gap: "20px" // space between items
                                     }}
                                 >
-                                    <span className="logo">{doc?.name.slice(0, 1).toUpperCase()}</span>
+                                    <span className="logo">{doc?.name?.slice(0, 1).toUpperCase()}</span>
                                     <div onClick={() => { setEdit(doc); setEditTemp(doc?.personalAssitantId) }}>
                                         <p style={{ margin: 0, fontSize: '14px' }}>Dr. {doc?.name}</p>
                                         <h5 style={{ color: 'blue', fontSize: '12px' }}>{`${doc.email || "N/A"}`}</h5>
