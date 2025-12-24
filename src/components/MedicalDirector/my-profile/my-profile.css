@@ -16,9 +16,9 @@
 .name-logo
 {
     background-color: #8b5cf6;;
-    /* border-radius: 50%; */
-    width: 40px;
-    height: 40px;
+    border-radius: 30%;
+    width: 60px;
+    height: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -31,7 +31,7 @@
     align-items: center;
 }
 
-.md-Name button
+button
 {
     padding: 10px;
     height: 30px;
@@ -40,6 +40,11 @@
     background-color: white;
     border: 0.5px solid lightgrey;
     border-radius: 5px;
+}
+
+ button:hover
+{
+    color: blue;
 }
 .md-data
 {
@@ -54,4 +59,5 @@
 .data{
     display: flex;
     flex-direction: column;
+    padding: 10px;
 }
