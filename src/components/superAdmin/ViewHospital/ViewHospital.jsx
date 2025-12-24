@@ -1266,7 +1266,7 @@ const ViewHospital = () => {
                                                                     marginTop: '10px',
                                                                     display: 'flex',
                                                                     columnGap: '80px',
-                                                                    display: "flex",
+                                             
                                                                     justifyContent: "center"
                                                                 }}>
                                                                     <label style={{
@@ -1977,7 +1977,7 @@ const ViewHospital = () => {
                             marginTop: '10px',
                             display: 'flex',
                             columnGap: '80px',
-                            display: "flex",
+                      
                             justifyContent: "center"
                         }}>
                             <label style={{
