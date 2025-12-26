@@ -440,9 +440,14 @@ const Medication = () => {
             <div className="med-head">
                 <div style={{
                     display: 'flex',
-                    justifyContent: 'space-between'
-                }}>
-                    <div onClick={() => navigate(-1)} className="med-card">
+                    justifyContent: 'space-between',
+                    borderBottom:"0.5px solid lightgray",
+                    // borderLeft:"0.5px solid lightgray",
+                    borderRadius:"20px",
+                    alignItems:"center",
+                    padding:"10px"
+                 }}>
+                    <div className="back-button" onClick={() => navigate(-1)}>
                         <h5><BsArrowLeft></BsArrowLeft> Back To Dashboard</h5>
                     </div>
                     <div className="med-card">
@@ -487,17 +492,12 @@ const Medication = () => {
                                 alignItems: 'center',
                                 outline: "none",
                                 border: "none",
-                                borderRadius: '10px'
+                                borderRadius: '10px',
+                                justifyContent: "center"
                             }}>
                             Generate
                         </button>
-
-
-
-
-
                     </div>
-
                 </div>
 
                 <div className="medication-heading-card">
@@ -512,45 +512,47 @@ const Medication = () => {
 
                     <div style={{
                         display: 'flex',
+                        width:"100%",
                         justifyContent: 'space-between'
                     }}>
-                        <h5>Patient Vitals:</h5>
-                        <h5>Patient History:</h5>
+                        <div style={{width:"100%"}}>
+                            <h5>Patient Vitals:</h5>
+                        </div>
+                        <div style={{width:"100%"}}>
+                            <h5>Patient History:</h5>
+                        </div>
                     </div>
                     <div className={`medication-heading ${patientDetails ? "open" : "closed"}`}>
                         <div className="patient-vitals">
 
                             <div className="patient-vitals-item">
-                                <div>
+                                <div className="patient-detail" >
                                     <p>Name</p>
                                     <h5>{patient?.name || "-"}</h5>
                                 </div>
 
-                                <div>
+                                <div className="patient-detail">
                                     <p>Age</p>
                                     <h5>{patient?.age ? `${patient.age} yrs` : "-"}</h5>
                                 </div>
-                            </div>
-
-                            <div className="patient-vitals-item">
-                                <div>
+                                <div className="patient-detail">
                                     <p>Gender</p>
                                     <h5>{patient?.gender || "-"}</h5>
                                 </div>
 
-                                <div>
+                                <div className="patient-detail">
                                     <p>Phone</p>
                                     <h5>{patient?.phone || "-"}</h5>
                                 </div>
                             </div>
 
                             <div className="patient-vitals-item">
-                                <div>
+                                <div className="patient-detail">
                                     <p>Blood Group</p>
                                     <h5>{patient?.initialAssementId?.bloodGroup || "-"}</h5>
                                 </div>
 
-                                <div>
+                                <div className="patient-detail">
                                     <p>Height</p>
                                     <h5>
                                         {patient?.initialAssementId?.height
@@ -558,10 +560,8 @@ const Medication = () => {
                                             : "-"}
                                     </h5>
                                 </div>
-                            </div>
 
-                            <div className="patient-vitals-item">
-                                <div>
+                                <div className="patient-detail">
                                     <p>Weight</p>
                                     <h5>
                                         {patient?.initialAssementId?.weight
@@ -570,7 +570,7 @@ const Medication = () => {
                                     </h5>
                                 </div>
 
-                                <div>
+                                <div className="patient-detail">
                                     <p>Pulse</p>
                                     <h5>
                                         {patient?.initialAssementId?.heartRate
@@ -582,7 +582,7 @@ const Medication = () => {
 
                             {patient?.initialAssementId?.selectedSym?.length > 0 && (
                                 <div className="patient-vitals-item">
-                                    <div>
+                                    <div className="patient-detail">
                                         <p>Symptoms</p>
                                         <h5>{patient.initialAssementId.selectedSym.join(", ")}</h5>
                                     </div>
@@ -729,6 +729,7 @@ const Medication = () => {
                                             width: '120px',
                                             padding: "7px",
                                             cursor: 'pointer',
+                                            justifyContent: "center",
                                             alignItems: 'center',
                                             outline: "none",
                                             border: 'none',
@@ -791,7 +792,7 @@ const Medication = () => {
 
                     </div>
                     <div style={{
-                    }}>
+                     }}>
                         <div style={{
                             marginTop: '10px',
                             display: 'flex',
@@ -869,11 +870,11 @@ const Medication = () => {
                     {selectedLabTest.length > 0 && (
                         <div style={{
                             marginBottom: '20px',
-                        }}>
+                         }}>
                             <div style={{
                                 display: 'flex',
                                 justifyContent: 'space-between'
-                            }}>
+                             }}>
                                 <h5>Lab Test:</h5>
                             </div>
                             {
@@ -927,7 +928,7 @@ const Medication = () => {
                                 })
                             }
                         </div>
-                    )}
+                     )}
                     <div>
                         <div style={{
                             display: 'flex',
@@ -1041,7 +1042,8 @@ const Medication = () => {
                                     width: '100px',
                                     padding: "5px",
                                     cursor: 'pointer',
-                                    alignItems: 'center'
+                                    alignItems: 'center',
+                                    justifyContent: "center"
                                 }}>
                                 Generate
                             </button>
@@ -1051,7 +1053,8 @@ const Medication = () => {
                                     border: "1px solid gray",
                                     padding: "5px",
                                     cursor: "pointer",
-                                    borderRadius: "10px"
+                                    borderRadius: "10px",
+                                    justifyContent: "center"
                                 }}
                                 onClick={() => {
                                     setSymptopms([]);

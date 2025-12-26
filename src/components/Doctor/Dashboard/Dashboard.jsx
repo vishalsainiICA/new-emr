@@ -209,7 +209,7 @@ const DashBoard = () => {
                 // flexDirection:'column',
                 // gap:'5px'
             }} >
-                <h3>Dashboard</h3>
+                <h3>Dashboard </h3>
                 <p >Helthcare and Network</p>
             </div>
             <div
@@ -381,33 +381,33 @@ const DashBoard = () => {
                                                 gap: '10px'
                                             }}>
                                                 <h5 style={{ margin: 0 }}>{hos?.name}</h5>
-                                                <p
-                                                    style={{
-                                                        color:
-                                                            hos?.status === "Cancel"
-                                                                ? "red"
-                                                                : hos?.status === "Postponed"
-                                                                    ? "#b8860b"          // dark yellow
-                                                                    : "green",
 
-                                                        backgroundColor:
-                                                            hos?.status === "Cancel"
-                                                                ? "#ffb3b3"          // light red
-                                                                : hos?.status === "Postponed"
-                                                                    ? "#fff2a8"          // light yellow
-                                                                    : "lightgreen",
-
-                                                        padding: "5px",
-                                                        borderRadius: "10px",
-                                                    }}
-                                                >
-                                                    {hos?.prescribtionId ? "Rxdone" : hos?.status}
-                                                </p>
                                             </div>
                                             <p style={{}}>{`${hos?.gender?.toLowerCase() || "N/A"} , ${hos?.age || "N/A"} `}</p>
                                             <p>{moment(hos?.updatedAt).format("DD/MM/YYYY, hh:mm A") || "N/A"}</p>
                                         </div>
+                                        <p
+                                            style={{
+                                                color:
+                                                    hos?.status === "Cancel"
+                                                        ? "red"
+                                                        : hos?.status === "Postponed"
+                                                            ? "#b8860b"          // dark yellow
+                                                            : "green",
 
+                                                backgroundColor:
+                                                    hos?.status === "Cancel"
+                                                        ? "#ffb3b3"          // light red
+                                                        : hos?.status === "Postponed"
+                                                            ? "#fff2a8"          // light yellow
+                                                            : "lightgreen",
+
+                                                padding: "5px",
+                                                borderRadius: "10px",
+                                            }}
+                                        >
+                                            {hos?.prescribtionId ? "Rxdone" : hos?.status}
+                                        </p>
                                     </div>
 
                                     <div style={{
