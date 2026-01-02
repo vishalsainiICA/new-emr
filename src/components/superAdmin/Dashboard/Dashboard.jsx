@@ -132,12 +132,12 @@ const Dashboard = () => {
 
 
             } else {
-                setError({ profile: res.data?.message || "Something went wrong" });
+                 toast.error(res.data?.message || "Something went wrong" );
             }
 
         } catch (err) {
             console.log(err);
-            setError({ profile: err.response?.data?.message || "Internal Server Error" });
+             toast.error(err.response?.data?.message || "Internal Server Error");
         } finally {
             setrefresh((prev) => !prev)
             setIsProcessing(false);
@@ -471,6 +471,7 @@ const Dashboard = () => {
 
                         )
                     }
+           
                     {error?.profile && (<p style={{ color: 'red' }}>Error :{error?.profile}</p>)}
 
                     <div className="final-process">
@@ -495,7 +496,7 @@ const Dashboard = () => {
                     <p>Are you sure you want to logout from the Super Admin Dashboard?</p>
                 </div>
                 <div className="log-btn">
-                    <button className="main-button " onClick={() => {
+                    <button className="main-button view-btn " onClick={() => {
                         localStorage.removeItem("token")
                         localStorage.removeItem("role")
                         navigate("/login", { replace: true })

@@ -14,9 +14,9 @@ const Errorpage = () => {
                 <img src={notfundimg} alt="" />
                 <div style={{display:"flex", justifyContent:"center",alignItems:"center", gap:"10px"}}>
                 <span >Go to </span>
-                <a href="">dashboard</a>
+                <a href="/" on>dashboard</a>
                 <span>or</span>
-                <a href="">login</a>
+                <a href="/login">login</a>
                 </div>
                
                 </div>

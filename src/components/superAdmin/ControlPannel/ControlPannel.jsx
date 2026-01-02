@@ -35,14 +35,14 @@ const ControlPannel = () => {
 
             <div className={`side-bar ${collapsed ? "acitve" : ""}`}>
                 <div className="collapse">
-                    <i
+                    <i 
                         onClick={() => setcollapsed(!collapsed)}
                         style={{
                             cursor: 'pointer',
                             display: 'block',
                             fontSize: '20px',
 
-                        }} class="ri-menu-line"></i>
+                        }} class="ri-menu-line menuIcon"></i>
                 </div>
                 {!collapsed && (
                     <div className="side-bar-logo"
@@ -67,7 +67,7 @@ const ControlPannel = () => {
                             className="side-bar-item">
                             <i className={item.icon}></i>
                             {!collapsed && (
-                                <h5>{item.name}</h5>
+                                <h5 className="tabname">{item.name}</h5>
                             )}
                         </div>
                     })}
@@ -80,7 +80,7 @@ const ControlPannel = () => {
                     className="side-bar-logout ">
                     <i class="ri-logout-box-r-line"></i>
                     {!collapsed && (
-                        <h5>LogOut</h5>
+                        <h5 className="logout">LogOut</h5>
                     )}
                 </div>
 
@@ -103,7 +103,7 @@ const ControlPannel = () => {
                     <p>Are you sure you want to logout from the Super Admin Dashboard?</p>
                 </div>
                 <div className="log-btn">
-                    <button className="main-button " onClick={() => {
+                    <button className="main-button view-btn" onClick={() => {
                         localStorage.removeItem("token")
                         localStorage.removeItem("role")
                         navigate("/login", { replace: true })

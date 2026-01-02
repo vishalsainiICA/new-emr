@@ -318,7 +318,7 @@
     font-weight: bold;
 }
 
-@media (max-width: 1024px) and (min-width: 600px) {
+@media screen and (min-width: 600px) and  (max-width: 1024px) {
     .Hospital-perfo-and-Network {
         flex-direction: column;
     }
@@ -354,6 +354,14 @@
         font-size: 7px;
 
     }
+        .hospital-performance , .network-overview{
+
+        width: 100%;
+    }
+    .network-overview{
+        justify-content: center;
+    }
+    
 
 }
 
@@ -408,6 +416,14 @@
         box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
         z-index: 10;
 
+    }
+    .super-admin{
+        h3{
+            font-size: 3.5vw;
+        }
+        p{
+            font-size: 8px;
+        }
     }
 
 }

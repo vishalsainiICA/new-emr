@@ -99,10 +99,18 @@ const Loginpage = () => {
             </div>
             {error?.password && (<p>{error?.password}</p>)}
           </div>
-          <div className="login-button">
-            <a href="">forgot Password?</a>
-            <button disabled={isProcessing} onClick={handlelogin}> {`${isProcessing ? "login...." : "Log in"}`} </button>
-          </div>
+               <a style={{
+                  fontSize:'12px'
+               }} href="">forgot Password?</a>
+                    <button  style={{
+                      marginTop:'10px',
+              alignItems:'center',
+                 textAlign:'center',
+                 width:'90%',
+                 cursor:'pointer',
+                 justifyContent:"center"
+
+            }} className="view-btn" disabled={isProcessing} onClick={handlelogin}> {`${isProcessing ? "login...." : "Log"}`} </button>
           {error?.error && (<p style={{
             fontSize: '10px',
             color: 'red'

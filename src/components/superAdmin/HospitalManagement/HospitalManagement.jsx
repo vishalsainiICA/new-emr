@@ -164,7 +164,10 @@ const HospitalManagement = () => {
 
             <div className="customCard" style={{
                 height: '100vh',
-                marginTop: '10px'
+                marginTop: '10px',
+                overflowY:'scroll',
+                scrollbarWidth:'none'
+
             }}>
                 <h4>Hospital Directory</h4>
                 <div className="hostpitalmanagement-body" style={{
@@ -226,19 +229,19 @@ const HospitalManagement = () => {
                                         color: 'rgba(141, 129, 244)',
                                         fontWeight: 'bold'
 
-                                    }}>General Hospital</p>
+                                    }}>{hos?.hospitalCategory || "General Hospital"}</p>
                                 </div>
 
                             </div>
 
                             <div className="hos-metrices">
                                 <div className="">
-                                    <p >Beds <h5>456</h5></p>
-                                    <p >Beds <h5>456</h5></p>
+                                    <p >Beds <h5>{hos?.totalBeds || "456"}</h5></p>
+                                    <p >Beds <h5>{hos?.totalBeds || "456"}</h5></p>
                                 </div>
                                 <div className="" >
-                                    <p >Beds <h5>456</h5></p>
-                                    <p >Beds <h5>456</h5></p>
+                                    <p >Beds <h5>{hos?.totalBeds || "456"}</h5></p>
+                                    <p >Beds <h5>{hos?.totalBeds || "456"}</h5></p>
                                 </div>
                             </div>
 
@@ -258,18 +261,15 @@ const HospitalManagement = () => {
                                         fontSize: '10px',
                                         backgroundColor: 'rgba(219, 219, 252)',
                                         border: "none"
-                                    }}> 👁️ View</button>
-
-                                {/* <button style={{
-                                    height: '30px',
-                                    width: '70px',
-                                    fontSize: '10px',
-                                    backgroundColor: 'rgba(235, 254, 246)',
-                                    border: "none"
-                                }}>✏️ Edit</button> */}
+                                    }}
+                                    className="view-btn"
+                                    > 👁️ View</button>
 
                                 <button
                                     onClick={() => handledelete(hos?._id)}
+
+                                    className="red-btn"
+                                  
                                     style={{
                                         height: '30px',
                                         width: '70px',

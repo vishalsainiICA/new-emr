@@ -41,11 +41,11 @@ button
     border: 0.5px solid lightgrey;
     border-radius: 5px;
 }
-
+/* 
  button:hover
 {
     color: blue;
-}
+} */
 .md-data
 {
     display: flex;

@@ -219,7 +219,8 @@ export const NewHospital = () => {
         }
         if (doctorDetail === 3 && hospitalData.supportedDepartments.length !== 0) {
             if (doctorDetail == 1) {
-                if (!doctorData.name) errors.name = "Doctor name is required"
+                if (!doctorData.name) errors.docName = "Doctor name is required"
+                if (doctorData.name && !directorNameRegex.test(doctorData.name)) { errors.docName = "Only alphabets Allowed"; }
                 if (!doctorData.email) errors.doctorEmail = "Doctor Email is required"
                 if (doctorData?.email && !gmailRegex.test(doctorData?.email)) { errors.doctorEmail = "Only Gmail address allowed"; }
                 if (!doctorData.experience) errors.doctorExperience = "Doctor Experience is required"
@@ -252,9 +253,6 @@ export const NewHospital = () => {
             if (hospitalDatacopy?.medicalDirector?.contact && hospitalDatacopy?.medicalDirector?.contact.length !== 10) errors.medicalDirectorContact = "Medical director Number Must be 10 digits"
             if (!hospitalDatacopy?.medicalDirector?.email) errors.medicalDirectorEmail = "Medical director email is required"
             if (hospitalDatacopy?.medicalDirector?.email && !gmailRegex.test(hospitalDatacopy?.medicalDirector?.email)) { errors.medicalDirectorEmail = "Only Gmail address allowed"; }
-
-
-
         }
 
 
@@ -292,6 +290,37 @@ export const NewHospital = () => {
             toast.error("Please fill all required fields!");
             return;
         }
+
+               // Regex patterns
+               const nameRegex = /^[A-Za-z ]+$/;
+               const contactRegex = /^[0-9]{10}$/;
+               const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+       
+               // Name validation
+               if (!nameRegex.test(doctorData.name)) {
+                   toast.error("Name must contain only alphabets!");
+                   return;
+               }
+                              // Email validation
+               if (!emailRegex.test(doctorData.email)) {
+                   toast.error("Invalid email!");
+                   return;
+               }
+       
+               // Contact number validation
+               if (!contactRegex.test(doctorData.contact)) {
+                   toast.error("Contact must be a valid 10-digit number!");
+                   return;
+               }
+       
+               // Experience validation
+               if (Number(doctorData.experience) > 100) {
+                   toast.error("Experience must be less than 100 years!");
+                   return;
+               }
+       
+
+
 
         const updatedDepartments = [...hospitalData.supportedDepartments];
         const selectedDept = updatedDepartments[assinDoctor];
@@ -587,18 +616,9 @@ export const NewHospital = () => {
                                 }} />
                             {errors.patientCategories && <label style={{ color: "red" }}>{errors.patientCategories}</label>}
                         </label>
-                        <button
-
-                            style={{
-                                marginTop: '10px',
-                                width: '60px',
-                                height: '30px',
-                                cursor: 'pointer',
-                                backgroundColor: 'lavender',
-                                outline: 'none',
-                                border: '0.5px solid lightgrey',
-                                borderRadius: '10px'
-                            }}
+                        <button className="addButton" style={{
+                            marginTop:'20px'
+                        }}
                             onClick={() => {
                                 if (!categoryName || categoryName === '') {
                                     toast.error('Please Enter Scheme Name')
@@ -933,7 +953,7 @@ export const NewHospital = () => {
                                                     gap: "20px" // space between items
                                                 }}
                                             >
-                                                <span style={{ fontSize: '18px', fontFamily: 'cursive' }}>{i + 1}.</span>
+                                                <span style={{ fontSize: '18px' }}>{i + 1}.</span>
                                                 <div>
                                                     <h4 >{dep.departmentName || "Unnamed"}</h4>
                                                     <p className="reviewtag">{dep.doctors?.length || "0"}</p>
@@ -963,10 +983,15 @@ export const NewHospital = () => {
                                             onClick={() => setAssignDoctor(i)}
                                             className="addButton"
                                             style={{
-                                                width: '100%'
+                                                width: '100%',
+                                                display:"flex",
+                                                alignItems:'center',
+                                                justifyContent:'center',
+                                                textAlign:'center'
+                                                
                                             }}
 
-                                        ><i class="ri-group-line"></i>+ Doctor</button>
+                                        ><i class="ri-group-line"></i> Add Doctor</button>
 
 
                                     </div>
@@ -1495,7 +1520,7 @@ export const NewHospital = () => {
                                     value={doctorData.name}
                                     onChange={(e) => setDoctorData({ ...doctorData, name: e.target.value })}
                                 />
-                                {errors.name && <label style={{ color: "red" }}>{errors.name}</label>}
+                                {errors.docName && <label style={{ color: "red" }}>{errors.docName}</label>}
                             </label>
 
                             <label style={{ width: '100%' }}>

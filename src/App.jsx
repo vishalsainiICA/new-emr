@@ -25,7 +25,7 @@ import Department from './components/MedicalDirector/Department/Department.jsx';
 import DepartmentCards from './components/MedicalDirector/Department-Cards/Department-Cards.jsx';
 import Myprofile from './components/MedicalDirector/my-profile/my-profile.jsx';
 import Hospital_info from './components/MedicalDirector/Hospital-info/Hosptai-info.jsx';
-
+import NotFoundPage from './components/Utility/Not-found/Not-found.jsx'
 
 
 
@@ -64,6 +64,10 @@ function App() {
       <Route path="/pa" element={<Pa_Dashboard></Pa_Dashboard>}> </Route>
       <Route path="/intial-assement" element={<InitialAssesment></InitialAssesment>}> </Route>
       <Route path="/new-patient" element={<Pa_PatientRegistertaion></Pa_PatientRegistertaion>}> </Route>
+
+
+      <Route path="*" element={<NotFoundPage></NotFoundPage>}> </Route>
+
     </Routes>
     <ToastContainer
       position="top-right"

@@ -255,6 +255,10 @@ button:active {
     border: none;
     background-color: #1976d2;
 }
+.addButton:hover{
+      color: black;
+     background-color: lightgray;  
+}
 
 .editItems {
     cursor: pointer;
