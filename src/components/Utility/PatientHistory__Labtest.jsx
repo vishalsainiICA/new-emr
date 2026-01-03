@@ -226,8 +226,7 @@ export function Patient_Hisotry({ patient, onclose }) {
                 <h5>Patient Vitals:</h5>
             </div>
 
-            <div style={{
-            }} className={`patient-vitals ${patientDetails ? "active" : ""}`}>
+            <div className={`patient-vitals ${patientDetails ? "active" : ""}`}>
                 <div className="patient-vitals-item">
                     <p>Name: <h5>{patient.name}</h5></p>
                     <p>Age: <h5>{patient.age}</h5></p>

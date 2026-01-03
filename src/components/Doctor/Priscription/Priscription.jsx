@@ -39,26 +39,17 @@ const Pricription = () => {
         setpin(null)
     };
 
-    const generatePDFBlob = () => {
-        return new Promise((resolve) => {
-            const input = pdfRef.current;
+const generateImageBlob = () => {
+    return new Promise((resolve) => {
+        const input = pdfRef.current;
 
-            html2canvas(input, { scale: 2 }).then((canvas) => {
-                const imgData = canvas.toDataURL("image/png");
-                const pdf = new jsPDF("p", "mm", "a4");
-
-                const pdfWidth = pdf.internal.pageSize.getWidth();
-                const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-                pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-
-                // 👉 pdf को Blob में convert करें
-                const pdfBlob = pdf.output("blob");
-
-                resolve(pdfBlob);
-            });
+        html2canvas(input, { scale: 2 }).then((canvas) => {
+            canvas.toBlob((blob) => {
+                resolve(blob); //  image/blob return
+            }, "image/png");
         });
-    };
+    });
+};
 
 
     useEffect(() => {
@@ -95,10 +86,10 @@ const Pricription = () => {
         setIsProcessing(true);
         try {
             const form = new FormData()
-            const pdfBlob = await generatePDFBlob();
+            const pdfBlob = await generateImageBlob();
             console.log("state", state);
             console.log("blog", pdfBlob);
-            form.append("prescriptionImage", pdfBlob, "prescription.pdf");
+            form.append("prescriptionImage", pdfBlob, "prescription.png");
             form.append("patientId", state?.patientInfo?._id)
             form.append("initialAssementId", state?.patientInfo?.initialAssementId._id)
             form.append("doctorId", state?.patientInfo?.doctorId)

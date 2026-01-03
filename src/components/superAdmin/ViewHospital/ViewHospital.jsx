@@ -397,7 +397,7 @@ const ViewHospital = () => {
     return <div className="viewhospital">
 
         <div className="cardList">
-            <div className="customCard hover" style={{
+            <div className="customCard" style={{
 
             }}>
                 <div style={{
@@ -416,7 +416,7 @@ const ViewHospital = () => {
                     fontWeight: "bold"
                 }}>08%</p> */}
             </div>
-            <div className="customCard hover" style={{
+            <div className="customCard" style={{
 
             }}>
                 <div style={{
@@ -435,7 +435,7 @@ const ViewHospital = () => {
                     fontWeight: "bold"
                 }}>08%</p> */}
             </div>
-            <div className="customCard hover" style={{
+            <div className="customCard" style={{
 
             }}>
                 <div style={{
@@ -454,7 +454,7 @@ const ViewHospital = () => {
                     fontWeight: "bold"
                 }}>08%</p> */}
             </div>
-            <div className="customCard hover" style={{
+            <div className="customCard" style={{
 
             }}>
                 <div style={{
@@ -502,7 +502,7 @@ const ViewHospital = () => {
                         Registration Link
                     </button>
 
-                    <button className="regular-btn" onClick={() => setEdit("hospitalEdit")}> Edit Hospital </button>
+                    <button className="addButton" onClick={() => setEdit("hospitalEdit")}> Edit Hospital </button>
                 </div>
 
 
@@ -1623,16 +1623,9 @@ const ViewHospital = () => {
                                             return setCategoryName(e.target.value)
                                         }} placeholder="patientCategory" />
                                     </label>
-                                    <button
+                                    <button className="addButton"
                                         style={{
-                                            marginTop: '10px',
-                                            width: '60px',
-                                            height: '30px',
-                                            cursor: 'pointer',
-                                            backgroundColor: 'lavender',
-                                            outline: 'none',
-                                            border: '0.5px solid lightgrey',
-                                            borderRadius: '10px'
+                                             marginTop:'20px'
                                         }}
                                         onClick={() => {
                                             if (!categoryName || categoryName === '') {

@@ -168,6 +168,10 @@ const DashBoard = () => {
 
             //Only add password fields if user actually entered something
             if (password.old.trim() !== "" && password.new.trim() !== "") {
+                if (password.new.length < 6 || password.new.length > 10) {
+    toast.error("Password length must be between 6 and 10 characters");
+    return;
+}
                 formdata.append("oldPassword", password.old);
                 formdata.append("newPassword", password.new);
             }

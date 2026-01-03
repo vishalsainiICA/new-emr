@@ -114,6 +114,13 @@ const Dashboard = () => {
 
             //Only add password fields if user actually entered something
             if (password.old.trim() !== "" && password.new.trim() !== "") {
+
+
+if (password.new.length < 6 || password.new.length > 10) {
+    toast.error("Password length must be between 6 and 10 characters");
+    return;
+}
+
                 formdata.append("oldPassword", password.old);
                 formdata.append("newPassword", password.new);
             }
@@ -129,6 +136,7 @@ const Dashboard = () => {
                 setblur(false);
                 setCollapse(false);
                 setpassword({ old: '', new: '' });
+                setChangePassword(false)
 
 
             } else {
@@ -154,7 +162,7 @@ const Dashboard = () => {
                 </div>
                 <div className="super-name" onClick={() => setCollapse(!isCollapse)}>
                     <span className="logo">SA</span>
-                    <div>
+                    <div className="hospitalPerfomance">
                         <h4>{superAdmin?.name}</h4>
                         <span style={{
                             fontSize: "12px"
@@ -224,9 +232,7 @@ const Dashboard = () => {
 
                 <div className="hospital-performance">
                     <div className="hospital-heading">
-                        <h4 style={{
-                            width: '100%'
-                        }}>Hopital Performance</h4>
+                        <h4 className="hospitalPerfomance">Hopital Performance</h4>
                         <input type="search" placeholder="type name..." onChange={(e) => filter(e.target.value)} />
                     </div>
                     <div >
@@ -254,12 +260,7 @@ const Dashboard = () => {
                         )}
 
                         {!isProcessing && !error && Array.isArray(filterHospital) && filterHospital.length > 0 && (
-                            <div style={{
-
-                                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                                gap: '20px',
-                                // minHeight: '500px'
-                            }}>
+                            <div className="hoslist" >
                                 {filterHospital.map((hos, i) => (
                                     <div onDoubleClick={() => navigate("/super-admin/view-hospital", { state: { hospital: hos } })} key={i} className="hospital-name">
                                         <div style={{ display: "flex", gap: "10px" }}>
