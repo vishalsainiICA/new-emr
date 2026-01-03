@@ -15,7 +15,7 @@ export const commonApi = {
         return await superAdminInstance.get(`/common/hospital/all-patients?hospitalId=${id}`)
     },
     login: async (data) => {
-        console.log('Data', data);
+  
         return await commonInstance.post(`/login`, data)
     },
 

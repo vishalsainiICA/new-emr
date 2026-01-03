@@ -18,9 +18,6 @@ export default function PatientRecords() {
 
     const location = useLocation()
 
-    console.log("location", location);
-
-
     useEffect(() => {
         setCancelReason(location.state?.status ? "rx-done" : "all");
     }, [location.state]);
@@ -65,80 +62,11 @@ export default function PatientRecords() {
 
 
     return (
-        <div >
-            {/* <div className="cardList">
-                <div className="customCard hover" style={{
+        <div >    
+        <div className="customCard" style={{
 
-                }}>
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        width: '100%'
-                    }}>
-                        <h4>Total Hospitals</h4>
-                        <p>🏥</p>
-                    </div>
-                    <h2>6</h2>
-                    <p style={{
-                        color: 'rgba(125, 200, 176)',
-                        fontWeight: "bold"
-                    }}>08%</p>
-                </div>
-                <div className="customCard hover" style={{
-
-                }}>
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        width: '100%'
-                    }}>
-                        <h4>Total Capacity</h4>
-                        <p>🛏️</p>
-                    </div>
-                    <h2>6</h2>
-                    <p style={{
-                        color: 'rgba(125, 200, 176)',
-                        fontWeight: "bold"
-                    }}>08%</p>
-                </div>
-                <div className="customCard hover" style={{
-
-                }}>
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        width: '100%'
-                    }}>
-                        <h4>Current Occupancy</h4>
-                        <p>👥</p>
-                    </div>
-                    <h2>6</h2>
-                    <p style={{
-                        color: 'rgba(125, 200, 176)',
-                        fontWeight: "bold"
-                    }}>08%</p>
-                </div>
-                <div className="customCard hover" style={{
-
-                }}>
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        width: '100%'
-                    }}>
-                        <h4>Total Staff</h4>
-                        <p>👨‍⚕️</p>
-                    </div>
-                    <h2>6</h2>
-                    <p style={{
-                        color: 'rgba(125, 200, 176)',
-                        fontWeight: "bold"
-                    }}>08%</p>
-                </div>
-
-            </div> */}
-
-            <div className="customCard">
+            minWidth:'600px'
+        }}>
                 <div
                     style={{
                         display: 'flex',

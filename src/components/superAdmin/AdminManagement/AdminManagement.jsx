@@ -183,8 +183,9 @@ export default function AdminManagement() {
             <div className="customCard" style={{
                 display: 'flex',
                 justifyContent: 'space-between',
+                minWidth:'600px'
             }}>
-                <div className="hospitalMangement" >
+                <div className="hospitalMangement">
                     <h3>Admin Management</h3>
                     <p style={{
                         fontSize: '10px'
@@ -194,16 +195,19 @@ export default function AdminManagement() {
                     onClick={() => setAssignAdmin({ type: "new" })}
                     style={{
 
-                    }} className="common-btn">+ New Admin</button>
+                    }} className="common-btn hidebutton">+ New Admin</button>
             </div>
 
-            <div className="customCard">
+            <div className="customCard" style={{
+                    minWidth:'600px'
+                }}>
                 <div
                     style={{
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center',
-                        marginBottom: '10px'
+                        marginBottom: '10px',
+                    
                     }}
                 >
                     <h4>Admin Records</h4>

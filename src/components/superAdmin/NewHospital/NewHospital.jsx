@@ -435,6 +435,8 @@ export const NewHospital = () => {
         <div className="customCard" style={{
             display: 'flex',
             justifyContent: 'space-between',
+            marginLeft:'0px',
+            marginRight:'240px'
         }}>
             <div className="hospitalMangement" >
                 <span onClick={() => navigate(-1)} style={{ cursor: 'pointer', }}><FaArrowLeft></FaArrowLeft> Back to Hospitals</span>
@@ -445,7 +447,6 @@ export const NewHospital = () => {
             }}>
                 <CurrentStep currentStep={currentStep} totalSteps={totalSteps}></CurrentStep>
             </div>
-
         </div>
 
 
@@ -549,8 +550,9 @@ export const NewHospital = () => {
                                 borderRadius: '7px',
                                 padding: '8px',
                                 color: 'black',
-                                fontsize: "12.5px",
+                                 fontSize:'12px',
                                 border: "1px solid lightgray",
+
                             }} name="" id="" rows="3"></textarea>
                         {errors.address && <label style={{ color: "red" }}>{errors.address}</label>}
                     </label>

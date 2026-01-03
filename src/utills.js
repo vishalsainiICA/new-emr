@@ -7,7 +7,7 @@ export const commonInstance = axios.create({
 })
 commonInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem("SuperAdmintoken") || localStorage.getItem("AdminToken");
-  console.log('intecepto', token);
+
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -24,7 +24,7 @@ export const superAdminInstance = axios.create({
 
 superAdminInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
-  console.log('intecepto', token);
+
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -60,7 +60,7 @@ export const medicalDirectorInstance = axios.create({
 
 medicalDirectorInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
-  console.log('tokem', token);
+
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;

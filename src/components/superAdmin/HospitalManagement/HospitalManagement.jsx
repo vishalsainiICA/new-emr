@@ -86,7 +86,7 @@ const HospitalManagement = () => {
                     onClick={() => navigate('/super-admin/new-hospital')}
                     style={{
 
-                    }} className="addButton">+ Add New Hospital</button>
+                    }} className="addButton hidebutton ">+ Add New Hospital</button>
             </div>
             {/* 
             <div className="cardList">
@@ -170,7 +170,7 @@ const HospitalManagement = () => {
 
             }}>
                 <h4>Hospital Directory</h4>
-                <div className="hostpitalmanagement-body" style={{
+                <div className="hostpitalmanagement-body_HM" style={{
                     marginTop: '12px',
                     height: "100vh"
                 }}>

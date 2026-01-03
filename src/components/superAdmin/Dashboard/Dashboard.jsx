@@ -155,7 +155,7 @@ if (password.new.length < 6 || password.new.length > 10) {
 
     return (
         <div className="">
-            <div className="super-admin-logo">
+            <div className="super-admin-logos">
                 <div className="super-admin">
                     <h3>Super Admin Dashboard</h3>
                     <p>Helthcare and Network</p>
