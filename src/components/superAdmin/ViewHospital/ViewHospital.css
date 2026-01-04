@@ -286,8 +286,6 @@
     gap: 10px;
     justify-content: space-between;
 
-    label {}
-
     p {
         color: gray
     }
@@ -301,4 +299,39 @@
     cursor: pointer;
     border: none;
     background-color: #1976d2;
+}
+
+.hosptial-info-grid{
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+}
+@media screen and (max-width:599px){
+        .cardList{
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .customCard{
+
+        padding: 10px;
+        h4{
+            font-size: 10px;
+        }
+    }
+    .hostpitalmanagement-body{
+           grid-template-columns: repeat(1, 1fr)
+    }
+    .hidebutton{
+        display: none;
+    }
+    .hosptial-info-grid{
+        grid-template-columns: repeat(1,1fr);
+       
+    }
+}
+
+@media screen and (min-width:600px) and (max-width:1024px) {
+    .cardList{
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
 }

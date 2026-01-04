@@ -327,7 +327,7 @@ const Patientregisteration = () => {
       <div className="patient-view-form">
 
         <div className="patientregisteration-header">
-          <h3>Patient Registeration</h3>
+          <h3 className="hidebutton">Patient Registeration</h3>
           <CurrentStep currentStep={currentStep} totalSteps={totalSteps}></CurrentStep>
         </div>
         <hr />

@@ -299,6 +299,7 @@ const ViewHospital = () => {
             if (res.status === 200) {
                 toast.success(`Profile Updated ${editDoc?.name}`);
                 setEditDoc(null)
+                setRefresh(prev => !prev);
             }
         } catch (err) {
             console.log(err);
@@ -397,9 +398,7 @@ const ViewHospital = () => {
     return <div className="viewhospital">
 
         <div className="cardList">
-            <div className="customCard" style={{
-
-            }}>
+            <div className="customCard">
                 <div style={{
                     display: 'flex',
                     justifyContent: 'space-between',
@@ -507,11 +506,7 @@ const ViewHospital = () => {
 
 
             </div>
-            <div style={{
-                marginTop: '10px',
-                display: 'grid',
-                gridTemplateColumns: "repeat(2,1fr)"
-            }}>
+            <div className="hosptial-info-grid">
                 <span style={{
                     fontSize: '13px',
                     fontWeight: 'bold'
@@ -526,11 +521,7 @@ const ViewHospital = () => {
                     fontWeight: 'normal'
                 }}>{hospital?.city},{hospital?.state}</span></span>
             </div>
-            <div style={{
-                marginTop: '10px',
-                display: 'grid',
-                gridTemplateColumns: "repeat(2,1fr)"
-            }}>
+            <div className="hosptial-info-grid">
                 <span style={{
                     fontSize: '13px',
                     fontWeight: 'bold'
@@ -545,11 +536,7 @@ const ViewHospital = () => {
                     fontWeight: 'normal'
                 }}></span>{hospital?.pinCode}</span>
             </div>
-            <div style={{
-                marginTop: '10px',
-                display: 'grid',
-                gridTemplateColumns: "repeat(2,1fr)"
-            }}>
+            <div className="hosptial-info-grid">
                 <span style={{
                     fontSize: '13px',
                     fontWeight: 'bold'
@@ -711,7 +698,7 @@ const ViewHospital = () => {
         </div>
 
         <div
-            className="customCard"
+            className="customCard hidebutton"
             style={{
                 marginTop: '10px'
             }}
@@ -741,9 +728,7 @@ const ViewHospital = () => {
             </div>
 
 
-
-            <div>
-                <div style={{ marginTop: '10px' }}>
+  <div style={{ marginTop: '10px' }}>
                     <div className="hosptialHeading">
                         <p style={{
                             fontSize: '12px'
@@ -849,7 +834,6 @@ const ViewHospital = () => {
                         </p>
                     )}
                 </div>
-            </div>
 
         </div>
 

@@ -106,7 +106,7 @@ const ControlPannel = () => {
                     <button className="main-button view-btn" onClick={() => {
                         localStorage.removeItem("token")
                         localStorage.removeItem("role")
-                        navigate("/login", { replace: true })
+                        navigate("/login", {replace:true})
                     }}>Yes logout</button>
                     <button className="common-btn" onClick={() => { setlogOut(!logOut); setblur(!blur); setCollapse(!isCollapse) }}>Cancel</button>
                 </div>

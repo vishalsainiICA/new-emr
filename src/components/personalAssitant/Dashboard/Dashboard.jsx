@@ -274,7 +274,7 @@ const DashBoard = () => {
                             <option value="all">All</option>
                         </select>
                         <input type="date" onChange={(e) => setNewDate(e.target.value)} />
-                        <button className="regular-btn" onClick={() => navigate("/new-patient", { state: { pa } })}>+New</button>
+                        <button className="addButton" onClick={() => navigate("/new-patient", { state: { pa } })}>+New</button>
 
                     </div>
 
