@@ -397,15 +397,13 @@ const generateImageBlob = () => {
                     setpin("download")
                 }} style={{ display: "flex", gap: "8px", width: '150px', cursor: 'pointer' }}><i class="ri-chat-download-line"></i>Download(.pdf)</button>
                 <br />
-                <button disabled={isProcessing} onClick={(e) => {
+                <button className="" disabled={isProcessing} onClick={(e) => {
 
                     setpin("save")
                     // handleSubmit(e)
                 }
                 } style={{ display: "flex", gap: "8px", width: '150px', cursor: 'pointer' }}>{` ${isProcessing ? "Saving...." : "Save And Continue`"}`}</button>
             </div>
-            {console.log("t[pin", tpin)
-            }
             {
                 tpin !== null && (
                     <div style={{
