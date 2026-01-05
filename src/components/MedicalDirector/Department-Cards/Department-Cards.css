@@ -34,6 +34,12 @@
     justify-content: space-between;
     padding-top: 10px;
     align-items: center;
+    h2{
+       font-size: 18px;
+    }
+     span{
+       font-size: 11px;
+    }
 }
 .Department-name-section button
 {
@@ -53,6 +59,10 @@
 .staff-Data {
     display: flex;
     justify-content: space-between;
+    span
+    {
+      font-size: 15px;
+    }
 }
 
 .data {

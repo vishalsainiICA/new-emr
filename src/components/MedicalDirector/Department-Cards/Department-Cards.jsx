@@ -11,7 +11,7 @@ const DepartmentCards = () => {
             <div className='Department-name-section'>
                 <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
                     <i style={{ color: "red", fontSize: "20px", backgroundColor:"lightgreen",width:"40px",height:"40px",borderRadius:"3px",display:"flex",justifyContent:"center",alignItems:"center" }} class="fa-solid fa-heart-pulse"></i>
-                    <div style={{ display: "flex", flexDirection: "column" }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap:"5px" }}>
                         <h2>Cardiology Department</h2>
                         <span>Head of Dept: Dr. Rajesh Koothrappali</span>
                     </div>
@@ -20,7 +20,7 @@ const DepartmentCards = () => {
             </div>
             <hr />
             <div className='Medical-Staf'>
-                <div>
+                <div style={{fontSize:"15px",fontWeight:"bold", textDecoration:"underline"}}>
                     <span>Medical Staff (Cardiology)</span>
                 </div>
                 <div className='staff-Data'>
