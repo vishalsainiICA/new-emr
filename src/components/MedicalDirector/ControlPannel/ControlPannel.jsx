@@ -109,9 +109,12 @@ const ControlPannel_Md = () => {
                             }}
                             className="side-bar-item">
                             <i className={item.icon}></i>
+                            <div className="side-bar-item2">
+
                             {!collapsed && (
                                 <h5>{item.name}</h5>
                             )}
+                            </div>
                         </div>
                     })}
                 </div>
@@ -122,9 +125,12 @@ const ControlPannel_Md = () => {
                     onClick={() => { setlogOut(!logOut); setblur(!blur); setCollapse(!isCollapse) }}
                     className="side-bar-logout ">
                     <i class="ri-logout-box-r-line"></i>
+                    <div className="side-bar-item2">
+
                     {!collapsed && (
                         <h5>LogOut</h5>
                     )}
+                    </div>
                 </div>
 
             </div>
@@ -132,13 +138,13 @@ const ControlPannel_Md = () => {
 
             <div className="mainContent">
                 <div className="super-admin-logo">
-                    <div className="super-admin">
+                    <div className="super-admin" style={{width:"50%"}}>
                         <h3>{acitvetab}</h3>
                         <p>Helthcare and Network</p>
                     </div>
-                    <div className="super-name" onClick={() => setCollapse(!isCollapse)}>
+                    <div className="super-name " style={{width:"50%"}} onClick={() => setCollapse(!isCollapse)}>
                         <span className="logo">SA</span>
-                        <div>
+                        <div className="none" >
                             {console.log("super", superAdmin)
                             }
                             <h4>{superAdmin?.name}</h4>

@@ -155,10 +155,10 @@ const InitialAssesment = () => {
                 <div className='patient-detail'>
                     {data && (
                         <h4>Patient Name:  <span style={{
-                            fontSize: '20px'
+                            fontSize: '15px'
                         }}>{data?.name}</span></h4>
                     )}
-                    <div style={{ display: "flex", gap: "100px", marginTop: "10px" }}>
+                    <div className='patient-intial-data'>
                         <label style={{ width: "100%" }}>
                             Height (cm) <p className='star'>*</p>
                             <input
@@ -180,7 +180,7 @@ const InitialAssesment = () => {
                         </label>
                     </div>
 
-                    <div style={{ display: "flex", gap: "100px", marginTop: "10px" }}>
+                    <div className='patient-intial-data' >
                         <label style={{ width: "100%" }}>
                             Blood Pressure (mmHg)  <p className='star'>*</p>
                             <input
@@ -202,7 +202,7 @@ const InitialAssesment = () => {
                         </label>
                     </div>
 
-                    <div style={{ display: "flex", gap: "100px", marginTop: "10px" }}>
+                    <div className='patient-intial-data'>
                         <label style={{ width: "100%" }}>
                             Heart Rate (bpm)
                             <input
@@ -224,7 +224,7 @@ const InitialAssesment = () => {
                         </label>
                     </div>
 
-                    <div style={{ display: "flex", gap: "100px", marginTop: "10px" }}>
+                    <div className='patient-intial-data'>
                         <label style={{ width: "100%" }}>
                             Hemoglobin (g/dL)
                             <input
@@ -248,7 +248,7 @@ const InitialAssesment = () => {
                         </label>
                     </div>
 
-                    <div style={{ display: "flex", gap: "100px", marginTop: "10px" }}>
+                    <div className='patient-intial-data'>
                         <label style={{ width: "100%" }}>
                             Respiratory Rate (breaths/min)
                             <input
@@ -398,24 +398,28 @@ const InitialAssesment = () => {
                             </div>
                         )}
                     </div>
-
-                    <button
-
-                        disabled={isProcessing}
-                        style={{
-                            width: '90px',
-                            height: '40px',
-                            border: '1px solid black',
-                            cursor: "pointer"
-                        }}
-                        onClick={(e) => {
-                            e.preventDefault();
-                            handleSubmit(e);
-                        }}
-                    >
-                        {isProcessing ? "saving...." : "Save Vitals"}
-                    </button>
+                    
                 </div>
+
+                <div style={{width:"100%",display:"flex",justifyContent:"end"}}>
+
+                        <button
+
+                            disabled={isProcessing}
+                            style={{
+                                width: '90px',
+                                height: '40px',
+                                border: '1px solid black',
+                                cursor: "pointer"
+                            }}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                handleSubmit(e);
+                            }}
+                        >
+                            {isProcessing ? "saving...." : "Save Vitals"}
+                        </button>
+                    </div>
 
             </div>
         </div>

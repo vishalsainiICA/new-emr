@@ -6,7 +6,6 @@
     display: flex;
     justify-content: space-between;
     padding: 10px;
-    /* height: 90px; */
     color: black;
     background-color: rgba(254, 254, 255);
     border-radius: 20px;
@@ -14,33 +13,33 @@
 }
 
 .performance-card {
+    width: 100%;
     height: 500px;
     margin-top: 20px;
-    display: grid;
-    grid-template-columns: 2fr 1fr;
+    display: flex;
+    /* flex-direction: column; */
+    /* grid-template-columns: 2fr 1fr;   */
     gap: 10px
 }
 
 
 .revenue-performance {
-
+    width: 70%;
     border-radius: 20px;
     background-color: rgba(254, 254, 255);
     color: black;
     display: flex;
     flex-direction: column;
-    /* gap: 5px; */
     padding: 15px;
 }
 
 .today-visits {
-
+    width: 30%;
     border-radius: 20px;
     background-color: rgba(254, 254, 255);
     color: black;
     display: flex;
     flex-direction: column;
-    /* gap: 5px; */
     padding: 15px;
 }
 
@@ -100,4 +99,40 @@
         border-radius: 7px;
 
     }
+}
+
+
+
+@media screen and (min-width: 600px) and  (max-width: 1024px)
+{
+  .performance-card
+  {
+    flex-direction: column;
+  } 
+  .revenue-performance
+  {
+    width: 100%;
+  }
+ .today-visits
+ {
+    width: 100%;    
+ }
+}
+
+@media (max-width: 599px)
+{
+
+.performance-card
+  {
+    flex-direction: column;
+  } 
+  .revenue-performance
+  {
+    width: 100%;
+  }
+
+  .today-visits
+ {
+    width: 100%;    
+ }
 }

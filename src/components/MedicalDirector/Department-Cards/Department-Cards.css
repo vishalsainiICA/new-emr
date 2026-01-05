@@ -8,6 +8,11 @@
 .back-button
 {
     font-size: small;
+    border: none;
+    display: flex;
+    justify-content: start ;
+    width: 13%;
+    /* background-color: #007bff; */
 }
 .back-button:hover
 {

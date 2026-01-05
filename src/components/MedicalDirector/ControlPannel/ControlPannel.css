@@ -1,0 +1,18 @@
+@media screen and (min-width: 600px) and (max-width: 1024px) {
+    .side-bar-item2 {
+        display: none;
+    }
+}
+
+@media (max-width: 599px) {
+
+    .side-bar-item2 {
+        display: none;
+    }
+    .none
+    {
+        display: none;
+    }
+
+}
+

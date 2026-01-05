@@ -14,7 +14,7 @@
 }
 
 .initial-main-form {
-    /* width: 60%; */
+    /* width: 100%; */
     background-color: rgba(254, 254, 255);
     padding: 20px;
     border-radius: 20px;
@@ -22,6 +22,7 @@
     scrollbar-width: none;
     /* background-color: ; */
 }
+
 
 .initial-main-form button {
     background-color: black;
@@ -36,6 +37,21 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+.patient-intial-data
+{
+    display: flex;
+    gap: 100px;
+    margin-top: 10px;
+}
+
+.patient-intial-data select{
+  width:100%;
+  border-radius:7px;
+  border:1px solid lightgrey;
+  cursor:pointer;
+  padding:7px;
+  outline:none;
 }
 
 .intialAssement-action {
@@ -96,4 +112,26 @@
         color: rgb(65, 61, 61);
         border: 0.5px solid lightgray;
     }
+}
+
+@media screen and (max-width:599px)
+{
+.patient-intial-data
+{
+    flex-direction: column;
+    gap:20px;
+    width: 60%;
+}
+.initial-main-form
+{
+     h2 
+    {
+        font-size: 16px;
+    }
+     h4
+     {
+        font-size: 14px;  
+     }
+}
+
 }
