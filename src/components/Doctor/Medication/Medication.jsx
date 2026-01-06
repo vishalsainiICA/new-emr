@@ -662,10 +662,8 @@ const handleChangeMedicene = (e) => {
                     <div style={{
                         display: 'flex',
                         gap: '10px',
-                        alignItems:'center'
-
-
-                    }}>
+                        // alignItems:'center'
+                     }}>
                         <div >
                             <h5>Illness/Daignosis</h5>
                             <input type="search" onChange={handleChange} placeholder="type illness" value={searchTerm} />
@@ -731,7 +729,7 @@ const handleChangeMedicene = (e) => {
                             )}
                         </div>
                         <div className="symtompsSuggestion">
-                            <h5>Symptoms</h5>
+                            <h5>Symptoms </h5>
                             <div style={{
                                 display: 'flex',
                                 justifyContent: 'space-between'
@@ -791,7 +789,9 @@ const handleChangeMedicene = (e) => {
                      <div style={{
                             display: 'flex',
                             justifyContent: 'space-between',
-                            gap: '10px'
+                            gap: '10px',
+                            // backgroundColor:"red"
+                            marginTop:"20px"
                         }}>
                             <button
                                 disabled={labTestloading}
@@ -827,7 +827,7 @@ const handleChangeMedicene = (e) => {
                     </div>
                     <div>
 
-                    <div style={{ marginTop: "10px" }}>
+                      <div style={{ marginTop: "10px" }}>
                         <h5>Illness:</h5>
                         <div className="selected-illness">
                             {illness.length > 0 &&
