@@ -29,6 +29,13 @@
     border-radius: 10px;
 }
 
+.priscription button:hover
+{
+    color: rgb(1, 1, 15);
+    background-color:  rgb(236, 231, 231);
+
+}
+
 .prisciption-detail-form {
     width: 794px;
     height: 900px;
