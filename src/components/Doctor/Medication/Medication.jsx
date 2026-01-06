@@ -455,15 +455,7 @@ const handleChangeMedicene = (e) => {
 
 
             <div className="med-head">
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    borderBottom:"0.5px solid lightgray",
-                    // borderLeft:"0.5px solid lightgray",
-                    borderRadius:"20px",
-                    alignItems:"center",
-                    padding:"10px"
-                 }}>
+                <div className="head-section" >
                     <div className="back-button" onClick={() => navigate(-1)}>
                         <h5><BsArrowLeft></BsArrowLeft> Back To Dashboard</h5>
                     </div>
@@ -507,7 +499,7 @@ const handleChangeMedicene = (e) => {
                     </div>
                 </div>
 
-                <div className="medication-heading-card">
+                <div  className="medication-heading-card">
 
                     {patientDetails ? (
                         <IoChevronDown style={{
@@ -522,16 +514,16 @@ const handleChangeMedicene = (e) => {
                         width:"100%",
                         justifyContent: 'space-between'
                     }}>
-                        <div style={{width:"100%"}}>
+                        {/* <div style={{width:"100%"}}>
                             <h5>Patient Vitals:</h5>
                         </div>
                         <div style={{width:"100%"}}>
                             <h5>Patient History:</h5>
-                        </div>
+                        </div> */}
                     </div>
                     <div className={`medication-heading ${patientDetails ? "open" : "closed"}`}>
                         <div className="patient-vitals">
-
+                            <h5>Patient Vitals:</h5>
                             <div className="patient-vitals-item">
                                 <div className="patient-detail" >
                                     <p>Name</p>
@@ -586,7 +578,7 @@ const handleChangeMedicene = (e) => {
                                     </h5>
                                 </div>
                             </div>
-
+                                
                             {patient?.initialAssementId?.selectedSym?.length > 0 && (
                                 <div className="patient-vitals-item">
                                     <div className="patient-detail">
@@ -600,13 +592,16 @@ const handleChangeMedicene = (e) => {
 
 
                         <hr style={{
-                            width: '2px'
+                            width: '2px',
+                            // backgroundColor:"red"
                         }} />
                         <div className="patient-history">
+                          <h5>Patient history :</h5>
                             <div style={{
                                 width: '100%',
                                 display: 'flex',
-                                gap: '10px'
+                                gap: '10px',
+                                padding:"10px 0px"
                             }}>
                                 {patient?.pastDocuments?.map((doc, i) => {
                                     let isSelected = doc._id
@@ -723,6 +718,7 @@ const handleChangeMedicene = (e) => {
                             <div style={{
                                 display: 'flex',
                                 justifyContent: 'space-between'
+
                             }}>
                                 <input type="search" placeholder="add more symtomps...." onChange={handleChangeSymtomps} value={searchTermforsymtoms} />
 
@@ -776,13 +772,7 @@ const handleChangeMedicene = (e) => {
 
                         </div>
 
-                     <div style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            gap: '10px',
-                            // backgroundColor:"red"
-                            marginTop:"20px"
-                        }}>
+                     <div className="genarate-clear-btn">
                             <button
                                 disabled={labTestloading}
                                 onClick={() => fetchLabTest()}
@@ -791,7 +781,7 @@ const handleChangeMedicene = (e) => {
                             </button>
                             <button
                                 style={{
-                                    width: "100px",
+                                    width:"100px",
                                     border: "1px solid gray",
                                     padding: "5px",
                                     cursor: "pointer",
