@@ -45,14 +45,14 @@ const CurrentStep = ({ currentStep, totalSteps }) => {
 
 
 const dummyDepartments = [
-    { image: new URL("../../../assets/DepartmentsImages/cardiology.png", import.meta.url).href, name: "Cardiology" },
-    { image: new URL("../../../assets/DepartmentsImages/audiologist.png", import.meta.url).href, name: "ENT" },
-    { image: new URL("../../../assets/DepartmentsImages/medical.png", import.meta.url).href, name: "Radiology" },
-    { image: new URL("../../../assets/DepartmentsImages/neurology.png", import.meta.url).href, name: "Neurology" },
-    { image: new URL("../../../assets/DepartmentsImages/arthritis.png", import.meta.url).href, name: "Orthopedics" },
-    { image: new URL("../../../assets/DepartmentsImages/pediatrics.png", import.meta.url).href, name: "Pediatrics" },
-    { image: new URL("../../../assets/DepartmentsImages/anesthesia.png", import.meta.url).href, name: "General Surgery" },
-    { image: new URL("../../../assets/DepartmentsImages/skin.png", import.meta.url).href, name: "Dermatology" }
+    { image: new URL("../../../assets/DepartmentsImages/Cardiology.png", import.meta.url).href, name: "Cardiology" },
+    { image: new URL("../../../assets/DepartmentsImages/ENT.png", import.meta.url).href, name: "ENT" },
+    { image: new URL("../../../assets/DepartmentsImages/Radiology.png", import.meta.url).href, name: "Radiology" },
+    { image: new URL("../../../assets/DepartmentsImages/Neurology.png", import.meta.url).href, name: "Neurology" },
+    { image: new URL("../../../assets/DepartmentsImages/Orthopedics.png", import.meta.url).href, name: "Orthopedics" },
+    { image: new URL("../../../assets/DepartmentsImages/Pediatrics.png", import.meta.url).href, name: "Pediatrics" },
+    { image: new URL("../../../assets/DepartmentsImages/Generalsurgery.png", import.meta.url).href, name: "General Surgery" },
+    { image: new URL("../../../assets/DepartmentsImages/Dermatology.png", import.meta.url).href, name: "Dermatology" }
 ];
 
 
