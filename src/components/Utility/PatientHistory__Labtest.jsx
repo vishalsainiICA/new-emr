@@ -52,7 +52,9 @@ export function LabTest({ labTest = [], labTestError, labTestloading, onclose, s
                 }}>
                     Select Lab Tests
                 </h5>
-                <div>
+                <div style={{
+                    display:'flex'
+                }}>
                     <button
                         onClick={() => onclose?.(null)}
                         className='common-btn'

@@ -292,6 +292,7 @@ const Medication = () => {
     const [active, setactive] = useState(null)
     const [filteredIllness, setFilteredIllness] = useState([]);
     const [filteredsymtomps, setfilteredsymtomps] = useState([]);
+    const [filteredMediciene, setfilteredMediciene] = useState([]);
     const [openImage, setopenImage] = useState(null)
     const [patient, setPatient] = useState(null)
     const [state, setState] = useState({
@@ -353,6 +354,22 @@ const Medication = () => {
         );
 
         setfilteredsymtomps(filtered);
+    };
+
+const handleChangeMedicene = (e) => {
+        const value = e.target.value;
+        setsearchTermforMedicene(value);
+
+        if (value.trim() === "") {
+            setfilteredMediciene([]);
+            return;
+        }
+        // Corrected filter logic
+        const filtered = medicieneData.filter((med) =>
+                med.medicine_name.toLowerCase().startsWith(value.toLowerCase())
+            
+        );
+        setfilteredMediciene(filtered);
     };
 
 
@@ -874,7 +891,69 @@ const Medication = () => {
                     </div>
                 </div>
                 <div className="selectedMediciene">
-                    {selectedLabTest.length > 0 && (
+
+                    <div>
+                        <div className="medicene">
+                            <div className="search-med">
+                            <input type="search" placeholder="search mediciene..." onChange={handleChangeMedicene} value={searchTermforMedicene} />
+                                 <button
+                                        onClick={() => setClose(true)}
+                                        disabled={labTestloading}
+                                        style={{
+                                            backgroundColor: "lightblue",
+                                            width: '120px',
+                                            padding: "7px",
+                                            cursor: 'pointer',
+                                            justifyContent: "center",
+                                            alignItems: 'center',
+                                            outline: "none",
+                                            border: 'none',
+                                            fontSize: '12px',
+                                            borderRadius: '10px'
+                                        }}>
+                                        LabTests
+                                    </button>
+                            </div>
+                        </div>
+                            {filteredMediciene.length > 0 && searchTermforMedicene.trim() !== "" && (
+                                <>
+                                    <div className="illnessSuggenstion">
+                                        {filteredMediciene?.map((ill, i) => {
+                                            const isSelected = selectedMediciene.some((item) => item._id === ill._id)
+                                            return <div
+                                                onClick={() => {
+                                                   if (isSelected){
+                                                    return 
+                                                   }
+                                                   setselectedMediciene((prev)=>[...prev,ill])
+                                                }}
+
+                                                key={i} className="illCard">
+                                                <div>
+                                                    <h5>{ill?.medicine_name}</h5>
+                                                    <p style={{
+                                                    }}>{ill?.dosage}</p>
+                                                </div>
+                                                {isSelected && (
+                                                    <i
+                                                        className="ri-check-line"
+                                                        style={{
+                                                            fontSize: "24px",
+                                                            color: "green",
+                                                            marginLeft: "10px",
+                                                        }}
+                                                    ></i>
+                                                )}
+
+
+                                            </div>
+                                        })}
+                                    </div>
+
+                                </>
+
+                            )}
+                                                {selectedLabTest.length > 0 && (
                         <div style={{
                             marginBottom: '20px',
                          }}>
@@ -895,7 +974,7 @@ const Medication = () => {
                                             backgroundColor: 'white',
                                             borderBottom: '1px solid lightgray',
                                             borderRadius: '10px',
-                                            cursor: 'pointer'
+                                      
                                         }}>
                                         <div
 
@@ -936,29 +1015,9 @@ const Medication = () => {
                             }
                         </div>
                      )}
-                    <div>
-                        <div className="medicene">
-                            <h5>Mediciene:</h5>
-                            <input type="search" placeholder="search mediciene..." onChange={handleChangeSymtomps} value={searchTermforsymtoms} />
-                                 <button
-                                        onClick={() => setClose(true)}
-                                        disabled={labTestloading}
-                                        style={{
-                                            backgroundColor: "lightblue",
-                                            width: '120px',
-                                            padding: "7px",
-                                            cursor: 'pointer',
-                                            justifyContent: "center",
-                                            alignItems: 'center',
-                                            outline: "none",
-                                            border: 'none',
-                                            fontSize: '12px',
-                                            borderRadius: '10px'
-                                        }}>
-                                        LabTests
-                                    </button>
-                        </div>
-                        {
+                                                    <h5>Mediciene:</h5>  
+                                                    <div className="selected-med">
+                                                                                {
                             selectedMediciene.length > 0 && selectedMediciene.map((hos, i) => {
                                 return <div key={i}
                                     style={{
@@ -969,7 +1028,7 @@ const Medication = () => {
                                         backgroundColor: 'white',
                                         borderBottom: '1px solid lightgray',
                                         borderRadius: '10px',
-                                        cursor: 'pointer'
+                                   
                                     }}>
                                     <div
 
@@ -980,7 +1039,7 @@ const Medication = () => {
                                             gap: "20px" // space between items
                                         }}
                                     > <div>
-                                            <h5 >{hos?.drug_name}</h5>
+                                            <h5 >{hos?.medicine_name}</h5>
                                             <p>{hos?.dosage} <p></p>| {"Take After Meal"}</p>
 
                                         </div>
@@ -988,13 +1047,15 @@ const Medication = () => {
                                     </div>
                                     <div>
                                         <i onClick={() => {
-                                            setselectedMediciene((prev) => prev.filter((item) => item?.drug_name !== hos?.drug_name))
+                                            setselectedMediciene((prev) => prev.filter((item) => item?.medicine_name !== hos?.medicine_name))
                                         }} class="ri-delete-bin-6-line"></i>
                                     </div>
 
                                 </div>
                             })
                         }
+                                                        </div>  
+
                     </div>
 
                 </div>

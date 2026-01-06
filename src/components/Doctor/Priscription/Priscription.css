@@ -156,3 +156,13 @@
         font-weight: bold;
     }
 }
+
+/* style={{ width: "70%", display: "flex", gap: "5px" }} */
+.priscri-med{
+
+    p{
+        font-weight: normal;
+        font-size: 10px;
+        text-wrap:inherit;
+    }
+}

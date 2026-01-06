@@ -15,6 +15,8 @@
     overflow-y: scroll;
     border-radius: 20px;
     z-index: 9999;
+    border: 0.5px solid lightgray;
+    margin-bottom: 20px;
 
     h5 {
         font-size: 12px;
@@ -240,11 +242,13 @@
     /* padding: 15px; */
     box-shadow: 0px 5px 5px rgb(0, 0, 0, 0.1);
     transition: all 1s ease;
-    min-height: 100vh;
     overflow-y: scroll;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
+    min-height: 100vh;
+    
+    
 }
 
 .medicationPatienmedication {
@@ -365,6 +369,7 @@
 
 .selectedMediciene {
     background-color: white;
+
     padding: 20px;
     border-radius: 20px;
     p {
@@ -372,6 +377,11 @@
         font-size: 12px;
         margin-top: 5px;
     }
+}
+.selected-med{
+    max-height: 100vh;
+    min-height: 100vh;
+    overflow-y: scroll;
 }
 
 
@@ -420,4 +430,11 @@
     justify-content: space-between;
     align-items: center;
     gap: 10px;
+}
+.search-med{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 10%;
+    margin-bottom: 20px;
 }

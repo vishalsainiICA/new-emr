@@ -350,9 +350,9 @@ const generateImageBlob = () => {
                                                     justifyContent: 'space-between',
                                                 }}>
 
-                                                    <div style={{ width: "70%", display: "flex", gap: "5px" }}>
-                                                        <span>{i + 1}</span>
-                                                        <span>{med?.drug_name}</span>
+                                                    <div className="priscri-med">
+                                                        <span style={{padding:'5px'}} >{i + 1}</span>
+                                                        <span>{med?.medicine_name}</span>
                                                         <p>{med?.dosage}</p>
                                                     </div>
                                                     <div style={{
