@@ -110,7 +110,7 @@ const Loginpage = () => {
                  cursor:'pointer',
                  justifyContent:"center"
 
-            }} className="view-btn" disabled={isProcessing} onClick={handlelogin}> {`${isProcessing ? "login...." : "Log"}`} </button>
+            }} className="view-btn" disabled={isProcessing} onClick={handlelogin}> {`${isProcessing ? "login...." : "Log In"}`} </button>
           {error?.error && (<p style={{
             fontSize: '10px',
             color: 'red'
