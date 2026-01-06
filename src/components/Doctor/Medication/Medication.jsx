@@ -501,17 +501,7 @@ const handleChangeMedicene = (e) => {
                                     }
                                 }
                             })}
-                            style={{
-                                backgroundColor: "#c8a2ff",
-                                width: '100px',
-                                padding: "10px",
-                                cursor: 'pointer',
-                                alignItems: 'center',
-                                outline: "none",
-                                border: "none",
-                                borderRadius: '10px',
-                                justifyContent: "center"
-                            }}>
+                          className="genrate-btn-1 gen-btn">
                             Generate
                         </button>
                     </div>
@@ -796,14 +786,7 @@ const handleChangeMedicene = (e) => {
                             <button
                                 disabled={labTestloading}
                                 onClick={() => fetchLabTest()}
-                                style={{
-                                    backgroundColor: "lightblue",
-                                    width: '100px',
-                                    padding: "5px",
-                                    cursor: 'pointer',
-                                    alignItems: 'center',
-                                    justifyContent: "center"
-                                }}>
+                              className="genrate-btn-2 gen-btn">
                                 Generate
                             </button>
                             <button
@@ -899,18 +882,8 @@ const handleChangeMedicene = (e) => {
                                  <button
                                         onClick={() => setClose(true)}
                                         disabled={labTestloading}
-                                        style={{
-                                            backgroundColor: "lightblue",
-                                            width: '120px',
-                                            padding: "7px",
-                                            cursor: 'pointer',
-                                            justifyContent: "center",
-                                            alignItems: 'center',
-                                            outline: "none",
-                                            border: 'none',
-                                            fontSize: '12px',
-                                            borderRadius: '10px'
-                                        }}>
+                                        className="gen-btn genrate-btn-2"
+                                        >
                                         LabTests
                                     </button>
                             </div>
@@ -926,6 +899,7 @@ const handleChangeMedicene = (e) => {
                                                     return 
                                                    }
                                                    setselectedMediciene((prev)=>[...prev,ill])
+                                                   setsearchTermforMedicene('')
                                                 }}
 
                                                 key={i} className="illCard">

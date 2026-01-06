@@ -438,3 +438,40 @@
     gap: 10%;
     margin-bottom: 20px;
 }
+
+ /* style={{
+                                backgroundColor: "#c8a2ff",
+                                width: '100px',
+                                padding: "10px",
+                                cursor: 'pointer',
+                                alignItems: 'center',
+                                outline: "none",
+                                border: "none",
+                                borderRadius: '10px',
+                                justifyContent: "center" */
+.genrate-btn-1{
+    background-color: #c8a2ff;
+
+}
+
+.genrate-btn-2{
+    background-color: lightblue;
+
+}
+
+.gen-btn{
+width: 100px;
+padding: 10px;
+cursor: pointer;
+align-items: center;
+justify-content: center;
+border-radius: 10px;
+border: none;
+outline: none;
+}
+
+.gen-btn:hover{
+    background-color: lightgrey;
+}
+
+
