@@ -285,6 +285,7 @@ const Medication = () => {
     const [selectedMediciene, setselectedMediciene] = useState([])
     const [searchTerm, setSearchTerm] = useState("");
     const [searchTermforsymtoms, setsearchTermforsymtoms] = useState("");
+    const [searchTermforMedicene, setsearchTermforMedicene] = useState("");
     const [open, setClose] = useState(false)
     const [patientDetails, setpatientDetails] = useState(false)
     const [symtom_popup, setSymtom_popup] = useState(false)
@@ -296,6 +297,7 @@ const Medication = () => {
     const [state, setState] = useState({
         hospitalData: [],
         illnessData: [],
+    medicieneData: [],
         filterHospital: [],
         labTest: [],
         labTestError: null,
@@ -360,10 +362,14 @@ const Medication = () => {
         const fetchIllness = async () => {
             setPartialState({ loadingIllness: true, error: null });
             try {
-                const res = await doctorAPi.getAllIllness();
-                const illnessData = res?.data?.data || [];
+                const res = await doctorAPi.getAllIllnessAndPharmacydata();
+                const illnessData = res?.data?.data?.Illness || [];
+                const medicieneData = res?.data?.data?.Mediciene || [];
+                const labTest = res?.data?.data?.Labtest || [];
                 setPartialState({
                     illnessData,
+                    medicieneData,
+                    labTest
                 });
             } catch (err) {
                 setPartialState({
@@ -417,14 +423,9 @@ const Medication = () => {
         }
     };
 
-
-
     const {
-        hospitalData,
         illnessData,
-        filterHospital,
-        loadingHospital,
-        loadingIllness,
+        medicieneData,
         labTest,
         labTestError,
         labTestloading,
@@ -644,6 +645,7 @@ const Medication = () => {
                     <div style={{
                         display: 'flex',
                         gap: '10px',
+                        alignItems:'center'
 
 
                     }}>
@@ -719,26 +721,6 @@ const Medication = () => {
                             }}>
                                 <input type="search" placeholder="add more symtomps...." onChange={handleChangeSymtomps} value={searchTermforsymtoms} />
 
-                                {labtestResult.length > 0 && (
-                                    <button
-                                        onClick={() => setClose(true)}
-                                        disabled={labTestloading}
-                                        style={{
-                                            backgroundColor: "lightblue",
-                                            width: '120px',
-                                            padding: "7px",
-                                            cursor: 'pointer',
-                                            justifyContent: "center",
-                                            alignItems: 'center',
-                                            outline: "none",
-                                            border: 'none',
-                                            fontSize: '12px',
-                                            borderRadius: '10px'
-                                        }}>
-                                        LabTests
-                                    </button>
-                                )}
-
 
                             </div>
 
@@ -789,80 +771,106 @@ const Medication = () => {
 
                         </div>
 
-                    </div>
-                    <div style={{
-                     }}>
-                        <div style={{
-                            marginTop: '10px',
+                     <div style={{
                             display: 'flex',
                             justifyContent: 'space-between',
-                            boxShadow: '10px 20px 5px rg'
-
+                            gap: '10px'
                         }}>
-                            <h5>Medication:</h5>
-
+                            <button
+                                disabled={labTestloading}
+                                onClick={() => fetchLabTest()}
+                                style={{
+                                    backgroundColor: "lightblue",
+                                    width: '100px',
+                                    padding: "5px",
+                                    cursor: 'pointer',
+                                    alignItems: 'center',
+                                    justifyContent: "center"
+                                }}>
+                                Generate
+                            </button>
+                            <button
+                                style={{
+                                    width: "100px",
+                                    border: "1px solid gray",
+                                    padding: "5px",
+                                    cursor: "pointer",
+                                    borderRadius: "10px",
+                                    justifyContent: "center"
+                                }}
+                                onClick={() => {
+                                    setSymptopms([]);
+                                    setIllness([]);
+                                }}
+                            >
+                                Clear
+                            </button>
                         </div>
-                        {labTestloading && (
-                            <p style={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                flexDirection: 'column',
-                                padding: '50px 0'
-                            }}>
-                                <Circles height="40" width="40" color="#4f46e5" ariaLabel="loading" />
-                                <br />Loading...
-                            </p>
-                        )}
 
-                        {labTestError && (
-                            <h5 style={{
-                                color: 'red',
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                padding: '50px 0'
-                            }}>{labTestError}</h5>
-                        )}
+                    </div>
+                    <div>
 
-                        {!labTestloading && !labTestError && Array.isArray(mediciene) && mediciene.length > 0 && (
-                            <div className="medication-card" style={{
+                    <div style={{ marginTop: "10px" }}>
+                        <h5>Illness:</h5>
+                        <div className="selected-illness">
+                            {illness.length > 0 &&
+                                illness.map((ill, i) => (
+                                    <p key={i}>
+                                        {ill.illnessName}
+                                        <i
+                                            onClick={() =>
+                                                setIllness((prev) =>
+                                                    prev.filter((item) => item.illnessName !== ill.illnessName)
+                                                )
+                                            }
+                                            className="ri-close-line"
+                                            style={{
+                                                cursor: "pointer",
+                                                color: "#555",
+                                                transition: "0.2s",
+                                            }}
+                                            onMouseOver={(e) => (e.target.style.color = "red")}
+                                            onMouseOut={(e) => (e.target.style.color = "#555")}
+                                        ></i>
+                                    </p>
+                                ))}
+                        </div>
+                    </div>
 
-                            }}>
-                                {mediciene.map((hos, i) => {
-                                    return <div key={i}
-                                        style={{
-                                            display: 'flex',
-                                            justifyContent: 'space-between',
-                                            padding: '10px',
-                                            backgroundColor: 'white',
-                                            borderBottom: '1px solid lightgray',
-                                            borderRadius: '10px',
-                                            cursor: 'pointer'
-                                        }}>
-                                        <div>
-                                            <h5 >{hos?.drug_name || "Unnamed Hospital"}</h5>
-                                            <p >{`${hos?.dosage}`}</p>
-                                            <p >{`${hos?.frequency}`}</p>
-                                        </div>
-                                        <div>
-                                            <button
-                                                onClick={() => {
-                                                    setselectedMediciene((prev) => [...prev, hos])
-                                                }}
-                                                className="common-btn">+ Add </button>
-                                        </div>
-
-                                    </div>
-                                })}
+                    {/* Symptoms list */}
+                    <div className="selected-symtomps">
+                        <h5>Symptoms:</h5>
+                        {symtomps.length > 0 && (
+                            <div
+                                style={{
+                                    display: "flex",
+                                    margin: "20px",
+                                    gap: "10px",
+                                    flexWrap: "wrap",
+                                    backgroundColor: "white",
+                                }}
+                            >
+                                {symtomps.map((sym, i) => (
+                                    <p key={i} className="patient">
+                                        {sym}
+                                        <i
+                                            onClick={() =>
+                                                setSymptopms((prev) => prev.filter((st) => st !== sym))
+                                            }
+                                            className="ri-close-line"
+                                            style={{
+                                                cursor: "pointer",
+                                                color: "#555",
+                                                transition: "0.2s",
+                                            }}
+                                            onMouseOver={(e) => (e.target.style.color = "red")}
+                                            onMouseOut={(e) => (e.target.style.color = "#555")}
+                                        ></i>
+                                    </p>
+                                ))}
                             </div>
                         )}
-
-                        {!loadingHospital && !error && Array.isArray(filterHospital) && filterHospital.length === 0 && (
-                            <p
-                                style={{ textAlign: 'center', padding: '50px 0' }}
-                            >No Mediciene found</p>
-                        )}
+                    </div>
                     </div>
                 </div>
                 <div className="selectedMediciene">
@@ -929,11 +937,26 @@ const Medication = () => {
                         </div>
                      )}
                     <div>
-                        <div style={{
-                            display: 'flex',
-                            justifyContent: 'space-between'
-                        }}>
+                        <div className="medicene">
                             <h5>Mediciene:</h5>
+                            <input type="search" placeholder="search mediciene..." onChange={handleChangeSymtomps} value={searchTermforsymtoms} />
+                                 <button
+                                        onClick={() => setClose(true)}
+                                        disabled={labTestloading}
+                                        style={{
+                                            backgroundColor: "lightblue",
+                                            width: '120px',
+                                            padding: "7px",
+                                            cursor: 'pointer',
+                                            justifyContent: "center",
+                                            alignItems: 'center',
+                                            outline: "none",
+                                            border: 'none',
+                                            fontSize: '12px',
+                                            borderRadius: '10px'
+                                        }}>
+                                        LabTests
+                                    </button>
                         </div>
                         {
                             selectedMediciene.length > 0 && selectedMediciene.map((hos, i) => {
@@ -999,143 +1022,10 @@ const Medication = () => {
                     </div>
                 )
             }
-            <div className={`symtomPopup ${symtom_popup ? "open" : "none"}`}>
-                <div style={{
-
-                }}>
-                    {symtom_popup ? (
-                        <IoChevronDown
-                            style={{ cursor: "pointer" }}
-                            onClick={() => setSymtom_popup(false)}
-                        />
-                    ) : (
-                        <IoChevronUp
-                            style={{ cursor: "pointer" }}
-                            onClick={() => setSymtom_popup(true)}
-                        />
-                    )}
-
-                </div>
-
-
-                <div className="symtomPopup-card">
-
-                    <div style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        width: "100%",
-                        marginTop: "10px",
-                        backgroundColor: "white"
-                    }}>
-                        <h4>Selected</h4>
-                        <div style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            gap: '10px'
-                        }}>
-                            <button
-                                disabled={labTestloading}
-                                onClick={() => fetchLabTest()}
-                                style={{
-                                    backgroundColor: "lightblue",
-                                    width: '100px',
-                                    padding: "5px",
-                                    cursor: 'pointer',
-                                    alignItems: 'center',
-                                    justifyContent: "center"
-                                }}>
-                                Generate
-                            </button>
-                            <button
-                                style={{
-                                    width: "100px",
-                                    border: "1px solid gray",
-                                    padding: "5px",
-                                    cursor: "pointer",
-                                    borderRadius: "10px",
-                                    justifyContent: "center"
-                                }}
-                                onClick={() => {
-                                    setSymptopms([]);
-                                    setIllness([]);
-                                }}
-                            >
-                                Clear
-                            </button>
-                        </div>
-
-                    </div>
-
-                    {/* Illness list */}
-                    <div style={{ marginTop: "10px" }}>
-                        <h5>Illness:</h5>
-                        <div className="selected-illness">
-                            {illness.length > 0 &&
-                                illness.map((ill, i) => (
-                                    <p key={i}>
-                                        {ill.illnessName}
-                                        <i
-                                            onClick={() =>
-                                                setIllness((prev) =>
-                                                    prev.filter((item) => item.illnessName !== ill.illnessName)
-                                                )
-                                            }
-                                            className="ri-close-line"
-                                            style={{
-                                                cursor: "pointer",
-                                                color: "#555",
-                                                transition: "0.2s",
-                                            }}
-                                            onMouseOver={(e) => (e.target.style.color = "red")}
-                                            onMouseOut={(e) => (e.target.style.color = "#555")}
-                                        ></i>
-                                    </p>
-                                ))}
-                        </div>
-                    </div>
-
-                    {/* Symptoms list */}
-                    <div className="selected-symtomps">
-                        <h5>Symptoms:</h5>
-                        {symtomps.length > 0 && (
-                            <div
-                                style={{
-                                    display: "flex",
-                                    margin: "20px",
-                                    gap: "10px",
-                                    flexWrap: "wrap",
-                                    backgroundColor: "white",
-                                }}
-                            >
-                                {symtomps.map((sym, i) => (
-                                    <p key={i} className="patient">
-                                        {sym}
-                                        <i
-                                            onClick={() =>
-                                                setSymptopms((prev) => prev.filter((st) => st !== sym))
-                                            }
-                                            className="ri-close-line"
-                                            style={{
-                                                cursor: "pointer",
-                                                color: "#555",
-                                                transition: "0.2s",
-                                            }}
-                                            onMouseOver={(e) => (e.target.style.color = "red")}
-                                            onMouseOut={(e) => (e.target.style.color = "#555")}
-                                        ></i>
-                                    </p>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </div>
-
-
             {
                 open && (
                     <div className="patientHistory">
-                        <LabTest selectedLabTest={selectedLabTest} setselectedLabTest={setselectedLabTest} labTest={labtestResult} labTestError={labTestError} labTestloading={labTestloading} onclose={() => setClose(false)} ></LabTest>
+                        <LabTest selectedLabTest={selectedLabTest} setselectedLabTest={setselectedLabTest} labTest={labTest} labTestError={labTestError} labTestloading={labTestloading} onclose={() => setClose(false)} ></LabTest>
                     </div>
                 )
             }

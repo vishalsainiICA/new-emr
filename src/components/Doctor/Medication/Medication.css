@@ -110,7 +110,7 @@
 .patient-vitals-item {
     width: 100%;
     display: flex;
-    flex-direction: column;
+    /* flex-direction: column; */
     justify-content: start;
     /* padding: 70px;   */
     /* background-color: #007bff;  */
@@ -413,4 +413,11 @@
 
 
 
+}
+
+.medicene{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
 }

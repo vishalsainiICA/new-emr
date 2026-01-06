@@ -179,8 +179,8 @@ export const doctorAPi = {
     getTodayPatient: async () => {
         return await doctorInstance.get('/doctor/today-Patient')
     },
-    getAllIllness: async () => {
-        return await doctorInstance.get('/doctor/all-illness')
+    getAllIllnessAndPharmacydata: async () => {
+        return await doctorInstance.get('/doctor/all-illness-pharma')
     },
 
     dailyActivity: async () => {
